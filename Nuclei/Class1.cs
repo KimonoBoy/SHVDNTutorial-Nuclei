@@ -1,6 +1,5 @@
 ﻿using System.Windows.Forms;
 using GTA;
-using GTA.UI;
 
 namespace Nuclei
 {
@@ -13,7 +12,11 @@ namespace Nuclei
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.T) Notification.Show("Hello GTA V - Adele Mania");
+            if (e.KeyCode == Keys.T)
+            {
+                Game.Player.Character.Health = Game.Player.Character.MaxHealth;
+                Game.Player.Character.Armor = Game.Player.MaxArmor;
+            }
         }
     }
 }
