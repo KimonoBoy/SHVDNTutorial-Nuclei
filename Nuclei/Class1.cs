@@ -13,7 +13,7 @@ namespace Nuclei
 
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.T) Notification.Show("Hello GTA V!");
+            if (e.KeyCode == Keys.T) Notification.Show("Hello GTA V - Adele Mania");
         }
     }
 }
