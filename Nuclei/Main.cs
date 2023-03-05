@@ -36,6 +36,8 @@ public class Main : Script
         _menu.Add(subMenuItemPlayer);
         _pool.Add(_playerMenu);
 
+        _playerMenu.Add(_itemFixPlayer);
+
         KeyDown += OnKeyDown;
         Tick += OnTick;
     }
