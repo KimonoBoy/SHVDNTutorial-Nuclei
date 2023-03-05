@@ -10,6 +10,10 @@ public class Main : Script
 {
     private readonly NativeCheckboxItem _checkBoxInvincible = new("Invincible", "Makes the Player invincible.");
     private readonly NativeItem _itemFixPlayer = new("Fix Player", "Restores Player's Health and Armor.");
+
+    private readonly NativeListItem<int> _listItemWantedLevel =
+        new("Wanted Level", "Adjust the Player's Wanted Level.", 0, 1, 2, 3, 4, 5);
+
     private readonly NativeMenu _menu = new("Nuclei", "Main Menu");
     private readonly ObjectPool _pool = new();
 
@@ -22,8 +26,16 @@ public class Main : Script
 
         _checkBoxInvincible.CheckboxChanged += OnInvincibleCheckboxChanged;
         _menu.Add(_checkBoxInvincible);
+
+        _listItemWantedLevel.ItemChanged += OnWantedLevelItemChanged;
+        _menu.Add(_listItemWantedLevel);
         KeyDown += OnKeyDown;
         Tick += OnTick;
+    }
+
+    private void OnWantedLevelItemChanged(object sender, ItemChangedEventArgs<int> wantedLevel)
+    {
+        Game.Player.WantedLevel = wantedLevel.Object;
     }
 
     private void OnInvincibleCheckboxChanged(object sender, EventArgs e)
