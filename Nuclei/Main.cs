@@ -8,6 +8,7 @@ namespace Nuclei;
 
 public class Main : Script
 {
+    private readonly NativeCheckboxItem _checkBoxInvincible = new("Invincible", "Makes the Player invincible.");
     private readonly NativeItem _itemFixPlayer = new("Fix Player", "Restores Player's Health and Armor.");
     private readonly NativeMenu _menu = new("Nuclei", "Main Menu");
     private readonly ObjectPool _pool = new();
@@ -18,8 +19,16 @@ public class Main : Script
 
         _itemFixPlayer.Activated += OnFixPlayerActivated;
         _menu.Add(_itemFixPlayer);
+
+        _checkBoxInvincible.CheckboxChanged += OnInvincibleCheckboxChanged;
+        _menu.Add(_checkBoxInvincible);
         KeyDown += OnKeyDown;
         Tick += OnTick;
+    }
+
+    private void OnInvincibleCheckboxChanged(object sender, EventArgs e)
+    {
+        Game.Player.Character.IsInvincible = _checkBoxInvincible.Checked;
     }
 
     private void OnFixPlayerActivated(object sender, EventArgs e)
