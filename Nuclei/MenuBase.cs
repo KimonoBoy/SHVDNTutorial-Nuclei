@@ -38,4 +38,24 @@ public abstract class MenuBase : NativeMenu
         Add(item);
         return item;
     }
+
+    /// <summary>
+    ///     Adds a new checkbox item to the menu.
+    /// </summary>
+    /// <param name="text">The 'title' of the item.</param>
+    /// <param name="description">The description when the item is selected.</param>
+    /// <param name="defaultValue">The default value of the checkbox Checked state.</param>
+    /// <param name="action">The action to perform when the checkbox Checked state changes.</param>
+    /// <returns>The checkbox item.</returns>
+    protected NativeCheckboxItem AddCheckbox(string text, string description = "", bool defaultValue = false,
+        Action<bool> action = null)
+    {
+        var item = new NativeCheckboxItem(text, description, defaultValue);
+
+        // anonymous method to handle the event
+        item.CheckboxChanged += (sender, args) => { action?.Invoke(item.Checked); };
+
+        Add(item);
+        return item;
+    }
 }
