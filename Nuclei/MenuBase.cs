@@ -58,4 +58,22 @@ public abstract class MenuBase : NativeMenu
         Add(item);
         return item;
     }
+
+    /// <summary>
+    ///     Adds a new list item to the menu.
+    /// </summary>
+    /// <typeparam name="T">The object type of the values.</typeparam>
+    /// <param name="text">The 'title' of the item.</param>
+    /// <param name="description">The description when the item is selected.</param>
+    /// <param name="action">The action to perform when the selected item of the list changes.</param>
+    /// <param name="items">The items array.</param>
+    /// <returns>The list item.</returns>
+    protected NativeListItem<T> AddListItem<T>(string text, string description = "", Action<T, int> action = null,
+        params T[] items)
+    {
+        var item = new NativeListItem<T>(text, description, items);
+        item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
+        Add(item);
+        return item;
+    }
 }
