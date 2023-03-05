@@ -6,11 +6,19 @@ namespace Nuclei;
 
 public abstract class MenuBase : NativeMenu
 {
-    public static ObjectPool MenuPool = new();
+    /// <summary>
+    ///     The pool of menus.
+    /// </summary>
+    public static ObjectPool Pool = new();
 
+    /// <summary>
+    ///     Creates a new menu.
+    /// </summary>
+    /// <param name="subtitle">The subtitle to display below the header.</param>
+    /// <param name="description">The description of the menu.</param>
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
-        MenuPool.Add(this);
+        Pool.Add(this);
     }
 
     /// <summary>
@@ -23,11 +31,10 @@ public abstract class MenuBase : NativeMenu
     protected NativeItem AddItem(string text, string description = "", Action action = null)
     {
         var item = new NativeItem(text, description);
-        item.Activated += (sender, args) =>
-        {
-            if (action != null)
-                action();
-        };
+
+        // anonymous method to handle the event
+        item.Activated += (sender, args) => { action?.Invoke(); };
+
         Add(item);
         return item;
     }
