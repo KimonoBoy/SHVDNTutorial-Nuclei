@@ -18,7 +18,6 @@ public class Main : Script
 
     private readonly NativeMenu _playerMenu = new("Nuclei", "Player Menu");
     private readonly ObjectPool _pool = new();
-    private readonly NativeSubmenuItem _subMenuItemPlayer;
 
     public Main()
     {
@@ -33,8 +32,8 @@ public class Main : Script
         _listItemWantedLevel.ItemChanged += OnWantedLevelItemChanged;
         _menu.Add(_listItemWantedLevel);
 
-        _subMenuItemPlayer = new NativeSubmenuItem(_playerMenu, _menu);
-        _menu.Add(_subMenuItemPlayer);
+        var subMenuItemPlayer = new NativeSubmenuItem(_playerMenu, _menu);
+        _menu.Add(subMenuItemPlayer);
         _pool.Add(_playerMenu);
 
         KeyDown += OnKeyDown;
