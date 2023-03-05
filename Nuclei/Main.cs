@@ -35,6 +35,7 @@ public class Main : Script
 
         _subMenuItemPlayer = new NativeSubmenuItem(_playerMenu, _menu);
         _menu.Add(_subMenuItemPlayer);
+        _pool.Add(_playerMenu);
 
         KeyDown += OnKeyDown;
         Tick += OnTick;
