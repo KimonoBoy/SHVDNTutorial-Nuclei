@@ -1,7 +1,7 @@
 ﻿using GTA;
 using Nuclei.UI.Menus.Abstracts;
 
-namespace Nuclei.UI.Menus.Player;
+namespace Nuclei;
 
 public class PlayerMenu : MenuBase
 {
