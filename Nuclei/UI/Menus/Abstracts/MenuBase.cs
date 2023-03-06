@@ -3,7 +3,7 @@ using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 
-namespace Nuclei;
+namespace Nuclei.UI.Menus.Abstracts;
 
 public abstract class MenuBase : NativeMenu
 {

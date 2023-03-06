@@ -1,4 +1,7 @@
-﻿namespace Nuclei;
+﻿using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Player;
+
+namespace Nuclei.UI.Menus;
 
 public class MainMenu : MenuBase
 {

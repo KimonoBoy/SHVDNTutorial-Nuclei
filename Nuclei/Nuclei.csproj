@@ -50,14 +50,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
-    <Compile Include="MainMenu.cs" />
-    <Compile Include="MenuBase.cs" />
-    <Compile Include="PlayerMenu.cs" />
+    <Compile Include="UI\Menus\MainMenu.cs" />
+    <Compile Include="UI\Menus\Abstracts\MenuBase.cs" />
+    <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enums\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="Scripts\Player\" />
+    <Folder Include="Services\Player\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
