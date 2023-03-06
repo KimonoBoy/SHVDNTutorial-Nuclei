@@ -1,4 +1,5 @@
 ﻿using System;
+using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 
@@ -24,13 +25,13 @@ public abstract class MenuBase : NativeMenu
     /// <summary>
     ///     Adds a new item to the menu.
     /// </summary>
-    /// <param name="text">The 'title' of the item.</param>
+    /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected.</param>
     /// <param name="action">The action to perform when activated.</param>
     /// <returns>The item.</returns>
-    protected NativeItem AddItem(string text, string description = "", Action action = null)
+    protected NativeItem AddItem(string title, string description = "", Action action = null)
     {
-        var item = new NativeItem(text, description);
+        var item = new NativeItem(title, description);
 
         // anonymous method to handle the event
         item.Activated += (sender, args) => { action?.Invoke(); };
@@ -42,15 +43,15 @@ public abstract class MenuBase : NativeMenu
     /// <summary>
     ///     Adds a new checkbox item to the menu.
     /// </summary>
-    /// <param name="text">The 'title' of the item.</param>
+    /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected.</param>
     /// <param name="defaultValue">The default value of the checkbox Checked state.</param>
     /// <param name="action">The action to perform when the checkbox Checked state changes.</param>
     /// <returns>The checkbox item.</returns>
-    protected NativeCheckboxItem AddCheckbox(string text, string description = "", bool defaultValue = false,
+    protected NativeCheckboxItem AddCheckbox(string title, string description = "", bool defaultValue = false,
         Action<bool> action = null)
     {
-        var item = new NativeCheckboxItem(text, description, defaultValue);
+        var item = new NativeCheckboxItem(title, description, defaultValue);
 
         // anonymous method to handle the event
         item.CheckboxChanged += (sender, args) => { action?.Invoke(item.Checked); };
@@ -63,17 +64,30 @@ public abstract class MenuBase : NativeMenu
     ///     Adds a new list item to the menu.
     /// </summary>
     /// <typeparam name="T">The object type of the values.</typeparam>
-    /// <param name="text">The 'title' of the item.</param>
+    /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected.</param>
     /// <param name="action">The action to perform when the selected item of the list changes.</param>
     /// <param name="items">The items array.</param>
     /// <returns>The list item.</returns>
-    protected NativeListItem<T> AddListItem<T>(string text, string description = "", Action<T, int> action = null,
+    protected NativeListItem<T> AddListItem<T>(string title, string description = "", Action<T, int> action = null,
         params T[] items)
     {
-        var item = new NativeListItem<T>(text, description, items);
+        var item = new NativeListItem<T>(title, description, items);
         item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
         Add(item);
         return item;
+    }
+
+    /// <summary>
+    ///     Adds a new submenu and associated item to the menu.
+    /// </summary>
+    /// <param name="subMenu">The Sub Menu to add.</param>
+    /// <returns>The item associated with the sub menu.</returns>
+    protected NativeSubmenuItem AddMenu(MenuBase subMenu)
+    {
+        var subMenuItem = AddSubMenu(subMenu);
+        subMenuItem.AltTitle = "Menu";
+        subMenuItem.AltTitleFont = Font.ChaletComprimeCologne;
+        return subMenuItem;
     }
 }

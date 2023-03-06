@@ -52,6 +52,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MenuBase.cs" />
+    <Compile Include="PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
