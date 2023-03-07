@@ -1,4 +1,6 @@
-﻿namespace Nuclei.Services.Player;
+﻿using System;
+
+namespace Nuclei.Services.Player;
 
 /// <summary>
 ///     This class represents the PlayerService and serves as a layer between the PlayerMenu and the PlayerScript.
@@ -22,11 +24,16 @@ public class PlayerService : IPlayerService
     public int WantedLevel { get; private set; }
 
     /// <summary>
-    ///     A method that fixes the player. The implementation of this method will be added later.
+    ///     An event that is invoked when the player is fixed.
+    /// </summary>
+    public event EventHandler PlayerFixed;
+
+    /// <summary>
+    ///     A method that invokes the `PlayerFixed` event.
     /// </summary>
     public void FixPlayer()
     {
-        // We'll implement this a bit later.
+        PlayerFixed?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>
