@@ -1,4 +1,5 @@
-﻿using Nuclei.UI.Menus.Abstracts;
+﻿using Nuclei.Enums;
+using Nuclei.UI.Menus.Abstracts;
 using Nuclei.UI.Menus.Player;
 
 namespace Nuclei.UI.Menus;
@@ -12,7 +13,8 @@ public class MainMenu : MenuBase
 
     private void AddPlayerMenu()
     {
-        var playerMenu = new PlayerMenu("Player", "Everything associated with the Player and its Character.");
+        var playerMenu = new PlayerMenu(MenuTitles.Player.ToString(),
+            "Everything associated with the Player and its Character.");
         AddMenu(playerMenu);
     }
 }

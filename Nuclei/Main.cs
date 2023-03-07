@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
+using Nuclei.Enums;
 using Nuclei.UI.Menus.Abstracts;
 using MainMenu = Nuclei.UI.Menus.MainMenu;
 
@@ -8,7 +9,7 @@ namespace Nuclei;
 
 public class Main : Script
 {
-    private readonly MainMenu _mainMenu = new("Main Menu", "The main menu of Nuclei.");
+    private readonly MainMenu _mainMenu = new(MenuTitles.Main.ToString(), "The main menu of Nuclei.");
 
     public Main()
     {
