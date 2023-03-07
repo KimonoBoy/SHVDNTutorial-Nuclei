@@ -1,5 +1,4 @@
 ﻿using Nuclei.UI.Menus.Abstracts;
-using Nuclei.UI.Menus.Player;
 
 namespace Nuclei.UI.Menus;
 
