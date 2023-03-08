@@ -9,7 +9,7 @@ namespace Nuclei;
 
 public class Main : Script
 {
-    private readonly MainMenu _mainMenu = new(MenuTitles.Main.ToString(), "The main menu of Nuclei.");
+    private readonly MainMenu _mainMenu = new(MenuTitles.Main);
 
     public Main()
     {

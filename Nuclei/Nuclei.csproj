@@ -51,7 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\MenuTitles.cs" />
+    <Compile Include="Enums\PlayerTitles.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
+    <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />

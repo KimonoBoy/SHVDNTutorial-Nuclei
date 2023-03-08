@@ -1,4 +1,5 @@
-﻿using Nuclei.Services.Player;
+﻿using System;
+using Nuclei.Services.Player;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Player;
@@ -7,7 +8,7 @@ public class PlayerMenu : MenuBase
 {
     private readonly PlayerService _playerService = PlayerService.Instance;
 
-    public PlayerMenu(string subtitle, string description) : base(subtitle, description)
+    public PlayerMenu(Enum @enum) : base(@enum)
     {
         AddItem("Fix Player", "Restores Player's Health and Armor back to full.",
             () => { _playerService.FixPlayer(); });

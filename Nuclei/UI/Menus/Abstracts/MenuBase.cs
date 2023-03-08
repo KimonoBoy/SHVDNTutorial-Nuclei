@@ -2,6 +2,7 @@
 using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
+using Nuclei.Helpers.ExtensionMethods;
 
 namespace Nuclei.UI.Menus.Abstracts;
 
@@ -18,6 +19,15 @@ public abstract class MenuBase : NativeMenu
     /// <param name="subtitle">The subtitle to display below the header.</param>
     /// <param name="description">The description of the menu.</param>
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
+    {
+        Pool.Add(this);
+    }
+
+    /// <summary>
+    ///     Creates a new menu.
+    /// </summary>
+    /// <param name="enum">The Enum to get the Sub Title and Description from.</param>
+    protected MenuBase(Enum @enum) : base("Nuclei", @enum.ToPrettyString(), @enum.GetDescription())
     {
         Pool.Add(this);
     }
@@ -41,6 +51,17 @@ public abstract class MenuBase : NativeMenu
     }
 
     /// <summary>
+    ///     Adds a new item to the menu.
+    /// </summary>
+    /// <param name="enum">The Enum to get the Title and the Description from.</param>
+    /// <param name="action">The action to perform when activated.</param>
+    /// <returns>The item.</returns>
+    protected NativeItem AddItem(Enum @enum, Action action = null)
+    {
+        return AddItem(@enum.ToPrettyString(), @enum.GetDescription(), action);
+    }
+
+    /// <summary>
     ///     Adds a new checkbox item to the menu.
     /// </summary>
     /// <param name="title">The 'title' of the item.</param>
@@ -61,6 +82,18 @@ public abstract class MenuBase : NativeMenu
     }
 
     /// <summary>
+    ///     Adds a new checkbox item to the menu.
+    /// </summary>
+    /// <param name="enum">The enum to get the Title and the Description from.</param>
+    /// <param name="defaultValue">The default checked state of the checkbox.</param>
+    /// <param name="action">The action to perform when the checkbox Checked state changes.</param>
+    /// <returns>The checkbox item.</returns>
+    protected NativeCheckboxItem AddCheckbox(Enum @enum, bool defaultValue = false, Action<bool> action = null)
+    {
+        return AddCheckbox(@enum.ToPrettyString(), @enum.GetDescription(), defaultValue, action);
+    }
+
+    /// <summary>
     ///     Adds a new list item to the menu.
     /// </summary>
     /// <typeparam name="T">The object type of the values.</typeparam>
@@ -76,6 +109,19 @@ public abstract class MenuBase : NativeMenu
         item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
         Add(item);
         return item;
+    }
+
+    /// <summary>
+    ///     Adds a new list item to the menu.
+    /// </summary>
+    /// <typeparam name="T">The object type of the values.</typeparam>
+    /// <param name="enum">The enum to get the Title and the Description from.</param>
+    /// <param name="action">The action to perform when the selected item of the list changes.</param>
+    /// <param name="items">The items array.</param>
+    /// <returns>The list item.</returns>
+    protected NativeListItem<T> AddListItem<T>(Enum @enum, Action<T, int> action = null, params T[] items)
+    {
+        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), action, items);
     }
 
     /// <summary>
