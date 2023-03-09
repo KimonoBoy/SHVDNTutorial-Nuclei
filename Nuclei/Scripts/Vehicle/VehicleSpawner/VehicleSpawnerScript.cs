@@ -17,6 +17,10 @@ public class VehicleSpawnerScript : Script
         SpawnVehicle(vehicleHash);
     }
 
+    /// <summary>
+    ///     Spawns a Vehicle from the given VehicleHash.
+    /// </summary>
+    /// <param name="vehicleHash">The vehicle to be spawned.</param>
     private void SpawnVehicle(VehicleHash vehicleHash)
     {
         // Create a model from the VehicleHash and then request the associated asset.
