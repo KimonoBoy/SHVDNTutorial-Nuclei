@@ -14,12 +14,19 @@ public abstract class MenuBase : NativeMenu
     public static ObjectPool Pool = new();
 
     /// <summary>
+    ///     The latest active menu. This is used to determine which menu to return to when closing a menu.
+    /// </summary>
+    public static MenuBase LatestMenu { get; set; }
+
+    /// <summary>
     ///     Creates a new menu.
     /// </summary>
     /// <param name="subtitle">The subtitle to display below the header.</param>
     /// <param name="description">The description of the menu.</param>
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
+        Shown += OnShown;
+
         Pool.Add(this);
     }
 
@@ -29,7 +36,17 @@ public abstract class MenuBase : NativeMenu
     /// <param name="enum">The Enum to get the Sub Title and Description from.</param>
     protected MenuBase(Enum @enum) : base("Nuclei", @enum.ToPrettyString(), @enum.GetDescription())
     {
+        Shown += OnShown;
+
         Pool.Add(this);
+    }
+
+    /// <summary>
+    ///     Toggles the visibility of the menu.
+    /// </summary>
+    public void Toggle()
+    {
+        Visible = !Visible;
     }
 
     /// <summary>
@@ -135,5 +152,10 @@ public abstract class MenuBase : NativeMenu
         subMenuItem.AltTitle = "Menu";
         subMenuItem.AltTitleFont = Font.ChaletComprimeCologne;
         return subMenuItem;
+    }
+
+    private void OnShown(object sender, EventArgs e)
+    {
+        LatestMenu = this;
     }
 }
