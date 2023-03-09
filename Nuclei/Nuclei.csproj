@@ -88,8 +88,11 @@
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
+    <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
+    <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
+    <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Abstracts\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
