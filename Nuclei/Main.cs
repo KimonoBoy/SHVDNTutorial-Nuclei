@@ -24,6 +24,12 @@ public class Main : Script
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.F5) _mainMenu.Visible = !_mainMenu.Visible;
+        if (e.KeyCode == Keys.F5)
+        {
+            if (MenuBase.LatestMenu != null)
+                MenuBase.LatestMenu.Toggle();
+            else
+                _mainMenu.Toggle();
+        }
     }
 }
