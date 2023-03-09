@@ -13,6 +13,9 @@ public enum MenuTitles
     [Description("Spawn Vehicles, Make Them Indestructible, Add Modifications and Much More")]
     Vehicle,
 
+    [Description("Spawn any Vehicle in the game.")]
+    SpawnVehicle,
+
     [Description("Everything associated with Weapons.")]
     Weapon
 }

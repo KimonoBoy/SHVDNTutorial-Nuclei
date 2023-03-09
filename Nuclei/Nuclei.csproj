@@ -94,6 +94,9 @@
     <Compile Include="UI\Menus\Abstracts\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Vehicle\VehicleMenu.cs" />
+    <Compile Include="UI\Vehicle\VehicleSpawner\VehicleClassMenu.cs" />
+    <Compile Include="UI\Vehicle\VehicleSpawner\VehicleSpawnerMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
