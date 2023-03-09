@@ -1,4 +1,5 @@
 ﻿using System;
+using Nuclei.Enums;
 using Nuclei.Services.Player;
 using Nuclei.UI.Menus.Abstracts;
 
@@ -10,13 +11,13 @@ public class PlayerMenu : MenuBase
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {
-        AddItem("Fix Player", "Restores Player's Health and Armor back to full.",
+        AddItem(PlayerTitles.FixPlayer,
             () => { _playerService.FixPlayer(); });
 
-        AddCheckbox("Invincible", "Set the Player Invincible.", false,
+        AddCheckbox(PlayerTitles.Invincible, false,
             @checked => { _playerService.SetInvincible(@checked); });
 
-        AddListItem("Wanted Level", "Adjust Player's Wanted Level.",
+        AddListItem(PlayerTitles.WantedLevel,
             (item, index) => { _playerService.SetWantedLevel(item); }, 0, 1, 2, 3, 4, 5);
     }
 }

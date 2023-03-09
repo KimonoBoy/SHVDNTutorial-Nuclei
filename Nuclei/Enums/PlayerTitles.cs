@@ -2,4 +2,7 @@
 
 public enum PlayerTitles
 {
+    FixPlayer,
+    Invincible,
+    WantedLevel
 }
