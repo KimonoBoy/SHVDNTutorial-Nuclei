@@ -13,6 +13,8 @@ namespace Nuclei.UI.Menus.Abstracts;
 
 public abstract class MenuBase : NativeMenu
 {
+    private bool _isMovingUp;
+
     /// <summary>
     ///     The pool of menus.
     /// </summary>
@@ -48,22 +50,30 @@ public abstract class MenuBase : NativeMenu
         Pool.Add(this);
     }
 
-    private bool _isMovingUp;
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
     {
         SkipHeader();
     }
 
+    /// <summary>
+    /// Header Items are meant to only categorize items, not be selectable.
+    /// So when a header item is selected, we skip it, selecting the next item instead.
+    /// </summary>
     private void SkipHeader()
     {
+        // If the menu contains 0 items or the selected item is not a header item, return.
         if (Items.Count < 1 || SelectedItem is not NativeHeaderItem) return;
+
+        // If the menu contains only header items, return. (This is to prevent an infinite loop)
         if (Items.All(i => i is NativeHeaderItem)) return;
 
+        // Set the state of the menus latest navigation to up or down.
         if (Game.IsKeyPressed(Keys.Up))
             _isMovingUp = true;
         else if (Game.IsKeyPressed(Keys.Down))
             _isMovingUp = false;
 
+        // Get the index of the next item.
         var nextIndex = _isMovingUp ? SelectedIndex - 1 : SelectedIndex + 1;
         if (nextIndex >= 0 && nextIndex < Items.Count)
             SelectedIndex = nextIndex;
@@ -185,6 +195,11 @@ public abstract class MenuBase : NativeMenu
         return subMenuItem;
     }
 
+    /// <summary>
+    /// Creates a new NativeHeaderItem and adds it to the menu.
+    /// </summary>
+    /// <param name="title">The title of the header item.</param>
+    /// <returns>The header item.</returns>
     protected NativeHeaderItem AddHeader(string title)
     {
         var headerItem = new NativeHeaderItem(title);

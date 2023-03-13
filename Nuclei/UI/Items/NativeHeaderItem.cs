@@ -6,6 +6,11 @@ using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Items;
 
+/// <summary>
+/// Creates a new header item.
+///
+/// The purpose of the header item is to group items together.
+/// </summary>
 public sealed class NativeHeaderItem : NativeItem
 {
     public NativeHeaderItem(string title) : base(title)
