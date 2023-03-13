@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Windows.Forms;
+using GTA;
 using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.UI.Items;
+using Control = GTA.Control;
 
 namespace Nuclei.UI.Menus.Abstracts;
 
@@ -26,6 +31,7 @@ public abstract class MenuBase : NativeMenu
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
         Shown += OnShown;
+        SelectedIndexChanged += OnSelectedIndexChanged;
 
         Pool.Add(this);
     }
@@ -37,8 +43,33 @@ public abstract class MenuBase : NativeMenu
     protected MenuBase(Enum @enum) : base("Nuclei", @enum.ToPrettyString(), @enum.GetDescription())
     {
         Shown += OnShown;
+        SelectedIndexChanged += OnSelectedIndexChanged;
 
         Pool.Add(this);
+    }
+
+    private bool _isMovingUp;
+    private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
+    {
+        SkipHeader();
+    }
+
+    private void SkipHeader()
+    {
+        if (Items.Count < 1 || SelectedItem is not NativeHeaderItem) return;
+        if (Items.All(i => i is NativeHeaderItem)) return;
+
+        if (Game.IsKeyPressed(Keys.Up))
+            _isMovingUp = true;
+        else if (Game.IsKeyPressed(Keys.Down))
+            _isMovingUp = false;
+
+        var nextIndex = _isMovingUp ? SelectedIndex - 1 : SelectedIndex + 1;
+        if (nextIndex >= 0 && nextIndex < Items.Count)
+            SelectedIndex = nextIndex;
+        else
+            SelectedIndex = nextIndex < 0 ? Items.Count - 1 : 0;
+        
     }
 
     /// <summary>
@@ -154,8 +185,16 @@ public abstract class MenuBase : NativeMenu
         return subMenuItem;
     }
 
+    protected NativeHeaderItem AddHeader(string title)
+    {
+        var headerItem = new NativeHeaderItem(title);
+        Add(headerItem);
+        return headerItem;
+    }
+
     private void OnShown(object sender, EventArgs e)
     {
         LatestMenu = this;
+        SkipHeader();
     }
 }

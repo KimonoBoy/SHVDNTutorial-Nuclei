@@ -1,9 +1,9 @@
 ﻿using System;
 using Nuclei.Enums;
 using Nuclei.UI.Menus.Abstracts;
-using Nuclei.UI.Vehicle.VehicleSpawner;
+using Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-namespace Nuclei.UI.Vehicle;
+namespace Nuclei.UI.Menus.Vehicle;
 
 public class VehicleMenu : MenuBase
 {

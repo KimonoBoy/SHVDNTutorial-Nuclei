@@ -1,6 +1,7 @@
 ﻿using System;
 using Nuclei.Enums;
 using Nuclei.Services.Player;
+using Nuclei.UI.Items;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Player;
@@ -11,6 +12,7 @@ public class PlayerMenu : MenuBase
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {
+        AddHeader("Test");
         AddItem(PlayerTitles.FixPlayer,
             () => { _playerService.FixPlayer(); });
 

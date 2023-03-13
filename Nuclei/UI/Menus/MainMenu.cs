@@ -2,7 +2,7 @@
 using Nuclei.Enums;
 using Nuclei.UI.Menus.Abstracts;
 using Nuclei.UI.Menus.Player;
-using Nuclei.UI.Vehicle;
+using Nuclei.UI.Menus.Vehicle;
 
 namespace Nuclei.UI.Menus;
 

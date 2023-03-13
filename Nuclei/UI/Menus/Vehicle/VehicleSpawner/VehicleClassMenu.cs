@@ -5,7 +5,7 @@ using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Abstracts;
 
-namespace Nuclei.UI.Vehicle.VehicleSpawner;
+namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
 public class VehicleClassMenu : MenuBase
 {

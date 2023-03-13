@@ -2,7 +2,7 @@
 using GTA;
 using Nuclei.UI.Menus.Abstracts;
 
-namespace Nuclei.UI.Vehicle.VehicleSpawner;
+namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerMenu : MenuBase
 {
@@ -10,7 +10,7 @@ public class VehicleSpawnerMenu : MenuBase
     {
         GenerateVehicleClassMenus();
     }
-
+    
     private void GenerateVehicleClassMenus()
     {
         foreach (VehicleClass vehicleClass in Enum.GetValues(typeof(VehicleClass)))
