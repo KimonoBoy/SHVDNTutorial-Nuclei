@@ -35,6 +35,7 @@ public abstract class MenuBase : NativeMenu
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
 
+        SubtitleFont = Font.Pricedown;
         Pool.Add(this);
     }
 
@@ -47,6 +48,7 @@ public abstract class MenuBase : NativeMenu
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
 
+        SubtitleFont = Font.Pricedown;
         Pool.Add(this);
     }
 
@@ -79,7 +81,6 @@ public abstract class MenuBase : NativeMenu
             SelectedIndex = nextIndex;
         else
             SelectedIndex = nextIndex < 0 ? Items.Count - 1 : 0;
-        
     }
 
     /// <summary>
