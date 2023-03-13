@@ -32,10 +32,11 @@ public abstract class MenuBase : NativeMenu
     /// <param name="description">The description of the menu.</param>
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
+        SubtitleFont = Font.Pricedown;
+
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
 
-        SubtitleFont = Font.Pricedown;
         Pool.Add(this);
     }
 
@@ -43,13 +44,8 @@ public abstract class MenuBase : NativeMenu
     ///     Creates a new menu.
     /// </summary>
     /// <param name="enum">The Enum to get the Sub Title and Description from.</param>
-    protected MenuBase(Enum @enum) : base("Nuclei", @enum.ToPrettyString(), @enum.GetDescription())
+    protected MenuBase(Enum @enum) : this(@enum.ToPrettyString(), @enum.GetDescription())
     {
-        Shown += OnShown;
-        SelectedIndexChanged += OnSelectedIndexChanged;
-
-        SubtitleFont = Font.Pricedown;
-        Pool.Add(this);
     }
 
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
