@@ -33,6 +33,7 @@ public class PlayerScript : Script
     {
         Invincible();
         AdjustWantedLevel();
+        GTA.UI.Notification.Show($"Okay: {_playerService.GetType}");
     }
 
     private void AdjustWantedLevel()
