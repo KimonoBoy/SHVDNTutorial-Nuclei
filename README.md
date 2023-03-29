@@ -1,7 +1,7 @@
 # SHVDNTutorial-Nuclei
-A Grand Theft Auto V step-by-step guide on developing a mod menu using ScriptHookVDotNet 
+A successor to **NucleiLite** - this will build upon everything we learned here [NucleiLite - Wiki](https://github.com/KimonoBoy/SHVDNTutorial-NucleiLite/wiki)  
 
-The idea of this mod is to create a well-build, well-documented overall mod menu, to help people interested in developing mods for **Grand Theft Auto V**
+The idea of this **mod** is to **create** a **well-build**, **well-documented** overall **mod menu**, to **help** people interested in **developing mods** for **Grand Theft Auto V**
 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
