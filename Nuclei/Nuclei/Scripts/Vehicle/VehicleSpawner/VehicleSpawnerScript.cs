@@ -28,12 +28,6 @@ public class VehicleSpawnerScript : Script
         var vehicleModel = new Model(vehicleHash);
         vehicleModel.Request();
 
-        if (!vehicleModel.IsInCdImage)
-        {
-            Notification.Show("The Model wasn't found.");
-            return;
-        }
-
         // Wait for the model to load.
         while (!vehicleModel.IsLoaded) Yield();
 
@@ -43,6 +37,8 @@ public class VehicleSpawnerScript : Script
         var vehicle = World.CreateVehicle(vehicleModel,
             Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
             Game.Player.Character.Heading + 90);
+        
+        // Places the Vehicle on all wheels
         vehicle.PlaceOnGround();
 
         // Remove the model from resources.
