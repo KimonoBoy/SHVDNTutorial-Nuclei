@@ -1,6 +1,4 @@
 ﻿using System.Drawing;
-using System.Windows.Forms;
-using GTA;
 using LemonUI.Menus;
 using Font = GTA.UI.Font;
 
