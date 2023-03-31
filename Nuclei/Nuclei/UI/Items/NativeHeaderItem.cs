@@ -21,4 +21,9 @@ public class NativeHeaderItem : NativeItem
 
         TitleFont = Font.Pricedown;
     }
+
+    public override void Draw()
+    {
+        title.Draw();
+    }
 }
