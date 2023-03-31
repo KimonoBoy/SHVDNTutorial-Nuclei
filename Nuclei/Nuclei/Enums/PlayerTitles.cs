@@ -1,8 +1,19 @@
-﻿namespace Nuclei.Enums;
+﻿using System.ComponentModel;
+
+namespace Nuclei.Enums;
 
 public enum PlayerTitles
 {
+    [Description("Restores Player's Health and Armor.")]
     FixPlayer,
+    [Description("You no longer take ANY damage.")]
     Invincible,
-    WantedLevel
+    [Description("Adjust your Wanted Level.")]
+    WantedLevel,
+    [Description("Locks the Wanted Level.")]
+    LockWantedLevel,
+    SuperJump,
+    SuperPunch,
+    SetCash,
+    AddCash
 }

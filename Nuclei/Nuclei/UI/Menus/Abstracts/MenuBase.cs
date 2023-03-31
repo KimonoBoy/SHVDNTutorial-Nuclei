@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -8,6 +9,7 @@ using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.UI.Items;
 using Control = GTA.Control;
+using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Menus.Abstracts;
 
@@ -36,6 +38,7 @@ public abstract class MenuBase : NativeMenu
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
         SubtitleFont = Font.Pricedown;
+        Banner.Color = Color.Black;
 
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;

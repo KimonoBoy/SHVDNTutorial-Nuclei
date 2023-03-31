@@ -6,12 +6,14 @@ using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Items;
 
-/// <summary>
-///      Creates a new header item.
-///      The purpose of the header item is to group items together.
-/// </summary>
-public sealed class NativeHeaderItem : NativeItem
+public class NativeHeaderItem : NativeItem
 {
+    /// <summary>
+    /// Creates a new NativeHeaderItem.
+    /// 
+    /// The purpose of the HeaderItem is to group items together.
+    /// </summary>
+    /// <param name="title">The DisplayTitle of the HeaderItem</param>
     public NativeHeaderItem(string title) : base(title)
     {
         Colors.BackgroundNormal = Color.FromArgb(230, 0, 0, 0);
