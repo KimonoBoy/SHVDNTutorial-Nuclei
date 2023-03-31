@@ -13,6 +13,9 @@ namespace Nuclei.UI.Menus.Abstracts;
 
 public abstract class MenuBase : NativeMenu
 {
+    /// <summary>
+    ///    Whether the user is navigating up (true) or down (false).
+    /// </summary>
     private bool _isMovingUp;
 
     /// <summary>
@@ -55,7 +58,7 @@ public abstract class MenuBase : NativeMenu
 
     /// <summary>
     /// Header Items are meant to only categorize items, not be selectable.
-    /// So when a header item is selected, we skip it, selecting the next item instead.
+    /// So when a header item is selected, we skip it, selecting the next item (depending on user-input) instead.
     /// </summary>
     private void SkipHeader()
     {
@@ -193,7 +196,7 @@ public abstract class MenuBase : NativeMenu
     }
 
     /// <summary>
-    /// Creates a new NativeHeaderItem and adds it to the menu.
+    ///     Adds a new NativeHeaderItem it to the menu.
     /// </summary>
     /// <param name="title">The title of the header item.</param>
     /// <returns>The header item.</returns>

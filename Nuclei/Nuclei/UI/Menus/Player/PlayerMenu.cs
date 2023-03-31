@@ -12,7 +12,6 @@ public class PlayerMenu : MenuBase
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {
-        AddHeader("Test");
         AddItem(PlayerTitles.FixPlayer,
             () => { _playerService.FixPlayer(); });
 
