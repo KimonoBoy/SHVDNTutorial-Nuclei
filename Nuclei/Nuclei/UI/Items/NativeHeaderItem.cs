@@ -17,9 +17,7 @@ public class NativeHeaderItem : NativeItem
     /// <param name="title">The DisplayTitle of the HeaderItem</param>
     public NativeHeaderItem(string title) : base(title)
     {
-        Colors.BackgroundNormal = Color.FromArgb(230, 0, 0, 0);
         Colors.TitleNormal = Color.FromArgb(255, 255, 255, 255);
-        UseCustomBackground = true;
         UpdateColors();
 
         TitleFont = Font.Pricedown;
