@@ -3,12 +3,10 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
-using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.UI.Items;
-using Control = GTA.Control;
 using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Menus.Abstracts;

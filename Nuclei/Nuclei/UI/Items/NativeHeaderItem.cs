@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using GTA;
+using GTA.UI;
 using LemonUI.Menus;
 using Font = GTA.UI.Font;
 
@@ -15,15 +18,10 @@ public class NativeHeaderItem : NativeItem
     public NativeHeaderItem(string title) : base(title)
     {
         Colors.BackgroundNormal = Color.FromArgb(230, 0, 0, 0);
-        Colors.TitleNormal = Color.FromArgb(230, 255, 255, 255);
+        Colors.TitleNormal = Color.FromArgb(255, 255, 255, 255);
         UseCustomBackground = true;
         UpdateColors();
 
         TitleFont = Font.Pricedown;
-    }
-
-    public override void Draw()
-    {
-        title.Draw();
     }
 }

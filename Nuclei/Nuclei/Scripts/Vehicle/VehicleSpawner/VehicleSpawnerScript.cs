@@ -1,6 +1,7 @@
 ﻿using GTA;
 using GTA.UI;
 using Nuclei.Services.Vehicle.VehicleSpawner;
+using System;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
@@ -27,9 +28,17 @@ public class VehicleSpawnerScript : Script
         // Create a model from the VehicleHash and then request the associated asset.
         var vehicleModel = new Model(vehicleHash);
         vehicleModel.Request();
-
-        // Wait for the model to load.
-        while (!vehicleModel.IsLoaded) Yield();
+        
+        // Ensure the model IsValid
+        if (vehicleModel.IsValid && vehicleModel.IsInCdImage) 
+        {
+            // Wait for the model to load.
+            while (!vehicleModel.IsLoaded) Yield();
+        } else
+        {
+            Notification.Show($"Invalid Vehicle Model: {vehicleHash}");
+            return;
+        }
 
         // 1st parameter - Create the Vehicle from the model.
         // 2nd parameter - Position the Vehicle 5.0f in front of the player.
@@ -37,7 +46,7 @@ public class VehicleSpawnerScript : Script
         var vehicle = World.CreateVehicle(vehicleModel,
             Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
             Game.Player.Character.Heading + 90);
-        
+
         // Places the Vehicle on all wheels
         vehicle.PlaceOnGround();
 
