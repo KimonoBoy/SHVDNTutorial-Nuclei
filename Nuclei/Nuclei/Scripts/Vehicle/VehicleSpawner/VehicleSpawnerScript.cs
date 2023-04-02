@@ -1,8 +1,6 @@
 ﻿using GTA;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using System;
-using System.Windows.Forms;
-using GTA.UI;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 
@@ -23,9 +21,9 @@ public class VehicleSpawnerScript : Script
     }
 
     /// <summary>
-    ///     Spawns a Vehicle from the given VehicleHash.
+    /// Attempts to spawn a vehicle with the given VehicleHash up to a maximum number of attempts.
     /// </summary>
-    /// <param name="vehicleHash">The vehicle to be spawned.</param>
+    /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
     private void SpawnVehicle(VehicleHash vehicleHash)
     {
         const int maxAttempts = 3;
@@ -65,6 +63,15 @@ public class VehicleSpawnerScript : Script
         }
     }
 
+    /// <summary>
+    /// Creates a Model object from the given VehicleHash and validates its existence in the game files.
+    /// Throws a VehicleModelNotFoundException if the model is invalid.
+    /// Throws a VehicleModelRequestTimedOutException if the model fails to load within the specified timeout.
+    /// </summary>
+    /// <param name="vehicleHash">The VehicleHash of the vehicle model to be created.</param>
+    /// <returns>A validated Model object corresponding to the given VehicleHash.</returns>
+    /// <exception cref="VehicleModelNotFoundException">Thrown when the model is invalid.</exception>
+    /// <exception cref="VehicleModelRequestTimedOutException">Thrown when the model fails to load within the specified timeout.</exception>
     private Model CreateVehicleModel(VehicleHash vehicleHash)
     {
         // Create a model from the VehicleHash.
@@ -87,6 +94,13 @@ public class VehicleSpawnerScript : Script
         return vehicleModel;
     }
 
+    /// <summary>
+    /// Creates and positions a vehicle using the provided Model object.
+    /// Throws a VehicleSpawnFailedException if the vehicle object is not created successfully or does not exist.
+    /// </summary>
+    /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
+    /// <returns>The spawned vehicle.</returns>
+    /// <exception cref="VehicleSpawnFailedException">Thrown when the vehicle object is not created successfully or does not exist.</exception>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
         // Create the Vehicle from the model, position it 5.0f in front of the player, and set its heading.
