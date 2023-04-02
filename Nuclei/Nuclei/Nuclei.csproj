@@ -49,7 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\MenuTitles.cs" />
-    <Compile Include="Enums\PlayerTitles.cs" />
+    <Compile Include="Enums\PlayerItemTitles.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />

@@ -12,26 +12,30 @@ public class PlayerMenu : MenuBase
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {
-        AddItem(PlayerTitles.FixPlayer,
-            () => { _playerService.FixPlayer(); });
+        AddFixPlayer();
 
+        AddInvincible();
 
-        AddInvincibleCheckbox();
-
-        AddWantedLevelItem();
+        AddWantedLevel();
     }
 
-    private void AddInvincibleCheckbox()
+    private void AddFixPlayer()
     {
-        var checkBoxInvincible = AddCheckbox(PlayerTitles.Invincible, Game.Player.Character.IsInvincible,
+        AddItem(PlayerItemTitles.FixPlayer,
+            () => { _playerService.FixPlayer(); });
+    }
+
+    private void AddInvincible()
+    {
+        var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible, Game.Player.Character.IsInvincible,
             @checked => { _playerService.IsInvincible.Value = @checked; });
 
         _playerService.IsInvincible.ValueChanged += (sender, e) => { checkBoxInvincible.Checked = e.Value; };
     }
 
-    private void AddWantedLevelItem()
+    private void AddWantedLevel()
     {
-        var listItemWantedLevel = AddListItem(PlayerTitles.WantedLevel,
+        var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
             (item, index) => { _playerService.WantedLevel.Value = item; }, 0, 1, 2, 3, 4, 5);
 
         _playerService.WantedLevel.ValueChanged += (sender, e) => { listItemWantedLevel.SelectedItem = e.Value; };
