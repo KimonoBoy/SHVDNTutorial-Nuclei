@@ -29,11 +29,13 @@ public class VehicleSpawnerScript : Script
         const int maxAttempts = 3;
         var currentAttempt = 1;
 
-        while (currentAttempt <= maxAttempts)
+        while (currentAttempt < maxAttempts)
             try
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
+
+                break; // We successfully spawned the vehicle, therefore stopping the loop.
             }
             catch (VehicleException vehicleSpawnerException)
             {
