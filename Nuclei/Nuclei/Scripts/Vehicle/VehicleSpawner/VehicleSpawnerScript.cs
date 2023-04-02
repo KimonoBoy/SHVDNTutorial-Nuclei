@@ -99,6 +99,7 @@ public class VehicleSpawnerScript : Script
     ///     Throws a VehicleSpawnFailedException if the vehicle object is not created successfully or does not exist.
     /// </summary>
     /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
+    /// <param name="vehicleHash">The vehicleHash</param>
     /// <returns>The spawned vehicle.</returns>
     /// <exception cref="VehicleSpawnFailedException">
     ///     Thrown when the vehicle object is not created successfully or does not
