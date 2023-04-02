@@ -55,6 +55,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
+    <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
