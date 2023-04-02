@@ -34,13 +34,6 @@ public class VehicleSpawnerScript : Script
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
-
-                if (vehicle != null)
-                {
-                    // Places the Vehicle on all wheels
-                    vehicle.PlaceOnGround();
-                    break; // Exit the loop since the vehicle was successfully spawned
-                }
             }
             catch (VehicleException vehicleSpawnerException)
             {
@@ -118,6 +111,9 @@ public class VehicleSpawnerScript : Script
         // Ensure the vehicle is actually spawned
         if (vehicle == null || !vehicle.Exists())
             throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
+
+        // Places the Vehicle on all wheels
+        vehicle.PlaceOnGround();
 
         return vehicle;
     }
