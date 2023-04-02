@@ -1,8 +1,8 @@
-﻿using GTA;
-using Nuclei.Services.Vehicle.VehicleSpawner;
-using System;
+﻿using System;
+using GTA;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
+using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
@@ -21,16 +21,15 @@ public class VehicleSpawnerScript : Script
     }
 
     /// <summary>
-    /// Attempts to spawn a vehicle with the given VehicleHash up to a maximum number of attempts.
+    ///     Attempts to spawn a vehicle with the given VehicleHash up to a maximum number of attempts.
     /// </summary>
     /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
     private void SpawnVehicle(VehicleHash vehicleHash)
     {
         const int maxAttempts = 3;
-        int currentAttempt = 1;
+        var currentAttempt = 1;
 
         while (currentAttempt <= maxAttempts)
-        {
             try
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
@@ -56,22 +55,25 @@ public class VehicleSpawnerScript : Script
             }
             catch (Exception ex)
             {
-                ExceptionService.Instance.RaiseError($"Something went wrong:\n\n{ex.Message}\n\nSee log for more info!");
+                ExceptionService.Instance.RaiseError(
+                    $"Something went wrong:\n\n{ex.Message}\n\nSee log for more info!");
                 // Logging will be implemented later.
                 break;
             }
-        }
     }
 
     /// <summary>
-    /// Creates a Model object from the given VehicleHash and validates its existence in the game files.
-    /// Throws a VehicleModelNotFoundException if the model is invalid.
-    /// Throws a VehicleModelRequestTimedOutException if the model fails to load within the specified timeout.
+    ///     Creates a Model object from the given VehicleHash and validates its existence in the game files.
+    ///     Throws a VehicleModelNotFoundException if the model is invalid.
+    ///     Throws a VehicleModelRequestTimedOutException if the model fails to load within the specified timeout.
     /// </summary>
     /// <param name="vehicleHash">The VehicleHash of the vehicle model to be created.</param>
     /// <returns>A validated Model object corresponding to the given VehicleHash.</returns>
     /// <exception cref="VehicleModelNotFoundException">Thrown when the model is invalid.</exception>
-    /// <exception cref="VehicleModelRequestTimedOutException">Thrown when the model fails to load within the specified timeout.</exception>
+    /// <exception cref="VehicleModelRequestTimedOutException">
+    ///     Thrown when the model fails to load within the specified
+    ///     timeout.
+    /// </exception>
     private Model CreateVehicleModel(VehicleHash vehicleHash)
     {
         // Create a model from the VehicleHash.
@@ -82,9 +84,7 @@ public class VehicleSpawnerScript : Script
         {
             // Request the associated asset with a 1-second timeout.
             if (!vehicleModel.Request(1000))
-            {
                 throw new VehicleModelRequestTimedOutException($"Loading of vehicle model timed out: {vehicleHash}");
-            }
         }
         else
         {
@@ -95,12 +95,15 @@ public class VehicleSpawnerScript : Script
     }
 
     /// <summary>
-    /// Creates and positions a vehicle using the provided Model object.
-    /// Throws a VehicleSpawnFailedException if the vehicle object is not created successfully or does not exist.
+    ///     Creates and positions a vehicle using the provided Model object.
+    ///     Throws a VehicleSpawnFailedException if the vehicle object is not created successfully or does not exist.
     /// </summary>
     /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
     /// <returns>The spawned vehicle.</returns>
-    /// <exception cref="VehicleSpawnFailedException">Thrown when the vehicle object is not created successfully or does not exist.</exception>
+    /// <exception cref="VehicleSpawnFailedException">
+    ///     Thrown when the vehicle object is not created successfully or does not
+    ///     exist.
+    /// </exception>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
         // Create the Vehicle from the model, position it 5.0f in front of the player, and set its heading.
@@ -113,9 +116,7 @@ public class VehicleSpawnerScript : Script
 
         // Ensure the vehicle is actually spawned
         if (vehicle == null || !vehicle.Exists())
-        {
             throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
-        }
 
         return vehicle;
     }
