@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
+using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.Services.Exception;
 using Nuclei.UI.Items;
 using Font = GTA.UI.Font;
 
@@ -29,6 +31,11 @@ public abstract class MenuBase : NativeMenu
     public static MenuBase LatestMenu { get; set; }
 
     /// <summary>
+    ///     This service helps with handling exceptions.
+    /// </summary>
+    private readonly ExceptionService _exceptionService = ExceptionService.Instance;
+
+    /// <summary>
     ///     Creates a new menu.
     /// </summary>
     /// <param name="subtitle">The subtitle to display below the header.</param>
@@ -40,6 +47,8 @@ public abstract class MenuBase : NativeMenu
 
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
+
+        _exceptionService.ErrorOccurred += OnErrorOccurred;
 
         Pool.Add(this);
     }
@@ -212,5 +221,10 @@ public abstract class MenuBase : NativeMenu
     {
         LatestMenu = this;
         SkipHeader();
+    }
+
+    private void OnErrorOccurred(object sender, string message)
+    {
+        Notification.Show($"~r~{message}");
     }
 }
