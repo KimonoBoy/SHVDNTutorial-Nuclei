@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Player;
 
 namespace Nuclei.Scripts.Player;
@@ -15,6 +16,18 @@ public class PlayerScript : Script
         Tick += OnTick;
         KeyDown += OnKeyDown;
         _playerService.PlayerFixed += OnPlayerFixed;
+        _playerService.IsInvincible.ValueChanged += OnInvincibleChanged;
+        _playerService.WantedLevel.ValueChanged += OnWantedLevelChanged;
+    }
+
+    private void OnTick(object sender, EventArgs e)
+    {
+        /*
+         * Updates the different states in the PlayerService, when
+         * changes in the game happens.
+         */
+        UpdateInvincible();
+        UpdateWantedLevel();
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -29,19 +42,25 @@ public class PlayerScript : Script
         Game.Player.Character.Armor = Game.Player.MaxArmor;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    private void OnInvincibleChanged(object sender, ValueEventArgs<bool> e)
     {
-        Invincible();
-        AdjustWantedLevel();
+        Game.Player.Character.IsInvincible = e.Value;
     }
 
-    private void AdjustWantedLevel()
+    private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
     {
-        Game.Player.WantedLevel = _playerService.WantedLevel;
+        Game.Player.WantedLevel = e.Value;
     }
 
-    private void Invincible()
+    private void UpdateWantedLevel()
     {
-        Game.Player.Character.IsInvincible = _playerService.IsInvincible;
+        if (_playerService.WantedLevel.Value != Game.Player.WantedLevel)
+            _playerService.WantedLevel.Value = Game.Player.WantedLevel;
+    }
+
+    private void UpdateInvincible()
+    {
+        if (_playerService.IsInvincible.Value != Game.Player.IsInvincible)
+            _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
     }
 }

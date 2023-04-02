@@ -1,13 +1,13 @@
 ﻿using System;
+using Nuclei.Helpers.Utilities;
 
 namespace Nuclei.Services.Player;
 
 public interface IPlayerService
 {
-    bool IsInvincible { get; }
-    int WantedLevel { get; }
+    BindableProperty<bool> IsInvincible { get; }
+    BindableProperty<int> WantedLevel { get; }
+
     event EventHandler PlayerFixed;
     void FixPlayer();
-    void SetInvincible(bool isInvincible);
-    void SetWantedLevel(int wantedLevel);
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Nuclei.Helpers.Utilities;
 
 namespace Nuclei.Services.Player;
 
@@ -16,12 +17,12 @@ public class PlayerService : IPlayerService
     /// <summary>
     ///     A property that determines whether the player is invincible or not.
     /// </summary>
-    public bool IsInvincible { get; private set; }
+    public BindableProperty<bool> IsInvincible { get; } = new();
 
     /// <summary>
     ///     A property that represents the wanted level of the player.
     /// </summary>
-    public int WantedLevel { get; private set; }
+    public BindableProperty<int> WantedLevel { get; } = new();
 
     /// <summary>
     ///     An event that is invoked when the player is fixed.
@@ -34,23 +35,5 @@ public class PlayerService : IPlayerService
     public void FixPlayer()
     {
         PlayerFixed?.Invoke(this, EventArgs.Empty);
-    }
-
-    /// <summary>
-    ///     A method that sets the value of the `IsInvincible` property.
-    /// </summary>
-    /// <param name="isInvincible">A boolean value that determines whether the player is invincible or not.</param>
-    public void SetInvincible(bool isInvincible)
-    {
-        IsInvincible = isInvincible;
-    }
-
-    /// <summary>
-    ///     A method that sets the value of the `WantedLevel` property.
-    /// </summary>
-    /// <param name="wantedLevel">An integer value that represents the wanted level of the player.</param>
-    public void SetWantedLevel(int wantedLevel)
-    {
-        WantedLevel = wantedLevel;
     }
 }
