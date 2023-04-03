@@ -16,24 +16,19 @@ namespace Nuclei.UI.Menus.Abstracts;
 public abstract class MenuBase : NativeMenu
 {
     /// <summary>
-    ///    Whether the user is navigating up (true) or down (false).
-    /// </summary>
-    private bool _isMovingUp;
-
-    /// <summary>
     ///     The pool of menus.
     /// </summary>
     public static ObjectPool Pool = new();
 
     /// <summary>
-    ///     The latest active menu. This is used to determine which menu to return to when closing a menu.
-    /// </summary>
-    public static MenuBase LatestMenu { get; set; }
-
-    /// <summary>
     ///     This service helps with handling exceptions.
     /// </summary>
     private readonly ExceptionService _exceptionService = ExceptionService.Instance;
+
+    /// <summary>
+    ///     Whether the user is navigating up (true) or down (false).
+    /// </summary>
+    private bool _isMovingUp;
 
     /// <summary>
     ///     Creates a new menu.
@@ -61,14 +56,19 @@ public abstract class MenuBase : NativeMenu
     {
     }
 
+    /// <summary>
+    ///     The latest active menu. This is used to determine which menu to return to when closing a menu.
+    /// </summary>
+    public static MenuBase LatestMenu { get; set; }
+
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
     {
         SkipHeader();
     }
 
     /// <summary>
-    /// Header Items are meant to only categorize items, not be selectable.
-    /// So when a header item is selected, we skip it, selecting the next item (depending on user-input) instead.
+    ///     Header Items are meant to only categorize items, not be selectable.
+    ///     So when a header item is selected, we skip it, selecting the next item (depending on user-input) instead.
     /// </summary>
     private void SkipHeader()
     {

@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace Nuclei.Services.Exception;
+
 public class ExceptionService
 {
     public static readonly ExceptionService Instance = new();

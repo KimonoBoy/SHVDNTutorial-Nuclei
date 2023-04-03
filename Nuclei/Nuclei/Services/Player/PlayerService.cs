@@ -15,6 +15,11 @@ public class PlayerService : IPlayerService
     public static readonly PlayerService Instance = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player has infinite stamina.
+    /// </summary>
+    public BindableProperty<bool> HasInfiniteStamina { get; } = new();
+
+    /// <summary>
     ///     A property that determines whether the player is invincible or not.
     /// </summary>
     public BindableProperty<bool> IsInvincible { get; } = new();
@@ -35,5 +40,17 @@ public class PlayerService : IPlayerService
     public void FixPlayer()
     {
         PlayerFixed?.Invoke(this, EventArgs.Empty);
+    }
+
+    /// <summary>
+    /// </summary>
+    public event EventHandler CashInputRequested;
+
+    /// <summary>
+    ///     Will invoke the `CashInputRequested` event.
+    /// </summary>
+    public void SetCashInput()
+    {
+        CashInputRequested?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -29,7 +29,7 @@ public class VehicleSpawnerScript : Script
         const int maxAttempts = 3;
         var currentAttempt = 1;
 
-        while (currentAttempt < maxAttempts)
+        while (currentAttempt <= maxAttempts)
             try
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
@@ -45,7 +45,7 @@ public class VehicleSpawnerScript : Script
                 {
                     ExceptionService.Instance.RaiseError($"{vehicleSpawnerException}");
                     // Logging will be implemented later.
-                    break;
+                    break; // We've tried to spawn the vehicle 3 times, break the loop.
                 }
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ public class VehicleSpawnerScript : Script
                 ExceptionService.Instance.RaiseError(
                     $"Something went wrong:\n\n{ex.Message}\n\nSee log for more info!");
                 // Logging will be implemented later.
-                break;
+                break; // If we reach this exception, something else happened, therefore break.
             }
     }
 

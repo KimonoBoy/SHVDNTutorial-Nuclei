@@ -10,7 +10,7 @@ public class VehicleSpawnerMenu : MenuBase
     {
         GenerateVehicleClassMenus();
     }
-    
+
     private void GenerateVehicleClassMenus()
     {
         foreach (VehicleClass vehicleClass in Enum.GetValues(typeof(VehicleClass)))

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
+using GTA.Native;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Services.Exception;
+using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Player;
 
 namespace Nuclei.Scripts.Player;
@@ -18,6 +21,40 @@ public class PlayerScript : Script
         _playerService.PlayerFixed += OnPlayerFixed;
         _playerService.IsInvincible.ValueChanged += OnInvincibleChanged;
         _playerService.WantedLevel.ValueChanged += OnWantedLevelChanged;
+        _playerService.CashInputRequested += OnCashInputRequested;
+    }
+
+    private void OnCashInputRequested(object sender, EventArgs e)
+    {
+        try
+        {
+            var maxLength = 12;
+            var cashInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 20);
+            if (cashInput.Length > maxLength)
+                cashInput = cashInput.Substring(0, maxLength);
+
+            if (string.IsNullOrEmpty(cashInput))
+                throw new EmptyCashInputException();
+
+            var cashInputAsULong = ulong.TryParse(cashInput, out var result);
+
+            if (cashInputAsULong)
+                Game.Player.Money = result > int.MaxValue ? int.MaxValue : (int)result;
+            else
+                throw new InvalidCashInputException();
+        }
+        catch (EmptyCashInputException emptyCashInputException)
+        {
+            ExceptionService.Instance.RaiseError(emptyCashInputException.Message);
+        }
+        catch (InvalidCashInputException invalidCashException)
+        {
+            ExceptionService.Instance.RaiseError(invalidCashException.Message);
+        }
+        catch (Exception ex)
+        {
+            ExceptionService.Instance.RaiseError(ex.Message);
+        }
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -28,6 +65,25 @@ public class PlayerScript : Script
          */
         UpdateInvincible();
         UpdateWantedLevel();
+
+        /*
+         * Utilities
+         */
+        ProcessInfiniteStamina();
+    }
+
+    /// <summary>
+    ///     When sprinting or swimming, if the amount of time you can sprint for
+    ///     drops below 5 seconds, RESET STAMINA to FULL.
+    /// </summary>
+    private void ProcessInfiniteStamina()
+    {
+        if (!_playerService.HasInfiniteStamina.Value) return;
+        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
+            !Game.Player.Character.IsSwimming) return;
+
+        if (Game.Player.RemainingSprintTime <= 5.0f)
+            Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

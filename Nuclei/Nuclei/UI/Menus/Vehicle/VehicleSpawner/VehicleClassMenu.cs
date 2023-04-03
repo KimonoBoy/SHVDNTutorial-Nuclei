@@ -22,10 +22,7 @@ public class VehicleClassMenu : MenuBase
     {
         foreach (var vehicleHash in GTA.Vehicle.GetAllModelsOfClass(_vehicleClass).OrderBy(v => v.ToPrettyString()))
         {
-            var itemSpawnVehicle = AddItem(vehicleHash, () =>
-            {
-                _vehicleSpawnerService.SpawnVehicle(vehicleHash);
-            });
+            var itemSpawnVehicle = AddItem(vehicleHash, () => { _vehicleSpawnerService.SpawnVehicle(vehicleHash); });
             itemSpawnVehicle.Description = $"Spawn {vehicleHash.ToPrettyString()}";
         }
     }
