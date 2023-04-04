@@ -43,13 +43,14 @@ public class PlayerService : IPlayerService
     }
 
     /// <summary>
+    ///     An event that is invoked when the RequestCashInput is called.
     /// </summary>
     public event EventHandler CashInputRequested;
 
     /// <summary>
-    ///     Will invoke the `CashInputRequested` event.
+    ///     A method that invokes the `CashInputRequested` event.
     /// </summary>
-    public void SetCashInput()
+    public void RequestCashInput()
     {
         CashInputRequested?.Invoke(this, EventArgs.Empty);
     }

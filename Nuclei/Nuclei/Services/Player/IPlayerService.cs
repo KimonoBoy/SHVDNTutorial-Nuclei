@@ -10,4 +10,7 @@ public interface IPlayerService
 
     event EventHandler PlayerFixed;
     void FixPlayer();
+
+    event EventHandler CashInputRequested;
+    void RequestCashInput();
 }

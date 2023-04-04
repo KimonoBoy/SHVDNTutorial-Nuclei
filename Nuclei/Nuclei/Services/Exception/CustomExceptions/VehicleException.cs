@@ -1,54 +1,37 @@
-﻿namespace Nuclei.Services.Exception.CustomExceptions;
+﻿using Nuclei.Enums;
 
-public class VehicleException : System.Exception
+namespace Nuclei.Services.Exception.CustomExceptions;
+
+public class VehicleModelRequestTimedOutException : CustomExceptionBase
 {
-    public VehicleException()
+    public VehicleModelRequestTimedOutException() : base(ExceptionType.SpawnVehicle,
+        "Loading of vehicle model timed out.")
     {
     }
 
-    public VehicleException(string message) : base(message)
-    {
-    }
-
-    public VehicleException(string message, System.Exception innerException) : base(message, innerException)
-    {
-    }
-
-    public override string ToString()
-    {
-        return $"~h~Failed to Spawn Vehicle:~h~\n\n{Message}";
-    }
-}
-
-public class VehicleModelRequestTimedOutException : VehicleException
-{
-    public VehicleModelRequestTimedOutException() : base("Loading of vehicle model timed out.")
-    {
-    }
-
-    public VehicleModelRequestTimedOutException(string message) : base(message)
+    public VehicleModelRequestTimedOutException(string message) : base(ExceptionType.SpawnVehicle, message)
     {
     }
 }
 
-public class VehicleModelNotFoundException : VehicleException
+public class VehicleModelNotFoundException : CustomExceptionBase
 {
-    public VehicleModelNotFoundException() : base("Vehicle model not found.")
+    public VehicleModelNotFoundException() : base(ExceptionType.SpawnVehicle, "Vehicle model not found.")
     {
     }
 
-    public VehicleModelNotFoundException(string message) : base(message)
+    public VehicleModelNotFoundException(string message) : base(ExceptionType.SpawnVehicle, message)
     {
     }
 }
 
-public class VehicleSpawnFailedException : VehicleException
+public class VehicleSpawnFailedException : CustomExceptionBase
 {
-    public VehicleSpawnFailedException() : base("Failed to spawn the vehicle object.")
+    public VehicleSpawnFailedException() : base(ExceptionType.SpawnVehicle, "Failed to spawn the vehicle object.")
     {
     }
 
-    public VehicleSpawnFailedException(string message) : base(message)
+    public VehicleSpawnFailedException(string message) : base(ExceptionType.SpawnVehicle, message)
     {
     }
 }

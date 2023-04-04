@@ -1,38 +1,26 @@
-﻿namespace Nuclei.Services.Exception.CustomExceptions;
+﻿using Nuclei.Enums;
 
-public class PlayerException : System.Exception
+namespace Nuclei.Services.Exception.CustomExceptions;
+
+public class EmptyCashInputException : CustomExceptionBase
 {
-    public PlayerException()
+    public EmptyCashInputException() : base(ExceptionType.CashInput, "Cash input is empty.")
     {
     }
 
-    public PlayerException(string message) : base(message)
-    {
-    }
-
-    public PlayerException(string message, System.Exception innerException) : base(message, innerException)
+    public EmptyCashInputException(string message) : base(ExceptionType.CashInput, message)
     {
     }
 }
 
-public class EmptyCashInputException : PlayerException
+public class InvalidCashInputException : CustomExceptionBase
 {
-    public EmptyCashInputException() : base("Cash input is empty.")
+    public InvalidCashInputException() : base(ExceptionType.CashInput,
+        "Please enter a numeric value.")
     {
     }
 
-    public EmptyCashInputException(string message) : base(message)
-    {
-    }
-}
-
-public class InvalidCashInputException : PlayerException
-{
-    public InvalidCashInputException() : base("Invalid cash input.\n\nPlease enter a valid numeric value.")
-    {
-    }
-
-    public InvalidCashInputException(string message) : base(message)
+    public InvalidCashInputException(string message) : base(ExceptionType.CashInput, message)
     {
     }
 }

@@ -37,7 +37,7 @@ public class VehicleSpawnerScript : Script
 
                 break; // We successfully spawned the vehicle, therefore stopping the loop.
             }
-            catch (VehicleException vehicleSpawnerException)
+            catch (CustomExceptionBase vehicleSpawnerException)
             {
                 currentAttempt++;
 

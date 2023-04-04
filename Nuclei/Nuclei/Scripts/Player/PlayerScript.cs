@@ -26,9 +26,17 @@ public class PlayerScript : Script
 
     private void OnCashInputRequested(object sender, EventArgs e)
     {
+        RequestCashInput();
+    }
+
+    /// <summary>
+    ///     Requests a UserInput Window for setting Player Money.
+    /// </summary>
+    private static void RequestCashInput()
+    {
         try
         {
-            var maxLength = 12;
+            var maxLength = int.MaxValue.ToString().Length;
             var cashInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 20);
             if (cashInput.Length > maxLength)
                 cashInput = cashInput.Substring(0, maxLength);
@@ -43,13 +51,9 @@ public class PlayerScript : Script
             else
                 throw new InvalidCashInputException();
         }
-        catch (EmptyCashInputException emptyCashInputException)
+        catch (CustomExceptionBase cashInputException)
         {
-            ExceptionService.Instance.RaiseError(emptyCashInputException.Message);
-        }
-        catch (InvalidCashInputException invalidCashException)
-        {
-            ExceptionService.Instance.RaiseError(invalidCashException.Message);
+            ExceptionService.Instance.RaiseError($"{cashInputException}");
         }
         catch (Exception ex)
         {
@@ -116,6 +120,7 @@ public class PlayerScript : Script
 
     private void UpdateInvincible()
     {
+        // This needs to be implemented differently. We'll cover it later and you'll see why.
         if (_playerService.IsInvincible.Value != Game.Player.IsInvincible)
             _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
     }

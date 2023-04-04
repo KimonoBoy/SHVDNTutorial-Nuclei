@@ -4,26 +4,27 @@ namespace Nuclei.Enums;
 
 public enum MenuTitles
 {
-    [Description("One Menu to Rule them all.")]
+    [Description("One menu to rule them all! Access all the features and options in one convenient location.")]
     Main,
 
-    [Description("Everything associated with the Player and its Character.")]
+    [Description("Customize everything associated with your player and its character!")]
     Player,
 
-    [Description("Change the Player's model. Be anyone you'd like. Even become a bird and fly.")]
+    [Description(
+        "Change your player's appearance and transform into any character, creature or even bird and take to the skies!")]
     SkinChanger,
 
     [Description(
-        "This menu allows you to see the Player's current stats and adjust them to your liking. Be the best version of you!")]
+        "Get complete control over your player's stats and customize them to be the best version of yourself!")]
     ChangeStats,
 
     [Description(
-        "Repair vehicles, make them indestructible, apply parachutes, how about vehicle rockets, or maybe you just want to spawn your own and modify them?")]
+        "Get full control over vehicles, from repairing them to making them indestructible, adding parachutes, or even vehicle rockets. You can even spawn and modify your own vehicles!")]
     Vehicle,
 
-    [Description("Spawn any Vehicle in the game.")]
+    [Description("Summon any vehicle from the game and make your grand entrance in style!")]
     SpawnVehicle,
 
-    [Description("Everything associated with Weapons.")]
+    [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapon
 }

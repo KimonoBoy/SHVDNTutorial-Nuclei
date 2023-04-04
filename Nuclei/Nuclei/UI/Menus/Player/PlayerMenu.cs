@@ -14,6 +14,7 @@ public class PlayerMenu : MenuBase
     {
         SkinChangerMenu();
         PlayerStatsMenu();
+
         AddHeader("Basics");
         FixPlayer();
         SetInvincible();
@@ -21,12 +22,14 @@ public class PlayerMenu : MenuBase
         LockWantedLevel();
         AddCash();
         SetCash();
+
         AddHeader("Utilities");
         SetInfiniteStamina();
         SetInfiniteBreath();
         SetInfiniteSpecialAbility();
         SetNoiseless();
         SetRideOnCars();
+
         AddHeader("Super Powers");
         SuperJump();
         OnePunchMan();
@@ -34,73 +37,10 @@ public class PlayerMenu : MenuBase
         Invisible();
     }
 
-    private void AddCash()
+    private void SkinChangerMenu()
     {
-        // We'll update this later, with better values than strings.
-        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, (selected, index) => { }, "$10.000", "$100.000",
-            "$1.000.000", "$100.000.000");
-    }
-
-    private void Invisible()
-    {
-        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false, @checked => { });
-    }
-
-    private void SuperSpeed()
-    {
-        // Will be updated later to use enums instead.
-        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed, (selected, index) => { }, "Normal", "Fast",
-            "Faster", "Sonic", "The Flash");
-
-        // Depending on the selected item, if "Sonic" or "The Flash" a new Sub Menu will be available
-        // Needs implementation.
-    }
-
-    private void OnePunchMan()
-    {
-        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false, @checked => { });
-    }
-
-    private void LockWantedLevel()
-    {
-        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false, @checked => { });
-    }
-
-    private void SuperJump()
-    {
-        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false, @checked => { });
-    }
-
-    private void SetNoiseless()
-    {
-        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false, @checked => { });
-    }
-
-    private void SetRideOnCars()
-    {
-        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false, @checked => { });
-    }
-
-    private void SetInfiniteSpecialAbility()
-    {
-        var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility, false,
-            @checked => { });
-    }
-
-    private void SetInfiniteBreath()
-    {
-        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false, @checked => { });
-    }
-
-    private void SetInfiniteStamina()
-    {
-        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, false,
-            @checked => { _playerService.HasInfiniteStamina.Value = @checked; });
-    }
-
-    private void SetCash()
-    {
-        var itemAddCash = AddItem(PlayerItemTitles.SetCash, () => { _playerService.SetCashInput(); });
+        var skinChangerMenu = new SkinChangerMenu(MenuTitles.SkinChanger);
+        var skinChangerMenuItem = AddMenu(skinChangerMenu);
     }
 
     private void PlayerStatsMenu()
@@ -109,11 +49,6 @@ public class PlayerMenu : MenuBase
         var playerStatsMenuItem = AddMenu(playerStatsMenu);
     }
 
-    private void SkinChangerMenu()
-    {
-        var skinChangerMenu = new SkinChangerMenu(MenuTitles.SkinChanger);
-        var skinChangerMenuItem = AddMenu(skinChangerMenu);
-    }
 
     private void FixPlayer()
     {
@@ -135,5 +70,76 @@ public class PlayerMenu : MenuBase
             (item, index) => { _playerService.WantedLevel.Value = item; }, 0, 1, 2, 3, 4, 5);
 
         _playerService.WantedLevel.ValueChanged += (sender, e) => { listItemWantedLevel.SelectedItem = e.Value; };
+    }
+
+    private void LockWantedLevel()
+    {
+        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false, @checked => { });
+    }
+
+    private void AddCash()
+    {
+        // We'll update this later, with better values than strings.
+        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, (selected, index) => { }, "$10.000", "$100.000",
+            "$1.000.000", "$100.000.000");
+    }
+
+    private void SetCash()
+    {
+        var itemSetCash = AddItem(PlayerItemTitles.SetCash, () => { _playerService.RequestCashInput(); });
+    }
+
+
+    private void SetInfiniteStamina()
+    {
+        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, false,
+            @checked => { _playerService.HasInfiniteStamina.Value = @checked; });
+    }
+
+    private void SetInfiniteBreath()
+    {
+        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false, @checked => { });
+    }
+
+    private void SetInfiniteSpecialAbility()
+    {
+        var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility, false,
+            @checked => { });
+    }
+
+    private void SetNoiseless()
+    {
+        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false, @checked => { });
+    }
+
+    private void SetRideOnCars()
+    {
+        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false, @checked => { });
+    }
+
+
+    private void SuperJump()
+    {
+        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false, @checked => { });
+    }
+
+    private void OnePunchMan()
+    {
+        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false, @checked => { });
+    }
+
+    private void SuperSpeed()
+    {
+        // Will be updated later to use enums instead.
+        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed, (selected, index) => { }, "Normal", "Fast",
+            "Faster", "Sonic", "The Flash");
+
+        // Depending on the selected item, if "Sonic" or "The Flash" a new Sub Menu will be available
+        // Needs implementation.
+    }
+
+    private void Invisible()
+    {
+        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false, @checked => { });
     }
 }

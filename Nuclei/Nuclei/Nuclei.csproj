@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ExceptionType.cs" />
     <Compile Include="Enums\MenuTitles.cs" />
     <Compile Include="Enums\PlayerItemTitles.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
+    <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />
