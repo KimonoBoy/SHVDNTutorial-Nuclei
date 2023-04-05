@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Nuclei.Enums;
+namespace Nuclei.Enums.UI;
 
 public enum MenuTitles
 {

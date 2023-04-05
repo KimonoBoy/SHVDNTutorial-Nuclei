@@ -1,4 +1,4 @@
-﻿using Nuclei.Enums;
+﻿using Nuclei.Enums.Exception;
 
 namespace Nuclei.Services.Exception.CustomExceptions;
 

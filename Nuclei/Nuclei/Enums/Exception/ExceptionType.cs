@@ -1,4 +1,4 @@
-﻿namespace Nuclei.Enums;
+﻿namespace Nuclei.Enums.Exception;
 
 public enum ExceptionType
 {

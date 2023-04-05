@@ -1,5 +1,5 @@
 ﻿using System;
-using Nuclei.Enums;
+using Nuclei.Enums.UI;
 using Nuclei.UI.Menus.Abstracts;
 using Nuclei.UI.Menus.Player;
 using Nuclei.UI.Menus.Vehicle;

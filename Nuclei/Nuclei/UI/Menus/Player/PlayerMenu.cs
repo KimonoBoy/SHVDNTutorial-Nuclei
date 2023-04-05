@@ -1,6 +1,7 @@
 ﻿using System;
 using GTA;
 using Nuclei.Enums;
+using Nuclei.Enums.UI;
 using Nuclei.Services.Player;
 using Nuclei.UI.Menus.Abstracts;
 

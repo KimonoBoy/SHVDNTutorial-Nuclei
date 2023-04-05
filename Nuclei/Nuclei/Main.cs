@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
-using Nuclei.Enums;
+using Nuclei.Enums.UI;
 using Nuclei.UI.Menus.Abstracts;
 using MainMenu = Nuclei.UI.Menus.MainMenu;
 

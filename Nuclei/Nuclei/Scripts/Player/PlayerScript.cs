@@ -32,7 +32,7 @@ public class PlayerScript : Script
     /// <summary>
     ///     Requests a UserInput Window for setting Player Money.
     /// </summary>
-    private static void RequestCashInput()
+    private void RequestCashInput()
     {
         try
         {
@@ -41,8 +41,7 @@ public class PlayerScript : Script
             if (cashInput.Length > maxLength)
                 cashInput = cashInput.Substring(0, maxLength);
 
-            if (string.IsNullOrEmpty(cashInput))
-                throw new EmptyCashInputException();
+            if (string.IsNullOrEmpty(cashInput)) return;
 
             var cashInputAsULong = ulong.TryParse(cashInput, out var result);
 
@@ -53,7 +52,7 @@ public class PlayerScript : Script
         }
         catch (CustomExceptionBase cashInputException)
         {
-            ExceptionService.Instance.RaiseError($"{cashInputException}");
+            ExceptionService.Instance.RaiseError(cashInputException.ToString());
         }
         catch (Exception ex)
         {
