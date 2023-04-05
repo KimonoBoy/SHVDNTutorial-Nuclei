@@ -218,6 +218,11 @@ public abstract class MenuBase : NativeMenu
         return headerItem;
     }
 
+    /// <summary>
+    ///     Performs a few tasks when the Menu is shown.
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnShown(object sender, EventArgs e)
     {
         LatestMenu = this;
@@ -227,7 +232,7 @@ public abstract class MenuBase : NativeMenu
     /// <summary>
     ///     Displays a Notification when an error is raised.
     /// </summary>
-    /// <param name="sender">Where the error was called from.</param>
+    /// <param name="sender">The caller.</param>
     /// <param name="exception">The exception that was thrown.</param>
     private void OnErrorOccurred(object sender, CustomExceptionBase exception)
     {

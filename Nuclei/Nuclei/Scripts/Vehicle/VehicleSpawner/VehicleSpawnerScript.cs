@@ -32,6 +32,7 @@ public class VehicleSpawnerScript : Script
         while (currentAttempt <= maxAttempts)
             try
             {
+                throw new ArgumentOutOfRangeException();
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
 
@@ -44,14 +45,12 @@ public class VehicleSpawnerScript : Script
                 if (currentAttempt == maxAttempts)
                 {
                     ExceptionService.Instance.RaiseError(vehicleSpawnerException);
-
                     break;
                 }
             }
             catch (Exception ex)
             {
                 ExceptionService.Instance.RaiseError(ex);
-
                 break;
             }
     }
