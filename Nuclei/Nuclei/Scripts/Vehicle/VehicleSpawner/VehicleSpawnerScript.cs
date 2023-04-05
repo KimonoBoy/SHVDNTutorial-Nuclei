@@ -35,7 +35,7 @@ public class VehicleSpawnerScript : Script
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
 
-                break; // We successfully spawned the vehicle, therefore stopping the loop.
+                break;
             }
             catch (CustomExceptionBase vehicleSpawnerException)
             {
@@ -44,15 +44,15 @@ public class VehicleSpawnerScript : Script
                 if (currentAttempt == maxAttempts)
                 {
                     ExceptionService.Instance.RaiseError(vehicleSpawnerException);
-                    // Logging will be implemented later.
-                    break; // We've tried to spawn the vehicle 3 times, break the loop.
+
+                    break;
                 }
             }
             catch (Exception ex)
             {
                 ExceptionService.Instance.RaiseError(ex);
-                // Logging will be implemented later.
-                break; // If we reach this exception, something else happened, therefore break.
+
+                break;
             }
     }
 

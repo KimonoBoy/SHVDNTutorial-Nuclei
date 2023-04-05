@@ -1,8 +1,13 @@
-﻿namespace Nuclei.Enums.Exception;
+﻿using System.ComponentModel;
+
+namespace Nuclei.Enums.Exception;
 
 public enum ExceptionType
 {
-    Unknown,
+    [Description("Something went wrong")] Unknown,
+
+    [Description("Failed to spawn vehicle")]
     SpawnVehicle,
-    CashInput
+
+    [Description("Set cash input failed")] CashInput
 }

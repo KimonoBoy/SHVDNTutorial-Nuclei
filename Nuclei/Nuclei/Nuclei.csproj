@@ -54,6 +54,7 @@
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
+    <Compile Include="Helpers\Utilities\Logger.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
@@ -83,6 +84,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"</PostBuildEvent>
+    <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -1,24 +1,33 @@
 ﻿using System;
 using Nuclei.Enums.Exception;
+using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception.CustomExceptions;
 
 namespace Nuclei.Services.Exception;
 
 public class ExceptionService
 {
-    public static readonly ExceptionService Instance = new();
+    private static readonly Lazy<ExceptionService> _instance = new(() => new ExceptionService());
+    private readonly Logger _logger;
+
+    private ExceptionService()
+    {
+        _logger = new Logger("scripts/Nuclei/logs/logs.log");
+    }
+
+    public static ExceptionService Instance => _instance.Value;
 
     public event EventHandler<CustomExceptionBase> ErrorOccurred;
 
     public void RaiseError(CustomExceptionBase exception)
     {
+        _logger.LogException(exception);
         ErrorOccurred?.Invoke(this, exception);
     }
 
-    public void RaiseError(System.Exception ex)
+    public void RaiseError(System.Exception exception)
     {
-        // Wrap the generic exception inside your CustomExceptionBase with an appropriate ExceptionType
-        var wrappedException = new CustomExceptionBase(ExceptionType.Unknown, ex.Message, ex);
-        ErrorOccurred?.Invoke(this, wrappedException);
+        _logger.LogException(exception);
+        ErrorOccurred?.Invoke(this, new CustomExceptionBase(ExceptionType.Unknown, exception.Message));
     }
 }
