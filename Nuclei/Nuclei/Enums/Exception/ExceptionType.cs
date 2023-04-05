@@ -2,6 +2,7 @@
 
 public enum ExceptionType
 {
+    Unknown,
     SpawnVehicle,
     CashInput
 }

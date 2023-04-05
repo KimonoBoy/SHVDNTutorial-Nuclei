@@ -8,6 +8,7 @@ using LemonUI;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Exception;
+using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.UI.Items;
 using Font = GTA.UI.Font;
 
@@ -223,8 +224,13 @@ public abstract class MenuBase : NativeMenu
         SkipHeader();
     }
 
-    private void OnErrorOccurred(object sender, string message)
+    /// <summary>
+    ///     Displays a Notification when an error is raised.
+    /// </summary>
+    /// <param name="sender">Where the error was called from.</param>
+    /// <param name="exception">The exception that was thrown.</param>
+    private void OnErrorOccurred(object sender, CustomExceptionBase exception)
     {
-        Notification.Show($"~r~{message}");
+        Notification.Show($"~r~~h~{exception.Prefix}~h~:\n\n~w~{exception.Message}");
     }
 }

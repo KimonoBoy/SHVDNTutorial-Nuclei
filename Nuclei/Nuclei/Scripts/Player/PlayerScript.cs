@@ -52,11 +52,11 @@ public class PlayerScript : Script
         }
         catch (CustomExceptionBase cashInputException)
         {
-            ExceptionService.Instance.RaiseError(cashInputException.ToString());
+            ExceptionService.Instance.RaiseError(cashInputException);
         }
         catch (Exception ex)
         {
-            ExceptionService.Instance.RaiseError(ex.Message);
+            ExceptionService.Instance.RaiseError(ex);
         }
     }
 

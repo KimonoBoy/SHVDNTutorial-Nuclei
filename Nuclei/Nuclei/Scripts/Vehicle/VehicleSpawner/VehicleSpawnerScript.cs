@@ -43,15 +43,14 @@ public class VehicleSpawnerScript : Script
 
                 if (currentAttempt == maxAttempts)
                 {
-                    ExceptionService.Instance.RaiseError($"{vehicleSpawnerException}");
+                    ExceptionService.Instance.RaiseError(vehicleSpawnerException);
                     // Logging will be implemented later.
                     break; // We've tried to spawn the vehicle 3 times, break the loop.
                 }
             }
             catch (Exception ex)
             {
-                ExceptionService.Instance.RaiseError(
-                    $"Something went wrong:\n\n{ex.Message}\n\nSee log for more info!");
+                ExceptionService.Instance.RaiseError(ex);
                 // Logging will be implemented later.
                 break; // If we reach this exception, something else happened, therefore break.
             }
