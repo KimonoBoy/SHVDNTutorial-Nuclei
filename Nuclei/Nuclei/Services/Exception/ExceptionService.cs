@@ -1,5 +1,4 @@
 ﻿using System;
-using Nuclei.Constants;
 using Nuclei.Enums.Exception;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception.CustomExceptions;
@@ -13,7 +12,7 @@ public class ExceptionService
 
     private ExceptionService()
     {
-        _logger = new Logger(Paths.LoggerPath);
+        _logger = new Logger("scripts/Nuclei/logs/logs.log");
     }
 
     public static ExceptionService Instance => _instance.Value;

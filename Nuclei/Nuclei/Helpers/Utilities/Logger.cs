@@ -23,7 +23,6 @@ public class Logger
         if (!File.Exists(_logFilePath))
             using (var file = File.Create(_logFilePath))
             {
-                // Create the log file if it doesn't exist
             }
     }
 

@@ -1,5 +1,7 @@
 ﻿using System;
 using GTA;
+using Nuclei.Constants;
+using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
@@ -9,6 +11,7 @@ namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 public class VehicleSpawnerScript : Script
 {
     private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
+    private readonly Logger logger = new(Paths.LoggerPath);
 
     public VehicleSpawnerScript()
     {
@@ -32,7 +35,6 @@ public class VehicleSpawnerScript : Script
         while (currentAttempt <= maxAttempts)
             try
             {
-                throw new ArgumentOutOfRangeException();
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
 
