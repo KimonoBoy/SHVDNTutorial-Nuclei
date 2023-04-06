@@ -16,6 +16,11 @@ public class PlayerScript : Script
 
     public PlayerScript()
     {
+        SubscribeToEvents();
+    }
+
+    private void SubscribeToEvents()
+    {
         Tick += OnTick;
         KeyDown += OnKeyDown;
         _playerService.PlayerFixed += OnPlayerFixed;
@@ -24,9 +29,81 @@ public class PlayerScript : Script
         _playerService.CashInputRequested += OnCashInputRequested;
     }
 
+    private void OnTick(object sender, EventArgs e)
+    {
+        UpdateStates();
+        ProcessFunctions();
+    }
+
+    /// <summary>
+    ///     Updates the different states in the service.
+    /// </summary>
+    private void UpdateStates()
+    {
+        UpdateInvincible();
+        UpdateWantedLevel();
+    }
+
+    /// <summary>
+    ///     Game changes that need to be processed each frame.
+    /// </summary>
+    private void ProcessFunctions()
+    {
+        ProcessInfiniteStamina();
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.T && e.Control)
+            Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
+    }
+
+    private void OnPlayerFixed(object sender, EventArgs e)
+    {
+        Game.Player.Character.Health = Game.Player.Character.MaxHealth;
+        Game.Player.Character.Armor = Game.Player.MaxArmor;
+    }
+
+    private void OnInvincibleChanged(object sender, ValueEventArgs<bool> e)
+    {
+        Game.Player.Character.IsInvincible = e.Value;
+    }
+
+    private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
+    {
+        Game.Player.WantedLevel = e.Value;
+    }
+
     private void OnCashInputRequested(object sender, EventArgs e)
     {
         RequestCashInput();
+    }
+
+    private void UpdateInvincible()
+    {
+        // This needs to be implemented differently. We'll cover it later and you'll see why.
+        if (_playerService.IsInvincible.Value != Game.Player.IsInvincible)
+            _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
+    }
+
+    private void UpdateWantedLevel()
+    {
+        if (_playerService.WantedLevel.Value != Game.Player.WantedLevel)
+            _playerService.WantedLevel.Value = Game.Player.WantedLevel;
+    }
+
+    /// <summary>
+    ///     When sprinting or swimming, if the amount of time you can sprint for
+    ///     drops below 5 seconds, RESET STAMINA to FULL.
+    /// </summary>
+    private void ProcessInfiniteStamina()
+    {
+        if (!_playerService.HasInfiniteStamina.Value) return;
+        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
+            !Game.Player.Character.IsSwimming) return;
+
+        if (Game.Player.RemainingSprintTime <= 5.0f)
+            Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
     }
 
     /// <summary>
@@ -58,69 +135,5 @@ public class PlayerScript : Script
         {
             ExceptionService.Instance.RaiseError(ex);
         }
-    }
-
-    private void OnTick(object sender, EventArgs e)
-    {
-        /*
-         * Updates the different states in the PlayerService, when
-         * changes in the game happens.
-         */
-        UpdateInvincible();
-        UpdateWantedLevel();
-
-        /*
-         * Utilities
-         */
-        ProcessInfiniteStamina();
-    }
-
-    /// <summary>
-    ///     When sprinting or swimming, if the amount of time you can sprint for
-    ///     drops below 5 seconds, RESET STAMINA to FULL.
-    /// </summary>
-    private void ProcessInfiniteStamina()
-    {
-        if (!_playerService.HasInfiniteStamina.Value) return;
-        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
-            !Game.Player.Character.IsSwimming) return;
-
-        if (Game.Player.RemainingSprintTime <= 5.0f)
-            Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
-    }
-
-    private void OnKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.KeyCode == Keys.T && e.Control)
-            Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
-    }
-
-    private void OnPlayerFixed(object sender, EventArgs e)
-    {
-        Game.Player.Character.Health = Game.Player.Character.MaxHealth;
-        Game.Player.Character.Armor = Game.Player.MaxArmor;
-    }
-
-    private void OnInvincibleChanged(object sender, ValueEventArgs<bool> e)
-    {
-        Game.Player.Character.IsInvincible = e.Value;
-    }
-
-    private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
-    {
-        Game.Player.WantedLevel = e.Value;
-    }
-
-    private void UpdateWantedLevel()
-    {
-        if (_playerService.WantedLevel.Value != Game.Player.WantedLevel)
-            _playerService.WantedLevel.Value = Game.Player.WantedLevel;
-    }
-
-    private void UpdateInvincible()
-    {
-        // This needs to be implemented differently. We'll cover it later and you'll see why.
-        if (_playerService.IsInvincible.Value != Game.Player.IsInvincible)
-            _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
     }
 }
