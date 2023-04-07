@@ -68,14 +68,23 @@ public class PlayerMenu : MenuBase
     private void AdjustWantedLevel()
     {
         var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
-            (item, index) => { _playerService.WantedLevel.Value = item; }, 0, 1, 2, 3, 4, 5);
+            (item, index) =>
+            {
+                _playerService.WantedLevel.Value = item;
+                _playerService.LockedWantedLevel.Value = item;
+            }, 0, 1, 2, 3, 4, 5);
 
-        _playerService.WantedLevel.ValueChanged += (sender, e) => { listItemWantedLevel.SelectedItem = e.Value; };
+        _playerService.WantedLevel.ValueChanged += (sender, e) =>
+        {
+            if (!_playerService.IsWantedLevelLocked.Value)
+                listItemWantedLevel.SelectedItem = e.Value;
+        };
     }
 
     private void LockWantedLevel()
     {
-        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false, @checked => { });
+        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false,
+            @checked => { _playerService.IsWantedLevelLocked.Value = @checked; });
     }
 
     private void AddCash()

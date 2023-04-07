@@ -97,7 +97,8 @@ public class PlayerScript : Script
 
     private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
     {
-        Game.Player.WantedLevel = e.Value;
+        Game.Player.WantedLevel =
+            !_playerService.IsWantedLevelLocked.Value ? e.Value : _playerService.LockedWantedLevel.Value;
     }
 
     private void OnCashInputRequested(object sender, EventArgs e)

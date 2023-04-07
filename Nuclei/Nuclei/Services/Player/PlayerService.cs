@@ -15,6 +15,16 @@ public class PlayerService : IPlayerService
     public static readonly PlayerService Instance = new();
 
     /// <summary>
+    ///     A property that defines whether or not the Wanted Level
+    ///     will be locked at its current value.
+    /// </summary>
+    public BindableProperty<bool> IsWantedLevelLocked { get; } = new();
+
+    /// <summary>
+    /// </summary>
+    public BindableProperty<int> LockedWantedLevel { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the player has infinite special ability.
     /// </summary>
     public BindableProperty<bool> HasInfiniteSpecialAbility { get; } = new();
