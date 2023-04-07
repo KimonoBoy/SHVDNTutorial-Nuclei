@@ -61,6 +61,11 @@ public class PlayerService : IPlayerService
     public BindableProperty<int> WantedLevel { get; } = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player can super jump.
+    /// </summary>
+    public BindableProperty<bool> CanSuperJump { get; } = new();
+
+    /// <summary>
     ///     An event that is invoked when the player is fixed.
     /// </summary>
     public event EventHandler PlayerFixed;

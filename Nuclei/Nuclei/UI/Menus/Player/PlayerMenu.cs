@@ -133,7 +133,8 @@ public class PlayerMenu : MenuBase
 
     private void SuperJump()
     {
-        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false, @checked => { });
+        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false,
+            @checked => { _playerService.CanSuperJump.Value = @checked; });
     }
 
     private void OnePunchMan()

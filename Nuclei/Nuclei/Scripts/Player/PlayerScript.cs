@@ -71,6 +71,17 @@ public class PlayerScript : Script
         ProcessInfiniteStamina();
         ProcessInfiniteSpecialAbility();
         ProcessNoiseless();
+        ProcessSuperJump();
+    }
+
+    /// <summary>
+    ///     Allows the player to jump as high as a building.
+    /// </summary>
+    private void ProcessSuperJump()
+    {
+        if (!_playerService.CanSuperJump.Value) return;
+
+        Game.Player.SetSuperJumpThisFrame();
     }
 
     /// <summary>
