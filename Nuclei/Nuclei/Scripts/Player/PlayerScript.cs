@@ -78,11 +78,10 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessNoiseless()
     {
-        if (_playerService.IsNoiseless.Value)
-        {
-            Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
-            Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
-        }
+        if (!_playerService.IsNoiseless.Value) return;
+
+        Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
+        Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
     }
 
     /// <summary>
