@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
+using GTA.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
@@ -61,6 +63,11 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessFunctions()
     {
+        var x =
+            new TextElement($"NoiseLevel: {Function.Call<float>(Hash.GET_PLAYER_CURRENT_STEALTH_NOISE, Game.Player)}",
+                new PointF(100.0f, 100.0f), 0.3f);
+        x.Draw();
+
         ProcessInfiniteStamina();
         ProcessInfiniteSpecialAbility();
         ProcessNoiseless();
@@ -72,7 +79,10 @@ public class PlayerScript : Script
     private void ProcessNoiseless()
     {
         if (_playerService.IsNoiseless.Value)
+        {
             Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
+            Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
+        }
     }
 
     /// <summary>
