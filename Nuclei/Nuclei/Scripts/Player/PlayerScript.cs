@@ -63,6 +63,16 @@ public class PlayerScript : Script
     {
         ProcessInfiniteStamina();
         ProcessInfiniteSpecialAbility();
+        ProcessNoiseless();
+    }
+
+    /// <summary>
+    ///     The noise level increases slowly over time. This prevents that.
+    /// </summary>
+    private void ProcessNoiseless()
+    {
+        if (_playerService.IsNoiseless.Value)
+            Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
     }
 
     /// <summary>

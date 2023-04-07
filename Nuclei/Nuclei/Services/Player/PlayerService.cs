@@ -15,12 +15,18 @@ public class PlayerService : IPlayerService
     public static readonly PlayerService Instance = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player is noiseless.
+    /// </summary>
+    public BindableProperty<bool> IsNoiseless { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the Wanted Level
     ///     will be locked at its current value.
     /// </summary>
     public BindableProperty<bool> IsWantedLevelLocked { get; } = new();
 
     /// <summary>
+    ///     The Wanted Level to default to when the IsWantedLevelLocked is true.
     /// </summary>
     public BindableProperty<int> LockedWantedLevel { get; } = new();
 

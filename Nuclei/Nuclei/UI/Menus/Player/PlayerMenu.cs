@@ -120,7 +120,8 @@ public class PlayerMenu : MenuBase
 
     private void SetNoiseless()
     {
-        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false, @checked => { });
+        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false,
+            @checked => { _playerService.IsNoiseless.Value = @checked; });
     }
 
     private void SetRideOnCars()

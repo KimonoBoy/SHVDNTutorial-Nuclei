@@ -10,6 +10,8 @@ public interface IPlayerService
     BindableProperty<bool> HasInfiniteStamina { get; }
     BindableProperty<bool> HasInfiniteBreath { get; }
     BindableProperty<int> WantedLevel { get; }
+    BindableProperty<int> LockedWantedLevel { get; }
+    BindableProperty<bool> IsWantedLevelLocked { get; }
 
     event EventHandler PlayerFixed;
     void FixPlayer();
