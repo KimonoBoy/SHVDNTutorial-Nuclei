@@ -193,6 +193,21 @@ public abstract class MenuBase : NativeMenu
         return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), action, items);
     }
 
+    protected NativeListItem<T> AddOnActivateListItem<T>(string title, string description = "",
+        Action<T, int> action = null,
+        params T[] items)
+    {
+        var item = new NativeListItem<T>(title, description, items);
+        item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
+        Add(item);
+        return item;
+    }
+
+    protected NativeListItem<T> AddOnActivateListItem<T>(Enum @enum, Action<T, int> action = null, params T[] items)
+    {
+        return AddOnActivateListItem(@enum.ToPrettyString(), @enum.GetDescription(), action, items);
+    }
+
     /// <summary>
     ///     Adds a new submenu and associated item to the menu.
     /// </summary>

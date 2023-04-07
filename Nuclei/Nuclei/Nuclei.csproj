@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Constants\Paths.cs" />
     <Compile Include="Enums\Exception\ExceptionType.cs" />
+    <Compile Include="Enums\Player\CashHash.cs" />
     <Compile Include="Enums\UI\MenuTitles.cs" />
     <Compile Include="Enums\UI\PlayerItemTitles.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />

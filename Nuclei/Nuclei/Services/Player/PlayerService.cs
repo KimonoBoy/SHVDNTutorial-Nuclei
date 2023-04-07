@@ -1,4 +1,5 @@
 ﻿using System;
+using Nuclei.Enums.Player;
 using Nuclei.Helpers.Utilities;
 
 namespace Nuclei.Services.Player;
@@ -13,6 +14,11 @@ public class PlayerService : IPlayerService
     ///     A singleton instance of the PlayerService class.
     /// </summary>
     public static readonly PlayerService Instance = new();
+
+    /// <summary>
+    ///     A property that can set the cash hash.
+    /// </summary>
+    public BindableProperty<CashHash> AddCash { get; } = new();
 
     /// <summary>
     ///     A property that defines whether or not the player can ride on cars without falling over.
@@ -89,5 +95,12 @@ public class PlayerService : IPlayerService
     public void RequestCashInput()
     {
         CashInputRequested?.Invoke(this, EventArgs.Empty);
+    }
+
+    public event EventHandler AddCashRequested;
+
+    public void RequestAddCash()
+    {
+        AddCashRequested?.Invoke(this, EventArgs.Empty);
     }
 }

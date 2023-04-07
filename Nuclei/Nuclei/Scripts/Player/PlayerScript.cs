@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
@@ -29,6 +30,23 @@ public class PlayerScript : Script
         _playerService.CashInputRequested += OnCashInputRequested;
         _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
         _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
+        _playerService.AddCashRequested += OnAddCashRequested;
+    }
+
+    private void OnAddCashRequested(object sender, EventArgs e)
+    {
+        var descriptionToInt = new string(_playerService.AddCash.Value.GetDescription().Where(char.IsDigit).ToArray());
+
+        var parseSuccess = int.TryParse(descriptionToInt, out var result);
+
+        if (!parseSuccess) return;
+
+        var newMoney = (long)Game.Player.Money + result;
+
+        if (newMoney > int.MaxValue)
+            Game.Player.Money = int.MaxValue;
+        else
+            Game.Player.Money = (int)newMoney;
     }
 
     private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)

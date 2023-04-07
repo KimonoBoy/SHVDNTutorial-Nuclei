@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using GTA;
 using Nuclei.Enums;
+using Nuclei.Enums.Player;
 using Nuclei.Enums.UI;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Player;
 using Nuclei.UI.Menus.Abstracts;
 
@@ -89,9 +92,11 @@ public class PlayerMenu : MenuBase
 
     private void AddCash()
     {
-        // We'll update this later, with better values than strings.
-        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, (selected, index) => { }, "$10.000", "$100.000",
-            "$1.000.000", "$100.000.000");
+        var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
+
+        var listItemAddCash = AddOnActivateListItem(PlayerItemTitles.AddCash,
+            (selected, index) => { _playerService.RequestAddCash(); },
+            allCashHash.Select(c => c.GetDescription()).ToArray());
     }
 
     private void SetCash()
