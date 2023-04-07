@@ -32,6 +32,12 @@ public class PlayerScript : Script
 
     private void OnInfiniteBreathChanged(object sender, ValueEventArgs<bool> e)
     {
+        /*
+         * PED_CONFIG_FLAG 3 is "DrownsInWater".
+         *
+         * False: Can't drown in water. (InfiniteBreath)
+         * True: Can drown in water. (Not InfiniteBreath)  
+         */
         Game.Player.Character.SetConfigFlag(3, !e.Value);
     }
 
