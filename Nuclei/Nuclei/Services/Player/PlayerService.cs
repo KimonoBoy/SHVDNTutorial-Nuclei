@@ -15,6 +15,11 @@ public class PlayerService : IPlayerService
     public static readonly PlayerService Instance = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player has infinite special ability.
+    /// </summary>
+    public BindableProperty<bool> HasInfiniteSpecialAbility { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the player has infinite stamina.
     /// </summary>
     public BindableProperty<bool> HasInfiniteStamina { get; } = new();

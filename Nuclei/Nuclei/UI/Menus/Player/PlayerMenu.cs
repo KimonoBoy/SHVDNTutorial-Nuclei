@@ -105,7 +105,7 @@ public class PlayerMenu : MenuBase
     private void SetInfiniteSpecialAbility()
     {
         var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility, false,
-            @checked => { });
+            @checked => { _playerService.HasInfiniteSpecialAbility.Value = @checked; });
     }
 
     private void SetNoiseless()

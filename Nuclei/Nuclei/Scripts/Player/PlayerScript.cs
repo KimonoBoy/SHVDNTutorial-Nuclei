@@ -50,6 +50,20 @@ public class PlayerScript : Script
     private void ProcessFunctions()
     {
         ProcessInfiniteStamina();
+        ProcessInfiniteSpecialAbility();
+    }
+
+    /// <summary>
+    ///     Restores Special Ability Meter to Full when at n-value.
+    /// </summary>
+    private void ProcessInfiniteSpecialAbility()
+    {
+        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
+        var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
+
+        if (isAbilityMeterFull) return;
+
+        Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
