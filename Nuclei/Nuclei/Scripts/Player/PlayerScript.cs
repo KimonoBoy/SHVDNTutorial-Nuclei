@@ -54,7 +54,7 @@ public class PlayerScript : Script
     }
 
     /// <summary>
-    ///     Restores Special Ability Meter to Full when at n-value.
+    ///     Restores Special Ability Meter to Full.
     /// </summary>
     private void ProcessInfiniteSpecialAbility()
     {
