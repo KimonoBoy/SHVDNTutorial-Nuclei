@@ -99,7 +99,8 @@ public class PlayerMenu : MenuBase
 
     private void SetInfiniteBreath()
     {
-        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false, @checked => { });
+        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false,
+            @checked => { _playerService.HasInfiniteBreath.Value = @checked; });
     }
 
     private void SetInfiniteSpecialAbility()

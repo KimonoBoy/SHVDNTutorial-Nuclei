@@ -27,6 +27,12 @@ public class PlayerScript : Script
         _playerService.IsInvincible.ValueChanged += OnInvincibleChanged;
         _playerService.WantedLevel.ValueChanged += OnWantedLevelChanged;
         _playerService.CashInputRequested += OnCashInputRequested;
+        _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
+    }
+
+    private void OnInfiniteBreathChanged(object sender, ValueEventArgs<bool> e)
+    {
+        Game.Player.Character.SetConfigFlag(3, !e.Value);
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -96,7 +102,7 @@ public class PlayerScript : Script
     private void UpdateInvincible()
     {
         // This needs to be implemented differently. We'll cover it later and you'll see why.
-        if (_playerService.IsInvincible.Value != Game.Player.IsInvincible)
+        if (_playerService.IsInvincible.Value != Game.Player.Character.IsInvincible)
             _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
     }
 

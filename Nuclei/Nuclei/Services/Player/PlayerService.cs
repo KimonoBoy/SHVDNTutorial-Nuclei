@@ -25,6 +25,11 @@ public class PlayerService : IPlayerService
     public BindableProperty<bool> HasInfiniteStamina { get; } = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player has infinite underwater breath.
+    /// </summary>
+    public BindableProperty<bool> HasInfiniteBreath { get; } = new();
+
+    /// <summary>
     ///     A property that determines whether the player is invincible or not.
     /// </summary>
     public BindableProperty<bool> IsInvincible { get; } = new();

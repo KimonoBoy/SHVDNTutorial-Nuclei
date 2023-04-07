@@ -8,6 +8,7 @@ public interface IPlayerService
     BindableProperty<bool> IsInvincible { get; }
     BindableProperty<bool> HasInfiniteSpecialAbility { get; }
     BindableProperty<bool> HasInfiniteStamina { get; }
+    BindableProperty<bool> HasInfiniteBreath { get; }
     BindableProperty<int> WantedLevel { get; }
 
     event EventHandler PlayerFixed;
