@@ -97,10 +97,10 @@ public class PlayerService : IPlayerService
         CashInputRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public event EventHandler AddCashRequested;
+    public event EventHandler<CashHash> AddCashRequested;
 
-    public void RequestAddCash()
+    public void RequestAddCash(CashHash cashHash)
     {
-        AddCashRequested?.Invoke(this, EventArgs.Empty);
+        AddCashRequested?.Invoke(this, cashHash);
     }
 }

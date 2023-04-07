@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
+using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
@@ -33,9 +34,9 @@ public class PlayerScript : Script
         _playerService.AddCashRequested += OnAddCashRequested;
     }
 
-    private void OnAddCashRequested(object sender, EventArgs e)
+    private void OnAddCashRequested(object sender, CashHash cashHash)
     {
-        var descriptionToInt = new string(_playerService.AddCash.Value.GetDescription().Where(char.IsDigit).ToArray());
+        var descriptionToInt = new string(cashHash.GetDescription().Where(char.IsDigit).ToArray());
 
         var parseSuccess = int.TryParse(descriptionToInt, out var result);
 
@@ -48,6 +49,7 @@ public class PlayerScript : Script
         else
             Game.Player.Money = (int)newMoney;
     }
+
 
     private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
     {

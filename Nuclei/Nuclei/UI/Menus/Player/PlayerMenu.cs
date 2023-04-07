@@ -95,7 +95,7 @@ public class PlayerMenu : MenuBase
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
         var listItemAddCash = AddOnActivateListItem(PlayerItemTitles.AddCash,
-            (selected, index) => { _playerService.RequestAddCash(); },
+            (selected, index) => { _playerService.RequestAddCash((CashHash)index); },
             allCashHash.Select(c => c.GetDescription()).ToArray());
     }
 
