@@ -12,6 +12,7 @@ public interface IPlayerService
     BindableProperty<int> WantedLevel { get; }
     BindableProperty<int> LockedWantedLevel { get; }
     BindableProperty<bool> IsWantedLevelLocked { get; }
+    BindableProperty<bool> IsNoiseless { get; }
 
     event EventHandler PlayerFixed;
     void FixPlayer();

@@ -126,7 +126,8 @@ public class PlayerMenu : MenuBase
 
     private void SetRideOnCars()
     {
-        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false, @checked => { });
+        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false,
+            @checked => { _playerService.CanRideOnCars.Value = @checked; });
     }
 
 

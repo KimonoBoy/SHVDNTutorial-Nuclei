@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
-using GTA.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
@@ -30,6 +28,13 @@ public class PlayerScript : Script
         _playerService.WantedLevel.ValueChanged += OnWantedLevelChanged;
         _playerService.CashInputRequested += OnCashInputRequested;
         _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
+        _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
+    }
+
+    private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
+    {
+        // False means the player won't fall over.
+        Game.Player.Character.CanRagdoll = !e.Value;
     }
 
     private void OnInfiniteBreathChanged(object sender, ValueEventArgs<bool> e)
@@ -63,11 +68,6 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessFunctions()
     {
-        var x =
-            new TextElement($"NoiseLevel: {Function.Call<float>(Hash.GET_PLAYER_CURRENT_STEALTH_NOISE, Game.Player)}",
-                new PointF(100.0f, 100.0f), 0.3f);
-        x.Draw();
-
         ProcessInfiniteStamina();
         ProcessInfiniteSpecialAbility();
         ProcessNoiseless();

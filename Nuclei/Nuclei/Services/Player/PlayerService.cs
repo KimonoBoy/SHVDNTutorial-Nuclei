@@ -15,6 +15,11 @@ public class PlayerService : IPlayerService
     public static readonly PlayerService Instance = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player can ride on cars without falling over.
+    /// </summary>
+    public BindableProperty<bool> CanRideOnCars { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the player is noiseless.
     /// </summary>
     public BindableProperty<bool> IsNoiseless { get; } = new();
