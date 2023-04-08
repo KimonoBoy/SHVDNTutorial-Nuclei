@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
-using GTA.UI;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
@@ -90,7 +89,6 @@ public class PlayerScript : Script
         else
             Game.Player.Money = (int)newMoney;
     }
-
 
     private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
     {
@@ -199,13 +197,6 @@ public class PlayerScript : Script
     {
         if (e.KeyCode == Keys.T && e.Control)
             Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
-
-        if (e.KeyCode == Keys.H && e.Control)
-        {
-            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            var sum = numbers.Where(n => n % 2 == 0).Sum();
-            Notification.Show(sum.ToString());
-        }
     }
 
     private void OnPlayerFixed(object sender, EventArgs e)
