@@ -97,9 +97,16 @@ public class PlayerService : IPlayerService
         CashInputRequested?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    ///     An event that is invoked when the RequestCashResult is called.
+    /// </summary>
     public event EventHandler<CashHash> AddCashRequested;
 
-    public void RequestAddCash(CashHash cashHash)
+    /// <summary>
+    ///     A method that invokes the `ÀddCashRequested` event.
+    /// </summary>
+    /// <param name="cashHash">The hash to get the Cash Amount from.</param>
+    public void RequestCashResult(CashHash cashHash)
     {
         AddCashRequested?.Invoke(this, cashHash);
     }

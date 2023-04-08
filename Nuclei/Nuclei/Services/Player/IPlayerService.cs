@@ -1,4 +1,5 @@
 ﻿using System;
+using Nuclei.Enums.Player;
 using Nuclei.Helpers.Utilities;
 
 namespace Nuclei.Services.Player;
@@ -21,4 +22,7 @@ public interface IPlayerService
 
     event EventHandler CashInputRequested;
     void RequestCashInput();
+
+    event EventHandler<CashHash> AddCashRequested;
+    void RequestCashResult(CashHash cashHash);
 }

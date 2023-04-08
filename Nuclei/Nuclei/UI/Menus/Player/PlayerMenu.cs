@@ -75,7 +75,7 @@ public class PlayerMenu : MenuBase
             {
                 _playerService.WantedLevel.Value = item;
                 _playerService.LockedWantedLevel.Value = item;
-            }, 0, 1, 2, 3, 4, 5);
+            }, ListItemEventType.ItemChanged, 0, 1, 2, 3, 4, 5);
 
         _playerService.WantedLevel.ValueChanged += (sender, e) =>
         {
@@ -94,8 +94,8 @@ public class PlayerMenu : MenuBase
     {
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
-        var listItemAddCash = AddOnActivateListItem(PlayerItemTitles.AddCash,
-            (selected, index) => { _playerService.RequestAddCash((CashHash)index); },
+        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash,
+            (selected, index) => { _playerService.RequestCashResult((CashHash)index); }, ListItemEventType.Activated,
             allCashHash.Select(c => c.GetDescription()).ToArray());
     }
 
@@ -150,11 +150,9 @@ public class PlayerMenu : MenuBase
     private void SuperSpeed()
     {
         // Will be updated later to use enums instead.
-        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed, (selected, index) => { }, "Normal", "Fast",
+        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed, (selected, index) => { },
+            ListItemEventType.ItemChanged, "Normal", "Fast",
             "Faster", "Sonic", "The Flash");
-
-        // Depending on the selected item, if "Sonic" or "The Flash" a new Sub Menu will be available
-        // Needs implementation.
     }
 
     private void Invisible()
