@@ -10,6 +10,7 @@ using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Player;
+using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
 
@@ -33,6 +34,35 @@ public class PlayerScript : Script
         _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
         _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
         _playerService.AddCashRequested += OnAddCashRequested;
+        _playerService.SuperSpeed.ValueChanged += OnSuperSpeedChanged;
+    }
+
+    private void OnSuperSpeedChanged(object sender, ValueEventArgs<SuperSpeedHash> superSpeedValueEventArgs)
+    {
+        switch (superSpeedValueEventArgs.Value)
+        {
+            case SuperSpeedHash.Normal:
+                Game.Player.SetRunSpeedMultThisFrame(1.0f); // 1.0f is the default speed.
+                break;
+            case SuperSpeedHash.Fast:
+                Game.Player.SetRunSpeedMultThisFrame(1.49f); // 1.49f is the maximum multiplier value.
+                break;
+
+            case SuperSpeedHash.Faster:
+                Game.Player.SetRunSpeedMultThisFrame(1.49f);
+                Tick += OnTickFaster;
+                break;
+
+            case SuperSpeedHash.Sonic:
+                Game.Player.SetRunSpeedMultThisFrame(1.49f);
+                Tick += OnTickSonic;
+                break;
+
+            case SuperSpeedHash.TheFlash:
+                Game.Player.SetRunSpeedMultThisFrame(1.49f);
+                Tick += OnTickTheFlash;
+                break;
+        }
     }
 
     private void OnAddCashRequested(object sender, CashHash cashHash)
@@ -137,6 +167,32 @@ public class PlayerScript : Script
         if (isAbilityMeterFull) return;
 
         Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
+    }
+
+    private void ProcessSuperSpeedTicks(int maxSpeed, SuperSpeedHash speedHash)
+    {
+        if (!_playerService.SuperSpeed.Value.Equals(speedHash)) return;
+
+        if (!Game.IsControlPressed(Control.Sprint) ||
+            (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting)) return;
+
+        Game.Player.Character.MaxSpeed = maxSpeed;
+        Game.Player.Character.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed);
+    }
+
+    private void OnTickTheFlash(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(350, SuperSpeedHash.TheFlash);
+    }
+
+    private void OnTickSonic(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(120, SuperSpeedHash.Sonic);
+    }
+
+    private void OnTickFaster(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(50, SuperSpeedHash.Faster);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

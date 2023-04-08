@@ -149,10 +149,10 @@ public class PlayerMenu : MenuBase
 
     private void SuperSpeed()
     {
-        // Will be updated later to use enums instead.
-        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed, (selected, index) => { },
-            ListItemEventType.ItemChanged, "Normal", "Fast",
-            "Faster", "Sonic", "The Flash");
+        var allSuperSpeeds = Enum.GetValues(typeof(SuperSpeedHash)).Cast<SuperSpeedHash>().ToList();
+        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed,
+            (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
+            ListItemEventType.ItemChanged, allSuperSpeeds.Select(s => s.ToPrettyString()).ToArray());
     }
 
     private void Invisible()

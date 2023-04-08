@@ -20,6 +20,8 @@ public class PlayerService : IPlayerService
     /// </summary>
     public BindableProperty<CashHash> AddCash { get; } = new();
 
+    public BindableProperty<SuperSpeedHash> SuperSpeed { get; } = new();
+
     /// <summary>
     ///     A property that defines whether or not the player can ride on cars without falling over.
     /// </summary>
