@@ -18,6 +18,8 @@ public class PlayerScript : Script
 {
     private readonly PlayerService _playerService = PlayerService.Instance;
 
+    private DateTime _lastEntityCheck = DateTime.UtcNow;
+
     public PlayerScript()
     {
         SubscribeToEvents();
@@ -168,20 +170,46 @@ public class PlayerScript : Script
     {
         if (!_playerService.IsOnePunchMan.Value || !Game.Player.Character.IsInMeleeCombat) return;
 
+        // Check for damaged entities only once every 100 milliseconds
+        if ((DateTime.UtcNow - _lastEntityCheck).TotalMilliseconds < 100) return;
+
+        _lastEntityCheck = DateTime.UtcNow;
+
+        var meleeTarget = Game.Player.Character.MeleeTarget;
         var targetedEntity = GetClosestDamagedEntity();
 
-        if (targetedEntity != null) ApplyOnePunchManForce(targetedEntity, 30.0f, 1000.0f);
+        if (meleeTarget != null && Game.Player.Character.IsTouching(meleeTarget))
+        {
+            meleeTarget.Kill();
+            ApplyOnePunchManForce(meleeTarget, 30.0f, 500.0f);
+        }
+        else if (targetedEntity != null)
+        {
+            ApplyOnePunchManForce(targetedEntity, 30.0f, 1000.0f);
+        }
     }
 
-    /// <summary>
-    ///     Gets the closest damaged entity to the player character.
-    /// </summary>
-    /// <returns>The closest damaged Entity object or null if no such entity is found.</returns>
     private Entity GetClosestDamagedEntity()
     {
         return World.GetAllEntities()
+            .Where(IsEntityInFrontOfPlayer)
             .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character));
+            .FirstOrDefault(entity => ((entity.HasBeenDamagedBy(Game.Player.Character) &&
+                                        entity is GTA.Vehicle or Prop) ||
+                                       (entity.IsTouching(Game.Player.Character) && entity is Ped)) &&
+                                      entity.Position.DistanceTo(Game.Player.Character.Position) <= 10.0f);
+    }
+
+    private bool IsEntityInFrontOfPlayer(Entity entity)
+    {
+        var playerToEntityDirection = (entity.Position - Game.Player.Character.Position).Normalized;
+        var dotProduct = playerToEntityDirection.X * Game.Player.Character.ForwardVector.X +
+                         playerToEntityDirection.Y * Game.Player.Character.ForwardVector.Y +
+                         playerToEntityDirection.Z * Game.Player.Character.ForwardVector.Z;
+
+
+        // If dotProduct is greater than 0, the entity is in front of the player
+        return dotProduct > 0;
     }
 
     /// <summary>
