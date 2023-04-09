@@ -192,9 +192,8 @@ public class PlayerScript : Script
             .Where(entity => entity.Position.DistanceTo(Game.Player.Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity => (entity.HasBeenDamagedBy(Game.Player.Character) &&
-                                       entity is GTA.Vehicle or Prop) ||
-                                      (entity.IsTouching(Game.Player.Character) && entity is Ped));
+            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character) ||
+                                      entity.IsTouching(Game.Player.Character));
     }
 
     /// <summary>
