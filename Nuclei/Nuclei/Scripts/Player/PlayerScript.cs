@@ -124,6 +124,34 @@ public class PlayerScript : Script
         ProcessNoiseless();
         ProcessSuperJump();
         ProcessSuperSpeed();
+        ProcessOnePunchMan();
+    }
+
+    /// <summary>
+    ///     Processes OnePunchMan.
+    ///     Hit an entity with a melee weapon and it will be pushed away with high force.
+    /// </summary>
+    private void ProcessOnePunchMan()
+    {
+        if (!_playerService.IsOnePunchMan.Value) return;
+        if (!Game.Player.Character.IsInMeleeCombat) return;
+
+        var meleeTarget = Game.Player.Character.MeleeTarget;
+        var targetedEntity = World.GetAllEntities().OrderBy(entity =>
+                entity.Position.DistanceTo(Game.Player.Character.Position))
+            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character));
+
+
+        if (meleeTarget != null && Game.Player.Character.IsTouching(meleeTarget))
+        {
+            meleeTarget.ApplyForce(Game.Player.Character.UpVector * 30.0f);
+            meleeTarget.ApplyForce(Game.Player.Character.ForwardVector * 1000.0f);
+            meleeTarget.Kill();
+        }
+        else if (targetedEntity != null)
+        {
+            targetedEntity.ApplyForce(Game.Player.Character.ForwardVector * 1000.0f);
+        }
     }
 
     /// <summary>
