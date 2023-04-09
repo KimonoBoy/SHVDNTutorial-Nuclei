@@ -9,8 +9,8 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 Both the **Wiki** and the **Mod** itself is a work in progress and it's in a very early stage.
 
 ## Credits
-**Alexander Blade** - **ScriptHookV**
-**Crosire** - **ScriptHookVDotNet**  
+**Alexander Blade** - **ScriptHookV**  
+**Crosire** - **ScriptHookVDotNet**   
 **Lemon** - **LemonUI**  
-**Guad** - **NativeUI** which **LemonUI** is based on.
-**JohnFromGWN** - For **feedback** and **suggestions**
+**Guad** - **NativeUI** which **LemonUI** is based on.  
+**JohnFromGWN** - For **feedback** and **suggestions**  
