@@ -187,13 +187,14 @@ public class PlayerScript : Script
     /// <returns>The closest damaged Entity object, or null if no such entity is found.</returns>
     private Entity GetClosestDamagedEntity()
     {
+        var maxDistance = 20.0f;
         return World.GetAllEntities()
-            .Where(IsEntityInFrontOfPlayer)
+            .Where(entity => entity.Position.DistanceTo(Game.Player.Character.Position) <= maxDistance &&
+                             IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity =>
-                ((entity.HasBeenDamagedBy(Game.Player.Character) && entity is GTA.Vehicle or Prop) ||
-                 (entity.IsTouching(Game.Player.Character) && entity is Ped)) &&
-                entity.Position.DistanceTo(Game.Player.Character.Position) <= 10.0f);
+            .FirstOrDefault(entity => (entity.HasBeenDamagedBy(Game.Player.Character) &&
+                                       entity is GTA.Vehicle or Prop) ||
+                                      (entity.IsTouching(Game.Player.Character) && entity is Ped));
     }
 
     /// <summary>
