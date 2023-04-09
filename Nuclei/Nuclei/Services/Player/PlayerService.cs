@@ -28,6 +28,11 @@ public class PlayerService : IPlayerService
     public BindableProperty<bool> IsOnePunchMan { get; } = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player is invisible.
+    /// </summary>
+    public BindableProperty<bool> IsInvisible { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the player can ride on cars without falling over.
     /// </summary>
     public BindableProperty<bool> CanRideOnCars { get; } = new();

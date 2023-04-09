@@ -158,6 +158,7 @@ public class PlayerMenu : MenuBase
 
     private void Invisible()
     {
-        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false, @checked => { });
+        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false,
+            @checked => { _playerService.IsInvisible.Value = @checked; });
     }
 }

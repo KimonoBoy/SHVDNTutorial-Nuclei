@@ -34,6 +34,12 @@ public class PlayerScript : Script
         _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
         _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
         _playerService.AddCashRequested += OnAddCashRequested;
+        _playerService.IsInvisible.ValueChanged += OnIsInvisibleChanged;
+    }
+
+    private void OnIsInvisibleChanged(object sender, ValueEventArgs<bool> e)
+    {
+        Game.Player.Character.IsVisible = !e.Value;
     }
 
     private void OnTick(object sender, EventArgs e)
