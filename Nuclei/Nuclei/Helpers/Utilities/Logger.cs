@@ -20,10 +20,8 @@ public class Logger
 
     private void InitializeLogFile()
     {
-        if (!File.Exists(_logFilePath))
-            using (var file = File.Create(_logFilePath))
-            {
-            }
+        if (File.Exists(_logFilePath)) return;
+        using var file = File.Create(_logFilePath);
     }
 
     public void Log(string message)

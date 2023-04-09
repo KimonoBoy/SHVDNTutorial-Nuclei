@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using GTA;
 using Nuclei.Constants;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
+using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
@@ -16,6 +18,13 @@ public class VehicleSpawnerScript : Script
     public VehicleSpawnerScript()
     {
         _vehicleSpawnerService.VehicleSpawned += OnVehicleSpawned;
+        Tick += VehicleSpawnerScript_Tick;
+    }
+
+    private void VehicleSpawnerScript_Tick(object sender, EventArgs e)
+    {
+        Display.DrawTextElement($"VehicleSeat: {_vehicleSpawnerService.VehicleSeat.Value}", 100.0f, 150.0f,
+            Color.AntiqueWhite);
     }
 
     private void OnVehicleSpawned(object sender, VehicleHash vehicleHash)
@@ -102,10 +111,17 @@ public class VehicleSpawnerScript : Script
     /// </exception>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
+        // Calculate the heading of the vehicle based on the player's heading.
+        var heading = Game.Player.Character.Heading + 90;
+
+        // If the player is spawning the vehicle, then set the heading to the player's heading.
+        if (_vehicleSpawnerService.WarpInSpawned.Value)
+            heading = Game.Player.Character.Heading;
+
         // Create the Vehicle from the model, position it 5.0f in front of the player, and set its heading.
         var vehicle = World.CreateVehicle(vehicleModel,
             Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
-            Game.Player.Character.Heading + 90);
+            heading);
 
         // Remove the model from resources.
         vehicleModel.MarkAsNoLongerNeeded();
@@ -116,6 +132,16 @@ public class VehicleSpawnerScript : Script
 
         // Places the Vehicle on all wheels
         vehicle.PlaceOnGround();
+
+        if (_vehicleSpawnerService.EnginesRunning.Value)
+            vehicle.IsEngineRunning = true;
+
+        if (!_vehicleSpawnerService.WarpInSpawned.Value) return vehicle;
+
+        Game.Player.Character.SetIntoVehicle(vehicle,
+            vehicle.IsSeatFree(_vehicleSpawnerService.VehicleSeat.Value)
+                ? _vehicleSpawnerService.VehicleSeat.Value
+                : VehicleSeat.Driver);
 
         return vehicle;
     }
