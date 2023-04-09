@@ -105,6 +105,10 @@ public class PlayerScript : Script
     /// </summary>
     private void UpdateStates()
     {
+        /*
+         * Until we add save & load functionality, we'll just update the states here.
+         */
+
         UpdateInvincible();
         UpdateWantedLevel();
         UpdateInfiniteBreath();

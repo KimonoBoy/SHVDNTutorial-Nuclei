@@ -11,6 +11,7 @@ using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.UI.Items;
+using Nuclei.UI.Text;
 using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Menus.Abstracts;
@@ -114,7 +115,11 @@ public abstract class MenuBase : NativeMenu
         var item = new NativeItem(title, description);
 
         // anonymous method to handle the event
-        item.Activated += (sender, args) => { action?.Invoke(); };
+        item.Activated += (sender, args) =>
+        {
+            action?.Invoke();
+            Display.Notify(title, "Activated");
+        };
 
         Add(item);
         return item;
@@ -145,7 +150,11 @@ public abstract class MenuBase : NativeMenu
         var item = new NativeCheckboxItem(title, description, defaultValue);
 
         // anonymous method to handle the event
-        item.CheckboxChanged += (sender, args) => { action?.Invoke(item.Checked); };
+        item.CheckboxChanged += (sender, args) =>
+        {
+            action?.Invoke(item.Checked);
+            Display.Notify(title, item.Checked ? "Activated" : "Deactivated", item.Checked);
+        };
 
         Add(item);
         return item;
