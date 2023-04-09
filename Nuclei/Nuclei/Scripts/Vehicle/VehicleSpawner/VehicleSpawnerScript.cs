@@ -1,32 +1,22 @@
 ﻿using System;
-using System.Drawing;
 using GTA;
-using Nuclei.Constants;
-using Nuclei.Helpers.Utilities;
+using GTA.Math;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerScript : Script
 {
     private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
-    private readonly Logger logger = new(Paths.LoggerPath);
 
     public VehicleSpawnerScript()
     {
         _vehicleSpawnerService.VehicleSpawned += OnVehicleSpawned;
-        Tick += VehicleSpawnerScript_Tick;
     }
 
-    private void VehicleSpawnerScript_Tick(object sender, EventArgs e)
-    {
-        Display.DrawTextElement($"VehicleSeat: {_vehicleSpawnerService.VehicleSeat.Value}", 100.0f, 150.0f,
-            Color.AntiqueWhite);
-    }
-
+    // Handles VehicleSpawned event by spawning the corresponding vehicle
     private void OnVehicleSpawned(object sender, VehicleHash vehicleHash)
     {
         SpawnVehicle(vehicleHash);
@@ -46,13 +36,11 @@ public class VehicleSpawnerScript : Script
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
-
                 break;
             }
             catch (CustomExceptionBase vehicleSpawnerException)
             {
                 currentAttempt++;
-
                 if (currentAttempt == maxAttempts)
                 {
                     ExceptionService.Instance.RaiseError(vehicleSpawnerException);
@@ -68,8 +56,6 @@ public class VehicleSpawnerScript : Script
 
     /// <summary>
     ///     Creates a Model object from the given VehicleHash and validates its existence in the game files.
-    ///     Throws a VehicleModelNotFoundException if the model is invalid.
-    ///     Throws a VehicleModelRequestTimedOutException if the model fails to load within the specified timeout.
     /// </summary>
     /// <param name="vehicleHash">The VehicleHash of the vehicle model to be created.</param>
     /// <returns>A validated Model object corresponding to the given VehicleHash.</returns>
@@ -80,13 +66,10 @@ public class VehicleSpawnerScript : Script
     /// </exception>
     private Model CreateVehicleModel(VehicleHash vehicleHash)
     {
-        // Create a model from the VehicleHash.
-        var vehicleModel = new Model(vehicleHash);
+        Model vehicleModel = new(vehicleHash);
 
-        // Ensure the model IsValid and in CdImage
         if (vehicleModel is { IsValid: true, IsInCdImage: true })
         {
-            // Request the associated asset with a 1-second timeout.
             if (!vehicleModel.Request(1000))
                 throw new VehicleModelRequestTimedOutException($"Loading of vehicle model timed out: {vehicleHash}");
         }
@@ -100,7 +83,6 @@ public class VehicleSpawnerScript : Script
 
     /// <summary>
     ///     Creates and positions a vehicle using the provided Model object.
-    ///     Throws a VehicleSpawnFailedException if the vehicle object is not created successfully or does not exist.
     /// </summary>
     /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
     /// <param name="vehicleHash">The vehicleHash</param>
@@ -112,37 +94,49 @@ public class VehicleSpawnerScript : Script
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
         // Calculate the heading of the vehicle based on the player's heading.
-        var heading = Game.Player.Character.Heading + 90;
+        var heading = GetVehicleHeading();
 
-        // If the player is spawning the vehicle, then set the heading to the player's heading.
-        if (_vehicleSpawnerService.WarpInSpawned.Value)
-            heading = Game.Player.Character.Heading;
+        // Create the Vehicle from the model, position it in front of the player, and set its heading.
+        var vehicle = World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
 
-        // Create the Vehicle from the model, position it 5.0f in front of the player, and set its heading.
-        var vehicle = World.CreateVehicle(vehicleModel,
-            Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
-            heading);
-
-        // Remove the model from resources.
+        // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();
 
-        // Ensure the vehicle is actually spawned
         if (vehicle == null || !vehicle.Exists())
             throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
 
-        // Places the Vehicle on all wheels
-        vehicle.PlaceOnGround();
-
-        if (_vehicleSpawnerService.EnginesRunning.Value)
-            vehicle.IsEngineRunning = true;
-
-        if (!_vehicleSpawnerService.WarpInSpawned.Value) return vehicle;
-
-        Game.Player.Character.SetIntoVehicle(vehicle,
-            vehicle.IsSeatFree(_vehicleSpawnerService.VehicleSeat.Value)
-                ? _vehicleSpawnerService.VehicleSeat.Value
-                : VehicleSeat.Driver);
+        // Set the vehicle's properties and place the player inside if necessary.
+        InitializeVehicle(vehicle);
 
         return vehicle;
+    }
+
+    // Calculate the vehicle heading based on player's heading and the WarpInSpawned setting.
+    private float GetVehicleHeading()
+    {
+        if (!_vehicleSpawnerService.WarpInSpawned.Value) return Game.Player.Character.Heading + 90.0f;
+
+        return Game.Player.Character.Heading;
+    }
+
+    // Calculate the vehicle position in front of the player.
+    private Vector3 GetVehiclePosition()
+    {
+        return Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f;
+    }
+
+    // Set the vehicle's properties and place the player inside if WarpInSpawned.
+    private void InitializeVehicle(GTA.Vehicle vehicle)
+    {
+        vehicle.PlaceOnGround();
+
+        if (_vehicleSpawnerService.EnginesRunning.Value) vehicle.IsEngineRunning = true;
+
+        if (!_vehicleSpawnerService.WarpInSpawned.Value) return;
+
+        var preferredSeat = _vehicleSpawnerService.VehicleSeat.Value;
+
+        Game.Player.Character.SetIntoVehicle(vehicle,
+            vehicle.IsSeatFree(preferredSeat) ? preferredSeat : VehicleSeat.Driver);
     }
 }

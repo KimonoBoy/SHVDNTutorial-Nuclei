@@ -33,6 +33,10 @@ public class VehicleSpawnerMenu : MenuBase
             (selected, index) => { _vehicleSpawnerService.VehicleSeat.Value = selected; },
             ListItemEventType.ItemChanged, VehicleSeat.Driver, VehicleSeat.LeftRear, VehicleSeat.RightRear,
             VehicleSeat.RightFront);
+
+        Shown += (sender, args) => { listItemSeat.Enabled = _vehicleSpawnerService.WarpInSpawned.Value; };
+
+        _vehicleSpawnerService.WarpInSpawned.ValueChanged += (_, args) => { listItemSeat.Enabled = args.Value; };
     }
 
     private void WarpInSpawned()
