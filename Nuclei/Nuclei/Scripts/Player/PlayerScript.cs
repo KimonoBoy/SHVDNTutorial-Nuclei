@@ -222,6 +222,7 @@ public class PlayerScript : Script
     {
         target.ApplyForce(Game.Player.Character.UpVector * forceUpwards);
         target.ApplyForce(Game.Player.Character.ForwardVector * forceForwards);
+        target.ClearLastWeaponDamage();
     }
 
     /// <summary>
