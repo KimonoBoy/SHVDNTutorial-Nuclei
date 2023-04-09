@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using GTA.Native;
-using GTA.UI;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
@@ -41,8 +39,6 @@ public class PlayerScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
-        var x = new TextElement(_playerService.SuperSpeed.Value.ToPrettyString(), new PointF(100.0f, 100.0f), 0.5f);
-        x.Draw();
         UpdateStates();
         ProcessFunctions();
     }
@@ -100,6 +96,8 @@ public class PlayerScript : Script
     private void OnSuperSpeedChanged(object sender, ValueEventArgs<SuperSpeedHash> superSpeedValueEventArgs)
     {
         // Unsubscribe from previous SuperSpeed ticks (if any).
+        // This is to prevent multiple SuperSpeeds from being active at the same time.
+        // And to prevent memory leaks.
         Tick -= OnTickFaster;
         Tick -= OnTickSonic;
         Tick -= OnTickTheFlash;
@@ -227,7 +225,7 @@ public class PlayerScript : Script
             var distanceToGround = characterPosition.Z - raycastResult.HitPosition.Z;
 
             // Apply a force proportional to the distance to the ground to keep the character on the ground
-            if (distanceToGround > 0.1f) // Adjust the value as needed
+            if (distanceToGround > 0.1f)
                 Game.Player.Character.ApplyForce(Game.Player.Character.UpVector * (-maxSpeed * (1 + distanceToGround)));
         }
 
