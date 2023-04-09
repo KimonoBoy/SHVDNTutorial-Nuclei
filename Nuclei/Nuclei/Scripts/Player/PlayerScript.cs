@@ -175,18 +175,9 @@ public class PlayerScript : Script
 
         _lastEntityCheck = DateTime.UtcNow;
 
-        var meleeTarget = Game.Player.Character.MeleeTarget;
         var targetedEntity = GetClosestDamagedEntity();
 
-        if (meleeTarget != null && Game.Player.Character.IsTouching(meleeTarget))
-        {
-            meleeTarget.Kill();
-            ApplyOnePunchManForce(meleeTarget, 30.0f, 500.0f);
-        }
-        else if (targetedEntity != null)
-        {
-            ApplyOnePunchManForce(targetedEntity, 30.0f, 1000.0f);
-        }
+        if (targetedEntity != null) ApplyOnePunchManForce(targetedEntity, 30.0f, 1000.0f);
     }
 
     /// <summary>
