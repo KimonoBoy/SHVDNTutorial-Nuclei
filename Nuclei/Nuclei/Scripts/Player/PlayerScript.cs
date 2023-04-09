@@ -163,8 +163,8 @@ public class PlayerScript : Script
     }
 
     /// <summary>
-    ///     Processes OnePunchMan.
-    ///     Hit an entity with a melee weapon and it will be pushed away with immense force.
+    ///     Processes the OnePunchMan feature. When active, hitting an entity with a melee weapon will apply immense force,
+    ///     pushing it away.
     /// </summary>
     private void ProcessOnePunchMan()
     {
@@ -189,17 +189,27 @@ public class PlayerScript : Script
         }
     }
 
+    /// <summary>
+    ///     Gets the closest damaged entity to the player character that is in front of the player and within a certain
+    ///     distance.
+    /// </summary>
+    /// <returns>The closest damaged Entity object, or null if no such entity is found.</returns>
     private Entity GetClosestDamagedEntity()
     {
         return World.GetAllEntities()
             .Where(IsEntityInFrontOfPlayer)
             .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity => ((entity.HasBeenDamagedBy(Game.Player.Character) &&
-                                        entity is GTA.Vehicle or Prop) ||
-                                       (entity.IsTouching(Game.Player.Character) && entity is Ped)) &&
-                                      entity.Position.DistanceTo(Game.Player.Character.Position) <= 10.0f);
+            .FirstOrDefault(entity =>
+                ((entity.HasBeenDamagedBy(Game.Player.Character) && entity is GTA.Vehicle or Prop) ||
+                 (entity.IsTouching(Game.Player.Character) && entity is Ped)) &&
+                entity.Position.DistanceTo(Game.Player.Character.Position) <= 10.0f);
     }
 
+    /// <summary>
+    ///     Determines if the specified entity is in front of the player character.
+    /// </summary>
+    /// <param name="entity">The Entity object to check.</param>
+    /// <returns>True if the entity is in front of the player character, false otherwise.</returns>
     private bool IsEntityInFrontOfPlayer(Entity entity)
     {
         var playerToEntityDirection = (entity.Position - Game.Player.Character.Position).Normalized;
@@ -207,13 +217,12 @@ public class PlayerScript : Script
                          playerToEntityDirection.Y * Game.Player.Character.ForwardVector.Y +
                          playerToEntityDirection.Z * Game.Player.Character.ForwardVector.Z;
 
-
         // If dotProduct is greater than 0, the entity is in front of the player
         return dotProduct > 0;
     }
 
     /// <summary>
-    ///     Applies OnePunchMan force to the target entity.
+    ///     Applies OnePunchMan force to the target entity, pushing it away with immense force.
     /// </summary>
     /// <param name="target">The Entity object to apply the force to.</param>
     /// <param name="forceUpwards">The upward force to apply to the target.</param>
