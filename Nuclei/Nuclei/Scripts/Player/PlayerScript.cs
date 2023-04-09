@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
+using GTA.Math;
 using GTA.Native;
+using GTA.UI;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
@@ -36,161 +39,12 @@ public class PlayerScript : Script
         _playerService.SuperSpeed.ValueChanged += OnSuperSpeedChanged;
     }
 
-    private void OnSuperSpeedChanged(object sender, ValueEventArgs<SuperSpeedHash> superSpeedValueEventArgs)
-    {
-        switch (superSpeedValueEventArgs.Value)
-        {
-            case SuperSpeedHash.Normal:
-                Game.Player.SetRunSpeedMultThisFrame(1.0f); // 1.0f is the default speed.
-                break;
-            case SuperSpeedHash.Fast:
-                Game.Player.SetRunSpeedMultThisFrame(1.49f); // 1.49f is the maximum multiplier value.
-                break;
-
-            case SuperSpeedHash.Faster:
-                Game.Player.SetRunSpeedMultThisFrame(1.49f);
-                Tick += OnTickFaster;
-                break;
-
-            case SuperSpeedHash.Sonic:
-                Game.Player.SetRunSpeedMultThisFrame(1.49f);
-                Tick += OnTickSonic;
-                break;
-
-            case SuperSpeedHash.TheFlash:
-                Game.Player.SetRunSpeedMultThisFrame(1.49f);
-                Tick += OnTickTheFlash;
-                break;
-        }
-    }
-
-    private void OnAddCashRequested(object sender, CashHash cashHash)
-    {
-        AddCash(cashHash);
-    }
-
-    /// <summary>
-    ///     Adds the CashHash value to the player's current money amount.
-    /// </summary>
-    /// <param name="cashHash">The cashHash.</param>
-    private static void AddCash(CashHash cashHash)
-    {
-        var descriptionToInt = new string(cashHash.GetDescription().Where(char.IsDigit).ToArray());
-
-        var parseSuccess = int.TryParse(descriptionToInt, out var result);
-
-        if (!parseSuccess)
-            return;
-
-        var newMoney = (long)Game.Player.Money + result;
-
-        if (newMoney > int.MaxValue)
-            Game.Player.Money = int.MaxValue;
-        else
-            Game.Player.Money = (int)newMoney;
-    }
-
-    private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
-    {
-        // False means the player won't fall over.
-        Game.Player.Character.CanRagdoll = !e.Value;
-    }
-
-    private void OnInfiniteBreathChanged(object sender, ValueEventArgs<bool> e)
-    {
-        /*
-         * PED_CONFIG_FLAG 3 is "DrownsInWater".
-         *
-         * False: Can't drown in water. (InfiniteBreath)
-         * True: Can drown in water. (Not InfiniteBreath)  
-         */
-        Game.Player.Character.SetConfigFlag(3, !e.Value);
-    }
-
     private void OnTick(object sender, EventArgs e)
     {
+        var x = new TextElement(_playerService.SuperSpeed.Value.ToPrettyString(), new PointF(100.0f, 100.0f), 0.5f);
+        x.Draw();
         UpdateStates();
         ProcessFunctions();
-    }
-
-    /// <summary>
-    ///     Updates the different states in the service.
-    /// </summary>
-    private void UpdateStates()
-    {
-        UpdateInvincible();
-        UpdateWantedLevel();
-    }
-
-    /// <summary>
-    ///     Game changes that need to be processed each frame.
-    /// </summary>
-    private void ProcessFunctions()
-    {
-        ProcessInfiniteStamina();
-        ProcessInfiniteSpecialAbility();
-        ProcessNoiseless();
-        ProcessSuperJump();
-    }
-
-    /// <summary>
-    ///     Allows the player to jump as high as a building.
-    /// </summary>
-    private void ProcessSuperJump()
-    {
-        if (!_playerService.CanSuperJump.Value) return;
-
-        Game.Player.SetSuperJumpThisFrame();
-    }
-
-    /// <summary>
-    ///     The noise level increases slowly over time. This prevents that.
-    /// </summary>
-    private void ProcessNoiseless()
-    {
-        if (!_playerService.IsNoiseless.Value) return;
-
-        Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
-        Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
-    }
-
-    /// <summary>
-    ///     Restores Special Ability Meter to Full.
-    /// </summary>
-    private void ProcessInfiniteSpecialAbility()
-    {
-        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
-        var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
-
-        if (isAbilityMeterFull) return;
-
-        Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
-    }
-
-    private void ProcessSuperSpeedTicks(int maxSpeed, SuperSpeedHash speedHash)
-    {
-        if (!_playerService.SuperSpeed.Value.Equals(speedHash)) return;
-
-        if (!Game.IsControlPressed(Control.Sprint) ||
-            (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting)) return;
-
-        Game.Player.Character.MaxSpeed = maxSpeed;
-        Game.Player.Character.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed);
-    }
-
-    private void OnTickTheFlash(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(350, SuperSpeedHash.TheFlash);
-    }
-
-    private void OnTickSonic(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(120, SuperSpeedHash.Sonic);
-    }
-
-    private void OnTickFaster(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(50, SuperSpeedHash.Faster);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -221,6 +75,66 @@ public class PlayerScript : Script
         RequestCashInput();
     }
 
+    private void OnInfiniteBreathChanged(object sender, ValueEventArgs<bool> e)
+    {
+        /*
+         * PED_CONFIG_FLAG 3 is "DrownsInWater".
+         *
+         * False: Can't drown in water. (InfiniteBreath)
+         * True: Can drown in water. (Not InfiniteBreath)  
+         */
+        Game.Player.Character.SetConfigFlag(3, !e.Value);
+    }
+
+    private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
+    {
+        // False means the player won't fall over.
+        Game.Player.Character.CanRagdoll = !e.Value;
+    }
+
+    private void OnAddCashRequested(object sender, CashHash cashHash)
+    {
+        AddCash(cashHash);
+    }
+
+    private void OnSuperSpeedChanged(object sender, ValueEventArgs<SuperSpeedHash> superSpeedValueEventArgs)
+    {
+        // Unsubscribe from previous SuperSpeed ticks (if any).
+        Tick -= OnTickFaster;
+        Tick -= OnTickSonic;
+        Tick -= OnTickTheFlash;
+
+        Game.Player.SetRunSpeedMultThisFrame(1.49f);
+
+        switch (superSpeedValueEventArgs.Value)
+        {
+            case SuperSpeedHash.Faster:
+                Tick += OnTickFaster;
+                break;
+
+            case SuperSpeedHash.Sonic:
+                Tick += OnTickSonic;
+                break;
+
+            case SuperSpeedHash.TheFlash:
+                Tick += OnTickTheFlash;
+                break;
+
+            default:
+                Game.Player.SetRunSpeedMultThisFrame(1.0f); // 1.0f is the default speed.
+                break;
+        }
+    }
+
+    /// <summary>
+    ///     Updates the different states in the service.
+    /// </summary>
+    private void UpdateStates()
+    {
+        UpdateInvincible();
+        UpdateWantedLevel();
+    }
+
     private void UpdateInvincible()
     {
         // This needs to be implemented differently. We'll cover it later and you'll see why.
@@ -235,6 +149,17 @@ public class PlayerScript : Script
     }
 
     /// <summary>
+    ///     Game changes that need to be processed each frame.
+    /// </summary>
+    private void ProcessFunctions()
+    {
+        ProcessInfiniteStamina();
+        ProcessInfiniteSpecialAbility();
+        ProcessNoiseless();
+        ProcessSuperJump();
+    }
+
+    /// <summary>
     ///     When sprinting or swimming, if the amount of time you can sprint for
     ///     drops below 5 seconds, RESET STAMINA to FULL.
     /// </summary>
@@ -246,6 +171,90 @@ public class PlayerScript : Script
 
         if (Game.Player.RemainingSprintTime <= 5.0f)
             Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
+    }
+
+    /// <summary>
+    ///     Allows the player to jump as high as a building.
+    /// </summary>
+    private void ProcessSuperJump()
+    {
+        if (!_playerService.CanSuperJump.Value) return;
+
+        Game.Player.SetSuperJumpThisFrame();
+    }
+
+    /// <summary>
+    ///     Restores Special Ability Meter to Full.
+    /// </summary>
+    private void ProcessInfiniteSpecialAbility()
+    {
+        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
+        var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
+
+        if (isAbilityMeterFull) return;
+
+        Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
+    }
+
+    /// <summary>
+    ///     The noise level increases slowly over time. This prevents that.
+    /// </summary>
+    private void ProcessNoiseless()
+    {
+        if (!_playerService.IsNoiseless.Value) return;
+
+        Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
+        Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
+    }
+
+    private void ProcessSuperSpeedTicks(int maxSpeed, SuperSpeedHash speedHash, float entityForceMultiplier = 0.0f)
+    {
+        if (!_playerService.SuperSpeed.Value.Equals(speedHash) || !Game.IsControlPressed(Control.Sprint)) return;
+        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting) return;
+        if (Game.Player.Character.IsJumping) return;
+
+        Game.Player.Character.MaxSpeed = maxSpeed;
+        Game.Player.Character.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed);
+
+        // Raycast to find ground position below character (more accurate than using Z coordinate (HeightAboveGround))
+        var characterPosition = Game.Player.Character.Position;
+        var raycastResult = World.Raycast(characterPosition, characterPosition - new Vector3(0, 0, 50.0f),
+            IntersectFlags.Everything);
+
+        if (raycastResult.DidHit)
+        {
+            // Calculate the distance to the ground
+            var distanceToGround = characterPosition.Z - raycastResult.HitPosition.Z;
+
+            // Apply a force proportional to the distance to the ground to keep the character on the ground
+            if (distanceToGround > 0.1f) // Adjust the value as needed
+                Game.Player.Character.ApplyForce(Game.Player.Character.UpVector * (-maxSpeed * (1 + distanceToGround)));
+        }
+
+        if (entityForceMultiplier <= 0.0f) return;
+
+        var touchingEntities = World.GetAllEntities()
+            .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
+            .Where(entity =>
+                entity != Game.Player.Character && entity.IsTouching(Game.Player.Character));
+
+        touchingEntities.ToList().ForEach(entity =>
+            entity.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed * entityForceMultiplier));
+    }
+
+    private void OnTickFaster(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(30, SuperSpeedHash.Faster);
+    }
+
+    private void OnTickSonic(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(70, SuperSpeedHash.Sonic, 1000.0f);
+    }
+
+    private void OnTickTheFlash(object sender, EventArgs e)
+    {
+        ProcessSuperSpeedTicks(120, SuperSpeedHash.TheFlash, 5000.0f);
     }
 
     /// <summary>
@@ -277,5 +286,26 @@ public class PlayerScript : Script
         {
             ExceptionService.Instance.RaiseError(ex);
         }
+    }
+
+    /// <summary>
+    ///     Adds the CashHash value to the player's current money amount.
+    /// </summary>
+    /// <param name="cashHash">The cashHash.</param>
+    private static void AddCash(CashHash cashHash)
+    {
+        var descriptionToInt = new string(cashHash.GetDescription().Where(char.IsDigit).ToArray());
+
+        var parseSuccess = int.TryParse(descriptionToInt, out var result);
+
+        if (!parseSuccess)
+            return;
+
+        var newMoney = (long)Game.Player.Money + result;
+
+        if (newMoney > int.MaxValue)
+            Game.Player.Money = int.MaxValue;
+        else
+            Game.Player.Money = (int)newMoney;
     }
 }
