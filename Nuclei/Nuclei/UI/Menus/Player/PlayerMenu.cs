@@ -144,7 +144,8 @@ public class PlayerMenu : MenuBase
 
     private void OnePunchMan()
     {
-        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false, @checked => { });
+        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false,
+            @checked => { _playerService.IsOnePunchMan.Value = @checked; });
     }
 
     private void SuperSpeed()

@@ -23,6 +23,11 @@ public class PlayerService : IPlayerService
     public BindableProperty<SuperSpeedHash> SuperSpeed { get; } = new();
 
     /// <summary>
+    ///     A property that defines whether or not the player is one punch man.
+    /// </summary>
+    public BindableProperty<bool> IsOnePunchMan { get; } = new();
+
+    /// <summary>
     ///     A property that defines whether or not the player can ride on cars without falling over.
     /// </summary>
     public BindableProperty<bool> CanRideOnCars { get; } = new();

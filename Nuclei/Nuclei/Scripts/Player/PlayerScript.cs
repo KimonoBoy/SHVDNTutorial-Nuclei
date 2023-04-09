@@ -34,7 +34,6 @@ public class PlayerScript : Script
         _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
         _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
         _playerService.AddCashRequested += OnAddCashRequested;
-        _playerService.SuperSpeed.ValueChanged += OnSuperSpeedChanged;
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -93,37 +92,6 @@ public class PlayerScript : Script
         AddCash(cashHash);
     }
 
-    private void OnSuperSpeedChanged(object sender, ValueEventArgs<SuperSpeedHash> superSpeedValueEventArgs)
-    {
-        // Unsubscribe from previous SuperSpeed ticks (if any).
-        // This is to prevent multiple SuperSpeeds from being active at the same time.
-        // And to prevent memory leaks.
-        Tick -= OnTickFaster;
-        Tick -= OnTickSonic;
-        Tick -= OnTickTheFlash;
-
-        Game.Player.SetRunSpeedMultThisFrame(1.49f);
-
-        switch (superSpeedValueEventArgs.Value)
-        {
-            case SuperSpeedHash.Faster:
-                Tick += OnTickFaster;
-                break;
-
-            case SuperSpeedHash.Sonic:
-                Tick += OnTickSonic;
-                break;
-
-            case SuperSpeedHash.TheFlash:
-                Tick += OnTickTheFlash;
-                break;
-
-            default:
-                Game.Player.SetRunSpeedMultThisFrame(1.0f); // 1.0f is the default speed.
-                break;
-        }
-    }
-
     /// <summary>
     ///     Updates the different states in the service.
     /// </summary>
@@ -155,6 +123,41 @@ public class PlayerScript : Script
         ProcessInfiniteSpecialAbility();
         ProcessNoiseless();
         ProcessSuperJump();
+        ProcessSuperSpeed();
+    }
+
+    /// <summary>
+    ///     Processes the different SuperSpeeds.
+    ///     If the player is not sprinting, the SuperSpeed is disabled.
+    ///     If the entityForceMultiplier is 0.0f, the entities the player is touching will not be affected.
+    /// </summary>
+    private void ProcessSuperSpeed()
+    {
+        int maxSpeed;
+        float entityForceMultiplier;
+
+        Game.Player.SetRunSpeedMultThisFrame(1.49f);
+
+        switch (_playerService.SuperSpeed.Value)
+        {
+            case SuperSpeedHash.Faster:
+                maxSpeed = 30;
+                entityForceMultiplier = 0.0f;
+                break;
+            case SuperSpeedHash.Sonic:
+                maxSpeed = 70;
+                entityForceMultiplier = 300.0f;
+                break;
+            case SuperSpeedHash.TheFlash:
+                maxSpeed = 120;
+                entityForceMultiplier = 1000.0f;
+                break;
+            default:
+                Game.Player.SetRunSpeedMultThisFrame(1.0f); // 1.0f is the default speed.
+                return;
+        }
+
+        ProcessSuperSpeedTicks(maxSpeed, entityForceMultiplier);
     }
 
     /// <summary>
@@ -205,11 +208,25 @@ public class PlayerScript : Script
         Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
     }
 
-    private void ProcessSuperSpeedTicks(int maxSpeed, SuperSpeedHash speedHash, float entityForceMultiplier = 0.0f)
+    /// <summary>
+    ///     Processes the different SuperSpeeds.
+    ///     If the player is not sprinting, the SuperSpeed is disabled.
+    ///     If the entityForceMultiplier is 0.0f, the entities the player is touching will not be affected.
+    /// </summary>
+    /// <param name="maxSpeed">The maximum movement speed.</param>
+    /// <param name="entityForceMultiplier">The force of which entities the player is touching will be pushed away.</param>
+    private void ProcessSuperSpeedTicks(int maxSpeed, float entityForceMultiplier = 0.0f)
     {
-        if (!_playerService.SuperSpeed.Value.Equals(speedHash) || !Game.IsControlPressed(Control.Sprint)) return;
-        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting) return;
-        if (Game.Player.Character.IsJumping) return;
+        /*
+         * We will rework this code later. We will add a few more functionality, such as WallRunning, FlashTime (SlowMotion when Flash), Improved SuperJump.
+         *
+         * Should also prevent the player from falling over, and make him collision proof.
+         * For now you can activate: RideOnCars and Invincible
+         *
+         * We'll also add a menu, where the user can select the different values of forces and speeds.
+         */
+
+        if (!Game.IsControlPressed(Control.Sprint) || Game.Player.Character.IsJumping) return;
 
         Game.Player.Character.MaxSpeed = maxSpeed;
         Game.Player.Character.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed);
@@ -225,34 +242,22 @@ public class PlayerScript : Script
             var distanceToGround = characterPosition.Z - raycastResult.HitPosition.Z;
 
             // Apply a force proportional to the distance to the ground to keep the character on the ground
-            if (distanceToGround > 0.1f)
-                Game.Player.Character.ApplyForce(Game.Player.Character.UpVector * (-maxSpeed * (1 + distanceToGround)));
+            if (distanceToGround >= 0.2f)
+                Game.Player.Character.ApplyForce(Game.Player.Character.UpVector *
+                                                 (-maxSpeed * (1 + distanceToGround)));
         }
 
         if (entityForceMultiplier <= 0.0f) return;
 
+        // Gets all entities that are touching the player.
         var touchingEntities = World.GetAllEntities()
             .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
             .Where(entity =>
                 entity != Game.Player.Character && entity.IsTouching(Game.Player.Character));
 
+        // Pushes the entities away from the player.
         touchingEntities.ToList().ForEach(entity =>
             entity.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed * entityForceMultiplier));
-    }
-
-    private void OnTickFaster(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(30, SuperSpeedHash.Faster);
-    }
-
-    private void OnTickSonic(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(70, SuperSpeedHash.Sonic, 1000.0f);
-    }
-
-    private void OnTickTheFlash(object sender, EventArgs e)
-    {
-        ProcessSuperSpeedTicks(120, SuperSpeedHash.TheFlash, 5000.0f);
     }
 
     /// <summary>
