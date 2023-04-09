@@ -18,10 +18,10 @@ public class VehicleSpawnerMenu : MenuBase
         GenerateVehicleClassMenus();
     }
 
-    private void EnginesRunning()
+    private void WarpInSpawned()
     {
-        var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitles.EnginesRunning, false,
-            @checked => { _vehicleSpawnerService.EnginesRunning.Value = @checked; });
+        var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitles.WarpInSpawned, false,
+            @checked => { _vehicleSpawnerService.WarpInSpawned.Value = @checked; });
     }
 
     private void SelectSeat()
@@ -39,10 +39,10 @@ public class VehicleSpawnerMenu : MenuBase
         _vehicleSpawnerService.WarpInSpawned.ValueChanged += (_, args) => { listItemSeat.Enabled = args.Value; };
     }
 
-    private void WarpInSpawned()
+    private void EnginesRunning()
     {
-        var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitles.WarpInSpawned, false,
-            @checked => { _vehicleSpawnerService.WarpInSpawned.Value = @checked; });
+        var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitles.EnginesRunning, false,
+            @checked => { _vehicleSpawnerService.EnginesRunning.Value = @checked; });
     }
 
     private void GenerateVehicleClassMenus()

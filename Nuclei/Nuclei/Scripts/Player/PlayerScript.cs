@@ -162,29 +162,47 @@ public class PlayerScript : Script
 
     /// <summary>
     ///     Processes OnePunchMan.
-    ///     Hit an entity with a melee weapon and it will be pushed away with high force.
+    ///     Hit an entity with a melee weapon and it will be pushed away with immense force.
     /// </summary>
     private void ProcessOnePunchMan()
     {
-        if (!_playerService.IsOnePunchMan.Value) return;
-        if (!Game.Player.Character.IsInMeleeCombat) return;
+        if (!_playerService.IsOnePunchMan.Value || !Game.Player.Character.IsInMeleeCombat) return;
 
         var meleeTarget = Game.Player.Character.MeleeTarget;
-        var targetedEntity = World.GetAllEntities().OrderBy(entity =>
-                entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character));
-
+        var targetedEntity = GetClosestDamagedEntity();
 
         if (meleeTarget != null && Game.Player.Character.IsTouching(meleeTarget))
         {
-            meleeTarget.ApplyForce(Game.Player.Character.UpVector * 30.0f);
-            meleeTarget.ApplyForce(Game.Player.Character.ForwardVector * 1000.0f);
             meleeTarget.Kill();
+            ApplyOnePunchManForce(meleeTarget, 30.0f, 500.0f);
         }
         else if (targetedEntity != null)
         {
-            targetedEntity.ApplyForce(Game.Player.Character.ForwardVector * 1000.0f);
+            ApplyOnePunchManForce(targetedEntity, 30.0f, 1000.0f);
         }
+    }
+
+    /// <summary>
+    ///     Gets the closest damaged entity to the player character.
+    /// </summary>
+    /// <returns>The closest damaged Entity object or null if no such entity is found.</returns>
+    private Entity GetClosestDamagedEntity()
+    {
+        return World.GetAllEntities()
+            .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
+            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character));
+    }
+
+    /// <summary>
+    ///     Applies OnePunchMan force to the target entity.
+    /// </summary>
+    /// <param name="target">The Entity object to apply the force to.</param>
+    /// <param name="forceUpwards">The upward force to apply to the target.</param>
+    /// <param name="forceForwards">The forward force to apply to the target.</param>
+    private void ApplyOnePunchManForce(Entity target, float forceUpwards, float forceForwards)
+    {
+        target.ApplyForce(Game.Player.Character.UpVector * forceUpwards);
+        target.ApplyForce(Game.Player.Character.ForwardVector * forceForwards);
     }
 
     /// <summary>

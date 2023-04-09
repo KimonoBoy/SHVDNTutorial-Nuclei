@@ -23,7 +23,7 @@ public class VehicleSpawnerScript : Script
     }
 
     /// <summary>
-    ///     Attempts to spawn a vehicle with the given VehicleHash up to a maximum number of attempts.
+    ///     Spawns a vehicle with the given VehicleHash at the player's current position.
     /// </summary>
     /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
     private void SpawnVehicle(VehicleHash vehicleHash)
@@ -31,6 +31,7 @@ public class VehicleSpawnerScript : Script
         const int maxAttempts = 3;
         var currentAttempt = 1;
 
+        // Attempt to spawn the vehicle up to a maximum number of attempts.
         while (currentAttempt <= maxAttempts)
             try
             {
@@ -66,10 +67,13 @@ public class VehicleSpawnerScript : Script
     /// </exception>
     private Model CreateVehicleModel(VehicleHash vehicleHash)
     {
+        // Create a Model object from the vehicleHash.
         Model vehicleModel = new(vehicleHash);
 
+        // Validate the model and check if it exists in the game files.
         if (vehicleModel is { IsValid: true, IsInCdImage: true })
         {
+            // Request the model and wait up to 1000 ms for it to load.
             if (!vehicleModel.Request(1000))
                 throw new VehicleModelRequestTimedOutException($"Loading of vehicle model timed out: {vehicleHash}");
         }
@@ -111,7 +115,10 @@ public class VehicleSpawnerScript : Script
         return vehicle;
     }
 
-    // Calculate the vehicle heading based on player's heading and the WarpInSpawned setting.
+    /// <summary>
+    ///     Calculates the vehicle heading based on the player's heading and the WarpInSpawned setting.
+    /// </summary>
+    /// <returns>A float value representing the vehicle heading.</returns>
     private float GetVehicleHeading()
     {
         if (!_vehicleSpawnerService.WarpInSpawned.Value) return Game.Player.Character.Heading + 90.0f;
@@ -119,13 +126,19 @@ public class VehicleSpawnerScript : Script
         return Game.Player.Character.Heading;
     }
 
-    // Calculate the vehicle position in front of the player.
+    /// <summary>
+    ///     Calculates the vehicle position in front of the player.
+    /// </summary>
+    /// <returns>A Vector3 value representing the vehicle position.</returns>
     private Vector3 GetVehiclePosition()
     {
         return Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f;
     }
 
-    // Set the vehicle's properties and place the player inside if WarpInSpawned.
+    /// <summary>
+    ///     Sets the vehicle's properties and places the player inside if WarpInSpawned is enabled.
+    /// </summary>
+    /// <param name="vehicle">The GTA.Vehicle object to initialize.</param>
     private void InitializeVehicle(GTA.Vehicle vehicle)
     {
         vehicle.PlaceOnGround();

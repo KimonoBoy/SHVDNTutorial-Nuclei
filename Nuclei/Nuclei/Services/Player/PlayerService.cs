@@ -20,6 +20,9 @@ public class PlayerService : IPlayerService
     /// </summary>
     public BindableProperty<CashHash> AddCash { get; } = new();
 
+    /// <summary>
+    ///     A property that can set the super speed hash.
+    /// </summary>
     public BindableProperty<SuperSpeedHash> SuperSpeed { get; } = new();
 
     /// <summary>

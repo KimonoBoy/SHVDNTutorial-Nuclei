@@ -22,13 +22,16 @@ public class Display
         textElement.Draw();
     }
 
-    public static void Notify(string message, string activationMessage = "", bool state = true)
+    public static void Notify(string message, string activationMessage = "", bool state = true,
+        bool hidePrevious = true)
     {
         var color = state ? "~g~" : "~r~";
         var text = $"~b~{message}";
         var activationText = $"{color}{activationMessage}";
         var notification = $"~h~{text}~h~\n{activationText}";
         var handle = Notification.Show(notification);
-        Notification.Hide(handle - 1);
+
+        if (hidePrevious)
+            Notification.Hide(handle - 1);
     }
 }
