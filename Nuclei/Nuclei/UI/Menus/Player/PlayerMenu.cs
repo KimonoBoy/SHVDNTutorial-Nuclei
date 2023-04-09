@@ -115,6 +115,8 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false,
             @checked => { _playerService.HasInfiniteBreath.Value = @checked; });
+
+        _playerService.HasInfiniteBreath.ValueChanged += (sender, e) => { checkBoxInfiniteBreath.Checked = e.Value; };
     }
 
     private void SetInfiniteSpecialAbility()
@@ -133,6 +135,8 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false,
             @checked => { _playerService.CanRideOnCars.Value = @checked; });
+
+        _playerService.CanRideOnCars.ValueChanged += (sender, e) => { checkBoxRideOnCars.Checked = e.Value; };
     }
 
 
@@ -160,5 +164,7 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false,
             @checked => { _playerService.IsInvisible.Value = @checked; });
+
+        _playerService.IsInvisible.ValueChanged += (sender, e) => { checkBoxInvisible.Checked = e.Value; };
     }
 }

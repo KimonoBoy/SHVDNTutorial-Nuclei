@@ -40,6 +40,8 @@ public class PlayerScript : Script
     private void OnIsInvisibleChanged(object sender, ValueEventArgs<bool> e)
     {
         Game.Player.Character.IsVisible = !e.Value;
+        Game.Player.Character.CanBeTargetted = !e.Value;
+        Game.Player.IgnoredByEveryone = e.Value;
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -105,6 +107,27 @@ public class PlayerScript : Script
     {
         UpdateInvincible();
         UpdateWantedLevel();
+        UpdateInfiniteBreath();
+        UpdateRideOnCars();
+        UpdateInvisible();
+    }
+
+    private void UpdateInvisible()
+    {
+        if (_playerService.IsInvisible.Value == Game.Player.Character.IsVisible)
+            _playerService.IsInvisible.Value = !Game.Player.Character.IsVisible;
+    }
+
+    private void UpdateRideOnCars()
+    {
+        if (_playerService.CanRideOnCars.Value == Game.Player.Character.CanRagdoll)
+            _playerService.CanRideOnCars.Value = !Game.Player.Character.CanRagdoll;
+    }
+
+    private void UpdateInfiniteBreath()
+    {
+        if (_playerService.HasInfiniteBreath.Value == Game.Player.Character.GetConfigFlag(3))
+            _playerService.HasInfiniteBreath.Value = !Game.Player.Character.GetConfigFlag(3);
     }
 
     private void UpdateInvincible()
