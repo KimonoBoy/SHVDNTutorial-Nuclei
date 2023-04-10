@@ -73,7 +73,6 @@
     <Compile Include="Services\Player\IPlayerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
-    <Compile Include="Services\Player\PlayerServiceState.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
