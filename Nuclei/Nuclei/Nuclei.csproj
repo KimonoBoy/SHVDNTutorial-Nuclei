@@ -36,6 +36,9 @@
     <Reference Include="LemonUI.SHVDN3, Version=1.9.4.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\LemonUI.SHVDN3.1.9.4\lib\net48\LemonUI.SHVDN3.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="ScriptHookVDotNet3, Version=3.6.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\ScriptHookVDotNet3.3.6.0\lib\net48\ScriptHookVDotNet3.dll</HintPath>
     </Reference>
@@ -66,9 +69,11 @@
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
+    <Compile Include="Services\GenericStateService.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
+    <Compile Include="Services\Player\PlayerServiceState.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
@@ -94,6 +99,7 @@
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
 COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"</PostBuildEvent>
+xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+xcopy /y "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"</PostBuildEvent>
   </PropertyGroup>
 </Project>

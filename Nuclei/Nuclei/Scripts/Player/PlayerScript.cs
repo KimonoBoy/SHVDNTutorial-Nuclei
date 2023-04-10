@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -7,9 +8,11 @@ using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Services;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Player;
+using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
@@ -17,6 +20,9 @@ namespace Nuclei.Scripts.Player;
 public class PlayerScript : Script
 {
     private readonly PlayerService _playerService = PlayerService.Instance;
+
+    private readonly GenericStateService<PlayerService> _playerServiceState =
+        GenericStateService<PlayerService>.Instance;
 
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
@@ -48,6 +54,9 @@ public class PlayerScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
+        Display.DrawTextElement($"Saved State: {_playerServiceState.GetState().WantedLevel.Value}", 100.0f, 100.0f,
+            Color.AliceBlue);
+        Display.DrawTextElement($"Current State: {_playerService.WantedLevel.Value}", 100.0f, 120.0f, Color.AliceBlue);
         UpdateStates();
         ProcessFunctions();
     }
@@ -56,6 +65,22 @@ public class PlayerScript : Script
     {
         if (e.KeyCode == Keys.T && e.Control)
             Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
+
+        if (e.KeyCode == Keys.K && e.Control)
+        {
+            // Update the current state
+            _playerServiceState.SetState(_playerService.GetCurrentState());
+
+            // Save the updated state
+            _playerServiceState.SaveState();
+        }
+
+        if (e.KeyCode == Keys.L && e.Control)
+        {
+            var loadedPlayerService = _playerServiceState.LoadState();
+
+            if (loadedPlayerService != null) _playerService.SetState(loadedPlayerService);
+        }
     }
 
     private void OnPlayerFixed(object sender, EventArgs e)
