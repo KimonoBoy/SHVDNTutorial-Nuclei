@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -12,7 +11,6 @@ using Nuclei.Services;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Player;
-using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
@@ -54,9 +52,6 @@ public class PlayerScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
-        Display.DrawTextElement($"Saved State: {_playerServiceState.GetState().WantedLevel.Value}", 100.0f, 100.0f,
-            Color.AliceBlue);
-        Display.DrawTextElement($"Current State: {_playerService.WantedLevel.Value}", 100.0f, 120.0f, Color.AliceBlue);
         UpdateStates();
         ProcessFunctions();
     }
