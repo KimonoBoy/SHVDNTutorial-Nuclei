@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using GTA;
 using Nuclei.Enums;
 using Nuclei.Enums.Player;
 using Nuclei.Enums.UI;
@@ -62,15 +61,13 @@ public class PlayerMenu : MenuBase
 
     private void SetInvincible()
     {
-        var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible, Game.Player.Character.IsInvincible,
+        var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible, _playerService.IsInvincible,
             @checked => { _playerService.IsInvincible.Value = @checked; });
-
-        _playerService.IsInvincible.ValueChanged += (sender, e) => { checkBoxInvincible.Checked = e.Value; };
     }
 
     private void AdjustWantedLevel()
     {
-        var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
+        var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel, null,
             (item, index) =>
             {
                 _playerService.WantedLevel.Value = item;
@@ -80,26 +77,21 @@ public class PlayerMenu : MenuBase
         _playerService.WantedLevel.ValueChanged += (sender, e) =>
         {
             if (!_playerService.IsWantedLevelLocked.Value)
-                listItemWantedLevel.SelectedItem = e.Value;
+                listItemWantedLevel.SelectedIndex = e.Value;
         };
     }
 
     private void LockWantedLevel()
     {
-        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false,
+        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, _playerService.IsWantedLevelLocked,
             @checked => { _playerService.IsWantedLevelLocked.Value = @checked; });
-
-        _playerService.IsWantedLevelLocked.ValueChanged += (sender, e) =>
-        {
-            checkBoxLockWantedLevel.Checked = e.Value;
-        };
     }
 
     private void AddCash()
     {
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
-        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash,
+        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, null,
             (selected, index) => { _playerService.RequestCashResult((CashHash)index); }, ListItemEventType.Activated,
             allCashHash.Select(c => c.GetDescription()).ToArray());
 
@@ -116,83 +108,68 @@ public class PlayerMenu : MenuBase
 
     private void SetInfiniteStamina()
     {
-        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, false,
+        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, _playerService.HasInfiniteStamina,
             @checked => { _playerService.HasInfiniteStamina.Value = @checked; });
-
-        _playerService.HasInfiniteStamina.ValueChanged += (sender, e) => { checkBoxInfiniteStamina.Checked = e.Value; };
     }
 
     private void SetInfiniteBreath()
     {
-        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, false,
+        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, _playerService.HasInfiniteBreath,
             @checked => { _playerService.HasInfiniteBreath.Value = @checked; });
-
-        _playerService.HasInfiniteBreath.ValueChanged += (sender, e) => { checkBoxInfiniteBreath.Checked = e.Value; };
     }
 
     private void SetInfiniteSpecialAbility()
     {
-        var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility, false,
+        var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility,
+            _playerService.HasInfiniteSpecialAbility,
             @checked => { _playerService.HasInfiniteSpecialAbility.Value = @checked; });
-
-        _playerService.HasInfiniteSpecialAbility.ValueChanged += (sender, e) =>
-        {
-            checkBoxInfiniteSpecialAbility.Checked = e.Value;
-        };
     }
 
     private void SetNoiseless()
     {
-        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false,
+        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, _playerService.IsNoiseless,
             @checked => { _playerService.IsNoiseless.Value = @checked; });
-
-        _playerService.IsNoiseless.ValueChanged += (sender, e) => { checkBoxNoiseless.Checked = e.Value; };
     }
 
     private void SetRideOnCars()
     {
-        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, false,
+        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, _playerService.CanRideOnCars,
             @checked => { _playerService.CanRideOnCars.Value = @checked; });
-
-        _playerService.CanRideOnCars.ValueChanged += (sender, e) => { checkBoxRideOnCars.Checked = e.Value; };
     }
 
 
     private void SuperJump()
     {
-        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false,
+        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, _playerService.CanSuperJump,
             @checked => { _playerService.CanSuperJump.Value = @checked; });
-
-        _playerService.CanSuperJump.ValueChanged += (sender, e) => { checkBoxSuperJump.Checked = e.Value; };
     }
 
     private void OnePunchMan()
     {
-        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false,
+        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, _playerService.IsOnePunchMan,
             @checked => { _playerService.IsOnePunchMan.Value = @checked; });
-
-        _playerService.IsOnePunchMan.ValueChanged += (sender, e) => { checkBoxOnePunchMan.Checked = e.Value; };
     }
 
     private void SuperSpeed()
     {
         var allSuperSpeeds = Enum.GetValues(typeof(SuperSpeedHash)).Cast<SuperSpeedHash>().ToList();
 
-        var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed,
+        var listItemSuperSpeed = AddListItem(
+            PlayerItemTitles.SuperSpeed,
+            null,
             (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
-            ListItemEventType.ItemChanged, allSuperSpeeds.Select(s => s.ToPrettyString()).ToArray());
+            ListItemEventType.ItemChanged,
+            allSuperSpeeds.Select(superSpeedHash => superSpeedHash.ToPrettyString()).ToArray());
 
-        _playerService.SuperSpeed.ValueChanged += (sender, e) =>
+        _playerService.SuperSpeed.ValueChanged += (sender, args) =>
         {
-            listItemSuperSpeed.SelectedItem = e.Value.ToPrettyString();
+            listItemSuperSpeed.SelectedIndex = (int)args.Value;
         };
     }
 
     private void Invisible()
     {
-        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, false,
+        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, _playerService.IsInvisible,
             @checked => { _playerService.IsInvisible.Value = @checked; });
-
-        _playerService.IsInvisible.ValueChanged += (sender, e) => { checkBoxInvisible.Checked = e.Value; };
     }
 }

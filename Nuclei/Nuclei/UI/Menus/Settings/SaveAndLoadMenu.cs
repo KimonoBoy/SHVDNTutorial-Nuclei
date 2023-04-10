@@ -28,11 +28,11 @@ public class SaveAndLoadMenu : MenuBase
 
     private void AutoLoad()
     {
-        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, false, @checked => { });
+        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, action: @checked => { });
     }
 
     private void AutoSave()
     {
-        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, false, @checked => { });
+        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, action: @checked => { });
     }
 }

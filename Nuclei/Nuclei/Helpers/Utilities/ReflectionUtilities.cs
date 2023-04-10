@@ -1,27 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Nuclei.Helpers.Utilities;
 
 public static class ReflectionUtilities
 {
-    private static readonly Dictionary<Type, List<(string sourceName, string destinationName)>>
+    private static readonly Dictionary<(Type source, Type destination),
+            List<(PropertyInfo sourceProperty, PropertyInfo destinationProperty)>>
         PropertyMappings = new();
 
     public static void CopyProperties(object source, object destination)
     {
-        var sourceProperties = source.GetType().GetProperties();
-        var destinationProperties = destination.GetType().GetProperties();
+        var sourceType = source.GetType();
+        var destinationType = destination.GetType();
+        var key = (sourceType, destinationType);
 
-        foreach (var sourceProperty in sourceProperties)
-        foreach (var destinationProperty in destinationProperties)
-            if (sourceProperty.Name == destinationProperty.Name &&
-                sourceProperty.PropertyType == destinationProperty.PropertyType)
-            {
-                destinationProperty.SetValue(destination, sourceProperty.GetValue(source));
-                break;
-            }
+        if (!PropertyMappings.TryGetValue(key, out var mappings))
+        {
+            var sourceProperties = sourceType.GetProperties();
+            var destinationProperties = destinationType.GetProperties();
+
+            mappings = (from sourceProperty in sourceProperties
+                from destinationProperty in destinationProperties
+                where sourceProperty.Name == destinationProperty.Name &&
+                      sourceProperty.PropertyType == destinationProperty.PropertyType
+                select (sourceProperty, destinationProperty)).ToList();
+
+            PropertyMappings[key] = mappings;
+        }
+
+        foreach (var (sourceProperty, destinationProperty) in mappings)
+            destinationProperty.SetValue(destination, sourceProperty.GetValue(source));
     }
 
     public static void CopyBindableProperties(object source, object destination)
@@ -31,12 +42,10 @@ public static class ReflectionUtilities
 
         var sourceType = source.GetType();
         var destinationType = destination.GetType();
-        List<(string sourceName, string destinationName)> mappings;
+        var key = (sourceType, destinationType);
 
-        if (!PropertyMappings.TryGetValue(sourceType, out mappings))
+        if (!PropertyMappings.TryGetValue(key, out var mappings))
         {
-            mappings = new List<(string sourceName, string destinationName)>();
-
             var sourceProperties = sourceType.GetProperties()
                 .Where(p => p.PropertyType.IsGenericType &&
                             p.PropertyType.GetGenericTypeDefinition() == typeof(BindableProperty<>));
@@ -44,22 +53,17 @@ public static class ReflectionUtilities
                 .Where(p => p.PropertyType.IsGenericType &&
                             p.PropertyType.GetGenericTypeDefinition() == typeof(BindableProperty<>));
 
-            foreach (var sourceProperty in sourceProperties)
-            {
-                var destinationProperty = destinationProperties
-                    .FirstOrDefault(p => p.Name == sourceProperty.Name &&
-                                         p.PropertyType == sourceProperty.PropertyType);
-                if (destinationProperty != null) mappings.Add((sourceProperty.Name, destinationProperty.Name));
-            }
+            mappings = (from sourceProperty in sourceProperties
+                from destinationProperty in destinationProperties
+                where sourceProperty.Name == destinationProperty.Name &&
+                      sourceProperty.PropertyType == destinationProperty.PropertyType
+                select (sourceProperty, destinationProperty)).ToList();
 
-            PropertyMappings[sourceType] = mappings;
+            PropertyMappings[key] = mappings;
         }
 
-        foreach (var (sourceName, destinationName) in mappings)
+        foreach (var (sourceProperty, destinationProperty) in mappings)
         {
-            var sourceProperty = sourceType.GetProperty(sourceName);
-            var destinationProperty = destinationType.GetProperty(destinationName);
-
             var sourceBindableProperty = sourceProperty.GetValue(source) as dynamic;
             var destinationBindableProperty = destinationProperty.GetValue(destination) as dynamic;
 
