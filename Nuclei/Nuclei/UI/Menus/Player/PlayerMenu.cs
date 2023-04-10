@@ -102,6 +102,10 @@ public class PlayerMenu : MenuBase
         var listItemAddCash = AddListItem(PlayerItemTitles.AddCash,
             (selected, index) => { _playerService.RequestCashResult((CashHash)index); }, ListItemEventType.Activated,
             allCashHash.Select(c => c.GetDescription()).ToArray());
+
+        listItemAddCash.ItemChanged += (sender, e) => { _playerService.AddCash.Value = (CashHash)e.Index; };
+
+        _playerService.AddCash.ValueChanged += (sender, e) => { listItemAddCash.SelectedIndex = (int)e.Value; };
     }
 
     private void SetCash()
