@@ -88,6 +88,11 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, false,
             @checked => { _playerService.IsWantedLevelLocked.Value = @checked; });
+
+        _playerService.IsWantedLevelLocked.ValueChanged += (sender, e) =>
+        {
+            checkBoxLockWantedLevel.Checked = e.Value;
+        };
     }
 
     private void AddCash()
@@ -109,6 +114,8 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, false,
             @checked => { _playerService.HasInfiniteStamina.Value = @checked; });
+
+        _playerService.HasInfiniteStamina.ValueChanged += (sender, e) => { checkBoxInfiniteStamina.Checked = e.Value; };
     }
 
     private void SetInfiniteBreath()
@@ -123,12 +130,19 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility, false,
             @checked => { _playerService.HasInfiniteSpecialAbility.Value = @checked; });
+
+        _playerService.HasInfiniteSpecialAbility.ValueChanged += (sender, e) =>
+        {
+            checkBoxInfiniteSpecialAbility.Checked = e.Value;
+        };
     }
 
     private void SetNoiseless()
     {
         var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, false,
             @checked => { _playerService.IsNoiseless.Value = @checked; });
+
+        _playerService.IsNoiseless.ValueChanged += (sender, e) => { checkBoxNoiseless.Checked = e.Value; };
     }
 
     private void SetRideOnCars()
@@ -144,12 +158,16 @@ public class PlayerMenu : MenuBase
     {
         var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, false,
             @checked => { _playerService.CanSuperJump.Value = @checked; });
+
+        _playerService.CanSuperJump.ValueChanged += (sender, e) => { checkBoxSuperJump.Checked = e.Value; };
     }
 
     private void OnePunchMan()
     {
         var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, false,
             @checked => { _playerService.IsOnePunchMan.Value = @checked; });
+
+        _playerService.IsOnePunchMan.ValueChanged += (sender, e) => { checkBoxOnePunchMan.Checked = e.Value; };
     }
 
     private void SuperSpeed()
@@ -159,6 +177,11 @@ public class PlayerMenu : MenuBase
         var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed,
             (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
             ListItemEventType.ItemChanged, allSuperSpeeds.Select(s => s.ToPrettyString()).ToArray());
+
+        _playerService.SuperSpeed.ValueChanged += (sender, e) =>
+        {
+            listItemSuperSpeed.SelectedItem = e.Value.ToPrettyString();
+        };
     }
 
     private void Invisible()
