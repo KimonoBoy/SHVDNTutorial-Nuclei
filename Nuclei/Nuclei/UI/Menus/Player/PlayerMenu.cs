@@ -155,6 +155,7 @@ public class PlayerMenu : MenuBase
     private void SuperSpeed()
     {
         var allSuperSpeeds = Enum.GetValues(typeof(SuperSpeedHash)).Cast<SuperSpeedHash>().ToList();
+
         var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed,
             (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
             ListItemEventType.ItemChanged, allSuperSpeeds.Select(s => s.ToPrettyString()).ToArray());

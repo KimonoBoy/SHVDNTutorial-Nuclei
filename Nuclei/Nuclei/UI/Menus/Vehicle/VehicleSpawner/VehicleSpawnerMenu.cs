@@ -26,9 +26,6 @@ public class VehicleSpawnerMenu : MenuBase
 
     private void SelectSeat()
     {
-        // Default
-        _vehicleSpawnerService.VehicleSeat.Value = VehicleSeat.Driver;
-
         var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
             (selected, index) => { _vehicleSpawnerService.VehicleSeat.Value = selected; },
             ListItemEventType.ItemChanged, VehicleSeat.Driver, VehicleSeat.LeftRear, VehicleSeat.RightRear,

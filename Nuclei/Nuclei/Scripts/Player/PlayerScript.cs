@@ -158,8 +158,8 @@ public class PlayerScript : Script
         ProcessInfiniteSpecialAbility();
         ProcessNoiseless();
         ProcessSuperJump();
-        ProcessSuperSpeed();
         ProcessOnePunchMan();
+        ProcessSuperSpeed();
     }
 
     /// <summary>
@@ -260,54 +260,6 @@ public class PlayerScript : Script
     }
 
     /// <summary>
-    ///     When sprinting or swimming, if the amount of time you can sprint for
-    ///     drops below 5 seconds, RESET STAMINA to FULL.
-    /// </summary>
-    private void ProcessInfiniteStamina()
-    {
-        if (!_playerService.HasInfiniteStamina.Value) return;
-        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
-            !Game.Player.Character.IsSwimming) return;
-
-        if (Game.Player.RemainingSprintTime <= 5.0f)
-            Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
-    }
-
-    /// <summary>
-    ///     Allows the player to jump as high as a building.
-    /// </summary>
-    private void ProcessSuperJump()
-    {
-        if (!_playerService.CanSuperJump.Value) return;
-
-        Game.Player.SetSuperJumpThisFrame();
-    }
-
-    /// <summary>
-    ///     Restores Special Ability Meter to Full.
-    /// </summary>
-    private void ProcessInfiniteSpecialAbility()
-    {
-        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
-        var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
-
-        if (isAbilityMeterFull) return;
-
-        Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
-    }
-
-    /// <summary>
-    ///     The noise level increases slowly over time. This prevents that.
-    /// </summary>
-    private void ProcessNoiseless()
-    {
-        if (!_playerService.IsNoiseless.Value) return;
-
-        Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
-        Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
-    }
-
-    /// <summary>
     ///     Processes the different SuperSpeeds.
     ///     If the player is not sprinting, the SuperSpeed is disabled.
     ///     If the entityForceMultiplier is 0.0f, the entities the player is touching will not be affected.
@@ -357,6 +309,54 @@ public class PlayerScript : Script
         // Pushes the entities away from the player.
         touchingEntities.ToList().ForEach(entity =>
             entity.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed * entityForceMultiplier));
+    }
+
+    /// <summary>
+    ///     When sprinting or swimming, if the amount of time you can sprint for
+    ///     drops below 5 seconds, RESET STAMINA to FULL.
+    /// </summary>
+    private void ProcessInfiniteStamina()
+    {
+        if (!_playerService.HasInfiniteStamina.Value) return;
+        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
+            !Game.Player.Character.IsSwimming) return;
+
+        if (Game.Player.RemainingSprintTime <= 5.0f)
+            Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);
+    }
+
+    /// <summary>
+    ///     Allows the player to jump as high as a building.
+    /// </summary>
+    private void ProcessSuperJump()
+    {
+        if (!_playerService.CanSuperJump.Value) return;
+
+        Game.Player.SetSuperJumpThisFrame();
+    }
+
+    /// <summary>
+    ///     Restores Special Ability Meter to Full.
+    /// </summary>
+    private void ProcessInfiniteSpecialAbility()
+    {
+        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
+        var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
+
+        if (isAbilityMeterFull) return;
+
+        Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
+    }
+
+    /// <summary>
+    ///     The noise level increases slowly over time. This prevents that.
+    /// </summary>
+    private void ProcessNoiseless()
+    {
+        if (!_playerService.IsNoiseless.Value) return;
+
+        Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
+        Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
     }
 
     /// <summary>

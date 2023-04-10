@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 using GTA;
 using GTA.UI;
 using LemonUI;
@@ -82,9 +81,9 @@ public abstract class MenuBase : NativeMenu
         if (Items.All(i => i is NativeHeaderItem)) return;
 
         // Set the state of the menus latest navigation to up or down.
-        if (Game.IsKeyPressed(Keys.Up))
+        if (Game.IsControlPressed(Control.PhoneUp))
             _isMovingUp = true;
-        else if (Game.IsKeyPressed(Keys.Down))
+        else if (Game.IsControlPressed(Control.PhoneDown))
             _isMovingUp = false;
 
         // Get the index of the next item.

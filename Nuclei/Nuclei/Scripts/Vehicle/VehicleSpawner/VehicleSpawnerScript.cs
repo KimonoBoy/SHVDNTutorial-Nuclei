@@ -13,6 +13,9 @@ public class VehicleSpawnerScript : Script
 
     public VehicleSpawnerScript()
     {
+        // Default VehicleSeat.
+        _vehicleSpawnerService.VehicleSeat.Value = VehicleSeat.Driver;
+
         _vehicleSpawnerService.VehicleSpawned += OnVehicleSpawned;
     }
 
