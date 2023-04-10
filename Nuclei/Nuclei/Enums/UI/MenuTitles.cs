@@ -26,5 +26,12 @@ public enum MenuTitles
     SpawnVehicle,
 
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
-    Weapon
+    Weapon,
+
+    [Description("Save/Load and Change HotKeys")]
+    Settings,
+
+    [Description("Save and Load")] SaveAndLoad,
+
+    [Description("Change HotKeys")] HotKeys
 }
