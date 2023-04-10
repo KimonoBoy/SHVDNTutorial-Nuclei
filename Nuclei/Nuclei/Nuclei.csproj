@@ -64,13 +64,15 @@
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="Helpers\Utilities\Logger.cs" />
+    <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
-    <Compile Include="Services\GenericStateService.cs" />
+    <Compile Include="Services\Generics\GenericService.cs" />
+    <Compile Include="Services\Generics\GenericStateService.cs" />
     <Compile Include="Services\Player\IPlayerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />

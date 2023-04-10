@@ -2,8 +2,9 @@
 using System.IO;
 using Newtonsoft.Json;
 using Nuclei.Constants;
+using Nuclei.Helpers.Utilities;
 
-namespace Nuclei.Services;
+namespace Nuclei.Services.Generics;
 
 public class GenericStateService<T> where T : new()
 {
@@ -39,7 +40,8 @@ public class GenericStateService<T> where T : new()
         var fileContent = File.ReadAllText(_stateFilePath);
         if (string.IsNullOrWhiteSpace(fileContent)) return default;
 
-        return JsonConvert.DeserializeObject<T>(fileContent);
+        var loadedState = JsonConvert.DeserializeObject<T>(fileContent);
+        return loadedState;
     }
 
     private void EnsureDirectoryAndFileExist(string filePath)
@@ -54,6 +56,8 @@ public class GenericStateService<T> where T : new()
     {
         if (newState == null) throw new ArgumentNullException(nameof(newState));
 
-        foreach (var property in typeof(T).GetProperties()) property.SetValue(_state, property.GetValue(newState));
+        // foreach (var property in typeof(T).GetProperties()) property.SetValue(_state, property.GetValue(newState));
+
+        ReflectionUtilities.CopyProperties(newState, _state);
     }
 }

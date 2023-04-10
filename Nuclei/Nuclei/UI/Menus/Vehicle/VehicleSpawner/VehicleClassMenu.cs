@@ -10,6 +10,7 @@ namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 public class VehicleClassMenu : MenuBase
 {
     private readonly VehicleClass _vehicleClass;
+
     private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
 
     public VehicleClassMenu(Enum @enum) : base(@enum)

@@ -1,16 +1,12 @@
 ﻿using System;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Player;
 
-public class PlayerService : IPlayerService
+public class PlayerService : GenericService<PlayerService>, IPlayerService
 {
-    /// <summary>
-    ///     A singleton instance of the PlayerService class.
-    /// </summary>
-    public static readonly PlayerService Instance = new();
-
     /// <summary>
     ///     A property that can set the cash hash.
     /// </summary>
@@ -120,48 +116,5 @@ public class PlayerService : IPlayerService
     public void RequestCashResult(CashHash cashHash)
     {
         AddCashRequested?.Invoke(this, cashHash);
-    }
-
-    public PlayerService GetCurrentState()
-    {
-        // Create a new instance of PlayerService and set its properties with the current values
-        var currentState = new PlayerService();
-
-        currentState.AddCash.Value = AddCash.Value;
-        currentState.SuperSpeed.Value = SuperSpeed.Value;
-        currentState.IsOnePunchMan.Value = IsOnePunchMan.Value;
-        currentState.IsInvisible.Value = IsInvisible.Value;
-        currentState.CanRideOnCars.Value = CanRideOnCars.Value;
-        currentState.IsNoiseless.Value = IsNoiseless.Value;
-        currentState.IsWantedLevelLocked.Value = IsWantedLevelLocked.Value;
-        currentState.LockedWantedLevel.Value = LockedWantedLevel.Value;
-        currentState.HasInfiniteSpecialAbility.Value = HasInfiniteSpecialAbility.Value;
-        currentState.HasInfiniteStamina.Value = HasInfiniteStamina.Value;
-        currentState.HasInfiniteBreath.Value = HasInfiniteBreath.Value;
-        currentState.IsInvincible.Value = IsInvincible.Value;
-        currentState.WantedLevel.Value = WantedLevel.Value;
-        currentState.CanSuperJump.Value = CanSuperJump.Value;
-
-        return currentState;
-    }
-
-    public void SetState(PlayerService newState)
-    {
-        if (newState == null) return;
-
-        AddCash.Value = newState.AddCash.Value;
-        SuperSpeed.Value = newState.SuperSpeed.Value;
-        IsOnePunchMan.Value = newState.IsOnePunchMan.Value;
-        IsInvisible.Value = newState.IsInvisible.Value;
-        CanRideOnCars.Value = newState.CanRideOnCars.Value;
-        IsNoiseless.Value = newState.IsNoiseless.Value;
-        IsWantedLevelLocked.Value = newState.IsWantedLevelLocked.Value;
-        LockedWantedLevel.Value = newState.LockedWantedLevel.Value;
-        HasInfiniteSpecialAbility.Value = newState.HasInfiniteSpecialAbility.Value;
-        HasInfiniteStamina.Value = newState.HasInfiniteStamina.Value;
-        HasInfiniteBreath.Value = newState.HasInfiniteBreath.Value;
-        IsInvincible.Value = newState.IsInvincible.Value;
-        WantedLevel.Value = newState.WantedLevel.Value;
-        CanSuperJump.Value = newState.CanSuperJump.Value;
     }
 }

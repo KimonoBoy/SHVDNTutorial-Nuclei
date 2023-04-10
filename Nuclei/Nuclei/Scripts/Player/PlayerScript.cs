@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -7,16 +8,18 @@ using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
-using Nuclei.Services;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
+using Nuclei.Services.Generics;
 using Nuclei.Services.Player;
+using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
 
 public class PlayerScript : Script
 {
+    // private readonly PlayerService _playerService = PlayerService.Instance;
     private readonly PlayerService _playerService = PlayerService.Instance;
 
     private readonly GenericStateService<PlayerService> _playerServiceState =
@@ -52,6 +55,11 @@ public class PlayerScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
+        Display.DrawTextElement($"PlayerService SuperJump: {_playerService.CanSuperJump.Value}", 100.0f, 100.0f,
+            Color.AntiqueWhite);
+        Display.DrawTextElement($"PlayerServiceState SuperJump: {_playerServiceState.GetState().CanSuperJump.Value}",
+            100.0f,
+            120.0f, Color.AntiqueWhite);
         UpdateStates();
         ProcessFunctions();
     }
@@ -64,7 +72,7 @@ public class PlayerScript : Script
         if (e.KeyCode == Keys.K && e.Control)
         {
             // Update the current state
-            _playerServiceState.SetState(_playerService.GetCurrentState());
+            _playerServiceState.SetState(_playerService);
 
             // Save the updated state
             _playerServiceState.SaveState();
@@ -72,8 +80,10 @@ public class PlayerScript : Script
 
         if (e.KeyCode == Keys.L && e.Control)
         {
+            // Load the state from the file.
             var loadedPlayerService = _playerServiceState.LoadState();
 
+            // Set the _playerService current state to the loaded state.
             if (loadedPlayerService != null) _playerService.SetState(loadedPlayerService);
         }
     }
