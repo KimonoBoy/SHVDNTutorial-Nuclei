@@ -33,6 +33,8 @@ public class VehicleSpawnerMenu : MenuBase
             VehicleSeat.RightFront);
 
         Shown += (sender, args) => { listItemSeat.Enabled = _vehicleSpawnerService.WarpInSpawned.Value; };
+
+        _vehicleSpawnerService.WarpInSpawned.ValueChanged += (sender, args) => { listItemSeat.Enabled = args.Value; };
     }
 
     private void EnginesRunning()

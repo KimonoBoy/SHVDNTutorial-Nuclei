@@ -7,8 +7,6 @@ namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVehicleSpawnerService
 {
-    public static VehicleSpawnerService Instance = new();
-
     /// <summary>
     ///     A property that indicates whether the spawned vehicle should have its engines running.
     /// </summary>

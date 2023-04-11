@@ -19,7 +19,6 @@ namespace Nuclei.Scripts.Player;
 
 public class PlayerScript : Script
 {
-    // private readonly PlayerService _playerService = PlayerService.Instance;
     private readonly PlayerService _playerService = PlayerService.Instance;
 
     private readonly GenericStateService<PlayerService> _playerServiceState =

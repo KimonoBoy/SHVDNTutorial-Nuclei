@@ -11,7 +11,7 @@ namespace Nuclei.UI.Menus.Player;
 
 public class PlayerMenu : MenuBase
 {
-    private readonly IPlayerService _playerService = PlayerService.Instance;
+    private readonly PlayerService _playerService = PlayerService.Instance;
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {

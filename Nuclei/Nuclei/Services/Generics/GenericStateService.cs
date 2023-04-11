@@ -22,6 +22,7 @@ public class GenericStateService<T> where T : new()
 
     public static GenericStateService<T> Instance => _instance ??= new GenericStateService<T>();
 
+
     public T GetState()
     {
         return _state;

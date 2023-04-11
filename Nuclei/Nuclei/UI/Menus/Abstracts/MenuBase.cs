@@ -214,32 +214,6 @@ public abstract class MenuBase : NativeMenu
     }
 
     /// <summary>
-    ///     Adds a new list item to the menu with a given title, description, action, event type, and items.
-    /// </summary>
-    /// <typeparam name="T">The object type of the values.</typeparam>
-    /// <param name="title">The 'title' of the item.</param>
-    /// <param name="description">The description when the item is selected (optional).</param>
-    /// <param name="action">The action to perform when the event type is triggered (optional).</param>
-    /// <param name="eventType">The event type that triggers the action (default is ItemChanged).</param>
-    /// <param name="items">The items array.</param>
-    /// <returns>The list item.</returns>
-    // protected NativeListItem<T> AddListItem<T>(string title, string description = "",
-    //     Action<T, int> action = null,
-    //     ListItemEventType eventType = ListItemEventType.ItemChanged,
-    //     params T[] items)
-    // {
-    //     var item = new NativeListItem<T>(title, description, items);
-    //
-    //     if (eventType == ListItemEventType.ItemChanged)
-    //         item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-    //     else if (eventType == ListItemEventType.Activated)
-    //         item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-    //
-    //     Add(item);
-    //     return item;
-    // }
-
-    /// <summary>
     ///     Adds a new list item to the menu with a given enum, action, event type, and items.
     /// </summary>
     /// <typeparam name="T">The object type of the values.</typeparam>
@@ -255,22 +229,6 @@ public abstract class MenuBase : NativeMenu
     {
         return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), bindableProperty, action, eventType, items);
     }
-
-
-    /// <summary>
-    ///     Adds a new list item to the menu with a given enum, action, event type, and items.
-    /// </summary>
-    /// <typeparam name="T">The object type of the values.</typeparam>
-    /// <param name="enum">The enum to get the Title and the Description from.</param>
-    /// <param name="action">The action to perform when the event type is triggered (optional).</param>
-    /// <param name="eventType">The event type that triggers the action (default is ItemChanged).</param>
-    /// <param name="items">The items array.</param>
-    /// <returns>The list item.</returns>
-    // protected NativeListItem<T> AddListItem<T>(Enum @enum, Action<T, int> action = null,
-    //     ListItemEventType eventType = ListItemEventType.ItemChanged, params T[] items)
-    // {
-    //     return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), action, eventType, items);
-    // }
 
     /// <summary>
     ///     Adds a new submenu and associated item to the menu.
