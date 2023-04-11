@@ -23,7 +23,7 @@ public class Display
     }
 
     public static void Notify(string message, string activationMessage = "", bool state = true,
-        bool hidePrevious = true)
+        bool hidePrevious = false)
     {
         var color = state ? "~g~" : "~r~";
         var text = $"~b~{message}";

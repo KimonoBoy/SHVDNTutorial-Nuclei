@@ -28,14 +28,13 @@ public class VehicleSpawnerMenu : MenuBase
     private void SelectSeat()
     {
         var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
-            ListItemEventType.ItemChanged,
             (selected, index) => { _vehicleSpawnerService.VehicleSeat.Value = selected; },
-            VehicleSeat.Driver,
+            null, VehicleSeat.Driver,
             VehicleSeat.LeftRear, VehicleSeat.RightRear,
             VehicleSeat.RightFront);
 
+        // Disable the seat selection item if the WarpInSpawned is not true.
         Shown += (sender, args) => { listItemSeat.Enabled = _vehicleSpawnerService.WarpInSpawned.Value; };
-
         _vehicleSpawnerService.WarpInSpawned.ValueChanged += (sender, args) => { listItemSeat.Enabled = args.Value; };
 
         _vehicleSpawnerService.VehicleSeat.ValueChanged += (sender, args) =>

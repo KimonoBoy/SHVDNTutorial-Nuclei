@@ -5,7 +5,6 @@ using GTA;
 using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
-using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
@@ -189,23 +188,28 @@ public abstract class MenuBase : NativeMenu
     /// <typeparam name="T">The object type of the values.</typeparam>
     /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected (optional).</param>
-    /// <param name="bindableProperty">The value to bind this item to.</param>
-    /// <param name="action">The action to perform when the event type is triggered (optional).</param>
-    /// <param name="eventType">The event type that triggers the action (default is ItemChanged).</param>
+    /// <param name="itemChangedAction">The action to perform when the item in the list changes. (Null to do nothing)</param>
+    /// <param name="itemActivatedAction">The action to perform when the item in the list is activated. (Null to do nothing)</param>
     /// <param name="items">The items array.</param>
     /// <returns>The list item.</returns>
     protected NativeListItem<T> AddListItem<T>(string title, string description = "",
-        ListItemEventType eventType = ListItemEventType.ItemChanged,
-        Action<T, int> action = null,
+        Action<T, int> itemChangedAction = null,
+        Action<T, int> itemActivatedAction = null,
         params T[] items)
     {
         var item = new NativeListItem<T>(title, description, items);
 
+        //
+        // if (eventType == ListItemEventType.ItemChanged)
+        //     item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
+        // else if (eventType == ListItemEventType.Activated)
+        //     item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
 
-        if (eventType == ListItemEventType.ItemChanged)
-            item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-        else if (eventType == ListItemEventType.Activated)
-            item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
+        if (itemChangedAction != null)
+            item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
+
+        if (itemActivatedAction != null)
+            item.Activated += (sender, args) => { itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 
         Add(item);
         return item;
@@ -216,17 +220,17 @@ public abstract class MenuBase : NativeMenu
     /// </summary>
     /// <typeparam name="T">The object type of the values.</typeparam>
     /// <param name="enum">The enum to get the Title and the Description from.</param>
-    /// <param name="bindableProperty">The value to bind this item to.</param>
-    /// <param name="action">The action to perform when the event type is triggered (optional).</param>
-    /// <param name="eventType">The event type that triggers the action (default is ItemChanged).</param>
+    /// <param name="itemChangedAction">The action to perform when the item in the list changes. (Null to do nothing)</param>
+    /// <param name="itemActivatedAction">The action to perform when the item in the list is activated. (Null to do nothing)</param>
     /// <param name="items">The items array.</param>
     /// <returns>The list item.</returns>
     protected NativeListItem<T> AddListItem<T>(Enum @enum,
-        ListItemEventType eventType = ListItemEventType.ItemChanged,
-        Action<T, int> action = null,
+        Action<T, int> itemChangedAction = null,
+        Action<T, int> itemActivatedAction = null,
         params T[] items)
     {
-        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), eventType, action, items);
+        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), itemChangedAction, itemActivatedAction,
+            items);
     }
 
     /// <summary>
