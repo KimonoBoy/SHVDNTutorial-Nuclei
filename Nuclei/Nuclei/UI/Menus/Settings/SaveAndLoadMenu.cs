@@ -21,6 +21,12 @@ public class SaveAndLoadMenu : MenuBase
         Load();
         AutoSave();
         AutoLoad();
+        RestoreDefaults();
+    }
+
+    private void RestoreDefaults()
+    {
+        var itemRestoreDefault = AddItem(SettingsTitles.RestoreDefault, () => { _storageService.RestoreDefaults(); });
     }
 
     private void Load()

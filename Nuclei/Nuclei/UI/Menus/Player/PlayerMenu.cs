@@ -76,8 +76,9 @@ public class PlayerMenu : MenuBase
 
         _playerService.WantedLevel.ValueChanged += (sender, e) =>
         {
-            if (!_playerService.IsWantedLevelLocked.Value)
-                listItemWantedLevel.SelectedIndex = e.Value;
+            listItemWantedLevel.SelectedItem = !_playerService.IsWantedLevelLocked.Value
+                ? e.Value
+                : _playerService.LockedWantedLevel.Value;
         };
     }
 

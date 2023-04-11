@@ -1,22 +1,22 @@
 ﻿using System;
 using GTA;
 using GTA.Math;
-using Nuclei.Services.Exception;
+using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerScript : Script
+public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 {
-    private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
+    // private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
 
     public VehicleSpawnerScript()
     {
         // Default VehicleSeat.
-        _vehicleSpawnerService.VehicleSeat.Value = VehicleSeat.Driver;
+        Service.VehicleSeat.Value = VehicleSeat.Driver;
 
-        _vehicleSpawnerService.VehicleSpawned += OnVehicleSpawned;
+        Service.VehicleSpawned += OnVehicleSpawned;
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicle
@@ -47,13 +47,13 @@ public class VehicleSpawnerScript : Script
                 currentAttempt++;
                 if (currentAttempt == maxAttempts)
                 {
-                    ExceptionService.Instance.RaiseError(vehicleSpawnerException);
+                    ExceptionService.RaiseError(vehicleSpawnerException);
                     break;
                 }
             }
             catch (Exception ex)
             {
-                ExceptionService.Instance.RaiseError(ex);
+                ExceptionService.RaiseError(ex);
                 break;
             }
     }
@@ -124,7 +124,7 @@ public class VehicleSpawnerScript : Script
     /// <returns>A float value representing the vehicle heading.</returns>
     private float GetVehicleHeading()
     {
-        if (!_vehicleSpawnerService.WarpInSpawned.Value) return Game.Player.Character.Heading + 90.0f;
+        if (!Service.WarpInSpawned.Value) return Game.Player.Character.Heading + 90.0f;
 
         return Game.Player.Character.Heading;
     }
@@ -146,11 +146,11 @@ public class VehicleSpawnerScript : Script
     {
         vehicle.PlaceOnGround();
 
-        if (_vehicleSpawnerService.EnginesRunning.Value) vehicle.IsEngineRunning = true;
+        if (Service.EnginesRunning.Value) vehicle.IsEngineRunning = true;
 
-        if (!_vehicleSpawnerService.WarpInSpawned.Value) return;
+        if (!Service.WarpInSpawned.Value) return;
 
-        var preferredSeat = _vehicleSpawnerService.VehicleSeat.Value;
+        var preferredSeat = Service.VehicleSeat.Value;
 
         Game.Player.Character.SetIntoVehicle(vehicle,
             vehicle.IsSeatFree(preferredSeat) ? preferredSeat : VehicleSeat.Driver);

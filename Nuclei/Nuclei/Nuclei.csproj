@@ -66,6 +66,7 @@
     <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
+    <Compile Include="Scripts\Generics\GenericScriptBase.cs" />
     <Compile Include="Scripts\Settings\StorageScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
@@ -104,9 +105,11 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-xcopy /y "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"</PostBuildEvent>
+    <PostBuildEvent>
+			if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			xcopy /y "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"
+		</PostBuildEvent>
   </PropertyGroup>
 </Project>

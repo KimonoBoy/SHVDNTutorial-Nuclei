@@ -1,6 +1,7 @@
 ﻿using System;
 using GTA;
 using Nuclei.Enums.UI;
+using Nuclei.Services.Generics;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Abstracts;
 
@@ -8,7 +9,7 @@ namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerMenu : MenuBase
 {
-    private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
+    private readonly VehicleSpawnerService _vehicleSpawnerService = GenericService<VehicleSpawnerService>.Instance;
 
     public VehicleSpawnerMenu(Enum @enum) : base(@enum)
     {

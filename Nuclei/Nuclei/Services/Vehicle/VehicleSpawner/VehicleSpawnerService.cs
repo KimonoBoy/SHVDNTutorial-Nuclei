@@ -18,7 +18,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVeh
     public BindableProperty<bool> WarpInSpawned { get; set; } = new();
 
     /// <summary>
-    ///     A property that indicates which seat the spawned vehicle should be warped into.
+    ///     A property that indicates which seat the player should be placed at when spawning a vehicle.
     /// </summary>
     public BindableProperty<VehicleSeat> VehicleSeat { get; set; } = new();
 

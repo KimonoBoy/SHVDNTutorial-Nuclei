@@ -10,12 +10,6 @@ public class SettingsMenu : MenuBase
     {
         AddSaveAndLoadMenu();
         AddHotKeysMenu();
-        RestoreDefault();
-    }
-
-    private void RestoreDefault()
-    {
-        var itemRestoreDefault = AddItem(SettingsTitles.RestoreDefault, () => { });
     }
 
     private void AddSaveAndLoadMenu()

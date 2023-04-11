@@ -7,6 +7,7 @@ using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Player;
@@ -14,10 +15,8 @@ using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
 
-public class PlayerScript : Script
+public class PlayerScript : GenericScriptBase<PlayerService>
 {
-    private readonly PlayerService _playerService = PlayerService.Instance;
-
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
     public PlayerScript()
@@ -29,14 +28,14 @@ public class PlayerScript : Script
     {
         Tick += OnTick;
         KeyDown += OnKeyDown;
-        _playerService.PlayerFixed += OnPlayerFixed;
-        _playerService.IsInvincible.ValueChanged += OnInvincibleChanged;
-        _playerService.WantedLevel.ValueChanged += OnWantedLevelChanged;
-        _playerService.CashInputRequested += OnCashInputRequested;
-        _playerService.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
-        _playerService.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
-        _playerService.AddCashRequested += OnAddCashRequested;
-        _playerService.IsInvisible.ValueChanged += OnIsInvisibleChanged;
+        Service.PlayerFixed += OnPlayerFixed;
+        Service.IsInvincible.ValueChanged += OnInvincibleChanged;
+        Service.WantedLevel.ValueChanged += OnWantedLevelChanged;
+        Service.CashInputRequested += OnCashInputRequested;
+        Service.HasInfiniteBreath.ValueChanged += OnInfiniteBreathChanged;
+        Service.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
+        Service.AddCashRequested += OnAddCashRequested;
+        Service.IsInvisible.ValueChanged += OnIsInvisibleChanged;
     }
 
     private void OnIsInvisibleChanged(object sender, ValueEventArgs<bool> e)
@@ -71,7 +70,7 @@ public class PlayerScript : Script
     private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
     {
         Game.Player.WantedLevel =
-            !_playerService.IsWantedLevelLocked.Value ? e.Value : _playerService.LockedWantedLevel.Value;
+            !Service.IsWantedLevelLocked.Value ? e.Value : Service.LockedWantedLevel.Value;
     }
 
     private void OnCashInputRequested(object sender, EventArgs e)
@@ -120,7 +119,7 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessOnePunchMan()
     {
-        if (!_playerService.IsOnePunchMan.Value || !Game.Player.Character.IsInMeleeCombat) return;
+        if (!Service.IsOnePunchMan.Value || !Game.Player.Character.IsInMeleeCombat) return;
 
         // Check for damaged entities only once every 100 milliseconds
         if ((DateTime.UtcNow - _lastEntityCheck).TotalMilliseconds < 100) return;
@@ -189,7 +188,7 @@ public class PlayerScript : Script
 
         Game.Player.SetRunSpeedMultThisFrame(1.49f);
 
-        switch (_playerService.SuperSpeed.Value)
+        switch (Service.SuperSpeed.Value)
         {
             case SuperSpeedHash.Fast:
                 return; // Do nothing, only apply the run speed multiplier.
@@ -271,7 +270,7 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessInfiniteStamina()
     {
-        if (!_playerService.HasInfiniteStamina.Value) return;
+        if (!Service.HasInfiniteStamina.Value) return;
         if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
             !Game.Player.Character.IsSwimming) return;
 
@@ -284,7 +283,7 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessSuperJump()
     {
-        if (!_playerService.CanSuperJump.Value) return;
+        if (!Service.CanSuperJump.Value) return;
 
         Game.Player.SetSuperJumpThisFrame();
     }
@@ -294,7 +293,7 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessInfiniteSpecialAbility()
     {
-        if (!_playerService.HasInfiniteSpecialAbility.Value) return;
+        if (!Service.HasInfiniteSpecialAbility.Value) return;
         var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
 
         if (isAbilityMeterFull) return;
@@ -307,7 +306,7 @@ public class PlayerScript : Script
     /// </summary>
     private void ProcessNoiseless()
     {
-        if (!_playerService.IsNoiseless.Value) return;
+        if (!Service.IsNoiseless.Value) return;
 
         Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
         Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
