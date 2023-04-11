@@ -59,7 +59,7 @@ public class PlayerScript : Script
         Display.DrawTextElement($"PlayerServiceState SuperJump: {_playerServiceState.GetState().CanSuperJump.Value}",
             100.0f,
             120.0f, Color.AntiqueWhite);
-        UpdateStates();
+        // UpdateStates();
         ProcessFunctions();
     }
 
@@ -131,21 +131,21 @@ public class PlayerScript : Script
         AddCash(cashHash);
     }
 
-    /// <summary>
-    ///     Updates the different states in the service.
-    /// </summary>
-    private void UpdateStates()
-    {
-        /*
-         * Until we add save & load functionality, we'll just update the states here.
-         */
-
-        UpdateInvincible();
-        UpdateWantedLevel();
-        UpdateInfiniteBreath();
-        UpdateRideOnCars();
-        UpdateInvisible();
-    }
+    // /// <summary>
+    // ///     Updates the different states in the service.
+    // /// </summary>
+    // private void UpdateStates()
+    // {
+    //     /*
+    //      * Until we add save & load functionality, we'll just update the states here.
+    //      */
+    //
+    //     UpdateInvincible();
+    //     UpdateWantedLevel();
+    //     UpdateInfiniteBreath();
+    //     UpdateRideOnCars();
+    //     UpdateInvisible();
+    // }
 
     private void UpdateInvisible()
     {

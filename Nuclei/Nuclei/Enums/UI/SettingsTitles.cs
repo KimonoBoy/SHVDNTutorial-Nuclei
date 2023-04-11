@@ -14,5 +14,8 @@ public enum SettingsTitles
     Save,
 
     [Description("Loads the last saved settings.")]
-    Load
+    Load,
+
+    [Description("Restores the default settings.")]
+    RestoreDefault
 }

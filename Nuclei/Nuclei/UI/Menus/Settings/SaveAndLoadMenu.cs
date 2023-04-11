@@ -1,8 +1,6 @@
 ﻿using System;
 using Nuclei.Enums.UI;
-using Nuclei.Services.Generics;
-using Nuclei.Services.Player;
-using Nuclei.Services.Vehicle.VehicleSpawner;
+using Nuclei.Services.Settings;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Settings;
@@ -15,61 +13,37 @@ public class SaveAndLoadMenu : MenuBase
      * This allows us to save and load more efficiently.
      */
 
-    private readonly PlayerService _playerService = PlayerService.Instance;
-
-    private readonly GenericStateService<PlayerService> _playerServiceState =
-        GenericStateService<PlayerService>.Instance;
-
-    private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
-
-    private readonly GenericStateService<VehicleSpawnerService> _vehicleSpawnerStateService =
-        GenericStateService<VehicleSpawnerService>.Instance;
+    private readonly StorageService _storageService = StorageService.Instance;
 
     public SaveAndLoadMenu(Enum @enum) : base(@enum)
     {
-        AutoSave();
-        AutoLoad();
         Save();
         Load();
+        AutoSave();
+        AutoLoad();
     }
 
     private void Load()
     {
-        var itemLoad = AddItem(SettingsTitles.Load, () =>
-        {
-            // Load the state from the file.
-            var loadedPlayerService = _playerServiceState.LoadState();
-            var loadedVehicleSpawnerService = _vehicleSpawnerStateService.LoadState();
-
-            // Set the _playerService current state to the loaded state.
-            if (loadedPlayerService != null) _playerService.SetState(loadedPlayerService);
-            if (loadedVehicleSpawnerService != null) loadedVehicleSpawnerService.SetState(loadedVehicleSpawnerService);
-        });
+        var itemLoad = AddItem(SettingsTitles.Load, () => { _storageService.Load(); });
         itemLoad.AltTitle = "CTRL + SHIFT + L";
     }
 
     private void Save()
     {
-        var itemSave = AddItem(SettingsTitles.Save, () =>
-        {
-            // Update the current state
-            _playerServiceState.SetState(_playerService);
-            _vehicleSpawnerStateService.SetState(_vehicleSpawnerService);
-
-            // Save the updated state
-            _playerServiceState.SaveState();
-            _vehicleSpawnerStateService.SaveState();
-        });
+        var itemSave = AddItem(SettingsTitles.Save, () => { _storageService.Save(); });
         itemSave.AltTitle = "CTRL + SHIFT + S";
     }
 
     private void AutoLoad()
     {
-        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, action: @checked => { });
+        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, _storageService.AutoLoad,
+            @checked => { _storageService.AutoLoad.Value = @checked; });
     }
 
     private void AutoSave()
     {
-        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, action: @checked => { });
+        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, _storageService.AutoSave,
+            @checked => { _storageService.AutoSave.Value = @checked; });
     }
 }
