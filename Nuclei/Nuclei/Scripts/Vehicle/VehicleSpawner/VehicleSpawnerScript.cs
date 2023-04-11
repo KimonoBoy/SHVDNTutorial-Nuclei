@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
-using Nuclei.Services.Generics;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
@@ -13,38 +11,12 @@ public class VehicleSpawnerScript : Script
 {
     private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
 
-    private readonly GenericStateService<VehicleSpawnerService> _vehicleSpawnerServiceState =
-        GenericStateService<VehicleSpawnerService>.Instance;
-
     public VehicleSpawnerScript()
     {
         // Default VehicleSeat.
         _vehicleSpawnerService.VehicleSeat.Value = VehicleSeat.Driver;
 
         _vehicleSpawnerService.VehicleSpawned += OnVehicleSpawned;
-
-        KeyDown += OnKeyDown;
-    }
-
-    private void OnKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.KeyCode == Keys.K && e.Control)
-        {
-            // Update the current state
-            _vehicleSpawnerServiceState.SetState(_vehicleSpawnerService);
-
-            // Save the updated state
-            _vehicleSpawnerServiceState.SaveState();
-        }
-
-        if (e.KeyCode == Keys.L && e.Control)
-        {
-            // Load the state from the file.
-            var loadedVehicleSpawnerService = _vehicleSpawnerServiceState.LoadState();
-
-            // Set the _playerService current state to the loaded state.
-            if (loadedVehicleSpawnerService != null) _vehicleSpawnerService.SetState(loadedVehicleSpawnerService);
-        }
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicle
