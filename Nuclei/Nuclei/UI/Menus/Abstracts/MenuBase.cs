@@ -199,12 +199,6 @@ public abstract class MenuBase : NativeMenu
     {
         var item = new NativeListItem<T>(title, description, items);
 
-        //
-        // if (eventType == ListItemEventType.ItemChanged)
-        //     item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-        // else if (eventType == ListItemEventType.Activated)
-        //     item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-
         if (itemChangedAction != null)
             item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 

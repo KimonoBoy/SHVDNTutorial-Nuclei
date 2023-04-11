@@ -268,6 +268,8 @@ public class PlayerScript : Script
 
         switch (_playerService.SuperSpeed.Value)
         {
+            case SuperSpeedHash.Fast:
+                return; // Do nothing, only apply the run speed multiplier.
             case SuperSpeedHash.Faster:
                 maxSpeed = 30;
                 entityForceMultiplier = 0.0f;
