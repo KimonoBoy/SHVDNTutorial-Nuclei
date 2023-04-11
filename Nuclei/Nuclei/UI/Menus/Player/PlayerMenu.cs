@@ -67,12 +67,13 @@ public class PlayerMenu : MenuBase
 
     private void AdjustWantedLevel()
     {
-        var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel, null,
+        var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
+            ListItemEventType.ItemChanged,
             (item, index) =>
             {
                 _playerService.WantedLevel.Value = item;
                 _playerService.LockedWantedLevel.Value = item;
-            }, ListItemEventType.ItemChanged, 0, 1, 2, 3, 4, 5);
+            }, 0, 1, 2, 3, 4, 5);
 
         _playerService.WantedLevel.ValueChanged += (sender, e) =>
         {
@@ -91,8 +92,8 @@ public class PlayerMenu : MenuBase
     {
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
-        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, null,
-            (selected, index) => { _playerService.RequestCashResult((CashHash)index); }, ListItemEventType.Activated,
+        var listItemAddCash = AddListItem(PlayerItemTitles.AddCash, ListItemEventType.Activated,
+            (selected, index) => { _playerService.RequestCashResult((CashHash)index); },
             allCashHash.Select(c => c.GetDescription()).ToArray());
 
         listItemAddCash.ItemChanged += (sender, e) => { _playerService.AddCash.Value = (CashHash)e.Index; };
@@ -156,9 +157,8 @@ public class PlayerMenu : MenuBase
 
         var listItemSuperSpeed = AddListItem(
             PlayerItemTitles.SuperSpeed,
-            null,
-            (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
             ListItemEventType.ItemChanged,
+            (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
             allSuperSpeeds.Select(superSpeedHash => superSpeedHash.ToPrettyString()).ToArray());
 
         _playerService.SuperSpeed.ValueChanged += (sender, args) =>

@@ -27,14 +27,21 @@ public class VehicleSpawnerMenu : MenuBase
 
     private void SelectSeat()
     {
-        var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat, _vehicleSpawnerService.VehicleSeat,
+        var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
+            ListItemEventType.ItemChanged,
             (selected, index) => { _vehicleSpawnerService.VehicleSeat.Value = selected; },
-            ListItemEventType.ItemChanged, VehicleSeat.Driver, VehicleSeat.LeftRear, VehicleSeat.RightRear,
+            VehicleSeat.Driver,
+            VehicleSeat.LeftRear, VehicleSeat.RightRear,
             VehicleSeat.RightFront);
 
         Shown += (sender, args) => { listItemSeat.Enabled = _vehicleSpawnerService.WarpInSpawned.Value; };
 
         _vehicleSpawnerService.WarpInSpawned.ValueChanged += (sender, args) => { listItemSeat.Enabled = args.Value; };
+
+        _vehicleSpawnerService.VehicleSeat.ValueChanged += (sender, args) =>
+        {
+            listItemSeat.SelectedItem = args.Value;
+        };
     }
 
     private void EnginesRunning()

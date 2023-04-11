@@ -195,19 +195,17 @@ public abstract class MenuBase : NativeMenu
     /// <param name="items">The items array.</param>
     /// <returns>The list item.</returns>
     protected NativeListItem<T> AddListItem<T>(string title, string description = "",
-        BindableProperty<T> bindableProperty = null,
+        ListItemEventType eventType = ListItemEventType.ItemChanged,
         Action<T, int> action = null,
-        ListItemEventType eventType = ListItemEventType.ItemChanged, params T[] items)
+        params T[] items)
     {
         var item = new NativeListItem<T>(title, description, items);
+
 
         if (eventType == ListItemEventType.ItemChanged)
             item.ItemChanged += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
         else if (eventType == ListItemEventType.Activated)
             item.Activated += (sender, args) => { action?.Invoke(item.SelectedItem, item.SelectedIndex); };
-
-        if (bindableProperty != null)
-            bindableProperty.ValueChanged += (sender, args) => { item.SelectedItem = bindableProperty.Value; };
 
         Add(item);
         return item;
@@ -223,11 +221,12 @@ public abstract class MenuBase : NativeMenu
     /// <param name="eventType">The event type that triggers the action (default is ItemChanged).</param>
     /// <param name="items">The items array.</param>
     /// <returns>The list item.</returns>
-    protected NativeListItem<T> AddListItem<T>(Enum @enum, BindableProperty<T> bindableProperty = null,
+    protected NativeListItem<T> AddListItem<T>(Enum @enum,
+        ListItemEventType eventType = ListItemEventType.ItemChanged,
         Action<T, int> action = null,
-        ListItemEventType eventType = ListItemEventType.ItemChanged, params T[] items)
+        params T[] items)
     {
-        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), bindableProperty, action, eventType, items);
+        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), eventType, action, items);
     }
 
     /// <summary>
