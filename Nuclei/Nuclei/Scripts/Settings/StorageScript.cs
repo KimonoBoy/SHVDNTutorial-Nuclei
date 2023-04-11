@@ -5,6 +5,7 @@ using Nuclei.Services.Generics;
 using Nuclei.Services.Player;
 using Nuclei.Services.Settings;
 using Nuclei.Services.Vehicle.VehicleSpawner;
+using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Settings;
 
@@ -43,6 +44,7 @@ public class StorageScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
+        // The IsPaused needs to be handled differently at a later time.
         if (_storageService.AutoSave.Value && Game.IsPaused)
             Save();
     }
@@ -69,6 +71,8 @@ public class StorageScript : Script
         if (loadedStorageService != null) _storageService.SetState(loadedStorageService);
         if (loadedPlayerService != null) _playerService.SetState(loadedPlayerService);
         if (loadedVehicleSpawnerService != null) _vehicleSpawnerService.SetState(loadedVehicleSpawnerService);
+
+        Display.Notify("Load", "All Settings Loaded Successfully.");
     }
 
     private void OnSaveRequested(object sender, EventArgs e)
