@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -10,9 +9,7 @@ using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
-using Nuclei.Services.Generics;
 using Nuclei.Services.Player;
-using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
@@ -20,9 +17,6 @@ namespace Nuclei.Scripts.Player;
 public class PlayerScript : Script
 {
     private readonly PlayerService _playerService = PlayerService.Instance;
-
-    private readonly GenericStateService<PlayerService> _playerServiceState =
-        GenericStateService<PlayerService>.Instance;
 
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
@@ -54,12 +48,6 @@ public class PlayerScript : Script
 
     private void OnTick(object sender, EventArgs e)
     {
-        Display.DrawTextElement($"PlayerService SuperJump: {_playerService.CanSuperJump.Value}", 100.0f, 100.0f,
-            Color.AntiqueWhite);
-        Display.DrawTextElement($"PlayerServiceState SuperJump: {_playerServiceState.GetState().CanSuperJump.Value}",
-            100.0f,
-            120.0f, Color.AntiqueWhite);
-        // UpdateStates();
         ProcessFunctions();
     }
 
@@ -67,24 +55,6 @@ public class PlayerScript : Script
     {
         if (e.KeyCode == Keys.T && e.Control)
             Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
-
-        if (e.KeyCode == Keys.K && e.Control)
-        {
-            // Update the current state
-            _playerServiceState.SetState(_playerService);
-
-            // Save the updated state
-            _playerServiceState.SaveState();
-        }
-
-        if (e.KeyCode == Keys.L && e.Control)
-        {
-            // Load the state from the file.
-            var loadedPlayerService = _playerServiceState.LoadState();
-
-            // Set the _playerService current state to the loaded state.
-            if (loadedPlayerService != null) _playerService.SetState(loadedPlayerService);
-        }
     }
 
     private void OnPlayerFixed(object sender, EventArgs e)
@@ -129,53 +99,6 @@ public class PlayerScript : Script
     private void OnAddCashRequested(object sender, CashHash cashHash)
     {
         AddCash(cashHash);
-    }
-
-    // /// <summary>
-    // ///     Updates the different states in the service.
-    // /// </summary>
-    // private void UpdateStates()
-    // {
-    //     /*
-    //      * Until we add save & load functionality, we'll just update the states here.
-    //      */
-    //
-    //     UpdateInvincible();
-    //     UpdateWantedLevel();
-    //     UpdateInfiniteBreath();
-    //     UpdateRideOnCars();
-    //     UpdateInvisible();
-    // }
-
-    private void UpdateInvisible()
-    {
-        if (_playerService.IsInvisible.Value == Game.Player.Character.IsVisible)
-            _playerService.IsInvisible.Value = !Game.Player.Character.IsVisible;
-    }
-
-    private void UpdateRideOnCars()
-    {
-        if (_playerService.CanRideOnCars.Value == Game.Player.Character.CanRagdoll)
-            _playerService.CanRideOnCars.Value = !Game.Player.Character.CanRagdoll;
-    }
-
-    private void UpdateInfiniteBreath()
-    {
-        if (_playerService.HasInfiniteBreath.Value == Game.Player.Character.GetConfigFlag(3))
-            _playerService.HasInfiniteBreath.Value = !Game.Player.Character.GetConfigFlag(3);
-    }
-
-    private void UpdateInvincible()
-    {
-        // This needs to be implemented differently. We'll cover it later and you'll see why.
-        if (_playerService.IsInvincible.Value != Game.Player.Character.IsInvincible)
-            _playerService.IsInvincible.Value = Game.Player.Character.IsInvincible;
-    }
-
-    private void UpdateWantedLevel()
-    {
-        if (_playerService.WantedLevel.Value != Game.Player.WantedLevel)
-            _playerService.WantedLevel.Value = Game.Player.WantedLevel;
     }
 
     /// <summary>
