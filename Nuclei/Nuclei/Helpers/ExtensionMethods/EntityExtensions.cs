@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using GTA;
 using GTA.Math;
 
@@ -7,38 +8,46 @@ namespace Nuclei.Helpers.ExtensionMethods;
 public static class EntityExtensions
 {
     /// <summary>
-    ///     Teleport to a map blip.
+    ///     Teleport an entity to a map blip.
     /// </summary>
     /// <param name="entity">The entity to teleport.</param>
-    /// <param name="blipSprite">The blip to teleport to. (e.g. BlipSprite.Waypoint)</param>
+    /// <param name="blipSprite">The blip to teleport to (e.g., BlipSprite.Waypoint).</param>
     /// <returns>Whether or not the teleport was successful.</returns>
     public static bool TeleportToBlip(this Entity entity, BlipSprite blipSprite)
     {
-        var blip = World
-            .GetAllBlips()
-            .FirstOrDefault(b => b.Sprite == blipSprite);
+        // Find the target blip
+        var blip = World.GetAllBlips().FirstOrDefault(b => b.Sprite == blipSprite);
 
+        // If no matching blip is found, return false
         if (blip == null) return false;
 
+        // Get blip position and initial z-coordinate
         var blipPos = blip.Position;
-        var zCoords = 0.0f;
+        entity.Position = new Vector3(blipPos.X, blipPos.Y, 0.0f);
 
-        entity.Position = new Vector3(blipPos.X, blipPos.Y, zCoords);
+        // Wait for 200 milliseconds to allow the game to update
         Script.Wait(200);
 
+        // If entity is in water, return true
         if (entity.IsInWater) return true;
 
-        var antiFreezeCounter = 0;
-
-        while (entity.Position.Z < World.GetGroundHeight(entity.Position) ||
-               World.GetGroundHeight(entity.Position) == 0)
+        // Elevate the entity's position until it is above ground
+        var attempt = 0;
+        while (true)
         {
-            antiFreezeCounter++;
-            entity.Position = new Vector3(entity.Position.X, entity.Position.Y, zCoords += 3.0f);
+            attempt++;
+            var groundHeight = World.GetGroundHeight(entity.Position);
 
-            if (antiFreezeCounter <= 20) continue;
-            Script.Yield();
-            antiFreezeCounter = 0;
+            // If the entity is above ground, break the loop
+            if (entity.Position.Z >= groundHeight && groundHeight != 0) break;
+
+            // Increment the entity's Z-coordinate adaptively based on the ground height difference
+            var heightDiff = Math.Abs(groundHeight - entity.Position.Z);
+            var zCoordIncrement = Math.Max(1.0f, heightDiff / 10);
+            entity.Position = new Vector3(entity.Position.X, entity.Position.Y, entity.Position.Z + zCoordIncrement);
+
+            // Yield if necessary
+            if (attempt % 20 == 0) Script.Yield();
         }
 
         return true;

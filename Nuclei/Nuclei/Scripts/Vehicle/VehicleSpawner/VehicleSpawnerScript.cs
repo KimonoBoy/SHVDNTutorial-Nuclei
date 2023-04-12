@@ -13,7 +13,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
     public VehicleSpawnerScript()
     {
-        // Default VehicleSeat.
+        // Default seat
         Service.VehicleSeat.Value = VehicleSeat.Driver;
 
         Service.VehicleSpawned += OnVehicleSpawned;

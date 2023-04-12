@@ -67,7 +67,15 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.T && e.Control)
-            Game.Player.Character.TeleportToBlip(BlipSprite.Waypoint);
+        {
+            var ped = Game.Player.Character;
+            var vehicle = ped.CurrentVehicle;
+
+            if (vehicle == null)
+                ped.TeleportToBlip(BlipSprite.Waypoint);
+            else
+                vehicle.TeleportToBlip(BlipSprite.Waypoint);
+        }
     }
 
     private void OnPlayerFixed(object sender, EventArgs e)
