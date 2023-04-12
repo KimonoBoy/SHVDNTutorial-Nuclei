@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using GTA;
 using GTA.Math;
 
@@ -42,8 +41,7 @@ public static class EntityExtensions
             if (entity.Position.Z >= groundHeight && groundHeight != 0) break;
 
             // Increment the entity's Z-coordinate adaptively based on the ground height difference
-            var heightDiff = Math.Abs(groundHeight - entity.Position.Z);
-            var zCoordIncrement = Math.Max(1.0f, heightDiff / 10);
+            var zCoordIncrement = 1.0f;
             entity.Position = new Vector3(entity.Position.X, entity.Position.Y, entity.Position.Z + zCoordIncrement);
 
             // Yield if necessary
