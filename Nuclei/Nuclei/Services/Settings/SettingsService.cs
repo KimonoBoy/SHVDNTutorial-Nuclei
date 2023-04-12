@@ -1,5 +1,7 @@
-﻿namespace Nuclei.Services.Settings;
+﻿using Nuclei.Services.Generics;
 
-public class SettingsService
+namespace Nuclei.Services.Settings;
+
+public class SettingsService : GenericService<SettingsService>
 {
 }

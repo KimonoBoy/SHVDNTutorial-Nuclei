@@ -1,10 +1,11 @@
 ﻿using System;
 using Nuclei.Enums.UI;
+using Nuclei.Services.Settings;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Settings;
 
-public class SettingsMenu : MenuBase
+public class SettingsMenu : GenericsMenuBase<SettingsService>
 {
     public SettingsMenu(Enum @enum) : base(@enum)
     {

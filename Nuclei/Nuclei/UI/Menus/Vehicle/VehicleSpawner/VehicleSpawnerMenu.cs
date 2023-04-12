@@ -1,15 +1,14 @@
 ﻿using System;
 using GTA;
 using Nuclei.Enums.UI;
-using Nuclei.Services.Generics;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerMenu : MenuBase
+public class VehicleSpawnerMenu : GenericsMenuBase<VehicleSpawnerService>
 {
-    private readonly VehicleSpawnerService _vehicleSpawnerService = GenericService<VehicleSpawnerService>.Instance;
+    // private readonly VehicleSpawnerService _vehicleSpawnerService = GenericService<VehicleSpawnerService>.Instance;
 
     public VehicleSpawnerMenu(Enum @enum) : base(@enum)
     {
@@ -22,33 +21,30 @@ public class VehicleSpawnerMenu : MenuBase
     private void WarpInSpawned()
     {
         var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitles.WarpInSpawned,
-            _vehicleSpawnerService.WarpInSpawned,
-            @checked => { _vehicleSpawnerService.WarpInSpawned.Value = @checked; });
+            Service.WarpInSpawned,
+            @checked => { Service.WarpInSpawned.Value = @checked; });
     }
 
     private void SelectSeat()
     {
         var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
-            (selected, index) => { _vehicleSpawnerService.VehicleSeat.Value = selected; },
+            (selected, index) => { Service.VehicleSeat.Value = selected; },
             null, VehicleSeat.Driver,
             VehicleSeat.LeftRear, VehicleSeat.RightRear,
             VehicleSeat.RightFront);
 
         // Disable the seat selection item if the WarpInSpawned is not true.
-        Shown += (sender, args) => { listItemSeat.Enabled = _vehicleSpawnerService.WarpInSpawned.Value; };
-        _vehicleSpawnerService.WarpInSpawned.ValueChanged += (sender, args) => { listItemSeat.Enabled = args.Value; };
+        Shown += (sender, args) => { listItemSeat.Enabled = Service.WarpInSpawned.Value; };
+        Service.WarpInSpawned.ValueChanged += (sender, args) => { listItemSeat.Enabled = args.Value; };
 
-        _vehicleSpawnerService.VehicleSeat.ValueChanged += (sender, args) =>
-        {
-            listItemSeat.SelectedItem = args.Value;
-        };
+        Service.VehicleSeat.ValueChanged += (sender, args) => { listItemSeat.SelectedItem = args.Value; };
     }
 
     private void EnginesRunning()
     {
         var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitles.EnginesRunning,
-            _vehicleSpawnerService.EnginesRunning,
-            @checked => { _vehicleSpawnerService.EnginesRunning.Value = @checked; });
+            Service.EnginesRunning,
+            @checked => { Service.EnginesRunning.Value = @checked; });
     }
 
     private void GenerateVehicleClassMenus()

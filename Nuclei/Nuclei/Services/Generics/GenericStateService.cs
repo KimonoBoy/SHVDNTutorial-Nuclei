@@ -22,12 +22,12 @@ namespace Nuclei.Services.Generics;
 /// <summary>
 ///     Represents a service class for managing the state of an object T.
 /// </summary>
-/// <typeparam name="T">The type of object to manage state for.</typeparam>
-public class GenericStateService<T> where T : new()
+/// <typeparam name="TService">The type of object to manage state for.</typeparam>
+public class GenericStateService<TService> where TService : new()
 {
-    private static GenericStateService<T> _instance;
+    private static GenericStateService<TService> _instance;
 
-    private readonly T _state;
+    private readonly TService _state;
     private readonly string _stateFilePath;
 
     /// <summary>
@@ -35,21 +35,21 @@ public class GenericStateService<T> where T : new()
     /// </summary>
     protected GenericStateService()
     {
-        _stateFilePath = $"{Paths.StatesPath}/{typeof(T).Name}.json";
+        _stateFilePath = $"{Paths.StatesPath}/{typeof(TService).Name}.json";
         EnsureDirectoryAndFileExist(_stateFilePath);
-        _state = LoadState() ?? new T();
+        _state = LoadState() ?? new TService();
     }
 
     /// <summary>
     ///     Gets the singleton instance of the <see cref="GenericStateService{T}" /> class.
     /// </summary>
-    public static GenericStateService<T> Instance => _instance ??= new GenericStateService<T>();
+    public static GenericStateService<TService> Instance => _instance ??= new GenericStateService<TService>();
 
     /// <summary>
     ///     Gets the current state of the object T.
     /// </summary>
     /// <returns>The current state of the object T.</returns>
-    public T GetState()
+    public TService GetState()
     {
         return _state;
     }
@@ -67,14 +67,14 @@ public class GenericStateService<T> where T : new()
     ///     Loads the saved state of the object T from a JSON file.
     /// </summary>
     /// <returns>The loaded state of the object T.</returns>
-    public T LoadState()
+    public TService LoadState()
     {
         EnsureDirectoryAndFileExist(_stateFilePath);
 
         var fileContent = File.ReadAllText(_stateFilePath);
         if (string.IsNullOrWhiteSpace(fileContent)) return default;
 
-        var loadedState = JsonConvert.DeserializeObject<T>(fileContent);
+        var loadedState = JsonConvert.DeserializeObject<TService>(fileContent);
         return loadedState;
     }
 
@@ -99,7 +99,7 @@ public class GenericStateService<T> where T : new()
     /// </summary>
     /// <param name="newState">The new state to set.</param>
     /// <exception cref="ArgumentNullException">Thrown when the new state is null.</exception>
-    public void SetState(T newState)
+    public void SetState(TService newState)
     {
         if (newState == null) throw new ArgumentNullException(nameof(newState));
 

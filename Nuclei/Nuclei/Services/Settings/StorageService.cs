@@ -1,11 +1,11 @@
 ﻿using System;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Settings;
 
-public class StorageService
+public class StorageService : GenericService<StorageService>
 {
-    public static readonly StorageService Instance = new();
     public BindableProperty<bool> AutoSave { get; set; } = new();
 
     public BindableProperty<bool> AutoLoad { get; set; } = new();

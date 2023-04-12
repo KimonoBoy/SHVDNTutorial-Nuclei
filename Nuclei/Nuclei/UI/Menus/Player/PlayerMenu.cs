@@ -9,9 +9,9 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Player;
 
-public class PlayerMenu : MenuBase
+public class PlayerMenu : GenericsMenuBase<PlayerService>
 {
-    private readonly PlayerService _playerService = PlayerService.Instance;
+    // private readonly PlayerService _playerService = PlayerService.Instance;
 
     public PlayerMenu(Enum @enum) : base(@enum)
     {
@@ -56,13 +56,13 @@ public class PlayerMenu : MenuBase
     private void FixPlayer()
     {
         AddItem(PlayerItemTitles.FixPlayer,
-            () => { _playerService.FixPlayer(); });
+            () => { Service.FixPlayer(); });
     }
 
     private void SetInvincible()
     {
-        var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible, _playerService.IsInvincible,
-            @checked => { _playerService.IsInvincible.Value = @checked; });
+        var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible, Service.IsInvincible,
+            @checked => { Service.IsInvincible.Value = @checked; });
     }
 
     private void AdjustWantedLevel()
@@ -70,22 +70,22 @@ public class PlayerMenu : MenuBase
         var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
             (item, index) =>
             {
-                _playerService.WantedLevel.Value = item;
-                _playerService.LockedWantedLevel.Value = item;
+                Service.WantedLevel.Value = item;
+                Service.LockedWantedLevel.Value = item;
             }, null, 0, 1, 2, 3, 4, 5);
 
-        _playerService.WantedLevel.ValueChanged += (sender, e) =>
+        Service.WantedLevel.ValueChanged += (sender, e) =>
         {
-            listItemWantedLevel.SelectedItem = !_playerService.IsWantedLevelLocked.Value
+            listItemWantedLevel.SelectedItem = !Service.IsWantedLevelLocked.Value
                 ? e.Value
-                : _playerService.LockedWantedLevel.Value;
+                : Service.LockedWantedLevel.Value;
         };
     }
 
     private void LockWantedLevel()
     {
-        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, _playerService.IsWantedLevelLocked,
-            @checked => { _playerService.IsWantedLevelLocked.Value = @checked; });
+        var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel, Service.IsWantedLevelLocked,
+            @checked => { Service.IsWantedLevelLocked.Value = @checked; });
     }
 
     private void AddCash()
@@ -93,61 +93,61 @@ public class PlayerMenu : MenuBase
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
         var listItemAddCash = AddListItem(PlayerItemTitles.AddCash,
-            (selected, index) => { _playerService.AddCash.Value = (CashHash)index; },
-            (selected, index) => { _playerService.RequestCashResult((CashHash)index); },
+            (selected, index) => { Service.AddCash.Value = (CashHash)index; },
+            (selected, index) => { Service.RequestCashResult((CashHash)index); },
             allCashHash.Select(c => c.GetDescription()).ToArray());
 
-        _playerService.AddCash.ValueChanged += (sender, e) => { listItemAddCash.SelectedIndex = (int)e.Value; };
+        Service.AddCash.ValueChanged += (sender, e) => { listItemAddCash.SelectedIndex = (int)e.Value; };
     }
 
     private void SetCash()
     {
-        var itemSetCash = AddItem(PlayerItemTitles.SetCash, () => { _playerService.RequestCashInput(); });
+        var itemSetCash = AddItem(PlayerItemTitles.SetCash, () => { Service.RequestCashInput(); });
     }
 
 
     private void SetInfiniteStamina()
     {
-        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, _playerService.HasInfiniteStamina,
-            @checked => { _playerService.HasInfiniteStamina.Value = @checked; });
+        var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina, Service.HasInfiniteStamina,
+            @checked => { Service.HasInfiniteStamina.Value = @checked; });
     }
 
     private void SetInfiniteBreath()
     {
-        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, _playerService.HasInfiniteBreath,
-            @checked => { _playerService.HasInfiniteBreath.Value = @checked; });
+        var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath, Service.HasInfiniteBreath,
+            @checked => { Service.HasInfiniteBreath.Value = @checked; });
     }
 
     private void SetInfiniteSpecialAbility()
     {
         var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility,
-            _playerService.HasInfiniteSpecialAbility,
-            @checked => { _playerService.HasInfiniteSpecialAbility.Value = @checked; });
+            Service.HasInfiniteSpecialAbility,
+            @checked => { Service.HasInfiniteSpecialAbility.Value = @checked; });
     }
 
     private void SetNoiseless()
     {
-        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, _playerService.IsNoiseless,
-            @checked => { _playerService.IsNoiseless.Value = @checked; });
+        var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless, Service.IsNoiseless,
+            @checked => { Service.IsNoiseless.Value = @checked; });
     }
 
     private void SetRideOnCars()
     {
-        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, _playerService.CanRideOnCars,
-            @checked => { _playerService.CanRideOnCars.Value = @checked; });
+        var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars, Service.CanRideOnCars,
+            @checked => { Service.CanRideOnCars.Value = @checked; });
     }
 
 
     private void SuperJump()
     {
-        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, _playerService.CanSuperJump,
-            @checked => { _playerService.CanSuperJump.Value = @checked; });
+        var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump, Service.CanSuperJump,
+            @checked => { Service.CanSuperJump.Value = @checked; });
     }
 
     private void OnePunchMan()
     {
-        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, _playerService.IsOnePunchMan,
-            @checked => { _playerService.IsOnePunchMan.Value = @checked; });
+        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, Service.IsOnePunchMan,
+            @checked => { Service.IsOnePunchMan.Value = @checked; });
     }
 
     private void SuperSpeed()
@@ -156,19 +156,16 @@ public class PlayerMenu : MenuBase
 
         var listItemSuperSpeed = AddListItem(
             PlayerItemTitles.SuperSpeed,
-            (selected, index) => { _playerService.SuperSpeed.Value = (SuperSpeedHash)index; },
+            (selected, index) => { Service.SuperSpeed.Value = (SuperSpeedHash)index; },
             null,
             allSuperSpeeds.Select(superSpeedHash => superSpeedHash.ToPrettyString()).ToArray());
 
-        _playerService.SuperSpeed.ValueChanged += (sender, args) =>
-        {
-            listItemSuperSpeed.SelectedIndex = (int)args.Value;
-        };
+        Service.SuperSpeed.ValueChanged += (sender, args) => { listItemSuperSpeed.SelectedIndex = (int)args.Value; };
     }
 
     private void Invisible()
     {
-        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, _playerService.IsInvisible,
-            @checked => { _playerService.IsInvisible.Value = @checked; });
+        var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible, Service.IsInvisible,
+            @checked => { Service.IsInvisible.Value = @checked; });
     }
 }

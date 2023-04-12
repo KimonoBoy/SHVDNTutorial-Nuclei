@@ -48,6 +48,20 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void OnTick(object sender, EventArgs e)
     {
         ProcessFunctions();
+        UpdatePlayerPed();
+    }
+
+    /*
+     * This is just for testing purposes.
+     *
+     * We'll add our own Timer that can listen to character changes through the service.
+     *
+     * So that the Game States are always equal to the Service States.
+     */
+    private void UpdatePlayerPed()
+    {
+        if (Game.Player.Character.IsInvincible != Service.IsInvincible.Value)
+            Game.Player.Character.IsInvincible = Service.IsInvincible.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

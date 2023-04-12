@@ -3,26 +3,27 @@ using System.Windows.Forms;
 using GTA;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
-using Nuclei.UI.Text;
+using Nuclei.Services.Settings;
 
 namespace Nuclei.Scripts.Generics;
 
-public class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
+public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
     private readonly TService _defaultValuesService = new();
+    private readonly StorageService _storageService = StorageService.Instance;
 
     protected GenericScriptBase()
     {
-        if (State.GetState().Storage.AutoLoad.Value) Load();
-        if (State.GetState().Storage.AutoSave.Value) Service.Storage.AutoSave.Value = true;
+        if (_storageService.CurrentState().GetState().AutoLoad.Value) Load();
+        if (_storageService.CurrentState().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
 
         KeyDown += OnKeyDown;
         Tick += OnTick;
         Aborted += OnAborted;
 
-        Service.Storage.SaveRequested += OnSaveRequested;
-        Service.Storage.LoadRequested += OnLoadRequested;
-        Service.Storage.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
+        _storageService.SaveRequested += OnSaveRequested;
+        _storageService.LoadRequested += OnLoadRequested;
+        _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
     }
 
     protected TService Service => GenericService<TService>.Instance;
@@ -31,15 +32,26 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
 
     private void OnTick(object sender, EventArgs e)
     {
-        if (Service.Storage.AutoSave.Value && Game.IsPaused) Save();
+        if (_storageService.AutoSave.Value && Game.IsPaused) Save();
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.KeyCode == Keys.S && e.Control && e.Shift) Save();
+        else if (e.KeyCode == Keys.L && e.Control && e.Shift) Load();
     }
 
     private void OnAborted(object sender, EventArgs e)
     {
-        if (Service.Storage.AutoSave.Value) Save();
+        if (_storageService.AutoSave.Value) Save();
     }
 
     private void OnRestoreDefaultsRequested(object sender, EventArgs e)
+    {
+        RestoreDefaults();
+    }
+
+    private void RestoreDefaults()
     {
         Service.SetState(_defaultValuesService);
         State.SetState(_defaultValuesService);
@@ -60,19 +72,11 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
     {
         State.SetState(Service);
         State.SaveState();
-        Display.Notify("Save", "Settings saved.");
     }
 
     private void Load()
     {
         var loadedStorageService = State.LoadState();
         if (loadedStorageService != null) Service.SetState(loadedStorageService);
-        Display.Notify("Load", "All settings loaded successfully.");
-    }
-
-    private void OnKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.KeyCode == Keys.S && e.Control && e.Shift) Save();
-        else if (e.KeyCode == Keys.L && e.Control && e.Shift) Load();
     }
 }

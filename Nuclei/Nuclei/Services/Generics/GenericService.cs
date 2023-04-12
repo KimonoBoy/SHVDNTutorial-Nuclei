@@ -1,18 +1,17 @@
-﻿using System;
-using Nuclei.Helpers.Utilities;
-using Nuclei.Services.Settings;
+﻿using Nuclei.Helpers.Utilities;
 
 namespace Nuclei.Services.Generics;
 
-public abstract class GenericService<T> where T : class, new()
+public abstract class GenericService<TService> where TService : class, new()
 {
-    private static readonly Lazy<T> _instance = new(() => new T());
+    public static TService Instance = new();
 
-    public StorageService Storage = StorageService.Instance;
+    public GenericStateService<TService> CurrentState()
+    {
+        return GenericStateService<TService>.Instance;
+    }
 
-    public static T Instance => _instance.Value;
-
-    public void SetState(T newState)
+    public void SetState(TService newState)
     {
         ReflectionUtilities.CopyBindableProperties(newState, this);
     }

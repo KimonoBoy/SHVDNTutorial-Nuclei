@@ -7,11 +7,9 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleClassMenu : MenuBase
+public class VehicleClassMenu : GenericsMenuBase<VehicleSpawnerService>
 {
     private readonly VehicleClass _vehicleClass;
-
-    private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
 
     public VehicleClassMenu(Enum @enum) : base(@enum)
     {
@@ -23,7 +21,7 @@ public class VehicleClassMenu : MenuBase
     {
         foreach (var vehicleHash in GTA.Vehicle.GetAllModelsOfClass(_vehicleClass).OrderBy(v => v.ToPrettyString()))
         {
-            var itemSpawnVehicle = AddItem(vehicleHash, () => { _vehicleSpawnerService.SpawnVehicle(vehicleHash); });
+            var itemSpawnVehicle = AddItem(vehicleHash, () => { Service.SpawnVehicle(vehicleHash); });
             itemSpawnVehicle.Description = $"Spawn {vehicleHash.ToPrettyString()}";
         }
     }
