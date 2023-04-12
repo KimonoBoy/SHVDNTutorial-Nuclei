@@ -40,8 +40,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void OnIsInvisibleChanged(object sender, ValueEventArgs<bool> e)
     {
-        Game.Player.Character.IsVisible = !e.Value;
-        Game.Player.Character.CanBeTargetted = !e.Value;
+        Character.IsVisible = !e.Value;
+        Character.CanBeTargetted = !e.Value;
         Game.Player.IgnoredByEveryone = e.Value;
     }
 
@@ -60,33 +60,24 @@ public class PlayerScript : GenericScriptBase<PlayerService>
      */
     private void UpdatePlayerPed()
     {
-        if (Game.Player.Character.IsInvincible != Service.IsInvincible.Value)
-            Game.Player.Character.IsInvincible = Service.IsInvincible.Value;
+        if (Character.IsInvincible != Service.IsInvincible.Value)
+            Character.IsInvincible = Service.IsInvincible.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.KeyCode == Keys.T && e.Control)
-        {
-            var ped = Game.Player.Character;
-            var vehicle = ped.CurrentVehicle;
-
-            if (vehicle == null)
-                ped.TeleportToBlip(BlipSprite.Waypoint);
-            else
-                vehicle.TeleportToBlip(BlipSprite.Waypoint);
-        }
+        if (e.KeyCode == Keys.T && e.Control) CurrentEntity.TeleportToBlip(BlipSprite.Waypoint);
     }
 
     private void OnPlayerFixed(object sender, EventArgs e)
     {
-        Game.Player.Character.Health = Game.Player.Character.MaxHealth;
-        Game.Player.Character.Armor = Game.Player.MaxArmor;
+        Character.Health = Character.MaxHealth;
+        Character.Armor = Game.Player.MaxArmor;
     }
 
     private void OnInvincibleChanged(object sender, ValueEventArgs<bool> e)
     {
-        Game.Player.Character.IsInvincible = e.Value;
+        Character.IsInvincible = e.Value;
     }
 
     private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)
@@ -108,13 +99,13 @@ public class PlayerScript : GenericScriptBase<PlayerService>
          * False: Can't drown in water. (InfiniteBreath)
          * True: Can drown in water. (Not InfiniteBreath)  
          */
-        Game.Player.Character.SetConfigFlag(3, !e.Value);
+        Character.SetConfigFlag(3, !e.Value);
     }
 
     private void OnCanRideOnCarsChanged(object sender, ValueEventArgs<bool> e)
     {
         // False means the player won't fall over.
-        Game.Player.Character.CanRagdoll = !e.Value;
+        Character.CanRagdoll = !e.Value;
     }
 
     private void OnAddCashRequested(object sender, CashHash cashHash)
@@ -141,7 +132,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// </summary>
     private void ProcessOnePunchMan()
     {
-        if (!Service.IsOnePunchMan.Value || !Game.Player.Character.IsInMeleeCombat) return;
+        if (!Service.IsOnePunchMan.Value || !Character.IsInMeleeCombat) return;
 
         // Check for damaged entities only once every 100 milliseconds
         if ((DateTime.UtcNow - _lastEntityCheck).TotalMilliseconds < 100) return;
@@ -162,11 +153,11 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         var maxDistance = 20.0f;
         return World.GetAllEntities()
-            .Where(entity => entity.Position.DistanceTo(Game.Player.Character.Position) <= maxDistance &&
+            .Where(entity => entity.Position.DistanceTo(Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
-            .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
-            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Game.Player.Character) ||
-                                      entity.IsTouching(Game.Player.Character));
+            .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
+            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Character) ||
+                                      entity.IsTouching(Character));
     }
 
     /// <summary>
@@ -176,10 +167,10 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// <returns>True if the entity is in front of the player character, false otherwise.</returns>
     private bool IsEntityInFrontOfPlayer(Entity entity)
     {
-        var playerToEntityDirection = (entity.Position - Game.Player.Character.Position).Normalized;
-        var dotProduct = playerToEntityDirection.X * Game.Player.Character.ForwardVector.X +
-                         playerToEntityDirection.Y * Game.Player.Character.ForwardVector.Y +
-                         playerToEntityDirection.Z * Game.Player.Character.ForwardVector.Z;
+        var playerToEntityDirection = (entity.Position - Character.Position).Normalized;
+        var dotProduct = playerToEntityDirection.X * Character.ForwardVector.X +
+                         playerToEntityDirection.Y * Character.ForwardVector.Y +
+                         playerToEntityDirection.Z * Character.ForwardVector.Z;
 
         // If dotProduct is greater than 0, the entity is in front of the player
         return dotProduct > 0;
@@ -193,8 +184,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// <param name="forceForwards">The forward force to apply to the target.</param>
     private void ApplyOnePunchManForce(Entity target, float forceUpwards, float forceForwards)
     {
-        target.ApplyForce(Game.Player.Character.UpVector * forceUpwards);
-        target.ApplyForce(Game.Player.Character.ForwardVector * forceForwards);
+        target.ApplyForce(Character.UpVector * forceUpwards);
+        target.ApplyForce(Character.ForwardVector * forceForwards);
         target.ClearLastWeaponDamage();
     }
 
@@ -252,13 +243,13 @@ public class PlayerScript : GenericScriptBase<PlayerService>
          * We'll also add a menu, where the user can select the different values of forces and speeds.
          */
 
-        if (!Game.IsControlPressed(Control.Sprint) || Game.Player.Character.IsJumping) return;
+        if (!Game.IsControlPressed(Control.Sprint) || Character.IsJumping) return;
 
-        Game.Player.Character.MaxSpeed = maxSpeed;
-        Game.Player.Character.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed);
+        Character.MaxSpeed = maxSpeed;
+        Character.ApplyForce(Character.ForwardVector * maxSpeed);
 
         // Raycast to find ground position below character (more accurate than using Z coordinate (HeightAboveGround))
-        var characterPosition = Game.Player.Character.Position;
+        var characterPosition = Character.Position;
         var raycastResult = World.Raycast(characterPosition, characterPosition - new Vector3(0, 0, 50.0f),
             IntersectFlags.Everything);
 
@@ -269,21 +260,21 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
             // Apply a force proportional to the distance to the ground to keep the character on the ground
             if (distanceToGround >= 0.2f)
-                Game.Player.Character.ApplyForce(Game.Player.Character.UpVector *
-                                                 (-maxSpeed * (1 + distanceToGround)));
+                Character.ApplyForce(Character.UpVector *
+                                     (-maxSpeed * (1 + distanceToGround)));
         }
 
         if (entityForceMultiplier <= 0.0f) return;
 
         // Gets all entities that are touching the player.
         var touchingEntities = World.GetAllEntities()
-            .OrderBy(entity => entity.Position.DistanceTo(Game.Player.Character.Position))
+            .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
             .Where(entity =>
-                entity != Game.Player.Character && entity.IsTouching(Game.Player.Character));
+                entity != Character && entity.IsTouching(Character));
 
         // Pushes the entities away from the player.
         touchingEntities.ToList().ForEach(entity =>
-            entity.ApplyForce(Game.Player.Character.ForwardVector * maxSpeed * entityForceMultiplier));
+            entity.ApplyForce(Character.ForwardVector * maxSpeed * entityForceMultiplier));
     }
 
     /// <summary>
@@ -293,8 +284,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void ProcessInfiniteStamina()
     {
         if (!Service.HasInfiniteStamina.Value) return;
-        if (!Game.Player.Character.IsRunning && !Game.Player.Character.IsSprinting &&
-            !Game.Player.Character.IsSwimming) return;
+        if (!Character.IsRunning && !Character.IsSprinting &&
+            !Character.IsSwimming) return;
 
         if (Game.Player.RemainingSprintTime <= 5.0f)
             Function.Call(Hash.RESET_PLAYER_STAMINA, Game.Player);

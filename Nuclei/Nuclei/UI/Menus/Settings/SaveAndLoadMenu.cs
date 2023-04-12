@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Settings;
 
-public class SaveAndLoadMenu : GenericsMenuBase<StorageService>
+public class SaveAndLoadMenu : GenericMenuBase<StorageService>
 {
     public SaveAndLoadMenu(Enum @enum) : base(@enum)
     {

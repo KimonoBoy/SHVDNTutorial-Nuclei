@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Settings;
 
-public class SettingsMenu : GenericsMenuBase<SettingsService>
+public class SettingsMenu : GenericMenuBase<SettingsService>
 {
     public SettingsMenu(Enum @enum) : base(@enum)
     {

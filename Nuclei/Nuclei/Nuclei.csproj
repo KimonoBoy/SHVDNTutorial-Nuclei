@@ -59,6 +59,7 @@
     <Compile Include="Enums\UI\PlayerItemTitles.cs" />
     <Compile Include="Enums\UI\SettingsTitles.cs" />
     <Compile Include="Enums\UI\VehicleSpawnerItemTitles.cs" />
+    <Compile Include="Enums\UI\VehicleItemTitles.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Scripts\Generics\GenericScriptBase.cs" />
     <Compile Include="Scripts\Settings\StorageScript.cs" />
     <Compile Include="Scripts\StorageScript.cs" />
+    <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
@@ -80,10 +82,11 @@
     <Compile Include="Services\Exception\ExceptionService.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Settings\StorageService.cs" />
+    <Compile Include="Services\Vehicle\VehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
-    <Compile Include="UI\Menus\Abstracts\GenericsMenuBase.cs" />
+    <Compile Include="UI\Menus\Abstracts\GenericMenuBase.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Abstracts\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />

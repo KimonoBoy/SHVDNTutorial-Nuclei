@@ -9,7 +9,7 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Player;
 
-public class PlayerMenu : GenericsMenuBase<PlayerService>
+public class PlayerMenu : GenericMenuBase<PlayerService>
 {
     // private readonly PlayerService _playerService = PlayerService.Instance;
 

@@ -6,7 +6,7 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerMenu : GenericsMenuBase<VehicleSpawnerService>
+public class VehicleSpawnerMenu : GenericMenuBase<VehicleSpawnerService>
 {
     // private readonly VehicleSpawnerService _vehicleSpawnerService = GenericService<VehicleSpawnerService>.Instance;
 
