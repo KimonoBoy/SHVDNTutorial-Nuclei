@@ -10,8 +10,8 @@ namespace Nuclei.Scripts.Generics;
 
 public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
+    private static bool _eventsSubscribed;
     private readonly TService _defaultValuesService = new();
-    private readonly bool _eventsSubscribed;
     private readonly StorageService _storageService = StorageService.Instance;
 
     protected GenericScriptBase()
