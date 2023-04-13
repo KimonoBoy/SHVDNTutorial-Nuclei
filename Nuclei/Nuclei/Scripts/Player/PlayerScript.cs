@@ -17,7 +17,6 @@ namespace Nuclei.Scripts.Player;
 
 public class PlayerScript : GenericScriptBase<PlayerService>
 {
-    private readonly CustomTimer _updatePlayerStatesTimer = new(100);
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
     public PlayerScript()
@@ -38,6 +37,14 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         Service.AddCashRequested += OnAddCashRequested;
         Service.IsInvisible.ValueChanged += OnIsInvisibleChanged;
         GameStateTimer.SubscribeToTimerElapsed(OnTimerElapsed);
+
+        Aborted += OnAborted;
+    }
+
+    private void OnAborted(object sender, EventArgs e)
+    {
+        GameStateTimer?.Stop();
+        GameStateTimer?.UnsubscribeFromTimerElapsed(OnTimerElapsed);
     }
 
     private void OnTimerElapsed(object sender, EventArgs e)
