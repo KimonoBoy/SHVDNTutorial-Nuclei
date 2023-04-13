@@ -63,6 +63,7 @@
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
+    <Compile Include="Helpers\Utilities\CustomTimer.cs" />
     <Compile Include="Helpers\Utilities\Logger.cs" />
     <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
     <Compile Include="Main.cs" />

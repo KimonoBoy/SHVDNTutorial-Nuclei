@@ -17,6 +17,7 @@ namespace Nuclei.Scripts.Player;
 
 public class PlayerScript : GenericScriptBase<PlayerService>
 {
+    private readonly CustomTimer _updatePlayerStatesTimer = new(100);
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
     public PlayerScript()
@@ -36,6 +37,12 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         Service.CanRideOnCars.ValueChanged += OnCanRideOnCarsChanged;
         Service.AddCashRequested += OnAddCashRequested;
         Service.IsInvisible.ValueChanged += OnIsInvisibleChanged;
+        GameStateTimer.SubscribeToTimerElapsed(OnTimerElapsed);
+    }
+
+    private void OnTimerElapsed(object sender, EventArgs e)
+    {
+        UpdatePlayerStates();
     }
 
     private void OnIsInvisibleChanged(object sender, ValueEventArgs<bool> e)
@@ -48,17 +55,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void OnTick(object sender, EventArgs e)
     {
         ProcessFunctions();
-        UpdatePlayerPed();
     }
 
-    /*
-     * This is just for testing purposes.
-     *
-     * We'll add our own Timer that can listen to character changes through the service.
-     *
-     * So that the Game States are always equal to the Service States.
-     */
-    private void UpdatePlayerPed()
+    private void UpdatePlayerStates()
     {
         if (Character.IsInvincible != Service.IsInvincible.Value)
             Character.IsInvincible = Service.IsInvincible.Value;
@@ -77,7 +76,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void OnInvincibleChanged(object sender, ValueEventArgs<bool> e)
     {
-        Character.IsInvincible = e.Value;
+        if (Character != null)
+            Character.IsInvincible = e.Value;
     }
 
     private void OnWantedLevelChanged(object sender, ValueEventArgs<int> e)

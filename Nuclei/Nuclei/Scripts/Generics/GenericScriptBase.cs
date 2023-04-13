@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
+using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
 using Nuclei.Services.Settings;
@@ -11,6 +12,8 @@ namespace Nuclei.Scripts.Generics;
 public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
     private static bool _eventsSubscribed;
+
+    protected static readonly CustomTimer GameStateTimer = new(100);
     private readonly TService _defaultValuesService = new();
     private readonly StorageService _storageService = StorageService.Instance;
 
@@ -20,6 +23,9 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         if (_storageService.CurrentState().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
 
         if (_eventsSubscribed) return;
+
+        // Subscribe the GameStateUpdater event handler only if it hasn't been subscribed before.
+        GameStateTimer.SubscribeToTimerElapsed(GameStateUpdater);
 
         // Ensures that the events are only subscribed once.
         KeyDown += OnKeyDown;
@@ -40,21 +46,28 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
 
     protected static GTA.Vehicle CurrentVehicle { get; set; }
 
-    protected static Ped Character { get; set; }
+    protected static Ped Character { get; set; } = Game.Player.Character;
 
     protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
+
+    private void GameStateUpdater(object sender, EventArgs e)
+    {
+        SetCharacter();
+        SetCurrentVehicle();
+    }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (_storageService.AutoSave.Value && Game.IsPaused) Save();
-        SetCurrentVehicle();
-        SetCharacter();
     }
 
     private void SetCharacter()
     {
         if (Character != Game.Player.Character)
+        {
             Character = Game.Player.Character;
+            Display.Notify("Character Change Registered", "Applying Settings");
+        }
     }
 
     private void SetCurrentVehicle()
@@ -73,6 +86,7 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     private void OnAborted(object sender, EventArgs e)
     {
         if (_storageService.AutoSave.Value) Save();
+        GameStateTimer?.Stop();
     }
 
     private void OnRestoreDefaultsRequested(object sender, EventArgs e)

@@ -19,6 +19,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void Indestructible()
     {
+        if (CurrentVehicle == null) return;
         if (CurrentVehicle.IsInvincible != Service.Indestructible.Value)
             CurrentVehicle.IsInvincible = Service.Indestructible.Value;
     }
