@@ -13,6 +13,11 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
 {
     private static bool _eventsSubscribed;
 
+    /// <summary>
+    ///     A timer that can be subscribed to, that updates the game state every 100ms.
+    ///     This is way more efficient than subscribing to the Tick event, but scripts that require
+    ///     updates every tick should still subscribe to the Tick event.
+    /// </summary>
     protected static readonly CustomTimer GameStateTimer = new(100);
 
     private readonly TService _defaultValuesService = new();
@@ -26,17 +31,40 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         if (SubscribeToSharedEvents()) return;
     }
 
-
+    /// <summary>
+    ///     The service associated with the current script class.
+    /// </summary>
     protected TService Service => GenericService<TService>.Instance;
+
+    /// <summary>
+    ///     The exception service. Used to log exceptions and raise and throw errors.
+    /// </summary>
     protected ExceptionService ExceptionService => ExceptionService.Instance;
+
+    /// <summary>
+    ///     The state service. Used to save and load the state of the script to JSON files.
+    /// </summary>
     protected GenericStateService<TService> State => GenericStateService<TService>.Instance;
 
+    /// <summary>
+    ///     The vehicle the character is currently in.
+    /// </summary>
     protected static GTA.Vehicle CurrentVehicle { get; set; }
 
+    /// <summary>
+    ///     The character the player is currently controlling.
+    /// </summary>
     protected static Ped Character { get; set; } = Game.Player.Character;
 
+    /// <summary>
+    ///     The current entity the player is controlling, returns either the character or the vehicle the character is in.
+    /// </summary>
     protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
 
+    /// <summary>
+    ///     Subscribe to the events that are shared between all scripts.
+    /// </summary>
+    /// <returns></returns>
     private bool SubscribeToSharedEvents()
     {
         if (_eventsSubscribed) return true;
@@ -71,6 +99,9 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         if (_storageService.AutoSave.Value && Game.IsPaused) Save();
     }
 
+    /// <summary>
+    ///     Set the current character if the player has changed.
+    /// </summary>
     private void SetCharacter()
     {
         if (Character != Game.Player.Character)
@@ -80,6 +111,9 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         }
     }
 
+    /// <summary>
+    ///     Set the current vehicle if the player is in a vehicle.
+    /// </summary>
     private void SetCurrentVehicle()
     {
         CurrentVehicle = Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
