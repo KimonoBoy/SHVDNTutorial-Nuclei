@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
-using GTA.UI;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
@@ -24,7 +23,23 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         if (_storageService.GetStateService().GetState().AutoLoad.Value) Load();
         if (_storageService.GetStateService().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
 
-        if (_eventsSubscribed) return;
+        if (SubscribeToSharedEvents()) return;
+    }
+
+
+    protected TService Service => GenericService<TService>.Instance;
+    protected ExceptionService ExceptionService => ExceptionService.Instance;
+    protected GenericStateService<TService> State => GenericStateService<TService>.Instance;
+
+    protected static GTA.Vehicle CurrentVehicle { get; set; }
+
+    protected static Ped Character { get; set; } = Game.Player.Character;
+
+    protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
+
+    private bool SubscribeToSharedEvents()
+    {
+        if (_eventsSubscribed) return true;
 
         // Subscribe the GameStateUpdater event handler only if it hasn't been subscribed before.
         GameStateTimer.SubscribeToTimerElapsed(GameStateUpdater);
@@ -41,18 +56,9 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         _eventsSubscribed = true;
 
         SubscribeToEvents();
+
+        return false;
     }
-
-
-    protected TService Service => GenericService<TService>.Instance;
-    protected ExceptionService ExceptionService => ExceptionService.Instance;
-    protected GenericStateService<TService> State => GenericStateService<TService>.Instance;
-
-    protected static GTA.Vehicle CurrentVehicle { get; set; }
-
-    protected static Ped Character { get; set; } = Game.Player.Character;
-
-    protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
 
     private void GameStateUpdater(object sender, EventArgs e)
     {
@@ -85,10 +91,6 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
             Save();
         else if (e.KeyCode == Keys.L && e.Control && e.Shift)
             Load();
-
-        if (e.KeyCode == Keys.O && e.Control && e.Shift)
-            Notification.Show(
-                $"{_storageService.GetNumSubscribtions()}\nCustomTimerCount: {GameStateTimer.GetTimerCount()}");
     }
 
     private void OnAborted(object sender, EventArgs e)
@@ -143,6 +145,10 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
         action(value);
     }
 
+    /// <summary>
+    ///     Event subscription placed in this method ensures that the events subscribed to in the derived classes are only
+    ///     subscribed once.
+    /// </summary>
     protected virtual void SubscribeToEvents()
     {
     }

@@ -15,7 +15,10 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     {
         // Default seat
         Service.VehicleSeat.Value = VehicleSeat.Driver;
+    }
 
+    protected override void SubscribeToEvents()
+    {
         Service.VehicleSpawned += OnVehicleSpawned;
     }
 

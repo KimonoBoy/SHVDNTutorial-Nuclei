@@ -22,11 +22,6 @@ public class CustomTimer
         TimerElapsed?.Invoke(this, EventArgs.Empty);
     }
 
-    public int GetTimerCount()
-    {
-        return TimerElapsed?.GetInvocationList().Length ?? 0;
-    }
-
     public void SubscribeToTimerElapsed(EventHandler eventHandler)
     {
         if (TimerElapsed == null || !TimerElapsed.GetInvocationList().Contains(eventHandler))
