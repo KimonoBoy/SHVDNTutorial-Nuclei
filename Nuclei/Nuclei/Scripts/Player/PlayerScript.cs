@@ -19,12 +19,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 {
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
-    public PlayerScript()
-    {
-        SubscribeToEvents();
-    }
-
-    private void SubscribeToEvents()
+    protected override void SubscribeToEvents()
     {
         Tick += OnTick;
         KeyDown += OnKeyDown;
@@ -32,7 +27,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         Service.WantedLevel.ValueChanged += OnWantedLevelChanged;
         Service.CashInputRequested += OnCashInputRequested;
         Service.AddCashRequested += OnAddCashRequested;
-        GameStateTimer.SubscribeToTimerElapsed(OnTimerElapsed);
+        GameStateTimer.SubscribeToTimerElapsed(UpdatePlayer);
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -69,7 +64,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         AddCash(cashHash);
     }
 
-    private void OnTimerElapsed(object sender, EventArgs e)
+    private void UpdatePlayer(object sender, EventArgs e)
     {
         if (Character == null) return;
         UpdateFeature(Service.IsInvincible.Value, UpdateInvincible);

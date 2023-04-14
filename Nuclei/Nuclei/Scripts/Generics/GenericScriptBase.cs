@@ -10,7 +10,7 @@ using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Generics;
 
-public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
+public class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
     private static bool _eventsSubscribed;
 
@@ -39,6 +39,8 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
 
         _eventsSubscribed = true;
+
+        SubscribeToEvents();
     }
 
 
@@ -100,7 +102,7 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         RestoreDefaults();
     }
 
-    protected void RestoreDefaults()
+    private void RestoreDefaults()
     {
         Service.SetState(_defaultValuesService);
         State.SetState(_defaultValuesService);
@@ -139,5 +141,9 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     protected void UpdateFeature<T>(T value, Action<T> action)
     {
         action(value);
+    }
+
+    protected virtual void SubscribeToEvents()
+    {
     }
 }

@@ -6,22 +6,28 @@ namespace Nuclei.Scripts.Vehicle;
 
 public class VehicleScript : GenericScriptBase<VehicleService>
 {
-    public VehicleScript()
+    protected override void SubscribeToEvents()
     {
-        Service.RepairRequested += OnRepairRequested;
         Tick += OnTick;
+        Service.RepairRequested += OnRepairRequested;
+        GameStateTimer.SubscribeToTimerElapsed(UpdateVehicle);
+    }
+
+    private void UpdateVehicle(object sender, EventArgs e)
+    {
+        if (CurrentVehicle == null) return;
+
+        UpdateFeature(Service.Indestructible.Value, ProcessIndestructible);
     }
 
     private void OnTick(object sender, EventArgs e)
     {
-        Indestructible();
     }
 
-    private void Indestructible()
+    private void ProcessIndestructible(bool indestructible)
     {
-        if (CurrentVehicle == null) return;
-        if (CurrentVehicle.IsInvincible != Service.Indestructible.Value)
-            CurrentVehicle.IsInvincible = Service.Indestructible.Value;
+        if (CurrentVehicle.IsInvincible != indestructible)
+            CurrentVehicle.IsInvincible = indestructible;
     }
 
     private void OnRepairRequested(object sender, EventArgs e)
