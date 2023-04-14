@@ -8,7 +8,6 @@ namespace Nuclei.Services.Exception;
 
 public class ExceptionService
 {
-    private static readonly Lazy<ExceptionService> _instance = new(() => new ExceptionService());
     private readonly Logger _logger;
 
     private ExceptionService()
@@ -16,7 +15,7 @@ public class ExceptionService
         _logger = new Logger(Paths.LoggerPath);
     }
 
-    public static ExceptionService Instance => _instance.Value;
+    public static ExceptionService Instance { get; } = new();
 
     public event EventHandler<CustomExceptionBase> ErrorOccurred;
 

@@ -33,7 +33,7 @@ public class GenericStateService<TService> where TService : new()
     /// <summary>
     ///     Initializes a new instance of the <see cref="GenericStateService{T}" /> class.
     /// </summary>
-    protected GenericStateService()
+    public GenericStateService()
     {
         _stateFilePath = $"{Paths.StatesPath}/{typeof(TService).Name}.json";
         EnsureDirectoryAndFileExist(_stateFilePath);

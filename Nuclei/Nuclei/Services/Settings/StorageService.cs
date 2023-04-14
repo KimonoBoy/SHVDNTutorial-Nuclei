@@ -30,4 +30,13 @@ public class StorageService : GenericService<StorageService>
     {
         RestoreDefaultsRequested?.Invoke(this, EventArgs.Empty);
     }
+
+    public string GetNumSubscribtions()
+    {
+        var saveSubs = SaveRequested?.GetInvocationList().Length ?? 0;
+        var loadSubs = LoadRequested?.GetInvocationList().Length ?? 0;
+        var restoreSubs = RestoreDefaultsRequested?.GetInvocationList().Length ?? 0;
+        var msg = $"Save: {saveSubs}, Load: {loadSubs}, Restore: {restoreSubs}";
+        return msg;
+    }
 }

@@ -6,7 +6,7 @@ public abstract class GenericService<TService> where TService : class, new()
 {
     public static TService Instance = new();
 
-    public GenericStateService<TService> CurrentState()
+    public GenericStateService<TService> GetStateService()
     {
         return GenericStateService<TService>.Instance;
     }

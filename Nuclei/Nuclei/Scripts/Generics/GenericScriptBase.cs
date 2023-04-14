@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
+using GTA.UI;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
@@ -14,13 +15,14 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     private static bool _eventsSubscribed;
 
     protected static readonly CustomTimer GameStateTimer = new(100);
+
     private readonly TService _defaultValuesService = new();
     private readonly StorageService _storageService = StorageService.Instance;
 
     protected GenericScriptBase()
     {
-        if (_storageService.CurrentState().GetState().AutoLoad.Value) Load();
-        if (_storageService.CurrentState().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
+        if (_storageService.GetStateService().GetState().AutoLoad.Value) Load();
+        if (_storageService.GetStateService().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
 
         if (_eventsSubscribed) return;
 
@@ -81,6 +83,10 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
             Save();
         else if (e.KeyCode == Keys.L && e.Control && e.Shift)
             Load();
+
+        if (e.KeyCode == Keys.O && e.Control && e.Shift)
+            Notification.Show(
+                $"{_storageService.GetNumSubscribtions()}\nCustomTimerCount: {GameStateTimer.GetTimerCount()}");
     }
 
     private void OnAborted(object sender, EventArgs e)
@@ -122,5 +128,16 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         var loadedStorageService = State.LoadState();
         if (loadedStorageService != null) Service.SetState(loadedStorageService);
         Display.Notify("All Settings Loaded", "Successfully");
+    }
+
+    /// <summary>
+    ///     Updates the feature if the service state is different from the game state.
+    /// </summary>
+    /// <typeparam name="T">The type.</typeparam>
+    /// <param name="value">The value from the service state.</param>
+    /// <param name="action">The action to perform depending on the value.</param>
+    protected void UpdateFeature<T>(T value, Action<T> action)
+    {
+        action(value);
     }
 }

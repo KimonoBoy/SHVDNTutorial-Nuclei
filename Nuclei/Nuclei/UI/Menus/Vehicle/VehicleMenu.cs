@@ -17,7 +17,6 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         Indestructible();
     }
 
-
     private void AddVehicleSpawnerMenu()
     {
         var vehicleSpawnerMenu = new VehicleSpawnerMenu(MenuTitles.SpawnVehicle);

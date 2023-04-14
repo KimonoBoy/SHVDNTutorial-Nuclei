@@ -70,7 +70,6 @@
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Generics\GenericScriptBase.cs" />
     <Compile Include="Scripts\Settings\StorageScript.cs" />
-    <Compile Include="Scripts\StorageScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
@@ -83,6 +82,7 @@
     <Compile Include="Services\Exception\ExceptionService.cs" />
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Settings\StorageService.cs" />
+    <Compile Include="Services\Vehicle\IVehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />

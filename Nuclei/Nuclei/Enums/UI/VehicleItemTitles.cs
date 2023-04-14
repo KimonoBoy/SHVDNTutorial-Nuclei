@@ -8,5 +8,6 @@ public enum VehicleItemTitles
     RepairVehicle,
 
     [Description("Makes the vehicle indestructible.")]
-    Indestructible
+    Indestructible,
+    SetCurrentVehicle
 }
