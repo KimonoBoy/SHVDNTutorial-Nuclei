@@ -20,7 +20,8 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVeh
     /// <summary>
     ///     A property that indicates which seat the player should be placed at when spawning a vehicle.
     /// </summary>
-    public BindableProperty<VehicleSeat> VehicleSeat { get; set; } = new();
+    public BindableProperty<VehicleSeat> VehicleSeat { get; set; } =
+        new(GTA.VehicleSeat.Driver);
 
 
     /// <summary>

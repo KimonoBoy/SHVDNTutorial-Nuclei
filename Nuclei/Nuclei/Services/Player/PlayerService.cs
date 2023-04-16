@@ -86,7 +86,7 @@ public class PlayerService : GenericService<PlayerService>, IPlayerService
     /// <summary>
     ///     A method that invokes the `PlayerFixed` event.
     /// </summary>
-    public void FixPlayer()
+    public void RequestFixPlayer()
     {
         PlayerFixed?.Invoke(this, EventArgs.Empty);
     }

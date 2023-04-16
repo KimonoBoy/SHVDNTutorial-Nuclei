@@ -28,7 +28,7 @@ public interface IPlayerService
     event EventHandler<CashHash> AddCashRequested;
 
     // Methods
-    void FixPlayer();
+    void RequestFixPlayer();
     void RequestCashInput();
     void RequestCashResult(CashHash cashHash);
 }

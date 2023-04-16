@@ -15,6 +15,32 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         AddHeader("Basics");
         RepairVehicle();
         Indestructible();
+        SpeedBoost();
+
+        AddHeader("Utilities");
+        FlipVehicle();
+        LockDoors();
+        SeatBelt();
+        NeverFallOffBike();
+        DriveUnderWater();
+    }
+
+    private void LockDoors()
+    {
+        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, Service.LockDoors,
+            @checked => { Service.LockDoors.Value = @checked; });
+    }
+
+    private void NeverFallOffBike()
+    {
+        var checkBoxNeverFallOffBike = AddCheckbox(VehicleItemTitles.NeverFallOffBike, Service.NeverFallOffBike,
+            @checked => { Service.NeverFallOffBike.Value = @checked; });
+    }
+
+    private void DriveUnderWater()
+    {
+        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, Service.DriveUnderWater,
+            @checked => { Service.DriveUnderWater.Value = @checked; });
     }
 
     private void AddVehicleSpawnerMenu()
@@ -23,9 +49,26 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         AddMenu(vehicleSpawnerMenu);
     }
 
+    private void FlipVehicle()
+    {
+        var itemFlipVehicle = AddItem(VehicleItemTitles.FlipVehicle, () => { Service.RequestVehicleFlip(); });
+    }
+
+    private void SpeedBoost()
+    {
+        var sliderItemSpeedBoost = AddSliderItem(VehicleItemTitles.SpeedBoost, Service.SpeedBoost,
+            speedBoostValue => { Service.SpeedBoost.Value = speedBoostValue; }, 0, 5);
+    }
+
+    private void SeatBelt()
+    {
+        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, Service.SeatBelt,
+            @checked => { Service.SeatBelt.Value = @checked; });
+    }
+
     private void RepairVehicle()
     {
-        var itemRepairVehicle = AddItem(VehicleItemTitles.RepairVehicle, () => { Service.Repair(); });
+        var itemRepairVehicle = AddItem(VehicleItemTitles.RepairVehicle, () => { Service.RequestRepair(); });
     }
 
     private void Indestructible()

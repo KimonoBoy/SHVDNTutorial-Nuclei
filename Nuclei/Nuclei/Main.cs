@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using GTA;
 using Nuclei.Enums.UI;
 using Nuclei.UI.Menus.Abstracts;
+using Control = GTA.Control;
 using MainMenu = Nuclei.UI.Menus.MainMenu;
 
 namespace Nuclei;
@@ -20,6 +21,8 @@ public class Main : Script
     private void OnTick(object sender, EventArgs e)
     {
         MenuBase.Pool.Process();
+
+        if (MenuBase.Pool.AreAnyVisible) Game.DisableControlThisFrame(Control.ReplayStartStopRecording);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

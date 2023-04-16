@@ -35,7 +35,18 @@ public class GenericStateService<TService> where TService : new()
     /// </summary>
     public GenericStateService()
     {
-        _stateFilePath = $"{Paths.StatesPath}/{typeof(TService).Name}.json";
+        _stateFilePath = $"{Paths.StoragePath}/{typeof(TService).Name.Replace("Service", "State")}.json";
+        EnsureDirectoryAndFileExist(_stateFilePath);
+        _state = LoadState() ?? new TService();
+    }
+
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="GenericStateService{T}" /> class.
+    ///     <param name="stateFilePath">The path of the file.</param>
+    /// </summary>
+    public GenericStateService(string stateFilePath)
+    {
+        _stateFilePath = stateFilePath;
         EnsureDirectoryAndFileExist(_stateFilePath);
         _state = LoadState() ?? new TService();
     }

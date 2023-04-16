@@ -4,12 +4,12 @@ using GTA;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
-using Nuclei.Services.Settings;
+using Nuclei.Services.Settings.Storage;
 using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Generics;
 
-public class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
+public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
     private static bool _eventsSubscribed;
 
@@ -57,6 +57,11 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
     protected static Ped Character { get; set; } = Game.Player.Character;
 
     /// <summary>
+    ///     The last vehicle the player was in.
+    /// </summary>
+    protected static GTA.Vehicle LastVehicle { get; set; }
+
+    /// <summary>
     ///     The current entity the player is controlling, returns either the character or the vehicle the character is in.
     /// </summary>
     protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
@@ -67,12 +72,12 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
     /// <returns></returns>
     private bool SubscribeToSharedEvents()
     {
+        // Ensures that the events are only subscribed once.
         if (_eventsSubscribed) return true;
 
         // Subscribe the GameStateUpdater event handler only if it hasn't been subscribed before.
         GameStateTimer.SubscribeToTimerElapsed(GameStateUpdater);
 
-        // Ensures that the events are only subscribed once.
         KeyDown += OnKeyDown;
         Tick += OnTick;
         Aborted += OnAborted;
@@ -92,11 +97,22 @@ public class GenericScriptBase<TService> : Script where TService : GenericServic
     {
         SetCharacter();
         SetCurrentVehicle();
+        SetLastVehicle();
+    }
+
+    /// <summary>
+    ///     Set the last vehicle the player was in.
+    /// </summary>
+    private void SetLastVehicle()
+    {
+        if (CurrentVehicle != null)
+            LastVehicle = CurrentVehicle;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
-        if (_storageService.AutoSave.Value && Game.IsPaused) Save();
+        if (_storageService.AutoSave.Value && Game.IsPaused)
+            Save();
     }
 
     /// <summary>

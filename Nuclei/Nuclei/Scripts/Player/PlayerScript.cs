@@ -51,7 +51,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void OnWantedLevelChanged(object sender, ValueEventArgs<int> wantedLevel)
     {
-        UpdateFeature(Service.WantedLevel.Value, UpdateWantedLevel);
+        Game.Player.WantedLevel = wantedLevel.Value;
     }
 
     private void OnCashInputRequested(object sender, EventArgs e)
@@ -68,6 +68,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         if (Character == null) return;
         UpdateFeature(Service.IsInvincible.Value, UpdateInvincible);
+        UpdateFeature(Service.WantedLevel.Value, UpdateWantedLevel);
         UpdateFeature(Service.IsInvisible.Value, UpdateInvisible);
         UpdateFeature(Service.HasInfiniteBreath.Value, UpdateInfiniteBreath);
         UpdateFeature(Service.CanRideOnCars.Value, UpdateRideOnCars);
@@ -109,14 +110,18 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void UpdateRideOnCars(bool rideOnCars)
     {
         if (Character.CanRagdoll == !rideOnCars) return;
+
         // False means the player won't fall over.
         Character.CanRagdoll = !rideOnCars;
     }
 
     private void UpdateWantedLevel(int wantedLevel)
     {
-        Game.Player.WantedLevel =
-            !Service.IsWantedLevelLocked.Value ? wantedLevel : Service.LockedWantedLevel.Value;
+        if (Service.IsWantedLevelLocked.Value)
+            Game.Player.WantedLevel = Service.LockedWantedLevel.Value;
+
+        if (Service.WantedLevel.Value != Game.Player.WantedLevel)
+            Service.WantedLevel.Value = Game.Player.WantedLevel;
     }
 
     /// <summary>
@@ -188,8 +193,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
             .Where(entity => entity.Position.DistanceTo(Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
-            .FirstOrDefault(entity => entity.HasBeenDamagedBy(Character) ||
-                                      entity.IsTouching(Character));
+            .FirstOrDefault(entity => entity != Character && (entity.HasBeenDamagedBy(Character) ||
+                                                              entity.IsTouching(Character)));
     }
 
     /// <summary>
@@ -218,6 +223,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         target.ApplyForce(Character.UpVector * forceUpwards);
         target.ApplyForce(Character.ForwardVector * forceForwards);
+
         target.ClearLastWeaponDamage();
     }
 
@@ -326,7 +332,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         try
         {
-            var maxLength = int.MaxValue.ToString().Length;
+            var maxLength = ulong.MaxValue.ToString().Length;
             var cashInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 20);
             if (cashInput.Length > maxLength)
                 cashInput = cashInput.Substring(0, maxLength);

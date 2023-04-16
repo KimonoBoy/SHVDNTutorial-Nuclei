@@ -1,6 +1,6 @@
 ﻿using System;
 using Nuclei.Enums.UI;
-using Nuclei.Services.Settings;
+using Nuclei.Services.Settings.Storage;
 using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Settings;
@@ -23,14 +23,12 @@ public class SaveAndLoadMenu : GenericMenuBase<StorageService>
 
     private void Load()
     {
-        var itemLoad = AddItem(SettingsTitles.Load, () => { Service.Load(); });
-        itemLoad.AltTitle = "CTRL + SHIFT + L";
+        var itemLoad = AddItem(SettingsTitles.Load, () => { Service.Load(); }, "CTRL + SHIFT + L");
     }
 
     private void Save()
     {
-        var itemSave = AddItem(SettingsTitles.Save, () => { Service.Save(); });
-        itemSave.AltTitle = "CTRL + SHIFT + S";
+        var itemSave = AddItem(SettingsTitles.Save, () => { Service.Save(); }, "CTRL + SHIFT + S");
     }
 
     private void AutoLoad()

@@ -5,6 +5,7 @@ using GTA;
 using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
+using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
@@ -41,9 +42,12 @@ public abstract class MenuBase : NativeMenu
     {
         SubtitleFont = Font.Pricedown;
         Banner.Color = Color.Black;
+        MaxItems = 12;
 
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
+
+        AddButtons();
 
         _exceptionService.ErrorOccurred += OnErrorOccurred;
 
@@ -62,6 +66,12 @@ public abstract class MenuBase : NativeMenu
     ///     The latest active menu. This is used to determine which menu to return to when closing a menu.
     /// </summary>
     public static MenuBase LatestMenu { get; set; }
+
+    private void AddButtons()
+    {
+        var instructionalButtonHotKey = new InstructionalButton("Change Hotkey", Control.ReplayStartStopRecording);
+        Buttons.Add(instructionalButtonHotKey);
+    }
 
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
     {
@@ -108,10 +118,12 @@ public abstract class MenuBase : NativeMenu
     /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected.</param>
     /// <param name="action">The action to perform when activated.</param>
+    /// <param name="hotkey">The hotkey to activate this item.</param>
     /// <returns>The item.</returns>
-    protected NativeItem AddItem(string title, string description = "", Action action = null)
+    protected NativeItem AddItem(string title, string description = "", Action action = null, string hotkey = "")
     {
-        var item = new NativeItem(title, description);
+        var item = new NativeItem(title, description, hotkey);
+        item.AltTitleFont = Font.ChaletComprimeCologne;
 
         // anonymous method to handle the event
         item.Activated += (sender, args) =>
@@ -129,10 +141,11 @@ public abstract class MenuBase : NativeMenu
     /// </summary>
     /// <param name="enum">The Enum to get the Title and the Description from.</param>
     /// <param name="action">The action to perform when activated.</param>
+    /// <param name="hotkey">The hotkey to activate this item.</param>
     /// <returns>The item.</returns>
-    protected NativeItem AddItem(Enum @enum, Action action = null)
+    protected NativeItem AddItem(Enum @enum, Action action = null, string hotkey = "")
     {
-        return AddItem(@enum.ToPrettyString(), @enum.GetDescription(), action);
+        return AddItem(@enum.ToPrettyString(), @enum.GetDescription(), action, hotkey);
     }
 
     /// <summary>
@@ -180,6 +193,52 @@ public abstract class MenuBase : NativeMenu
         Action<bool> action = null)
     {
         return AddCheckbox(@enum.ToPrettyString(), @enum.GetDescription(), bindableProperty, action);
+    }
+
+    /// <summary>
+    ///     Adds a new slider item to the control and returns the slider item instance.
+    /// </summary>
+    /// <param name="title">The title of the slider item.</param>
+    /// <param name="description">The description of the slider item.</param>
+    /// <param name="bindableProperty">The data binding for the slider item's value.</param>
+    /// <param name="action">The delegate that will be invoked whenever the value of the slider item changes.</param>
+    /// <returns>The slider item instance.</returns>
+    protected NativeSliderItem AddSliderItem(string title, string description = "",
+        BindableProperty<int> bindableProperty = null, Action<int> action = null, int value = 0, int maxValue = 10)
+    {
+        var nativeSliderItem = new NativeSliderItem(title, description, maxValue, value);
+        var defaultValue = "Off: 0";
+        var currentValue = $"Current Value: {nativeSliderItem.Value}";
+        var max = $"Max Value: {nativeSliderItem.Maximum}";
+        nativeSliderItem.Description = $"{defaultValue}\n{currentValue}\n{max}";
+
+        if (bindableProperty != null)
+            bindableProperty.ValueChanged += (sender, args) =>
+            {
+                nativeSliderItem.Value = bindableProperty.Value;
+                currentValue = $"Current Value: {bindableProperty.Value}";
+                nativeSliderItem.Description = $"{defaultValue}\n{currentValue}\n{max}";
+            };
+
+
+        nativeSliderItem.ValueChanged += (sender, args) => { action?.Invoke(nativeSliderItem.Value); };
+
+        Add(nativeSliderItem);
+        return nativeSliderItem;
+    }
+
+    /// <summary>
+    ///     Adds a new slider item to the control using an enum value and returns the slider item instance.
+    /// </summary>
+    /// <param name="enum">The enum value representing the title and description of the slider item.</param>
+    /// <param name="bindableProperty">The data binding for the slider item's value.</param>
+    /// <param name="action">The delegate that will be invoked whenever the value of the slider item changes.</param>
+    /// <returns>The slider item instance.</returns>
+    protected NativeSliderItem AddSliderItem(Enum @enum,
+        BindableProperty<int> bindableProperty = null,
+        Action<int> action = null, int value = 0, int maxValue = 10)
+    {
+        return AddSliderItem(@enum.ToPrettyString(), @enum.GetDescription(), bindableProperty, action, value, maxValue);
     }
 
     /// <summary>

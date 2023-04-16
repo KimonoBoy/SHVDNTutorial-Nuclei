@@ -1,5 +1,5 @@
 ﻿using Nuclei.Scripts.Generics;
-using Nuclei.Services.Settings;
+using Nuclei.Services.Settings.Storage;
 
 namespace Nuclei.Scripts.Settings;
 

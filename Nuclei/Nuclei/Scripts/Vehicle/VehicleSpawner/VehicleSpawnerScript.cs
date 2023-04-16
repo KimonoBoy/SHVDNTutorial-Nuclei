@@ -9,14 +9,6 @@ namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 {
-    // private readonly VehicleSpawnerService _vehicleSpawnerService = VehicleSpawnerService.Instance;
-
-    public VehicleSpawnerScript()
-    {
-        // Default seat
-        Service.VehicleSeat.Value = VehicleSeat.Driver;
-    }
-
     protected override void SubscribeToEvents()
     {
         Service.VehicleSpawned += OnVehicleSpawned;

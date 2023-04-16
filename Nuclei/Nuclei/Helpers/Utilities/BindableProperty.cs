@@ -7,6 +7,15 @@ public class BindableProperty<T>
 {
     private T _value;
 
+    public BindableProperty()
+    {
+    }
+
+    public BindableProperty(T defaultValue)
+    {
+        _value = defaultValue;
+    }
+
     public T Value
     {
         get => _value;

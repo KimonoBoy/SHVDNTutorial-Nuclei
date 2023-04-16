@@ -2,9 +2,9 @@
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Generics;
 
-namespace Nuclei.Services.Settings;
+namespace Nuclei.Services.Settings.Storage;
 
-public class StorageService : GenericService<StorageService>
+public class StorageService : GenericService<StorageService>, IStorageService
 {
     public BindableProperty<bool> AutoSave { get; set; } = new();
 
