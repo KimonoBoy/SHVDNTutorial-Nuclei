@@ -6,9 +6,9 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerSpawnerMenu : GenericMenuBase<VehicleSpawnerService>
+public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
 {
-    public VehicleSpawnerSpawnerMenu(Enum @enum) : base(@enum)
+    public VehicleSpawnerMainMenu(Enum @enum) : base(@enum)
     {
         WarpInSpawned();
         SelectSeat();
