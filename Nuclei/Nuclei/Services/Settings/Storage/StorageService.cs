@@ -12,19 +12,19 @@ public class StorageService : GenericService<StorageService>, IStorageService
 
     public event EventHandler SaveRequested;
 
+    public event EventHandler LoadRequested;
+
+    public event EventHandler RestoreDefaultsRequested;
+
     public void Save()
     {
         SaveRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public event EventHandler LoadRequested;
-
     public void Load()
     {
         LoadRequested?.Invoke(this, EventArgs.Empty);
     }
-
-    public event EventHandler RestoreDefaultsRequested;
 
     public void RestoreDefaults()
     {
