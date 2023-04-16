@@ -25,6 +25,9 @@ public enum MenuTitles
     [Description("Summon any vehicle from the game and make your grand entrance in style!")]
     SpawnVehicle,
 
+    [Description("Your favorite vehicles stored in one place!")]
+    FavoriteVehicles,
+
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapon,
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using GTA;
 using Nuclei.Helpers.Utilities;
 
@@ -10,6 +11,7 @@ public interface IVehicleSpawnerService
     BindableProperty<bool> WarpInSpawned { get; }
     BindableProperty<bool> EnginesRunning { get; }
     BindableProperty<VehicleSeat> VehicleSeat { get; }
+    BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; }
 
     // Events
     event EventHandler<VehicleHash> VehicleSpawned;

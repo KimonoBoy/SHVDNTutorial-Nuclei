@@ -6,16 +6,21 @@ using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerMenu : GenericMenuBase<VehicleSpawnerService>
+public class VehicleSpawnerSpawnerMenu : GenericMenuBase<VehicleSpawnerService>
 {
-    // private readonly VehicleSpawnerService _vehicleSpawnerService = GenericService<VehicleSpawnerService>.Instance;
-
-    public VehicleSpawnerMenu(Enum @enum) : base(@enum)
+    public VehicleSpawnerSpawnerMenu(Enum @enum) : base(@enum)
     {
         WarpInSpawned();
         SelectSeat();
         EnginesRunning();
+        AddFavoriteVehiclesMenu();
         GenerateVehicleClassMenus();
+    }
+
+    private void AddFavoriteVehiclesMenu()
+    {
+        var favoriteVehiclesMenu = new VehicleSpawnerFavoritesMenu(MenuTitles.FavoriteVehicles);
+        AddMenu(favoriteVehiclesMenu);
     }
 
     private void WarpInSpawned()
@@ -51,7 +56,7 @@ public class VehicleSpawnerMenu : GenericMenuBase<VehicleSpawnerService>
     {
         foreach (VehicleClass vehicleClass in Enum.GetValues(typeof(VehicleClass)))
         {
-            var vehicleClassMenu = new VehicleClassMenu(vehicleClass);
+            var vehicleClassMenu = new VehicleSpawnerClassMenu(vehicleClass);
             var vehicleClassItem = AddMenu(vehicleClassMenu);
         }
     }

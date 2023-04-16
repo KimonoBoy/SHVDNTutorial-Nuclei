@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
+using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
@@ -12,6 +15,19 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     protected override void SubscribeToEvents()
     {
         Service.VehicleSpawned += OnVehicleSpawned;
+        KeyDown += OnKeyDown;
+    }
+
+    private void OnKeyDown(object sender, KeyEventArgs e)
+    {
+        if (Enum.GetValues(typeof(VehicleHash)).Cast<VehicleHash>()
+                .Contains(Service.CurrentVehicleHash.Value) && Game.IsControlPressed(Control.Jump))
+        {
+            if (Service.FavoriteVehicles.Value.Contains(Service.CurrentVehicleHash.Value))
+                Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
+            else
+                Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);
+        }
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicle

@@ -67,7 +67,7 @@ public abstract class MenuBase : NativeMenu
     /// </summary>
     public static MenuBase LatestMenu { get; set; }
 
-    private void AddButtons()
+    protected virtual void AddButtons()
     {
         var instructionalButtonHotKey = new InstructionalButton("Change Hotkey", Control.ReplayStartStopRecording);
         Buttons.Add(instructionalButtonHotKey);

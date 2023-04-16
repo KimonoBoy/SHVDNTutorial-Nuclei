@@ -45,7 +45,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void AddVehicleSpawnerMenu()
     {
-        var vehicleSpawnerMenu = new VehicleSpawnerMenu(MenuTitles.SpawnVehicle);
+        var vehicleSpawnerMenu = new VehicleSpawnerSpawnerMenu(MenuTitles.SpawnVehicle);
         AddMenu(vehicleSpawnerMenu);
     }
 

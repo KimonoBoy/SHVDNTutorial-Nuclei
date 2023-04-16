@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using GTA;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVehicleSpawnerService
+public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
 {
+    /// <summary>
+    ///     A property that contains the current selected vehicle hash.
+    /// </summary>
+    public BindableProperty<VehicleHash> CurrentVehicleHash { get; set; } = new();
+
     /// <summary>
     ///     A property that indicates whether the spawned vehicle should have its engines running.
     /// </summary>
@@ -22,6 +28,12 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVeh
     /// </summary>
     public BindableProperty<VehicleSeat> VehicleSeat { get; set; } =
         new(GTA.VehicleSeat.Driver);
+
+    /// <summary>
+    ///     A property that contains the list of favorite vehicles.
+    /// </summary>
+    public BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; set; } =
+        new(new ObservableCollection<VehicleHash>());
 
 
     /// <summary>
