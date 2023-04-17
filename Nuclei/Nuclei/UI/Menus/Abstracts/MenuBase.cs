@@ -202,23 +202,16 @@ public abstract class MenuBase : NativeMenu
     /// <param name="description">The description of the slider item.</param>
     /// <param name="bindableProperty">The data binding for the slider item's value.</param>
     /// <param name="action">The delegate that will be invoked whenever the value of the slider item changes.</param>
+    /// <param name="value">Current Value</param>
+    /// <param name="maxValue">Max Value</param>
     /// <returns>The slider item instance.</returns>
     protected NativeSliderItem AddSliderItem(string title, string description = "",
         BindableProperty<int> bindableProperty = null, Action<int> action = null, int value = 0, int maxValue = 10)
     {
         var nativeSliderItem = new NativeSliderItem(title, description, maxValue, value);
-        var defaultValue = "Off: 0";
-        var currentValue = $"Current Value: {nativeSliderItem.Value}";
-        var max = $"Max Value: {nativeSliderItem.Maximum}";
-        nativeSliderItem.Description = $"{defaultValue}\n{currentValue}\n{max}";
 
         if (bindableProperty != null)
-            bindableProperty.ValueChanged += (sender, args) =>
-            {
-                nativeSliderItem.Value = args.Value;
-                currentValue = $"Current Value: {bindableProperty.Value}";
-                nativeSliderItem.Description = $"{defaultValue}\n{currentValue}\n{max}";
-            };
+            bindableProperty.ValueChanged += (sender, args) => { nativeSliderItem.Value = args.Value; };
 
 
         nativeSliderItem.ValueChanged += (sender, args) => { action?.Invoke(nativeSliderItem.Value); };
@@ -233,6 +226,8 @@ public abstract class MenuBase : NativeMenu
     /// <param name="enum">The enum value representing the title and description of the slider item.</param>
     /// <param name="bindableProperty">The data binding for the slider item's value.</param>
     /// <param name="action">The delegate that will be invoked whenever the value of the slider item changes.</param>
+    /// <param name="value">Current Value.</param>
+    /// <param name="maxValue">Max Value.</param>
     /// <returns>The slider item instance.</returns>
     protected NativeSliderItem AddSliderItem(Enum @enum,
         BindableProperty<int> bindableProperty = null,

@@ -8,6 +8,7 @@ public abstract class GenericMenuBase<TService> : MenuBase where TService : Gene
 {
     protected TService Service = GenericService<TService>.Instance;
 
+
     protected GenericMenuBase(string subtitle, string description) : base(subtitle, description)
     {
     }

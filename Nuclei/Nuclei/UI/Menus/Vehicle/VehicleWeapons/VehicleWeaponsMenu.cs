@@ -16,15 +16,28 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     private readonly List<uint> _excludeHashes = new();
     private readonly ScaledTexture _starTexture = new("commonmenu", "shop_new_star");
 
+
     public VehicleWeaponsMenu(Enum @enum) : base(@enum)
     {
         ExcludeWeapons();
         VehicleWeapons();
-        SelectNumAttachments();
+        SelectNumWeapons();
+        AdjustFireRate();
 
         AddHeader("Vehicle Weapons");
         GenerateVehicleWeaponsItems();
         GeneratePlayerWeaponsItems();
+    }
+
+    private void AdjustFireRate()
+    {
+        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, Service.FireRate,
+            value => { Service.FireRate.Value = value; }, 0, 20);
+        Service.FireRate.ValueChanged += (sender, args) =>
+        {
+            sliderItemFireRate.Description =
+                $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms";
+        };
     }
 
     private void ExcludeWeapons()
@@ -37,6 +50,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons, Service.HasVehicleWeapons,
             @checked => { Service.HasVehicleWeapons.Value = @checked; });
+        checkBoxVehicleWeapons.Description += "\n\nSelect a weapon below.\n\nShoot: T";
     }
 
     private void AddStandardExcludedHashes()
@@ -76,7 +90,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         foreach (var weaponHash in GetFilteredWeaponHashes())
         {
-            AddHeaderIfNotExists(weaponHash);
+            AddHeaderIfNone(weaponHash);
             AddItemForWeaponHash(weaponHash);
         }
     }
@@ -89,7 +103,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
             .OrderBy(h => Function.Call<uint>(Hash.GET_WEAPONTYPE_GROUP, h));
     }
 
-    private void AddHeaderIfNotExists(WeaponHash weaponHash)
+    private void AddHeaderIfNone(WeaponHash weaponHash)
     {
         var groupDisplayName = GetWeaponGroupDisplayName(weaponHash);
         if (!Items.Exists(header => header.Title == groupDisplayName))
@@ -144,11 +158,11 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         };
     }
 
-    private void SelectNumAttachments()
+    private void SelectNumWeapons()
     {
-        var listItemNumAttachments = AddListItem(VehicleWeaponsItemTitles.SelectNumAttachments,
-            (selected, index) => { }, null, 1, 2, 3);
+        var listItemNumWEapons = AddListItem(VehicleWeaponsItemTitles.NumWeapons,
+            (selected, index) => { Service.NumWeapons.Value = selected; }, null, 1, 2, 3);
 
-        Service.NumAttachments.ValueChanged += (sender, args) => { listItemNumAttachments.SelectedItem = args.Value; };
+        Service.NumWeapons.ValueChanged += (sender, args) => { listItemNumWEapons.SelectedItem = args.Value; };
     }
 }
