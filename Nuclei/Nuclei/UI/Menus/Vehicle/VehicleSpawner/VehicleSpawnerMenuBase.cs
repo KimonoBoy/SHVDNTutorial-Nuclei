@@ -47,6 +47,6 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
 
     protected void UpdateSelectedItem()
     {
-        Service.CurrentVehicleHash.Value = Service.GetVehicleHashFromDisplayName(Items[SelectedIndex].Title);
+        Service.CurrentVehicleHash.Value = Service.GetHashFromDisplayName<VehicleHash>(Items[SelectedIndex].Title);
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Linq;
 using GTA;
-using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Generics;
 
@@ -36,31 +34,6 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
     /// </summary>
     public BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; set; } =
         new(new ObservableCollection<VehicleHash>());
-
-    /// <summary>
-    ///     Gets the VehicleHash from a display name string.
-    /// </summary>
-    /// <param name="displayName"></param>
-    /// <returns></returns>
-    public VehicleHash GetVehicleHashFromDisplayName(string displayName)
-    {
-        return Enum.GetValues(typeof(VehicleHash)).Cast<VehicleHash>().ToList().Find(vH =>
-            vH.ToPrettyString() == displayName || displayName == Game.GetLocalizedString(vH.ToString()));
-    }
-
-    /// <summary>
-    ///     Gets the localized dispaly name from a VehicleHash.
-    /// </summary>
-    /// <param name="vehicleHash"></param>
-    /// <returns></returns>
-    public string GetVehicleDisplayName(VehicleHash vehicleHash)
-    {
-        var localizedString = Game.GetLocalizedString(vehicleHash.ToString());
-
-        if (string.IsNullOrEmpty(localizedString)) return vehicleHash.ToPrettyString();
-
-        return localizedString;
-    }
 
 
     /// <summary>

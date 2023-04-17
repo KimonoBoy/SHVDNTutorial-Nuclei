@@ -31,7 +31,7 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
             case NotifyCollectionChangedAction.Add when e.NewItems != null:
                 e.NewItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var displayName = Service.GetLocalizedDisplayNameFromHash(vHash);
                     var item = Items.FirstOrDefault(i => i.Title == displayName);
                     if (item != null) item.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
                 });
@@ -39,7 +39,7 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
                 e.OldItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var displayName = Service.GetLocalizedDisplayNameFromHash(vHash);
                     var item = Items.FirstOrDefault(i => i.Title == displayName);
                     if (item != null) item.RightBadge = null;
                 });
@@ -52,9 +52,9 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
         Clear();
         foreach (var vehicleHash in GTA.Vehicle.GetAllModelsOfClass(_vehicleClass).OrderBy(v => v.ToPrettyString()))
         {
-            var vehicleName = Service.GetVehicleDisplayName(vehicleHash);
+            var vehicleName = Service.GetLocalizedDisplayNameFromHash(vehicleHash);
 
-            var itemSpawnVehicle = AddItem(vehicleName, $"Spawn {vehicleHash.ToPrettyString()}",
+            var itemSpawnVehicle = AddItem(vehicleName, $"Spawn {vehicleName}",
                 () => { Service.SpawnVehicle(vehicleHash); });
             itemSpawnVehicle.Selected += (sender, args) => { UpdateSelectedItem(); };
 

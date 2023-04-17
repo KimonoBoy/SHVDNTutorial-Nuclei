@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using GTA;
 using LemonUI.Scaleform;
-using Nuclei.Helpers.ExtensionMethods;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
@@ -19,10 +18,7 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
         Clear();
         foreach (var vehicleHash in newItems)
         {
-            var vehicleName = Game.GetLocalizedString(vehicleHash.ToString());
-
-            if (string.IsNullOrEmpty(vehicleName))
-                vehicleName = vehicleHash.ToPrettyString();
+            var vehicleName = Service.GetLocalizedDisplayNameFromHash(vehicleHash);
 
             var itemVehicle = AddItem(vehicleName, $"Spawn {vehicleName}",
                 () => { Service.SpawnVehicle(vehicleHash); });
@@ -36,7 +32,7 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
                 e.OldItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var displayName = Service.GetLocalizedDisplayNameFromHash(vHash);
                     var item = Items.FirstOrDefault(i => i.Title == displayName);
 
                     if (item != null)

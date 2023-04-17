@@ -21,8 +21,9 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     {
         if (Game.IsControlPressed(Control.Jump))
         {
-            var vehicleDisplayName = Service.GetVehicleDisplayName(Service.CurrentVehicleHash.Value);
-            if (Service.FavoriteVehicles.Value.Contains(Service.GetVehicleHashFromDisplayName(vehicleDisplayName)))
+            var vehicleDisplayName = Service.GetLocalizedDisplayNameFromHash(Service.CurrentVehicleHash.Value);
+            if (Service.FavoriteVehicles.Value.Contains(
+                    Service.GetHashFromDisplayName<VehicleHash>(vehicleDisplayName)))
                 Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
             else
                 Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);
