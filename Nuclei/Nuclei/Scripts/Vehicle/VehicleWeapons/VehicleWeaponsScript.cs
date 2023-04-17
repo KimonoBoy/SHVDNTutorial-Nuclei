@@ -3,7 +3,9 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
+using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleWeapons;
 
 namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
@@ -50,24 +52,35 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         if (!IsTimeToShoot()) return;
         _lastShotTime = DateTime.UtcNow;
 
-        // Get shooting points based on the NumWeapons value
-        var shootingPoints = GetShootingPoints(Service.NumWeapons.Value);
-        foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint);
+        try
+        {
+            // Get shooting points based on the VehicleWeaponAttachment value
+            var shootingPoints = GetShootingPoints(Service.VehicleWeaponAttachment.Value);
+            foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint);
+        }
+        catch (CustomExceptionBase vehicleWeaponsException)
+        {
+            ExceptionService.RaiseError(vehicleWeaponsException);
+        }
+        catch (Exception ex)
+        {
+            ExceptionService.RaiseError(ex);
+        }
     }
 
-    private Vector3[] GetShootingPoints(int numWeaponsValue)
+    private Vector3[] GetShootingPoints(VehicleWeaponAttachmentPoint attachmentPoint)
     {
-        switch (numWeaponsValue)
+        switch (attachmentPoint)
         {
-            case 1:
+            case VehicleWeaponAttachmentPoint.OneMiddle:
                 return new[] { CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f };
-            case 2:
+            case VehicleWeaponAttachmentPoint.OneOnEachSide:
                 return new[]
                 {
                     CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * -1.5f,
                     CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * 1.5f
                 };
-            case 3:
+            case VehicleWeaponAttachmentPoint.EachSideAndMiddle:
                 return new[]
                 {
                     CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f,
@@ -75,7 +88,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
                     CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * 1.5f
                 };
             default:
-                throw new ArgumentOutOfRangeException(nameof(numWeaponsValue), "Invalid number of weapons");
+                throw new ArgumentOutOfRangeException(nameof(attachmentPoint), "Invalid number of weapons");
         }
     }
 
@@ -87,9 +100,12 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     private void ShootBullet(uint weaponHash, Vector3 shootingPoint)
     {
         var weaponAsset = new WeaponAsset(weaponHash);
-        weaponAsset.Request(1000);
 
-        if (!weaponAsset.IsLoaded) return;
+        if (!weaponAsset.Request(_minBulletInterval))
+            throw new VehicleWeaponRequestTimedOutException();
+
+        if (weaponAsset is not { IsLoaded: true, IsValid: true })
+            throw new VehicleWeaponNotFoundException();
 
         World.ShootBullet(
             shootingPoint,
@@ -106,10 +122,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
             .Where(p => p.Position.DistanceTo(Character.Position) >= MinBulletDistance);
 
         foreach (var projectile in allProjectilesInWorld)
-        {
-            projectile.Explode();
-
-            if (projectile.Exists()) projectile.Delete();
-        }
+            if (projectile.Exists())
+                projectile.Delete();
     }
 }

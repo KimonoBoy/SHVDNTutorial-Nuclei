@@ -61,6 +61,7 @@
     <Compile Include="Enums\UI\VehicleSpawnerItemTitles.cs" />
     <Compile Include="Enums\UI\VehicleItemTitles.cs" />
     <Compile Include="Enums\UI\VehicleWeaponsItemTitles.cs" />
+    <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
@@ -113,9 +114,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Enums\Vehicle\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"

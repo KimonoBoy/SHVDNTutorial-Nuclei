@@ -5,6 +5,7 @@ using GTA;
 using GTA.Native;
 using LemonUI.Elements;
 using Nuclei.Enums.UI;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleWeapons;
 using Nuclei.UI.Menus.Abstracts;
@@ -16,12 +17,14 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     private readonly List<uint> _excludeHashes = new();
     private readonly ScaledTexture _starTexture = new("commonmenu", "shop_new_star");
 
-
     public VehicleWeaponsMenu(Enum @enum) : base(@enum)
     {
+        Width = 550;
+        MaxItems = 15;
+
         ExcludeWeapons();
         VehicleWeapons();
-        SelectNumWeapons();
+        WeaponAttachmentPoints();
         AdjustFireRate();
 
         AddHeader("Vehicle Weapons");
@@ -33,6 +36,10 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, Service.FireRate,
             value => { Service.FireRate.Value = value; }, 0, 20);
+
+        sliderItemFireRate.Description =
+            $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms";
+
         Service.FireRate.ValueChanged += (sender, args) =>
         {
             sliderItemFireRate.Description =
@@ -99,8 +106,8 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         return Enum.GetValues(typeof(WeaponHash))
             .Cast<WeaponHash>()
-            .Where(hash => !_excludeHashes.Contains((uint)hash))
-            .OrderBy(h => Function.Call<uint>(Hash.GET_WEAPONTYPE_GROUP, h));
+            .Where(weaponHash => !_excludeHashes.Contains((uint)weaponHash))
+            .OrderBy(weaponHash => Function.Call<uint>(Hash.GET_WEAPONTYPE_GROUP, weaponHash));
     }
 
     private void AddHeaderIfNone(WeaponHash weaponHash)
@@ -120,7 +127,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         var weaponDisplayName = weaponHash.GetLocalizedDisplayNameFromHash();
         var itemPlayerWeapon = AddItem(weaponDisplayName,
-            $"Attach: {weaponDisplayName}",
+            $"Set Weapon: {weaponDisplayName}",
             () => { Service.VehicleWeapon.Value = (uint)weaponHash; });
 
         Service.VehicleWeapon.ValueChanged += (sender, args) =>
@@ -146,8 +153,10 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void AddItemForVehicleWeaponHash(VehicleWeaponHash vehicleWeaponHash)
     {
-        var itemVehicleWeapon = AddItem(vehicleWeaponHash.GetLocalizedDisplayNameFromHash(),
-            $"Attach: {vehicleWeaponHash.GetLocalizedDisplayNameFromHash()}",
+        var vehicleWeaponDisplayName = vehicleWeaponHash.GetLocalizedDisplayNameFromHash();
+
+        var itemVehicleWeapon = AddItem(vehicleWeaponDisplayName,
+            $"Set Weapon: {vehicleWeaponDisplayName}",
             () => { Service.VehicleWeapon.Value = (uint)vehicleWeaponHash; });
 
         Service.VehicleWeapon.ValueChanged += (sender, args) =>
@@ -158,11 +167,20 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         };
     }
 
-    private void SelectNumWeapons()
+    private void WeaponAttachmentPoints()
     {
-        var listItemNumWEapons = AddListItem(VehicleWeaponsItemTitles.NumWeapons,
-            (selected, index) => { Service.NumWeapons.Value = selected; }, null, 1, 2, 3);
+        var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitles.WeaponAttachmentPoints,
+            (selected, index) =>
+            {
+                Service.VehicleWeaponAttachment.Value = selected.GetHashFromDisplayName<VehicleWeaponAttachmentPoint>();
+            }, null,
+            VehicleWeaponAttachmentPoint.OneMiddle.GetLocalizedDisplayNameFromHash(),
+            VehicleWeaponAttachmentPoint.OneOnEachSide.GetLocalizedDisplayNameFromHash(),
+            VehicleWeaponAttachmentPoint.EachSideAndMiddle.GetLocalizedDisplayNameFromHash());
 
-        Service.NumWeapons.ValueChanged += (sender, args) => { listItemNumWEapons.SelectedItem = args.Value; };
+        Service.VehicleWeaponAttachment.ValueChanged += (sender, args) =>
+        {
+            listItemWeaponAttachmentPoints.SelectedItem = args.Value.GetLocalizedDisplayNameFromHash();
+        };
     }
 }

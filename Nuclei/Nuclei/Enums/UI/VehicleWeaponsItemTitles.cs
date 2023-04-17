@@ -7,8 +7,8 @@ public enum VehicleWeaponsItemTitles
     [Description("Enable Vehicle Weapons.")]
     VehicleWeapons,
 
-    [Description("Select number of weapons to shoot from.")]
-    NumWeapons,
+    [Description("Select weapon attachment point.")]
+    WeaponAttachmentPoints,
 
     [Description("Rate at which vehicle weapons are fired.")]
     FireRate

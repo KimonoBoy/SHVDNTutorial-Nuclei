@@ -11,6 +11,6 @@ public enum ExceptionType
 
     [Description("Set cash input failed")] CashInput,
 
-    [Description("Failed to attach weapon to vehicle")]
-    AttachWeapon
+    [Description("Failed to add vehicle weapon")]
+    VehicleWeapon
 }

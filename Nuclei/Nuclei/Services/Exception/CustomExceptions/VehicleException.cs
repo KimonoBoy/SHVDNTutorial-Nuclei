@@ -35,3 +35,37 @@ public class VehicleSpawnFailedException : CustomExceptionBase
     {
     }
 }
+
+public class VehicleWeaponRequestTimedOutException : CustomExceptionBase
+{
+    public VehicleWeaponRequestTimedOutException() : base(ExceptionType.VehicleWeapon,
+        "Loading of vehicle weapon timed out.")
+    {
+    }
+
+    public VehicleWeaponRequestTimedOutException(string message) : base(ExceptionType.VehicleWeapon, message)
+    {
+    }
+}
+
+public class VehicleWeaponNotFoundException : CustomExceptionBase
+{
+    public VehicleWeaponNotFoundException() : base(ExceptionType.VehicleWeapon, "Vehicle weapon not found.")
+    {
+    }
+
+    public VehicleWeaponNotFoundException(string message) : base(ExceptionType.VehicleWeapon, message)
+    {
+    }
+}
+
+public class AddVehicleWeaponFailedException : CustomExceptionBase
+{
+    public AddVehicleWeaponFailedException() : base(ExceptionType.VehicleWeapon, "Failed to add vehicle weapon.")
+    {
+    }
+
+    public AddVehicleWeaponFailedException(string message) : base(ExceptionType.VehicleWeapon, message)
+    {
+    }
+}
