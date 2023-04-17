@@ -43,11 +43,11 @@ public abstract class MenuBase : NativeMenu
         SubtitleFont = Font.Pricedown;
         Banner.Color = Color.Black;
         MaxItems = 12;
+        AddButtons();
 
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
 
-        AddButtons();
 
         _exceptionService.ErrorOccurred += OnErrorOccurred;
 
@@ -253,7 +253,11 @@ public abstract class MenuBase : NativeMenu
             item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 
         if (itemActivatedAction != null)
-            item.Activated += (sender, args) => { itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
+            item.Activated += (sender, args) =>
+            {
+                itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex);
+                Display.Notify(item.SelectedItem.ToString(), "Activated");
+            };
 
         Add(item);
         return item;

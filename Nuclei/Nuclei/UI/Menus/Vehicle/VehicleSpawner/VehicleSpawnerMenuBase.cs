@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using GTA;
 using LemonUI.Menus;
+using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Abstracts;
@@ -48,5 +49,11 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
     protected void UpdateSelectedItem()
     {
         Service.CurrentVehicleHash.Value = Items[SelectedIndex].Title.GetHashFromDisplayName<VehicleHash>();
+    }
+
+    protected override void AddButtons()
+    {
+        var addVehicleToFavorites = new InstructionalButton("Add/Remove Favorite", Control.Jump);
+        Buttons.Add(addVehicleToFavorites);
     }
 }

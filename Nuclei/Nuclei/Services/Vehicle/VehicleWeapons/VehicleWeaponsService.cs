@@ -11,4 +11,5 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
     public BindableProperty<VehicleWeaponAttachmentPoint> VehicleWeaponAttachment { get; set; } = new();
     public BindableProperty<uint> VehicleWeapon { get; set; } = new((uint)VehicleWeaponHash.PlayerBullet);
     public BindableProperty<int> FireRate { get; set; } = new();
+    public BindableProperty<bool> PointAndShoot { get; set; } = new();
 }

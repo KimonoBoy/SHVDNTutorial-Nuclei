@@ -35,8 +35,8 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void LockDoors()
     {
-        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, Service.LockDoors,
-            @checked => { Service.LockDoors.Value = @checked; });
+        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, Service.DoorsAlwaysLocked,
+            @checked => { Service.DoorsAlwaysLocked.Value = @checked; });
     }
 
     private void NeverFallOffBike()
@@ -47,8 +47,8 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void DriveUnderWater()
     {
-        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, Service.DriveUnderWater,
-            @checked => { Service.DriveUnderWater.Value = @checked; });
+        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, Service.CanDriveUnderWater,
+            @checked => { Service.CanDriveUnderWater.Value = @checked; });
     }
 
     private void AddVehicleSpawnerMenu()
@@ -70,8 +70,8 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void SeatBelt()
     {
-        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, Service.SeatBelt,
-            @checked => { Service.SeatBelt.Value = @checked; });
+        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, Service.HasSeatBelt,
+            @checked => { Service.HasSeatBelt.Value = @checked; });
     }
 
     private void RepairVehicle()
@@ -81,7 +81,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void Indestructible()
     {
-        var checkBoxIndestructible = AddCheckbox(VehicleItemTitles.Indestructible, Service.Indestructible,
-            @checked => { Service.Indestructible.Value = @checked; });
+        var checkBoxIndestructible = AddCheckbox(VehicleItemTitles.Indestructible, Service.IsIndestructible,
+            @checked => { Service.IsIndestructible.Value = @checked; });
     }
 }

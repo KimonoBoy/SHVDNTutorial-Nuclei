@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Linq;
 using GTA;
 using LemonUI.Elements;
-using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
@@ -63,13 +62,5 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
             else
                 itemSpawnVehicle.RightBadge = null;
         }
-    }
-
-    protected override void AddButtons()
-    {
-        base.AddButtons();
-
-        var addVehicleToFavorites = new InstructionalButton("Favorite", Control.Jump);
-        Buttons.Add(addVehicleToFavorites);
     }
 }

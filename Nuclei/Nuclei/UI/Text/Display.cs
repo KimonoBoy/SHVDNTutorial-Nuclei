@@ -28,7 +28,7 @@ public class Display
         var color = state ? "~g~" : "~r~";
         var text = $"~b~{message}";
         var activationText = $"{color}{activationMessage}";
-        var notification = $"~h~{text}~h~\n{activationText}";
+        var notification = $"~h~{text}~h~: {activationText}";
         var handle = Notification.Show(notification);
 
         if (hidePrevious)

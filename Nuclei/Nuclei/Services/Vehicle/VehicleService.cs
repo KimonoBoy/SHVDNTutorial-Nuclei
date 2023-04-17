@@ -6,12 +6,12 @@ namespace Nuclei.Services.Vehicle;
 
 public class VehicleService : GenericService<VehicleService>, IVehicleService
 {
-    public BindableProperty<bool> DriveUnderWater { get; set; } = new();
+    public BindableProperty<bool> CanDriveUnderWater { get; set; } = new();
     public BindableProperty<int> SpeedBoost { get; set; } = new();
-    public BindableProperty<bool> SeatBelt { get; set; } = new();
-    public BindableProperty<bool> LockDoors { get; set; } = new();
+    public BindableProperty<bool> HasSeatBelt { get; set; } = new();
+    public BindableProperty<bool> DoorsAlwaysLocked { get; set; } = new();
     public BindableProperty<bool> NeverFallOffBike { get; set; } = new();
-    public BindableProperty<bool> Indestructible { get; set; } = new();
+    public BindableProperty<bool> IsIndestructible { get; set; } = new();
 
     public event EventHandler RepairRequested;
 

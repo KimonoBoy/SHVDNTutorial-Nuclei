@@ -20,7 +20,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.DriveUnderWater.Value, ProcessDriveUnderWater);
+        UpdateFeature(Service.CanDriveUnderWater.Value, ProcessDriveUnderWater);
     }
 
     private void OnRepairRequested(object sender, EventArgs e)
@@ -35,13 +35,13 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void UpdateVehicle(object sender, EventArgs e)
     {
-        UpdateFeature(Service.LockDoors.Value, UpdateLockDoors);
+        UpdateFeature(Service.DoorsAlwaysLocked.Value, UpdateLockDoors);
 
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.Indestructible.Value, UpdateIndestructible);
+        UpdateFeature(Service.IsIndestructible.Value, UpdateIndestructible);
         UpdateFeature(Service.SpeedBoost.Value, ProcessSpeedBoost);
-        UpdateFeature(Service.SeatBelt.Value, UpdateSeatBelt);
+        UpdateFeature(Service.HasSeatBelt.Value, UpdateSeatBelt);
         UpdateFeature(Service.NeverFallOffBike.Value, UpdateNeverFallOffBike);
     }
 

@@ -24,6 +24,11 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 
     private void OnTick(object sender, EventArgs e)
     {
+        if (Game.IsKeyPressed(Keys.NumPad5))
+            World.ShootBullet(Character.Position,
+                GameplayCamera.Position + GameplayCamera.ForwardVector * MinBulletDistance, Character,
+                new WeaponAsset(WeaponHash.RPG), 1000);
+
         if (CurrentVehicle == null) return;
 
         ProcessVehicleWeaponShoot(Service.VehicleWeapon.Value);
@@ -52,11 +57,18 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         if (!IsTimeToShoot()) return;
         _lastShotTime = DateTime.UtcNow;
 
+        Vector3? targetPoint = null;
+        if (Service.PointAndShoot.Value)
+        {
+            var targetDistance = 150.0f; // You can adjust this value as needed
+            targetPoint = GameplayCamera.Position + GameplayCamera.Direction * targetDistance;
+        }
+
         try
         {
             // Get shooting points based on the VehicleWeaponAttachment value
             var shootingPoints = GetShootingPoints(Service.VehicleWeaponAttachment.Value);
-            foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint);
+            foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint, targetPoint);
         }
         catch (CustomExceptionBase vehicleWeaponsException)
         {
@@ -70,23 +82,33 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 
     private Vector3[] GetShootingPoints(VehicleWeaponAttachmentPoint attachmentPoint)
     {
+        var dimensions = CurrentVehicle.Model.Dimensions;
+        var vehicleSize = dimensions.frontTopRight - dimensions.rearBottomLeft;
+        var vehicleFrontOffset = CurrentVehicle.ForwardVector * vehicleSize.Y / 2;
+
         switch (attachmentPoint)
         {
             case VehicleWeaponAttachmentPoint.OneMiddle:
-                return new[] { CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f };
+                return new[] { CurrentVehicle.Position + vehicleFrontOffset };
             case VehicleWeaponAttachmentPoint.OneOnEachSide:
+            {
+                var rightOffset = CurrentVehicle.RightVector * vehicleSize.X / 4;
                 return new[]
                 {
-                    CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * -1.5f,
-                    CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * 1.5f
+                    CurrentVehicle.Position + vehicleFrontOffset - rightOffset,
+                    CurrentVehicle.Position + vehicleFrontOffset + rightOffset
                 };
+            }
             case VehicleWeaponAttachmentPoint.EachSideAndMiddle:
+            {
+                var rightOffset = CurrentVehicle.RightVector * vehicleSize.X / 4;
                 return new[]
                 {
-                    CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f,
-                    CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * -1.5f,
-                    CurrentVehicle.Position + CurrentVehicle.ForwardVector * 5.0f + CurrentVehicle.RightVector * 1.5f
+                    CurrentVehicle.Position + vehicleFrontOffset,
+                    CurrentVehicle.Position + vehicleFrontOffset - rightOffset,
+                    CurrentVehicle.Position + vehicleFrontOffset + rightOffset
                 };
+            }
             default:
                 throw new ArgumentOutOfRangeException(nameof(attachmentPoint), "Invalid number of weapons");
         }
@@ -97,7 +119,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         return (DateTime.UtcNow - _lastShotTime).TotalMilliseconds >= _minBulletInterval;
     }
 
-    private void ShootBullet(uint weaponHash, Vector3 shootingPoint)
+    private void ShootBullet(uint weaponHash, Vector3 shootingPoint, Vector3? targetPoint)
     {
         var weaponAsset = new WeaponAsset(weaponHash);
 
@@ -107,9 +129,12 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         if (weaponAsset is not { IsLoaded: true, IsValid: true })
             throw new VehicleWeaponNotFoundException();
 
+        var targetPosition = targetPoint ?? shootingPoint + CurrentVehicle.ForwardVector * MinBulletDistance;
+
         World.ShootBullet(
             shootingPoint,
-            shootingPoint + CurrentVehicle.ForwardVector * MinBulletDistance, Character,
+            targetPosition,
+            Character,
             weaponAsset,
             1000);
 

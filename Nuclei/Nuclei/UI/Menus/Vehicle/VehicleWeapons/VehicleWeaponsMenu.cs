@@ -20,16 +20,22 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     public VehicleWeaponsMenu(Enum @enum) : base(@enum)
     {
         Width = 550;
-        MaxItems = 15;
 
         ExcludeWeapons();
         VehicleWeapons();
         WeaponAttachmentPoints();
         AdjustFireRate();
+        PointAndShoot();
 
         AddHeader("Vehicle Weapons");
         GenerateVehicleWeaponsItems();
         GeneratePlayerWeaponsItems();
+    }
+
+    private void PointAndShoot()
+    {
+        var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitles.PointAndShoot, Service.PointAndShoot,
+            @checked => { Service.PointAndShoot.Value = @checked; });
     }
 
     private void AdjustFireRate()
@@ -57,7 +63,6 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons, Service.HasVehicleWeapons,
             @checked => { Service.HasVehicleWeapons.Value = @checked; });
-        checkBoxVehicleWeapons.Description += "\n\nSelect a weapon below.\n\nShoot: T";
     }
 
     private void AddStandardExcludedHashes()

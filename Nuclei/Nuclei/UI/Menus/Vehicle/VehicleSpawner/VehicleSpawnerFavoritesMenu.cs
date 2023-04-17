@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using GTA;
-using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
@@ -46,11 +45,5 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
                 });
                 break;
         }
-    }
-
-    protected override void AddButtons()
-    {
-        var buttonDeleteFavorite = new InstructionalButton("Delete", Control.Jump);
-        Buttons.Add(buttonDeleteFavorite);
     }
 }
