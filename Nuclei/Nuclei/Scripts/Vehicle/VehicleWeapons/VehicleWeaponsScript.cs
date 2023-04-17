@@ -24,11 +24,6 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 
     private void OnTick(object sender, EventArgs e)
     {
-        if (Game.IsKeyPressed(Keys.NumPad5))
-            World.ShootBullet(Character.Position,
-                GameplayCamera.Position + GameplayCamera.ForwardVector * MinBulletDistance, Character,
-                new WeaponAsset(WeaponHash.RPG), 1000);
-
         if (CurrentVehicle == null) return;
 
         ProcessVehicleWeaponShoot(Service.VehicleWeapon.Value);
