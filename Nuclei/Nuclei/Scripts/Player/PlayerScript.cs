@@ -96,15 +96,13 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private static void UpdateInfiniteBreath(bool infiniteBreath)
     {
-        if (Character.GetConfigFlag(3) == !infiniteBreath) return;
+        if (Character.GetConfigFlag(DrownsInWater) == !infiniteBreath) return;
 
         /*
-         * PED_CONFIG_FLAG 3 is "DrownsInWater".
-         *
          * False: Can't drown in water. (InfiniteBreath)
          * True: Can drown in water. (Not InfiniteBreath)  
          */
-        Character.SetConfigFlag(3, !infiniteBreath);
+        Character.SetConfigFlag(DrownsInWater, !infiniteBreath);
     }
 
     private void UpdateRideOnCars(bool rideOnCars)

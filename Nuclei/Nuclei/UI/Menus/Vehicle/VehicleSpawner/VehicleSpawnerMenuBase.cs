@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using GTA;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
@@ -12,7 +11,14 @@ namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
 public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerService>
 {
-    protected VehicleSpawnerMenuBase(Enum @enum) : base(@enum)
+    protected VehicleSpawnerMenuBase(string subtitle, string description) : base(subtitle, description)
+    {
+        Shown += OnShown;
+        Closed += OnClosed;
+        SelectedIndexChanged += OnSelectedIndexChanged;
+    }
+
+    protected VehicleSpawnerMenuBase(Enum @enum) : this(@enum.ToPrettyString(), @enum.GetDescription())
     {
         Shown += OnShown;
         Closed += OnClosed;
@@ -41,8 +47,6 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
 
     protected void UpdateSelectedItem()
     {
-        Service.CurrentVehicleHash.Value =
-            Enum.GetValues(typeof(VehicleHash)).Cast<VehicleHash>().FirstOrDefault(vHash =>
-                vHash.ToPrettyString() == Items[SelectedIndex].Title);
+        Service.CurrentVehicleHash.Value = Service.GetVehicleHashFromDisplayName(Items[SelectedIndex].Title);
     }
 }

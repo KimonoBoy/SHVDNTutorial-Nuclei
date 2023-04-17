@@ -11,6 +11,16 @@ namespace Nuclei.Scripts.Generics;
 
 public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
 {
+    /// <summary>
+    ///     Ped flag for seat belt.
+    /// </summary>
+    protected const int FliesThroughWindscreen = 32;
+
+    /// <summary>
+    ///     Ped flag for drowning in water.
+    /// </summary>
+    protected const int DrownsInWater = 3;
+
     private static bool _eventsSubscribed;
 
     /// <summary>

@@ -14,6 +14,7 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
         SelectSeat();
         EnginesRunning();
         AddFavoriteVehiclesMenu();
+        AddHeader("Type");
         GenerateVehicleClassMenus();
     }
 

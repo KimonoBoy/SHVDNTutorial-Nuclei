@@ -81,16 +81,9 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void UpdateSeatBelt(bool seatBelt)
     {
-        /*
-         * WillFlyThroughWindscreen = 32
-         *
-         * False: SeaBelt is on.
-         * True: SeatBelt is off.
-         */
+        if (Character.GetConfigFlag(FliesThroughWindscreen) == !seatBelt) return;
 
-        if (Character.GetConfigFlag(32) == !seatBelt) return;
-
-        Character.SetConfigFlag(32, !seatBelt);
+        Character.SetConfigFlag(FliesThroughWindscreen, !seatBelt);
     }
 
     private void UpdateNeverFallOffBike(bool neverFallOffBike)

@@ -31,14 +31,16 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
             case NotifyCollectionChangedAction.Add when e.NewItems != null:
                 e.NewItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var item = Items.FirstOrDefault(i => i.Title == vHash.ToPrettyString());
+                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var item = Items.FirstOrDefault(i => i.Title == displayName);
                     if (item != null) item.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
                 });
                 break;
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
                 e.OldItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var item = Items.FirstOrDefault(i => i.Title == vHash.ToPrettyString());
+                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var item = Items.FirstOrDefault(i => i.Title == displayName);
                     if (item != null) item.RightBadge = null;
                 });
                 break;
@@ -50,15 +52,16 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
         Clear();
         foreach (var vehicleHash in GTA.Vehicle.GetAllModelsOfClass(_vehicleClass).OrderBy(v => v.ToPrettyString()))
         {
-            var itemSpawnVehicle = AddItem(vehicleHash, () => { Service.SpawnVehicle(vehicleHash); });
+            var vehicleName = Service.GetVehicleDisplayName(vehicleHash);
+
+            var itemSpawnVehicle = AddItem(vehicleName, $"Spawn {vehicleHash.ToPrettyString()}",
+                () => { Service.SpawnVehicle(vehicleHash); });
             itemSpawnVehicle.Selected += (sender, args) => { UpdateSelectedItem(); };
 
             if (Service.FavoriteVehicles.Value.Contains(vehicleHash))
                 itemSpawnVehicle.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
             else
                 itemSpawnVehicle.RightBadge = null;
-
-            itemSpawnVehicle.Description = $"Spawn {vehicleHash.ToPrettyString()}";
         }
     }
 

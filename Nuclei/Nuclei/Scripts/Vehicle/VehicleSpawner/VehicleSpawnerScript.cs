@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
@@ -20,10 +19,10 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (Enum.GetValues(typeof(VehicleHash)).Cast<VehicleHash>()
-                .Contains(Service.CurrentVehicleHash.Value) && Game.IsControlPressed(Control.Jump))
+        if (Game.IsControlPressed(Control.Jump))
         {
-            if (Service.FavoriteVehicles.Value.Contains(Service.CurrentVehicleHash.Value))
+            var vehicleDisplayName = Service.GetVehicleDisplayName(Service.CurrentVehicleHash.Value);
+            if (Service.FavoriteVehicles.Value.Contains(Service.GetVehicleHashFromDisplayName(vehicleDisplayName)))
                 Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
             else
                 Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);

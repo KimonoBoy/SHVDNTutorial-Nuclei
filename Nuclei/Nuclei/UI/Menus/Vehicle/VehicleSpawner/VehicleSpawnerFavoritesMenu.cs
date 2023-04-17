@@ -19,7 +19,13 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
         Clear();
         foreach (var vehicleHash in newItems)
         {
-            var itemVehicle = AddItem(vehicleHash, () => { Service.SpawnVehicle(vehicleHash); });
+            var vehicleName = Game.GetLocalizedString(vehicleHash.ToString());
+
+            if (string.IsNullOrEmpty(vehicleName))
+                vehicleName = vehicleHash.ToPrettyString();
+
+            var itemVehicle = AddItem(vehicleName, $"Spawn {vehicleName}",
+                () => { Service.SpawnVehicle(vehicleHash); });
         }
     }
 
@@ -30,7 +36,9 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
                 e.OldItems.Cast<VehicleHash>().ToList().ForEach(vHash =>
                 {
-                    var item = Items.FirstOrDefault(i => i.Title == vHash.ToPrettyString());
+                    var displayName = Service.GetVehicleDisplayName(vHash);
+                    var item = Items.FirstOrDefault(i => i.Title == displayName);
+
                     if (item != null)
                     {
                         var itemIndex = Items.IndexOf(item);
