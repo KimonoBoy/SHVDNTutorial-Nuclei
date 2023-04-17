@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
+using GTA;
 
 namespace Nuclei.Helpers.ExtensionMethods;
 
@@ -41,5 +42,20 @@ public static class EnumExtensions
         }
 
         return string.Empty;
+    }
+
+    public static TEnum GetHashFromDisplayName<TEnum>(this string displayName) where TEnum : Enum
+    {
+        return Enum.GetValues(typeof(TEnum)).Cast<TEnum>().ToList().Find(@enum =>
+            @enum.ToPrettyString() == displayName || displayName == Game.GetLocalizedString(@enum.ToString()));
+    }
+
+    public static string GetLocalizedDisplayNameFromHash<TEnum>(this TEnum hash) where TEnum : Enum
+    {
+        var localizedString = Game.GetLocalizedString(hash.ToString());
+
+        if (string.IsNullOrEmpty(localizedString)) return hash.ToPrettyString();
+
+        return localizedString;
     }
 }

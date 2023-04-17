@@ -164,7 +164,7 @@ public abstract class MenuBase : NativeMenu
         if (bindableProperty != null)
         {
             checkBoxItem = new NativeCheckboxItem(title, description, bindableProperty.Value);
-            bindableProperty.ValueChanged += (sender, args) => checkBoxItem.Checked = bindableProperty.Value;
+            bindableProperty.ValueChanged += (sender, args) => checkBoxItem.Checked = args.Value;
         }
         else
         {
@@ -215,7 +215,7 @@ public abstract class MenuBase : NativeMenu
         if (bindableProperty != null)
             bindableProperty.ValueChanged += (sender, args) =>
             {
-                nativeSliderItem.Value = bindableProperty.Value;
+                nativeSliderItem.Value = args.Value;
                 currentValue = $"Current Value: {bindableProperty.Value}";
                 nativeSliderItem.Description = $"{defaultValue}\n{currentValue}\n{max}";
             };
@@ -267,6 +267,7 @@ public abstract class MenuBase : NativeMenu
         Add(item);
         return item;
     }
+
 
     /// <summary>
     ///     Adds a new list item to the menu with a given enum, action, event type, and items.

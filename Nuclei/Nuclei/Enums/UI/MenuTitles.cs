@@ -28,6 +28,9 @@ public enum MenuTitles
     [Description("Your favorite vehicles stored in one place!")]
     FavoriteVehicles,
 
+    [Description("Vehicle Weapons - Customize your vehicle's weapons and arm it to the teeth!")]
+    VehicleWeapons,
+
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapon,
 

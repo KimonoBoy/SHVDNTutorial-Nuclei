@@ -9,5 +9,8 @@ public enum ExceptionType
     [Description("Failed to spawn vehicle")]
     SpawnVehicle,
 
-    [Description("Set cash input failed")] CashInput
+    [Description("Set cash input failed")] CashInput,
+
+    [Description("Failed to attach weapon to vehicle")]
+    AttachWeapon
 }

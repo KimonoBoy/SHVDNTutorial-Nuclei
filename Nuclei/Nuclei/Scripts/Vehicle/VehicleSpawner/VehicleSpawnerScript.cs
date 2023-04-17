@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
@@ -21,13 +22,15 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     {
         if (Game.IsControlPressed(Control.Jump))
         {
-            var vehicleDisplayName = Service.GetLocalizedDisplayNameFromHash(Service.CurrentVehicleHash.Value);
-            if (Service.FavoriteVehicles.Value.Contains(
-                    Service.GetHashFromDisplayName<VehicleHash>(vehicleDisplayName)))
+            var vehicleDisplayName = Service.CurrentVehicleHash.Value.GetLocalizedDisplayNameFromHash();
+            if (Service.FavoriteVehicles.Value.Contains(vehicleDisplayName.GetHashFromDisplayName<VehicleHash>()))
                 Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
             else
                 Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);
         }
+
+        if (e.KeyCode == Keys.NumPad1)
+            SpawnVehicle(VehicleHash.Adder);
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicle
