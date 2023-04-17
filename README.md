@@ -14,6 +14,26 @@ However, when I begin updating the wiki again, you should be able to catch up wi
 
 Both the **Wiki** and the **Mod** itself is a work in progress and it's in a very early stage.
 
+## Hotkeys
+At the moment hotkeys are hardcoded. This will be configurable in settings later. For now:
+
+* **Menu** 
+  * **F5** - **Open** latest **Menu** if none exists in memory, open **Main Menu**  
+  * **Space** - **Add** or **Remove** vehicles to/from favorites.  
+  * **Enter** - **Activates** a feature. In **Vehicle Weapons Menu** it will mark a **weapon** to use.  
+  * **CTRL + SHIFT + S** - **Save** the current states.
+  * **CTRL + SHIFT + L** - **Load** the saved states.  
+  
+* **Speed - Shift**  
+  * **On Foot** - **Super Run**  
+  * **In Vehicle** - **Speed Boost**  
+  
+* **Vehicle Weapons**  
+  * **T** - **Shoot** the different vehicle weapons.  
+  
+* **Teleport to Waypoint**  
+  * **CTRL + T** - **Teleport** to the desired location. If in a vehicle, teleport the vehicle.  
+
 ## Credits
 **Alexander Blade** - **ScriptHookV**  
 **Crosire** - **ScriptHookVDotNet**   
