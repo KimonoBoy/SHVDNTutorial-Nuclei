@@ -101,7 +101,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     {
         var weaponAsset = new WeaponAsset(weaponHash);
 
-        if (!weaponAsset.Request(_minBulletInterval))
+        if (!weaponAsset.Request(500))
             throw new VehicleWeaponRequestTimedOutException();
 
         if (weaponAsset is not { IsLoaded: true, IsValid: true })

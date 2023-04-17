@@ -38,12 +38,12 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
             value => { Service.FireRate.Value = value; }, 0, 20);
 
         sliderItemFireRate.Description =
-            $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms";
+            $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball, Grenades, etc) often work better with a higher timer.";
 
         Service.FireRate.ValueChanged += (sender, args) =>
         {
             sliderItemFireRate.Description =
-                $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms";
+                $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball and Grenades) often work better with a higher timer.";
         };
     }
 

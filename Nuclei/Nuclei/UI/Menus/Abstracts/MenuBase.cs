@@ -172,11 +172,7 @@ public abstract class MenuBase : NativeMenu
         }
 
         // anonymous method to handle the event
-        checkBoxItem.CheckboxChanged += (sender, args) =>
-        {
-            action?.Invoke(checkBoxItem.Checked);
-            Display.Notify(title, checkBoxItem.Checked ? "Activated" : "Deactivated", checkBoxItem.Checked);
-        };
+        checkBoxItem.CheckboxChanged += (sender, args) => { action?.Invoke(checkBoxItem.Checked); };
 
         Add(checkBoxItem);
         return checkBoxItem;
