@@ -12,7 +12,7 @@ namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
 
 public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 {
-    private const float MinBulletDistance = 120.0f;
+    private const float MinBulletDistance = 200.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
     private int _minBulletInterval;
 
@@ -53,11 +53,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         _lastShotTime = DateTime.UtcNow;
 
         Vector3? targetPoint = null;
-        if (Service.PointAndShoot.Value)
-        {
-            var targetDistance = 200.0f;
-            targetPoint = GetCrosshairAimPoint(targetDistance);
-        }
+        if (Service.PointAndShoot.Value) targetPoint = GetCrosshairAimPoint(MinBulletDistance);
 
         try
         {
