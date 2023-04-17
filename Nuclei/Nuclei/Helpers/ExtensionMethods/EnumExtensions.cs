@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -23,25 +22,6 @@ public static class EnumExtensions
             "(?<=[a-zA-Z])(?=[0-9])|(?<=[0-9])(?=[A-Z])|(?<=[a-z])(?=[A-Z])|(?<=[A-Z])(?=[A-Z][a-z])", " ");
 
         return titleToRegex;
-    }
-
-    /// <summary>
-    ///     Converts a pretty string back to the corresponding enum value.
-    ///     e.g. "My Enum Value 01 Cool" becomes MyEnumValue01Cool
-    /// </summary>
-    /// <typeparam name="T">Enum type.</typeparam>
-    /// <param name="prettyString">The pretty string to convert back to an enum value.</param>
-    /// <returns>The corresponding enum value.</returns>
-    public static T FromPrettyString<T>(this string prettyString) where T : struct, Enum
-    {
-        // Remove spaces and ensure the first letter of each word is uppercase, the rest are lowercase.
-        var enumString = string.Concat(prettyString.Split(' ')
-            .Select(s => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s)));
-
-        // Parse the string to the corresponding enum value.
-        if (Enum.TryParse<T>(enumString, out var enumValue))
-            return enumValue;
-        throw new ArgumentException($"Cannot convert '{prettyString}' to enum value of type '{typeof(T)}'.");
     }
 
     /// <summary>
