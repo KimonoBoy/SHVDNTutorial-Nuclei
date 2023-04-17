@@ -55,8 +55,8 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         Vector3? targetPoint = null;
         if (Service.PointAndShoot.Value)
         {
-            var targetDistance = 150.0f; // You can adjust this value as needed
-            targetPoint = GameplayCamera.Position + GameplayCamera.Direction * targetDistance;
+            var targetDistance = 200.0f;
+            targetPoint = GetCrosshairAimPoint(targetDistance);
         }
 
         try
@@ -73,6 +73,19 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         {
             ExceptionService.RaiseError(ex);
         }
+    }
+
+    private Vector3 GetCrosshairAimPoint(float maxDistance)
+    {
+        var raycastResult = World.Raycast(
+            GameplayCamera.Position,
+            GameplayCamera.Position + GameplayCamera.Direction * maxDistance,
+            IntersectFlags.Everything,
+            Character);
+
+        if (raycastResult.DidHit)
+            return raycastResult.HitPosition;
+        return GameplayCamera.Position + GameplayCamera.Direction * maxDistance;
     }
 
     private Vector3[] GetShootingPoints(VehicleWeaponAttachmentPoint attachmentPoint)
