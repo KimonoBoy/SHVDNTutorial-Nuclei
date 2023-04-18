@@ -132,7 +132,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         var weaponDisplayName = weaponHash.GetLocalizedDisplayNameFromHash();
         var itemPlayerWeapon = AddItem(weaponDisplayName,
-            $"Set Weapon: {weaponDisplayName}",
+            $"Set WeaponsMenu: {weaponDisplayName}",
             () => { Service.VehicleWeapon.Value = (uint)weaponHash; });
 
         Service.VehicleWeapon.ValueChanged += (sender, args) =>
@@ -161,7 +161,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         var vehicleWeaponDisplayName = vehicleWeaponHash.GetLocalizedDisplayNameFromHash();
 
         var itemVehicleWeapon = AddItem(vehicleWeaponDisplayName,
-            $"Set Weapon: {vehicleWeaponDisplayName}",
+            $"Set WeaponsMenu: {vehicleWeaponDisplayName}",
             () => { Service.VehicleWeapon.Value = (uint)vehicleWeaponHash; });
 
         Service.VehicleWeapon.ValueChanged += (sender, args) =>

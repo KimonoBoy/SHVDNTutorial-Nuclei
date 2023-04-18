@@ -32,7 +32,10 @@ public enum MenuTitles
     VehicleWeapons,
 
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
-    Weapon,
+    Weapons,
+
+    [Description("Change your weapon's stats and make it the best version of itself!")]
+    WeaponComponents,
 
     [Description("Save/Load and Change HotKeys")]
     Settings,

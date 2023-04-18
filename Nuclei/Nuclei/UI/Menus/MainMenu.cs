@@ -4,6 +4,7 @@ using Nuclei.UI.Menus.Abstracts;
 using Nuclei.UI.Menus.Player;
 using Nuclei.UI.Menus.Settings;
 using Nuclei.UI.Menus.Vehicle;
+using Nuclei.UI.Menus.Weapon;
 
 namespace Nuclei.UI.Menus;
 
@@ -13,8 +14,15 @@ public class MainMenu : MenuBase
     {
         AddPlayerMenu();
         AddVehicleMenu();
+        AddWeaponsMenu();
 
         AddSettingsMenu();
+    }
+
+    private void AddWeaponsMenu()
+    {
+        var weaponsMenu = new WeaponsMenu(MenuTitles.Weapons);
+        AddMenu(weaponsMenu);
     }
 
     private void AddVehicleMenu()

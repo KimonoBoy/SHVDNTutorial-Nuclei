@@ -61,6 +61,7 @@
     <Compile Include="Enums\UI\VehicleSpawnerItemTitles.cs" />
     <Compile Include="Enums\UI\VehicleItemTitles.cs" />
     <Compile Include="Enums\UI\VehicleWeaponsItemTitles.cs" />
+    <Compile Include="Enums\UI\WeaponItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />
+    <Compile Include="Scripts\Weapon\WeaponsScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
@@ -90,7 +92,10 @@
     <Compile Include="Services\Vehicle\VehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
+    <Compile Include="Services\Vehicle\VehicleWeapons\IVehicleWeaponService.cs" />
     <Compile Include="Services\Vehicle\VehicleWeapons\VehicleWeaponsService.cs" />
+    <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
+    <Compile Include="Services\Weapon\WeaponsService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Abstracts\GenericMenuBase.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
@@ -108,6 +113,8 @@
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerMenuBase.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerMainMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleWeapons\VehicleWeaponsMenu.cs" />
+    <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
+    <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />
     <Compile Include="UI\Text\Display.cs" />
   </ItemGroup>
   <ItemGroup>

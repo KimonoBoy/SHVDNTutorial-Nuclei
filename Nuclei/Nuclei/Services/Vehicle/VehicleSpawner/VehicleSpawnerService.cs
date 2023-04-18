@@ -6,7 +6,7 @@ using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
+public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVehicleSpawnerService
 {
     /// <summary>
     ///     A property that contains the current selected vehicle hash.
