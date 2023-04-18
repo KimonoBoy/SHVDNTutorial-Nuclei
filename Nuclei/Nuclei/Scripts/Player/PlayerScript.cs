@@ -32,6 +32,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void OnTick(object sender, EventArgs e)
     {
+        if (Character == null) return;
+
+        UpdateFeature(Service.WantedLevel.Value, UpdateWantedLevel);
         UpdateFeature(Service.IsNoiseless.Value, ProcessNoiseless);
         UpdateFeature(Service.CanSuperJump.Value, ProcessSuperJump);
         UpdateFeature(Service.IsOnePunchMan.Value, ProcessOnePunchMan);
@@ -67,8 +70,8 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private void UpdatePlayer(object sender, EventArgs e)
     {
         if (Character == null) return;
+
         UpdateFeature(Service.IsInvincible.Value, UpdateInvincible);
-        UpdateFeature(Service.WantedLevel.Value, UpdateWantedLevel);
         UpdateFeature(Service.IsInvisible.Value, UpdateInvisible);
         UpdateFeature(Service.HasInfiniteBreath.Value, UpdateInfiniteBreath);
         UpdateFeature(Service.CanRideOnCars.Value, UpdateRideOnCars);

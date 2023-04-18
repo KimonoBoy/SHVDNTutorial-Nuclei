@@ -14,7 +14,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 {
     private const float MinProjectileDistance = 200.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
-    private int _minBulletInterval;
+    private int _minShootInterval;
 
     protected override void SubscribeToEvents()
     {
@@ -39,9 +39,9 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     private void UpdateFireRate(int fireRate)
     {
         if (!Service.HasVehicleWeapons.Value) return;
-        if (_minBulletInterval == fireRate) return;
+        if (_minShootInterval == fireRate) return;
 
-        _minBulletInterval = fireRate * 25;
+        _minShootInterval = fireRate * 25;
     }
 
     private void ProcessVehicleWeaponShoot(uint weaponHash)
@@ -120,7 +120,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 
     private bool IsTimeToShoot()
     {
-        return (DateTime.UtcNow - _lastShotTime).TotalMilliseconds >= _minBulletInterval;
+        return (DateTime.UtcNow - _lastShotTime).TotalMilliseconds >= _minShootInterval;
     }
 
     private void ShootBullet(uint weaponHash, Vector3 shootingPoint, Vector3? targetPoint)
@@ -151,7 +151,11 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
             .Where(p => p.Position.DistanceTo(Character.Position) >= MinProjectileDistance);
 
         foreach (var projectile in projectilesFurtherThanMinProjectileDistance)
+        {
+            projectile.MarkAsNoLongerNeeded();
+            projectile.Explode();
             if (projectile.Exists())
                 projectile.Delete();
+        }
     }
 }
