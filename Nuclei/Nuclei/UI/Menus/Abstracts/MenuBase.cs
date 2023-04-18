@@ -48,7 +48,6 @@ public abstract class MenuBase : NativeMenu
         Shown += OnShown;
         SelectedIndexChanged += OnSelectedIndexChanged;
 
-
         _exceptionService.ErrorOccurred += OnErrorOccurred;
 
         Pool.Add(this);

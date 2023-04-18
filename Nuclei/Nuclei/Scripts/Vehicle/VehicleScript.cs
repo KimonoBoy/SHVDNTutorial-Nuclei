@@ -8,6 +8,8 @@ namespace Nuclei.Scripts.Vehicle;
 
 public class VehicleScript : GenericScriptBase<VehicleService>
 {
+    private DateTime _speedBoostTimer = DateTime.UtcNow;
+
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
@@ -21,6 +23,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
         if (CurrentVehicle == null) return;
 
         UpdateFeature(Service.CanDriveUnderWater.Value, ProcessDriveUnderWater);
+        UpdateFeature(Service.SpeedBoost.Value, ProcessSpeedBoost);
     }
 
     private void OnRepairRequested(object sender, EventArgs e)
@@ -40,7 +43,6 @@ public class VehicleScript : GenericScriptBase<VehicleService>
         if (CurrentVehicle == null) return;
 
         UpdateFeature(Service.IsIndestructible.Value, UpdateIndestructible);
-        UpdateFeature(Service.SpeedBoost.Value, ProcessSpeedBoost);
         UpdateFeature(Service.HasSeatBelt.Value, UpdateSeatBelt);
         UpdateFeature(Service.NeverFallOffBike.Value, UpdateNeverFallOffBike);
     }
@@ -65,9 +67,11 @@ public class VehicleScript : GenericScriptBase<VehicleService>
     {
         if (!Game.IsControlPressed(Control.Sprint) || speedValue <= 0) return;
 
+        if ((DateTime.UtcNow - _speedBoostTimer).TotalMilliseconds < 100) return;
+
+        _speedBoostTimer = DateTime.UtcNow;
+
         CurrentVehicle.Speed += speedValue / 2.0f;
-        CurrentVehicle.ForwardSpeed = CurrentVehicle.Speed + (1 + speedValue / 1.5f);
-        ;
     }
 
     private void UpdateIndestructible(bool indestructible)
