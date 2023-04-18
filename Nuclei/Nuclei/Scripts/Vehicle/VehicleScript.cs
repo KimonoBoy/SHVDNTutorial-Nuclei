@@ -20,10 +20,17 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void OnTick(object sender, EventArgs e)
     {
+        UpdateFeature(Service.IsInVehicle, UpdateInVehicle);
+
         if (CurrentVehicle == null) return;
 
         UpdateFeature(Service.CanDriveUnderWater.Value, ProcessDriveUnderWater);
         UpdateFeature(Service.SpeedBoost.Value, ProcessSpeedBoost);
+    }
+
+    private void UpdateInVehicle(bool isInVehicle)
+    {
+        Service.IsInVehicle = CurrentVehicle != null;
     }
 
     private void OnRepairRequested(object sender, EventArgs e)

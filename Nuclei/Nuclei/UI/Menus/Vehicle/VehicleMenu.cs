@@ -32,7 +32,8 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
     private void AddVehicleModsMenu()
     {
         var vehicleModsMenu = new VehicleModsMenu(MenuTitles.VehicleMods);
-        AddMenu(vehicleModsMenu);
+        var vehicleModItem = AddMenu(vehicleModsMenu);
+        Service.IsInVehicleChanged += (sender, args) => { vehicleModItem.Enabled = args; };
     }
 
     private void AddVehicleWeaponsMenu()

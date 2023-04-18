@@ -6,6 +6,18 @@ namespace Nuclei.Services.Vehicle;
 
 public class VehicleService : GenericService<VehicleService>, IVehicleService
 {
+    private bool _isInVehicle;
+
+    public bool IsInVehicle
+    {
+        get => _isInVehicle;
+        set
+        {
+            _isInVehicle = value;
+            IsInVehicleChanged?.Invoke(this, value);
+        }
+    }
+
     public BindableProperty<bool> CanDriveUnderWater { get; set; } = new();
     public BindableProperty<int> SpeedBoost { get; set; } = new();
     public BindableProperty<bool> HasSeatBelt { get; set; } = new();
@@ -26,4 +38,6 @@ public class VehicleService : GenericService<VehicleService>, IVehicleService
     {
         VehicleFlipRequested?.Invoke(this, EventArgs.Empty);
     }
+
+    public event EventHandler<bool> IsInVehicleChanged;
 }
