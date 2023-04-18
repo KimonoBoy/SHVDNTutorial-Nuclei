@@ -10,5 +10,6 @@ public enum WeaponItemTitles
     [Description("Infinite ammunition.")] InfiniteAmmo,
 
     [Description("Combine this with infinite ammunition to shoot like a complete maniac.")]
-    NoReload
+    NoReload,
+    FireBullets
 }

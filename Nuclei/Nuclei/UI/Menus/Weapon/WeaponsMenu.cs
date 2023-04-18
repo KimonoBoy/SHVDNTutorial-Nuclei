@@ -11,6 +11,13 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
     {
         WeaponComponentsMenu();
         GiveAllWeapons();
+        FireBullets();
+    }
+
+    private void FireBullets()
+    {
+        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, Service.FireBullets,
+            @checked => { Service.FireBullets.Value = @checked; });
     }
 
     private void GiveAllWeapons()

@@ -9,7 +9,29 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
     protected override void SubscribeToEvents()
     {
+        Tick += OnTick;
         Service.AllWeaponsRequested += OnAllWeaponsRequested;
+        GameStateTimer.SubscribeToTimerElapsed(UpdateWeapons);
+    }
+
+    private void OnTick(object sender, EventArgs e)
+    {
+        if (Character == null) return;
+
+        UpdateFeature(Service.FireBullets.Value, ProcessFireBullets);
+    }
+
+    private void UpdateWeapons(object sender, EventArgs e)
+    {
+        if (Character == null) return;
+    }
+
+    private void ProcessFireBullets(bool isFireBullets)
+    {
+        if (!isFireBullets) return;
+        if (!Character.IsShooting) return;
+
+        Game.Player.SetFireAmmoThisFrame();
     }
 
     private void OnAllWeaponsRequested(object sender, EventArgs e)
