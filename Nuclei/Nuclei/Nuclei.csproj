@@ -73,6 +73,7 @@
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Generics\GenericScriptBase.cs" />
     <Compile Include="Scripts\Settings\StorageScript.cs" />
+    <Compile Include="Scripts\Vehicle\VehicleMods\VehicleModsScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />

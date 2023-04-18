@@ -30,10 +30,6 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     protected static readonly CustomTimer GameStateTimer = new(100);
 
-    private static Ped _character = Game.Player.Character;
-    private static GTA.Vehicle _currentVehicle = Game.Player.Character.CurrentVehicle;
-    private static GTA.Vehicle _lastVehicle;
-
     private readonly TService _defaultValuesService = new();
     private readonly StorageService _storageService = StorageService.Instance;
 
@@ -63,50 +59,22 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// <summary>
     ///     The vehicle the character is currently in.
     /// </summary>
-    protected static GTA.Vehicle CurrentVehicle
-    {
-        get => _currentVehicle;
-        private set
-        {
-            _currentVehicle = value;
-            CurrentVehicleChanged?.Invoke(_currentVehicle, EventArgs.Empty);
-        }
-    }
+    protected static GTA.Vehicle CurrentVehicle { get; private set; } = Game.Player.Character.CurrentVehicle;
 
     /// <summary>
     ///     The character the player is currently controlling.
     /// </summary>
-    protected static Ped Character
-    {
-        get => _character;
-        private set
-        {
-            _character = value;
-            CharacterChanged?.Invoke(_character, EventArgs.Empty);
-        }
-    }
+    protected static Ped Character { get; private set; } = Game.Player.Character;
 
     /// <summary>
     ///     The last vehicle the player was in.
     /// </summary>
-    protected static GTA.Vehicle LastVehicle
-    {
-        get => _lastVehicle;
-        private set
-        {
-            _lastVehicle = value;
-            LastVehicleChanged?.Invoke(_lastVehicle, EventArgs.Empty);
-        }
-    }
+    protected static GTA.Vehicle LastVehicle { get; private set; }
 
     /// <summary>
     ///     The current entity the player is controlling, returns either the character or the vehicle the character is in.
     /// </summary>
     protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
-
-    protected static event EventHandler CharacterChanged;
-    protected static event EventHandler CurrentVehicleChanged;
-    protected static event EventHandler LastVehicleChanged;
 
     /// <summary>
     ///     Subscribe to the events that are shared between all scripts.
