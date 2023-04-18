@@ -2,6 +2,7 @@
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle;
 using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Vehicle.VehicleWeapons;
 
@@ -13,6 +14,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
     {
         AddVehicleSpawnerMenu();
         AddVehicleWeaponsMenu();
+        AddVehicleModsMenu();
 
         AddHeader("Basics");
         RepairVehicle();
@@ -25,6 +27,12 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         SeatBelt();
         NeverFallOffBike();
         DriveUnderWater();
+    }
+
+    private void AddVehicleModsMenu()
+    {
+        var vehicleModsMenu = new VehicleModsMenu(MenuTitles.VehicleMods);
+        AddMenu(vehicleModsMenu);
     }
 
     private void AddVehicleWeaponsMenu()

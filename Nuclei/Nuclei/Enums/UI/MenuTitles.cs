@@ -31,6 +31,9 @@ public enum MenuTitles
     [Description("Vehicle Weapons - Customize your vehicle's weapons and arm it to the teeth!")]
     VehicleWeapons,
 
+    [Description("Change vehicle mods with this easy-to-use menu!")]
+    VehicleMods,
+
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapons,
 

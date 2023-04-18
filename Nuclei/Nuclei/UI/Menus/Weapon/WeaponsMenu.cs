@@ -10,8 +10,26 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
     public WeaponsMenu(Enum @enum) : base(@enum)
     {
         WeaponComponentsMenu();
+        AddHeader("Basics");
         GiveAllWeapons();
+        InfiniteAmmo();
+        NoReload();
         FireBullets();
+    }
+
+    private void NoReload()
+    {
+        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, Service.NoReload,
+            @checked => { Service.NoReload.Value = @checked; });
+
+        Shown += (sender, args) => { checkBoxNoReload.Enabled = Service.InfiniteAmmo.Value; };
+        Service.InfiniteAmmo.ValueChanged += (sender, args) => { checkBoxNoReload.Enabled = args.Value; };
+    }
+
+    private void InfiniteAmmo()
+    {
+        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, Service.InfiniteAmmo,
+            @checked => { Service.InfiniteAmmo.Value = @checked; });
     }
 
     private void FireBullets()

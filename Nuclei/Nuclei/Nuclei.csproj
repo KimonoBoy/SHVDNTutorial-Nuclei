@@ -89,6 +89,7 @@
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Settings\Storage\StorageService.cs" />
     <Compile Include="Services\Vehicle\IVehicleService.cs" />
+    <Compile Include="Services\Vehicle\VehicleMods\VehicleModsService.cs" />
     <Compile Include="Services\Vehicle\VehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\IVehicleSpawnerService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\VehicleSpawnerService.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="UI\Menus\Settings\SaveAndLoadMenu.cs" />
     <Compile Include="UI\Menus\Settings\SettingsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMenu.cs" />
+    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerFavoritesMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerClassMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerMenuBase.cs" />

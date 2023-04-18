@@ -1,5 +1,6 @@
 ﻿using System;
 using GTA;
+using GTA.Native;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Weapon;
 
@@ -19,11 +20,36 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         if (Character == null) return;
 
         UpdateFeature(Service.FireBullets.Value, ProcessFireBullets);
+        UpdateFeature(Service.InfiniteAmmo.Value, ProcessInfiniteAmmo);
+        UpdateFeature(Service.NoReload.Value, ProcessNoReload);
     }
 
     private void UpdateWeapons(object sender, EventArgs e)
     {
         if (Character == null) return;
+    }
+
+    private void ProcessInfiniteAmmo(bool infiniteAmmo)
+    {
+        if (!infiniteAmmo) return;
+        if (!Character.IsReloading &&
+            Character.Weapons.Current.Ammo != Character.Weapons.Current.AmmoInClip) return;
+        if (Character.Weapons.Current.Ammo == Character.Weapons.Current.AmmoInClip &&
+            Character.Weapons.Current.Ammo >= 10)
+            return; // For minigun and other weapons with shared clipSize
+
+        Character.Weapons.Current.Ammo = Character.Weapons.Current.MaxAmmo;
+        Character.Weapons.Current.AmmoInClip = Character.Weapons.Current.MaxAmmoInClip;
+    }
+
+    private void ProcessNoReload(bool noReload)
+    {
+        if (!Character.IsShooting) return;
+        if (noReload)
+            Function.Call(Hash.REFILL_AMMO_INSTANTLY, Character);
+
+        Character.Weapons.Current.InfiniteAmmoClip = Service.NoReload.Value;
+        Character.Weapons.Current.InfiniteAmmo = Service.NoReload.Value;
     }
 
     private void ProcessFireBullets(bool isFireBullets)
