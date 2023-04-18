@@ -12,7 +12,7 @@ namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
 
 public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 {
-    private const float MinBulletDistance = 200.0f;
+    private const float MinProjectileDistance = 200.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
     private int _minBulletInterval;
 
@@ -53,7 +53,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         _lastShotTime = DateTime.UtcNow;
 
         Vector3? targetPoint = null;
-        if (Service.PointAndShoot.Value) targetPoint = GetCrosshairAimPoint(MinBulletDistance);
+        if (Service.PointAndShoot.Value) targetPoint = GetCrosshairAimPoint(MinProjectileDistance);
 
         try
         {
@@ -133,7 +133,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         if (weaponAsset is not { IsLoaded: true, IsValid: true })
             throw new VehicleWeaponNotFoundException();
 
-        var targetPosition = targetPoint ?? shootingPoint + CurrentVehicle.ForwardVector * MinBulletDistance;
+        var targetPosition = targetPoint ?? shootingPoint + CurrentVehicle.ForwardVector * MinProjectileDistance;
 
         World.ShootBullet(
             shootingPoint,
@@ -147,10 +147,10 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 
     private void RemoveDistantProjectiles()
     {
-        var allProjectilesInWorld = World.GetAllProjectiles()
-            .Where(p => p.Position.DistanceTo(Character.Position) >= MinBulletDistance);
+        var projectilesFurtherThanMinProjectileDistance = World.GetAllProjectiles()
+            .Where(p => p.Position.DistanceTo(Character.Position) >= MinProjectileDistance);
 
-        foreach (var projectile in allProjectilesInWorld)
+        foreach (var projectile in projectilesFurtherThanMinProjectileDistance)
             if (projectile.Exists())
                 projectile.Delete();
     }
