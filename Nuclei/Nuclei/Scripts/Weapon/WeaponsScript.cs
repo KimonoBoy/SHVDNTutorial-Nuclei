@@ -21,7 +21,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
         UpdateFeature(Service.FireBullets.Value, ProcessFireBullets);
         UpdateFeature(Service.InfiniteAmmo.Value, ProcessInfiniteAmmo);
-        UpdateFeature(Service.NoReload.Value, ProcessNoReload);
+        UpdateFeature(Service.InfiniteAmmo.Value && Service.NoReload.Value, ProcessNoReload);
     }
 
     private void UpdateWeapons(object sender, EventArgs e)
@@ -48,8 +48,8 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         if (noReload)
             Function.Call(Hash.REFILL_AMMO_INSTANTLY, Character);
 
-        Character.Weapons.Current.InfiniteAmmoClip = Service.NoReload.Value;
-        Character.Weapons.Current.InfiniteAmmo = Service.NoReload.Value;
+        Character.Weapons.Current.InfiniteAmmoClip = noReload;
+        Character.Weapons.Current.InfiniteAmmo = noReload;
     }
 
     private void ProcessFireBullets(bool isFireBullets)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
@@ -8,6 +9,7 @@ public class VehicleService : GenericService<VehicleService>, IVehicleService
 {
     private bool _isInVehicle;
 
+    [JsonIgnore]
     public bool IsInVehicle
     {
         get => _isInVehicle;

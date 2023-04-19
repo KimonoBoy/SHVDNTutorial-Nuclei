@@ -13,6 +13,7 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using Newtonsoft.Json;
 using Nuclei.Constants;
 using Nuclei.Helpers.Utilities;
@@ -125,5 +126,11 @@ public class GenericStateService<TService> where TService : new()
         if (newState == null) throw new ArgumentNullException(nameof(newState));
 
         ReflectionUtilities.CopyProperties(newState, _state);
+    }
+
+    private bool ShouldSerialize(PropertyInfo pi)
+    {
+        return pi.PropertyType.IsGenericType &&
+               pi.PropertyType.GetGenericTypeDefinition() == typeof(BindableProperty<>);
     }
 }
