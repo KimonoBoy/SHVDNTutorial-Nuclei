@@ -8,11 +8,9 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 {
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
-        Shown += OnShown;
-    }
-
-    private void OnShown(object sender, EventArgs e)
-    {
-        Service.RequestInstallModKit();
+        Service.CurrentVehicleChanged += (sender, vehicle) =>
+        {
+            if (Visible && vehicle == null) Back();
+        };
     }
 }

@@ -52,11 +52,13 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         if (!IsTimeToShoot()) return;
         _lastShotTime = DateTime.UtcNow;
 
-        Vector3? targetPoint = null;
-        if (Service.PointAndShoot.Value) targetPoint = GetCrosshairAimPoint(MinProjectileDistance);
-
         try
         {
+            // Defines the target point for the projectile.
+            Vector3? targetPoint = null;
+            if (Service.PointAndShoot.Value && Character.IsAiming)
+                targetPoint = GetCrosshairAimPoint(MinProjectileDistance);
+
             // Get shooting points based on the VehicleWeaponAttachment value
             var shootingPoints = GetShootingPoints(Service.VehicleWeaponAttachment.Value);
             foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint, targetPoint);

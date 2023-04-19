@@ -1,14 +1,9 @@
-﻿using System;
+﻿using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleMods;
 
 public class VehicleModsService : GenericService<VehicleModsService>
 {
-    public event EventHandler InstallModKitRequested;
-
-    public void RequestInstallModKit()
-    {
-        InstallModKitRequested?.Invoke(this, EventArgs.Empty);
-    }
+    public BindableProperty<bool> IsModKitInstalled { get; set; } = new();
 }

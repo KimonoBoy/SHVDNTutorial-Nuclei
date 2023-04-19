@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Windows.Forms;
-using GTA;
+using GTA.Native;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle.VehicleMods;
 
@@ -8,31 +7,23 @@ namespace Nuclei.Scripts.Vehicle.VehicleMods;
 
 public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 {
+    private bool IsModKitInstalled => Function.Call<int>(Hash.GET_VEHICLE_MOD_KIT, CurrentVehicle) == 0;
+
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
-        Service.InstallModKitRequested += OnInstallModKitRequested;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        if (Game.IsKeyPressed(Keys.Add))
-            CurrentVehicle.Mods[VehicleModType.FrontWheel].Index++;
-        if (Game.IsKeyPressed(Keys.Subtract))
-            CurrentVehicle.Mods[VehicleModType.FrontWheel].Index--;
+        UpdateFeature(Service.IsModKitInstalled.Value, UpdateModKit);
     }
 
-    private void OnInstallModKitRequested(object sender, EventArgs e)
+    private void UpdateModKit(bool isModKitInstalled)
     {
-        if (CurrentVehicle == null) return;
-
-        InstallModKit();
-    }
-
-    private void InstallModKit()
-    {
-        CurrentVehicle.Mods.InstallModKit();
+        if (isModKitInstalled && !IsModKitInstalled)
+            CurrentVehicle.Mods.InstallModKit();
     }
 }

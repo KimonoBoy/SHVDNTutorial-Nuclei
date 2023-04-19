@@ -85,9 +85,6 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         // Ensures that the events are only subscribed once.
         if (_eventsSubscribed) return true;
 
-        // Subscribe the GameStateUpdater event handler only if it hasn't been subscribed before.
-        GameStateTimer.SubscribeToTimerElapsed(GameStateUpdater);
-
         KeyDown += OnKeyDown;
         Tick += OnTick;
         Aborted += OnAborted;
@@ -103,13 +100,6 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         return false;
     }
 
-    private void GameStateUpdater(object sender, EventArgs e)
-    {
-        SetCharacter();
-        SetCurrentVehicle();
-        SetLastVehicle();
-    }
-
     /// <summary>
     ///     Set the last vehicle the player was in.
     /// </summary>
@@ -121,6 +111,10 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
 
     private void OnTick(object sender, EventArgs e)
     {
+        SetCharacter();
+        SetCurrentVehicle();
+        SetLastVehicle();
+
         if (_storageService.AutoSave.Value && Game.IsPaused)
             Save();
     }
@@ -130,9 +124,10 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     private void SetCharacter()
     {
-        if (Character != Game.Player.Character)
+        if (Service.Character != Game.Player.Character)
         {
-            Character = Game.Player.Character;
+            Service.Character = Game.Player.Character;
+            Character = Service.Character;
             Display.Notify("Character Change Registered", "Applying Settings");
         }
     }
@@ -142,7 +137,8 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     private void SetCurrentVehicle()
     {
-        CurrentVehicle = Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
+        Service.CurrentVehicle = Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
+        CurrentVehicle = Service.CurrentVehicle;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
