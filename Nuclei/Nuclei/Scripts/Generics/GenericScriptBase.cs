@@ -124,10 +124,10 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     private void SetCharacter()
     {
-        if (Service.Character != Game.Player.Character)
+        if (Character != Game.Player.Character)
         {
-            Service.Character = Game.Player.Character;
-            Character = Service.Character;
+            Service.Character.Value = Game.Player.Character;
+            Character = Service.Character.Value;
             Display.Notify("Character Change Registered", "Applying Settings");
         }
     }
@@ -137,8 +137,9 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     private void SetCurrentVehicle()
     {
-        Service.CurrentVehicle = Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
-        CurrentVehicle = Service.CurrentVehicle;
+        Service.CurrentVehicle.Value =
+            Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
+        CurrentVehicle = Service.CurrentVehicle.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
