@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using GTA;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle.VehicleMods;
@@ -18,6 +20,20 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (currentVehicle.Value == null) return;
 
         InstallModKit();
+        UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
+    }
+
+    private void UpdateValidModTypes(List<VehicleModType> validModTypes)
+    {
+        validModTypes.Clear();
+
+        foreach (VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType)))
+        {
+            var vehicleMod = CurrentVehicle.Mods[vehicleModType];
+            if (vehicleMod.Count < 1) continue;
+
+            validModTypes.Add(vehicleModType);
+        }
     }
 
     private void OnTick(object sender, EventArgs e)

@@ -9,6 +9,18 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 {
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
+        Shown += OnShown;
+        Closed += OnClosed;
+    }
+
+    private void OnClosed(object sender, EventArgs e)
+    {
+        Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
+    }
+
+    private void OnShown(object sender, EventArgs e)
+    {
+        GenerateModsMenu();
         Service.CurrentVehicle.ValueChanged += OnVehicleChanged;
     }
 
@@ -22,12 +34,14 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             return;
         }
 
-        Service.IsModKitInstalled.Value = true;
         GenerateModsMenu();
     }
 
     private void GenerateModsMenu()
     {
         Clear();
+
+        foreach (var modType in Service.ValidVehicleModTypes.Value)
+            AddItem(modType.ToString());
     }
 }
