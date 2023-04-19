@@ -33,10 +33,16 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
     {
         var vehicleModsMenu = new VehicleModsMenu(MenuTitles.VehicleMods);
         var vehicleModItem = AddMenu(vehicleModsMenu);
+        Shown += (sender, args) =>
+        {
+            UpdateAltTitleOnDisable(vehicleModItem, Service.CurrentVehicle.Value != null,
+                Service.CurrentVehicle.Value?.LocalizedName + " MENU",
+                "No Vehicle");
+        };
         Service.CurrentVehicle.ValueChanged += (sender, vehicle) =>
         {
-            vehicleModItem.Enabled = vehicle.Value != null;
-            vehicleModItem.AltTitle = vehicle.Value != null ? vehicle.Value.DisplayName + " MENU" : "No Vehicle";
+            UpdateAltTitleOnDisable(vehicleModItem, vehicle.Value != null, vehicle.Value?.LocalizedName + " MENU",
+                "No Vehicle");
         };
     }
 

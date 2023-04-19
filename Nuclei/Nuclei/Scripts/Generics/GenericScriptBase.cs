@@ -59,12 +59,12 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// <summary>
     ///     The vehicle the character is currently in.
     /// </summary>
-    protected static GTA.Vehicle CurrentVehicle { get; private set; } = Game.Player.Character.CurrentVehicle;
+    protected static GTA.Vehicle CurrentVehicle { get; private set; }
 
     /// <summary>
     ///     The character the player is currently controlling.
     /// </summary>
-    protected static Ped Character { get; private set; } = Game.Player.Character;
+    protected static Ped Character { get; private set; }
 
     /// <summary>
     ///     The last vehicle the player was in.
@@ -126,8 +126,8 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     {
         if (Character != Game.Player.Character)
         {
-            Service.Character.Value = Game.Player.Character;
-            Character = Service.Character.Value;
+            Character = Game.Player.Character;
+            Service.Character.Value = Character;
             Display.Notify("Character Change Registered", "Applying Settings");
         }
     }
@@ -137,9 +137,9 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     /// </summary>
     private void SetCurrentVehicle()
     {
-        Service.CurrentVehicle.Value =
+        CurrentVehicle =
             Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
-        CurrentVehicle = Service.CurrentVehicle.Value;
+        Service.CurrentVehicle.Value = CurrentVehicle;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

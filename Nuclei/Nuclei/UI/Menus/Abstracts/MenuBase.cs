@@ -306,6 +306,14 @@ public abstract class MenuBase : NativeMenu
         return headerItem;
     }
 
+    protected void UpdateAltTitleOnDisable(NativeSubmenuItem itemToUpdate, bool condition,
+        string enabled, string disabled)
+    {
+        var altTitle = condition ? $"{enabled}" : $"{disabled}";
+        itemToUpdate.Enabled = condition;
+        itemToUpdate.AltTitle = altTitle;
+    }
+
     /// <summary>
     ///     Performs a few tasks when the Menu is shown.
     /// </summary>
