@@ -20,7 +20,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (currentVehicle.Value == null) return;
 
-        currentVehicle.Value.Mods.InstallModKit();
+        InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
     }
 
@@ -30,7 +30,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
         validModTypes.AddRange(from VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType))
             let vehicleMod = CurrentVehicle.Mods[vehicleModType]
-            where vehicleMod.Count >= 1
+            where vehicleMod.Count > 0
             select vehicleModType);
     }
 

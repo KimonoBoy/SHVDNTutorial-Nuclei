@@ -9,6 +9,13 @@ namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
 public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 {
+    /// <summary>
+    ///     Used to store the selected index of the menu.
+    ///     This is used to prevent the menu from resetting to the first item when the menu is closed and reopened unless a new
+    ///     vehicle is selected.
+    /// </summary>
+    private static int _selectedIndex;
+
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
         Shown += OnShown;
@@ -17,6 +24,7 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 
     private void OnClosed(object sender, EventArgs e)
     {
+        _selectedIndex = SelectedIndex;
         Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
     }
 
@@ -36,6 +44,7 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             return;
         }
 
+        _selectedIndex = 0;
         GenerateModsMenu();
     }
 
@@ -48,10 +57,11 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             var currentMod = Service.CurrentVehicle.Value.Mods[modType];
             var currentIndex = currentMod.Index;
             var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
-                (value, index) => { currentMod.Index = index; },
+                (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; },
                 null,
                 Enumerable.Range(0, currentMod.Count + 1).ToList().Select(i =>
                 {
+                    if (i == currentMod.Count) return "Stock";
                     currentMod.Index = i;
                     var localizedString = currentMod.LocalizedName;
                     return localizedString;
@@ -59,5 +69,7 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 
             listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
         }
+
+        SelectedIndex = _selectedIndex;
     }
 }
