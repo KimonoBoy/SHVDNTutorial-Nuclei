@@ -13,6 +13,7 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
 {
     /// <summary>
     ///     Ped flag for seat belt.
+    ///     Setting this value to false will prevent the player from falling out of the vehicle when it crashes.
     /// </summary>
     protected const int FliesThroughWindscreen = 32;
 

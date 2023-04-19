@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using GTA;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Scripts.Generics;
@@ -19,7 +20,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (currentVehicle.Value == null) return;
 
-        InstallModKit();
+        currentVehicle.Value.Mods.InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
     }
 
@@ -27,13 +28,10 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         validModTypes.Clear();
 
-        foreach (VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType)))
-        {
-            var vehicleMod = CurrentVehicle.Mods[vehicleModType];
-            if (vehicleMod.Count < 1) continue;
-
-            validModTypes.Add(vehicleModType);
-        }
+        validModTypes.AddRange(from VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType))
+            let vehicleMod = CurrentVehicle.Mods[vehicleModType]
+            where vehicleMod.Count >= 1
+            select vehicleModType);
     }
 
     private void OnTick(object sender, EventArgs e)

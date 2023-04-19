@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Abstracts;
@@ -42,6 +44,20 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
         Clear();
 
         foreach (var modType in Service.ValidVehicleModTypes.Value)
-            AddItem(modType.ToString());
+        {
+            var currentMod = Service.CurrentVehicle.Value.Mods[modType];
+            var currentIndex = currentMod.Index;
+            var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
+                (value, index) => { currentMod.Index = index; },
+                null,
+                Enumerable.Range(0, currentMod.Count + 1).ToList().Select(i =>
+                {
+                    currentMod.Index = i;
+                    var localizedString = currentMod.LocalizedName;
+                    return localizedString;
+                }).ToArray());
+
+            listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
+        }
     }
 }

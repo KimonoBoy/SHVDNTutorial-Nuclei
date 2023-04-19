@@ -85,7 +85,8 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     private Model CreateVehicleModel(VehicleHash vehicleHash)
     {
         // Create a Model object from the vehicleHash.
-        Model vehicleModel = new(vehicleHash);
+        var vehicleModel =
+            new Model(vehicleHash); // Extremely important to create the Model object in order to validate it for garages.
 
         // Validate the model and check if it exists in the game files.
         if (vehicleModel is { IsValid: true, IsInCdImage: true })
@@ -123,7 +124,10 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();
 
-        if (vehicle == null || !vehicle.Exists())
+        // Set the vehicle as persistent so it doesn't despawn.
+        vehicle.IsPersistent = true;
+
+        if (!vehicle.Exists())
             throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
 
         // Set the vehicle's properties and place the player inside if necessary.
@@ -161,6 +165,8 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         vehicle.PlaceOnGround();
 
         if (Service.EnginesRunning.Value) vehicle.IsEngineRunning = true;
+
+        vehicle.PreviouslyOwnedByPlayer = true;
 
         if (!Service.WarpInSpawned.Value) return;
 
