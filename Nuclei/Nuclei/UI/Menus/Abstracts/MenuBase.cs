@@ -7,7 +7,7 @@ using LemonUI;
 using LemonUI.Menus;
 using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.UI.Items;

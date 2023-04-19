@@ -16,6 +16,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Nuclei.Constants;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 
 namespace Nuclei.Services.Generics;
 
@@ -70,7 +71,12 @@ public class GenericStateService<TService> where TService : new()
     /// </summary>
     public void SaveState()
     {
-        var serializedState = JsonConvert.SerializeObject(_state, Formatting.Indented);
+        var settings = new JsonSerializerSettings
+        {
+            Formatting = Formatting.Indented,
+            Converters = { new BindablePropertyJsonConverter() }
+        };
+        var serializedState = JsonConvert.SerializeObject(_state, settings);
         File.WriteAllText(_stateFilePath, serializedState);
     }
 
@@ -85,7 +91,11 @@ public class GenericStateService<TService> where TService : new()
         var fileContent = File.ReadAllText(_stateFilePath);
         if (string.IsNullOrWhiteSpace(fileContent)) return default;
 
-        var loadedState = JsonConvert.DeserializeObject<TService>(fileContent);
+        var settings = new JsonSerializerSettings
+        {
+            Converters = { new BindablePropertyJsonConverter() }
+        };
+        var loadedState = JsonConvert.DeserializeObject<TService>(fileContent, settings);
         return loadedState;
     }
 

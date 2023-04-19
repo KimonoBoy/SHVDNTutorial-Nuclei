@@ -1,5 +1,5 @@
 ﻿using System;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 
 namespace Nuclei.Services.Settings.Storage;
 

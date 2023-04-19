@@ -1,6 +1,6 @@
 ﻿using System;
 using Nuclei.Enums.Player;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Player;

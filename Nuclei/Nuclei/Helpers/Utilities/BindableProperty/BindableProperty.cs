@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 
-namespace Nuclei.Helpers.Utilities;
+namespace Nuclei.Helpers.Utilities.BindableProperty;
 
 public class BindableProperty<T>
 {

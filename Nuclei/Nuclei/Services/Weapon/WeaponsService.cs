@@ -1,5 +1,5 @@
 ﻿using System;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Weapon;

@@ -1,5 +1,5 @@
 ﻿using Nuclei.Enums.Vehicle;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 
 namespace Nuclei.Services.Vehicle.VehicleWeapons;
 

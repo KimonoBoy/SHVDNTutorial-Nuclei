@@ -6,7 +6,7 @@ using GTA.Math;
 using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
@@ -224,6 +224,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         target.ApplyForce(Character.UpVector * forceUpwards);
         target.ApplyForce(Character.ForwardVector * forceForwards);
+
+        if (target is Ped ped)
+            ped.Kill();
 
         target.ClearLastWeaponDamage();
     }

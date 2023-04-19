@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GTA;
-using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
