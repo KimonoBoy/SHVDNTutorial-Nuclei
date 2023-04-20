@@ -6,14 +6,11 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Made the basic implementation for Vehicle Modifications. 
+The initial implementation for Vehicle Modifications has been completed. Currently, all ModTypes are automatically applied based on the Current Vehicle selected by the user. The menu updates itself dynamically when the user switches between vehicles, even if they warp directly to a new one.
 
-At the moment all ModTypes are automatically implemented depending on your Current Vehicle. The menu automatically updates when changing Vehicle, even when warping directly into a new one.
+The next step involves adding the ability to store custom Vehicles. Once this process is complete, the modifications menu will be further categorized to include different mods such as turbo, colors, wheel types (High End, Low Rider, etc.), neon lights, bulletproof tires, and more.
 
-The next step is to be able to store the custom Vehicles. Once the storage process is complete the modifications menu will be updated to categorize the different mods even further,
-and I'll implement the rest of the available modifications such as turbo, colors, wheel types (High End, Low rider etc), Neon lights, bullet proof tires, etc.
-
-We'll create the functionality to store each Vehicle first, because we can use our state service and BindableJSONConverter to automatically store the entire Vehicle with its applied modifications
+To achieve this, we will first create the functionality to store each Vehicle, leveraging our state service and BindableJSONConverter to automatically save the entire Vehicle with its applied modifications.
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
