@@ -78,6 +78,9 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
                     customVehicle.VehicleMods.Value.Add(customVehicleMod);
                 }
 
+                customVehicle.LicensePlate.Value = Service.CurrentVehicle.Value.Mods.LicensePlate;
+                customVehicle.LicensePlateStyle.Value = Service.CurrentVehicle.Value.Mods.LicensePlateStyle;
+
                 Service.CustomVehicles.Value.Add(customVehicle);
 
                 GenerateMenu();

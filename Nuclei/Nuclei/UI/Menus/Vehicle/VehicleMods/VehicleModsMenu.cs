@@ -76,6 +76,11 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             var userInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 8);
             Service.CurrentVehicle.Value.Mods.LicensePlate = userInput;
         });
+        itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
+        itemLicensePlate.Activated += (sender, args) =>
+        {
+            itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
+        };
 
         var listItemLicensePlateStyle = AddListItem(Service.CurrentVehicle.Value.Mods.LicensePlateStyle,
             (selected, index) =>
@@ -85,6 +90,8 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             }, null,
             Enum.GetValues(typeof(LicensePlateStyle)).Cast<LicensePlateStyle>()
                 .Select(lP => lP.GetLocalizedDisplayNameFromHash()).ToArray());
+        listItemLicensePlateStyle.SelectedItem =
+            Service.CurrentVehicle.Value.Mods.LicensePlateStyle.GetLocalizedDisplayNameFromHash();
 
         SelectedIndex = _selectedIndex;
     }

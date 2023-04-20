@@ -13,6 +13,9 @@ public class CustomVehicle
         new(new ObservableCollection<CustomVehicleMod>());
 
     public BindableProperty<string> LicensePlate { get; set; } = new();
+
+    public BindableProperty<LicensePlateStyle> LicensePlateStyle { get; set; } =
+        new();
 }
 
 public class CustomVehicleMod
