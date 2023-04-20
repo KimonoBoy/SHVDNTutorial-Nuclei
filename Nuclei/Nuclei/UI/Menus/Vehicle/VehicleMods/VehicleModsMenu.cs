@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using GTA;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Vehicle.VehicleMods;
@@ -69,6 +70,12 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 
             listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
         }
+
+        var itemLicensePlate = AddItem("License Plate", "", () =>
+        {
+            var userInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 8);
+            Service.CurrentVehicle.Value.Mods.LicensePlate = userInput;
+        });
 
         SelectedIndex = _selectedIndex;
     }

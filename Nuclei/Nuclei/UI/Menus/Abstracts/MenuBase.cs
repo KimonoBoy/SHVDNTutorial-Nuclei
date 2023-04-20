@@ -128,7 +128,7 @@ public abstract class MenuBase : NativeMenu
         item.Activated += (sender, args) =>
         {
             action?.Invoke();
-            Display.Notify(title, "Activated");
+            Display.Notify(title, "Activated", true, false);
         };
 
         Add(item);
@@ -255,7 +255,7 @@ public abstract class MenuBase : NativeMenu
             item.Activated += (sender, args) =>
             {
                 itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex);
-                Display.Notify(item.SelectedItem.ToString(), "Activated");
+                Display.Notify(title, "Activated", true, false);
             };
 
         Add(item);

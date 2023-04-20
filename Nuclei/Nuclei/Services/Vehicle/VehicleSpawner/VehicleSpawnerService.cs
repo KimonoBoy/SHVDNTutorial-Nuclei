@@ -51,4 +51,11 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVeh
     {
         VehicleSpawned?.Invoke(this, vehicleHash);
     }
+
+    public event EventHandler<CustomVehicle> CustomVehicleSpawned;
+
+    public void SpawnVehicle(CustomVehicle customVehicle)
+    {
+        CustomVehicleSpawned?.Invoke(this, customVehicle);
+    }
 }

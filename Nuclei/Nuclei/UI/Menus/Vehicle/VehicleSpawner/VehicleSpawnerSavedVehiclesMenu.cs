@@ -34,15 +34,17 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
         {
             var itemSpawnCustomVehicle = AddItem(customVehicle.Title.Value, "", () =>
             {
-                var vehicleModel = new Model(customVehicle.VehicleHash.Value);
-                vehicleModel.Request(1000);
+                // var vehicleModel = new Model(customVehicle.VehicleHash.Value);
+                // vehicleModel.Request(1000);
+                //
+                // var vehicle = World.CreateVehicle(vehicleModel,
+                //     Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
+                //     Game.Player.Character.Heading);
+                // vehicle.Mods.InstallModKit();
+                // foreach (var customVehicleMod in customVehicle.VehicleMods.Value)
+                //     vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
 
-                var vehicle = World.CreateVehicle(vehicleModel,
-                    Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f,
-                    Game.Player.Character.Heading);
-                vehicle.Mods.InstallModKit();
-                foreach (var customVehicleMod in customVehicle.VehicleMods.Value)
-                    vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
+                Service.SpawnVehicle(customVehicle);
             });
         }
     }

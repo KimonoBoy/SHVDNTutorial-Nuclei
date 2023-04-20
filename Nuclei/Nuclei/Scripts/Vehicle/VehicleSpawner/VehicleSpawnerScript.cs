@@ -15,7 +15,17 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     protected override void SubscribeToEvents()
     {
         Service.VehicleSpawned += OnVehicleSpawned;
+        Service.CustomVehicleSpawned += OnCustomVehicleSpawned;
         KeyDown += OnKeyDown;
+    }
+
+    private void OnCustomVehicleSpawned(object sender, CustomVehicle e)
+    {
+        var vehicle = SpawnVehicle(e.VehicleHash.Value);
+        vehicle.Mods.InstallModKit();
+
+        foreach (var customVehicleMod in e.VehicleMods.Value)
+            vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -43,7 +53,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     ///     Spawns a vehicle with the given VehicleHash at the player's current position.
     /// </summary>
     /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
-    private void SpawnVehicle(VehicleHash vehicleHash)
+    private GTA.Vehicle SpawnVehicle(VehicleHash vehicleHash)
     {
         const int maxAttempts = 3;
         var currentAttempt = 1;
@@ -54,7 +64,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
             {
                 var vehicleModel = CreateVehicleModel(vehicleHash);
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
-                break;
+                return vehicle;
             }
             catch (CustomExceptionBase vehicleSpawnerException)
             {
@@ -70,6 +80,8 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
                 ExceptionService.RaiseError(ex);
                 break;
             }
+
+        return null;
     }
 
     /// <summary>
