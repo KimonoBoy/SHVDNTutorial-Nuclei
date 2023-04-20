@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Vehicle.VehicleMods;
@@ -19,6 +20,7 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
 
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
+        Width = 550;
         Shown += OnShown;
         Closed += OnClosed;
     }
@@ -71,28 +73,32 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
         }
 
-        var itemLicensePlate = AddItem("License Plate", "", () =>
-        {
-            var userInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 8);
-            Service.CurrentVehicle.Value.Mods.LicensePlate = userInput;
-        });
-        itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
-        itemLicensePlate.Activated += (sender, args) =>
-        {
-            itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
-        };
-
-        var listItemLicensePlateStyle = AddListItem(Service.CurrentVehicle.Value.Mods.LicensePlateStyle,
-            (selected, index) =>
-            {
-                Service.CurrentVehicle.Value.Mods.LicensePlateStyle =
-                    selected.GetHashFromDisplayName<LicensePlateStyle>();
-            }, null,
-            Enum.GetValues(typeof(LicensePlateStyle)).Cast<LicensePlateStyle>()
-                .Select(lP => lP.GetLocalizedDisplayNameFromHash()).ToArray());
-        listItemLicensePlateStyle.SelectedItem =
-            Service.CurrentVehicle.Value.Mods.LicensePlateStyle.GetLocalizedDisplayNameFromHash();
+        LicensePlate();
 
         SelectedIndex = _selectedIndex;
+    }
+
+    private void LicensePlate()
+    {
+        var itemLicensePlate =
+            AddItem(VehicleModsItemTitles.LicensePlate, () => { Service.RequestLicensePlateInput(); });
+        itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
+        Service.LicensePlate.ValueChanged += (sender, args) => { itemLicensePlate.AltTitle = args.Value; };
+
+        var listItemLicensePlateStyle = AddListItem(VehicleModsItemTitles.LicensePlateStyle,
+            (selected, index) =>
+            {
+                Service.LicensePlateStyle.Value = selected.GetHashFromDisplayName<LicensePlateStyle>();
+            }, null,
+            typeof(LicensePlateStyle).ToDisplayNameArray());
+        listItemLicensePlateStyle.SelectedItem = Service.LicensePlateStyle.Value.GetLocalizedDisplayNameFromHash();
+        Service.LicensePlateStyle.ValueChanged += (sender, args) =>
+        {
+            listItemLicensePlateStyle.SelectedItem = args.Value.GetLocalizedDisplayNameFromHash();
+        };
+
+        var listItemLicensePlateType = AddListItem(VehicleModsItemTitles.LicensePlateType, (selected, index) => { },
+            null,
+            typeof(LicensePlateType).ToDisplayNameArray());
     }
 }

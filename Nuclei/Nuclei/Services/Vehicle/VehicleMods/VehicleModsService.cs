@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using GTA;
 using Newtonsoft.Json;
 using Nuclei.Helpers.Utilities.BindableProperty;
@@ -11,4 +12,16 @@ public class VehicleModsService : GenericService<VehicleModsService>
     [JsonIgnore]
     public BindableProperty<List<VehicleModType>> ValidVehicleModTypes { get; set; } =
         new(new List<VehicleModType>());
+
+    [JsonIgnore] public BindableProperty<LicensePlateStyle> LicensePlateStyle { get; set; } = new();
+
+    [JsonIgnore] public BindableProperty<string> LicensePlate { get; set; } = new("");
+
+
+    public event EventHandler LicensePlateInputRequested;
+
+    public void RequestLicensePlateInput()
+    {
+        LicensePlateInputRequested?.Invoke(this, EventArgs.Empty);
+    }
 }

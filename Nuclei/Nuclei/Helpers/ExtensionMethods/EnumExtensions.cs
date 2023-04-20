@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using GTA;
 
@@ -57,5 +58,20 @@ public static class EnumExtensions
         if (string.IsNullOrEmpty(localizedString)) return hash.ToPrettyString();
 
         return localizedString;
+    }
+
+    public static string[] ToDisplayNameArray(this Type enumType)
+    {
+        if (!enumType.IsEnum) throw new ArgumentException("The given type is not an enumeration.");
+
+        var method =
+            typeof(EnumExtensions).GetMethod("ToDisplayNameArrayGeneric", BindingFlags.NonPublic | BindingFlags.Static);
+        var genericMethod = method.MakeGenericMethod(enumType);
+        return (string[])genericMethod.Invoke(null, new object[] { enumType });
+    }
+
+    private static string[] ToDisplayNameArrayGeneric<TEnum>(Type enumType) where TEnum : Enum
+    {
+        return Enum.GetValues(typeof(TEnum)).Cast<TEnum>().Select(tE => tE.GetLocalizedDisplayNameFromHash()).ToArray();
     }
 }

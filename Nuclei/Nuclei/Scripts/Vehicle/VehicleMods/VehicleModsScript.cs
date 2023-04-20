@@ -14,6 +14,27 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         Tick += OnTick;
         Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
+        Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
+        Service.LicensePlateStyle.ValueChanged += OnLicensePlateStyleChanged;
+    }
+
+    private void OnLicensePlateStyleChanged(object sender, ValueEventArgs<LicensePlateStyle> licensePlateStyle)
+    {
+        if (CurrentVehicle == null) return;
+
+        if (licensePlateStyle.Value == CurrentVehicle.Mods.LicensePlateStyle) return;
+
+        CurrentVehicle.Mods.LicensePlateStyle = licensePlateStyle.Value;
+    }
+
+    private void OnLicensePlateInputRequested(object sender, EventArgs e)
+    {
+        if (CurrentVehicle == null) return;
+        var licensePlateInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 8);
+
+        if (CurrentVehicle.Mods.LicensePlate == licensePlateInput) return;
+
+        CurrentVehicle.Mods.LicensePlate = licensePlateInput;
     }
 
     private void OnCurrentVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
@@ -22,6 +43,13 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
         InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
+    }
+
+    private void UpdateLicensePlateStyle(LicensePlateStyle licensePlateStyle)
+    {
+        if (licensePlateStyle == CurrentVehicle.Mods.LicensePlateStyle) return;
+
+        Service.LicensePlateStyle.Value = CurrentVehicle.Mods.LicensePlateStyle;
     }
 
     private void UpdateValidModTypes(List<VehicleModType> validModTypes)
@@ -37,6 +65,16 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
+
+        UpdateFeature(Service.LicensePlate.Value, UpdateLicensePlate);
+        UpdateFeature(Service.LicensePlateStyle.Value, UpdateLicensePlateStyle);
+    }
+
+    private void UpdateLicensePlate(string licensePlate)
+    {
+        if (Service.LicensePlate.Value == CurrentVehicle.Mods.LicensePlate) return;
+
+        Service.LicensePlate.Value = CurrentVehicle.Mods.LicensePlate;
     }
 
     private void InstallModKit()

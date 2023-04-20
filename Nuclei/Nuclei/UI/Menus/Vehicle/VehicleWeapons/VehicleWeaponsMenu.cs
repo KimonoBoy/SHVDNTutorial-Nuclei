@@ -174,17 +174,12 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void WeaponAttachmentPoints()
     {
-        var attachmentPointsDisplayNames = Enum.GetValues(typeof(VehicleWeaponAttachmentPoint))
-            .Cast<VehicleWeaponAttachmentPoint>()
-            .Select(attachmentPoint => attachmentPoint.GetLocalizedDisplayNameFromHash())
-            .ToArray();
-
         var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitles.WeaponAttachmentPoints,
             (selected, index) =>
             {
                 Service.VehicleWeaponAttachment.Value = selected.GetHashFromDisplayName<VehicleWeaponAttachmentPoint>();
             }, null,
-            attachmentPointsDisplayNames);
+            typeof(VehicleWeaponAttachmentPoint).ToDisplayNameArray());
 
         Service.VehicleWeaponAttachment.ValueChanged += (sender, args) =>
         {

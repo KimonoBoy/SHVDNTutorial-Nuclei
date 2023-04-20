@@ -153,7 +153,7 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
             PlayerItemTitles.SuperSpeed,
             (selected, index) => { Service.SuperSpeed.Value = (SuperSpeedHash)index; },
             null,
-            allSuperSpeeds.Select(superSpeedHash => superSpeedHash.ToPrettyString()).ToArray());
+            typeof(SuperSpeedHash).ToDisplayNameArray());
 
         Service.SuperSpeed.ValueChanged += (sender, args) => { listItemSuperSpeed.SelectedIndex = (int)args.Value; };
     }

@@ -26,6 +26,9 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
         foreach (var customVehicleMod in e.VehicleMods.Value)
             vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
+
+        vehicle.Mods.LicensePlate = e.LicensePlate.Value;
+        vehicle.Mods.LicensePlateStyle = e.LicensePlateStyle.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
