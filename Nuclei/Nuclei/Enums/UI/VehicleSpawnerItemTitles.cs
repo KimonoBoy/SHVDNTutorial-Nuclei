@@ -11,5 +11,6 @@ public enum VehicleSpawnerItemTitles
     SelectSeat,
 
     [Description("Start the engine of the spawned vehicle immediately.")]
-    EnginesRunning
+    EnginesRunning,
+    SaveCurrentVehicle
 }

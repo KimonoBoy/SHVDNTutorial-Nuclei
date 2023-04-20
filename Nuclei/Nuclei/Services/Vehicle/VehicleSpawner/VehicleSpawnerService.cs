@@ -35,6 +35,8 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVeh
     public BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; set; } =
         new(new ObservableCollection<VehicleHash>());
 
+    public BindableProperty<ObservableCollection<CustomVehicle>> CustomVehicles { get; set; } =
+        new(new ObservableCollection<CustomVehicle>());
 
     /// <summary>
     ///     An event that is raised when a vehicle is spawned.

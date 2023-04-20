@@ -14,8 +14,15 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
         SelectSeat();
         EnginesRunning();
         AddFavoriteVehiclesMenu();
+        AddSavedVehiclesMenu();
         AddHeader("Type");
         GenerateVehicleClassMenus();
+    }
+
+    private void AddSavedVehiclesMenu()
+    {
+        var savedVehiclesMenu = new VehicleSpawnerSavedVehiclesMenu(MenuTitles.SavedVehicles);
+        AddMenu(savedVehiclesMenu);
     }
 
     private void AddFavoriteVehiclesMenu()

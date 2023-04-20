@@ -12,6 +12,7 @@ public interface IVehicleSpawnerService
     BindableProperty<bool> EnginesRunning { get; }
     BindableProperty<VehicleSeat> VehicleSeat { get; }
     BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; }
+    BindableProperty<ObservableCollection<CustomVehicle>> CustomVehicles { get; }
 
     // Events
     event EventHandler<VehicleHash> VehicleSpawned;

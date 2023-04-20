@@ -21,9 +21,6 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
 
     protected VehicleSpawnerMenuBase(Enum @enum) : this(@enum.ToPrettyString(), @enum.GetDescription())
     {
-        Shown += OnShown;
-        Closed += OnClosed;
-        SelectedIndexChanged += OnSelectedIndexChanged;
     }
 
     protected abstract void UpdateMenuItems(IEnumerable<VehicleHash> newItems);
