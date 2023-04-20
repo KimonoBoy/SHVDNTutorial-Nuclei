@@ -77,6 +77,15 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
             Service.CurrentVehicle.Value.Mods.LicensePlate = userInput;
         });
 
+        var listItemLicensePlateStyle = AddListItem(Service.CurrentVehicle.Value.Mods.LicensePlateStyle,
+            (selected, index) =>
+            {
+                Service.CurrentVehicle.Value.Mods.LicensePlateStyle =
+                    selected.GetHashFromDisplayName<LicensePlateStyle>();
+            }, null,
+            Enum.GetValues(typeof(LicensePlateStyle)).Cast<LicensePlateStyle>()
+                .Select(lP => lP.GetLocalizedDisplayNameFromHash()).ToArray());
+
         SelectedIndex = _selectedIndex;
     }
 }

@@ -11,7 +11,6 @@ using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.UI.Items;
-using Nuclei.UI.Text;
 using Font = GTA.UI.Font;
 
 namespace Nuclei.UI.Menus.Abstracts;
@@ -125,11 +124,7 @@ public abstract class MenuBase : NativeMenu
         item.AltTitleFont = Font.ChaletComprimeCologne;
 
         // anonymous method to handle the event
-        item.Activated += (sender, args) =>
-        {
-            action?.Invoke();
-            Display.Notify(title, "Activated", true, false);
-        };
+        item.Activated += (sender, args) => { action?.Invoke(); };
 
         Add(item);
         return item;
@@ -252,11 +247,7 @@ public abstract class MenuBase : NativeMenu
             item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 
         if (itemActivatedAction != null)
-            item.Activated += (sender, args) =>
-            {
-                itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex);
-                Display.Notify(title, "Activated", true, false);
-            };
+            item.Activated += (sender, args) => { itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 
         Add(item);
         return item;

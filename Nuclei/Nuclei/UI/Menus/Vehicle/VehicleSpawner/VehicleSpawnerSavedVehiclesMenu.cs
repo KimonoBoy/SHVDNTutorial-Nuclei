@@ -55,9 +55,16 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
             () =>
             {
                 var userInput = Game.GetUserInput(WindowTitle.EnterMessage60, "", 60);
-                if (Service.CustomVehicles.Value.Any(v => v.Title.Value == userInput))
+                if (Service.CustomVehicles.Value.Any(v =>
+                        v.Title.Value == userInput))
                 {
                     Notification.Show("Vehicle with that title already exists. Please enter a unique title.");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(userInput))
+                {
+                    Notification.Show("Please enter a title to save the vehicle.");
                     return;
                 }
 
