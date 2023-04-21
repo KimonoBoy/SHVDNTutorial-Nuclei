@@ -1,85 +1,55 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Helpers.Utilities.BindableProperty;
-using Nuclei.Services.Vehicle.VehicleMods;
-using Nuclei.UI.Menus.Abstracts;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
-public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
+public class VehicleModsMenu : VehicleModsMenuBase
 {
-    /// <summary>
-    ///     Used to store the selected index of the menu.
-    ///     This is used to prevent the menu from resetting to the first item when the menu is closed and reopened unless a new
-    ///     vehicle is selected.
-    /// </summary>
-    private static int _selectedIndex;
-
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
-        Width = 550;
-        Shown += OnShown;
-        Closed += OnClosed;
     }
 
-    private void OnClosed(object sender, EventArgs e)
-    {
-        _selectedIndex = SelectedIndex;
-        Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
-    }
-
-    private void OnShown(object sender, EventArgs e)
-    {
-        GenerateModsMenu();
-        Service.CurrentVehicle.ValueChanged += OnVehicleChanged;
-    }
-
-    private void OnVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
-    {
-        if (!Visible) return;
-
-        if (currentVehicle.Value == null)
-        {
-            Back();
-            return;
-        }
-
-        _selectedIndex = 0;
-        GenerateModsMenu();
-    }
-
-    private void GenerateModsMenu()
+    protected override void UpdateMenuItems()
     {
         Clear();
 
-        foreach (var modType in Service.ValidVehicleModTypes.Value)
-        {
-            var currentMod = Service.CurrentVehicle.Value.Mods[modType];
-            var currentIndex = currentMod.Index;
-            var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
-                (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; },
-                null,
-                Enumerable.Range(0, currentMod.Count + 1).ToList().Select(i =>
-                {
-                    if (i == currentMod.Count) return "Stock";
-                    currentMod.Index = i;
-                    var localizedString = currentMod.LocalizedName;
-                    return localizedString;
-                }).ToArray());
-
-            listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
-        }
-
+        RandomizeMods();
+        WheelsMenu();
+        base.UpdateMenuItems();
         LicensePlate();
+    }
 
-        SelectedIndex = _selectedIndex;
+    private void RandomizeMods()
+    {
+        var itemRandomizeMods = AddItem(VehicleModsItemTitles.RandomizeMods,
+            () =>
+            {
+                Service.RequestRandomizeMods(Service.ValidVehicleModTypes.Value);
+                UpdateMenuItems();
+            });
+    }
+
+    private void WheelsMenu()
+    {
+        var wheelsMenu = new VehicleModsWheelsMenu(MenuTitles.Wheels);
+        AddMenu(wheelsMenu);
+    }
+
+    protected override IEnumerable<VehicleModType> GetValidModTypes()
+    {
+        return Service.ValidVehicleModTypes.Value.Where(modType =>
+            modType != VehicleModType.FrontWheel && modType != VehicleModType.RearWheel);
     }
 
     private void LicensePlate()
     {
+        if (Service.CurrentVehicle.Value == null) return;
+
         var itemLicensePlate =
             AddItem(VehicleModsItemTitles.LicensePlate, () => { Service.RequestLicensePlateInput(); });
         itemLicensePlate.AltTitle = Service.CurrentVehicle.Value.Mods.LicensePlate;
@@ -96,9 +66,5 @@ public class VehicleModsMenu : GenericMenuBase<VehicleModsService>
         {
             listItemLicensePlateStyle.SelectedItem = args.Value.GetLocalizedDisplayNameFromHash();
         };
-
-        var listItemLicensePlateType = AddListItem(VehicleModsItemTitles.LicensePlateType, (selected, index) => { },
-            null,
-            typeof(LicensePlateType).ToDisplayNameArray());
     }
 }

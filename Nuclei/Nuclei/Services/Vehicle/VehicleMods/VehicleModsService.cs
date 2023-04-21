@@ -24,4 +24,11 @@ public class VehicleModsService : GenericService<VehicleModsService>
     {
         LicensePlateInputRequested?.Invoke(this, EventArgs.Empty);
     }
+
+    public event EventHandler<List<VehicleModType>> RandomizeModsRequested;
+
+    public void RequestRandomizeMods(List<VehicleModType> vehicleModTypes)
+    {
+        RandomizeModsRequested?.Invoke(this, vehicleModTypes);
+    }
 }

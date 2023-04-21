@@ -16,6 +16,21 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
         Service.LicensePlateStyle.ValueChanged += OnLicensePlateStyleChanged;
+        Service.RandomizeModsRequested += OnRandomizeModsRequested;
+    }
+
+    private void OnRandomizeModsRequested(object sender, List<VehicleModType> modsToRandomize)
+    {
+        if (CurrentVehicle == null) return;
+
+        Random r = new();
+        foreach (var vehicleModType in modsToRandomize)
+        {
+            var currentMod = CurrentVehicle.Mods[vehicleModType];
+            var randomMod = r.Next(-1, currentMod.Count);
+            if (currentMod.Index == randomMod) continue;
+            currentMod.Index = randomMod;
+        }
     }
 
     private void OnLicensePlateStyleChanged(object sender, ValueEventArgs<LicensePlateStyle> licensePlateStyle)

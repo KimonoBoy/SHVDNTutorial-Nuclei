@@ -46,5 +46,6 @@ public enum MenuTitles
     [Description("Save and Load")] SaveAndLoad,
 
     [Description("Change HotKeys")] HotKeys,
-    SavedVehicles
+    SavedVehicles,
+    Wheels
 }

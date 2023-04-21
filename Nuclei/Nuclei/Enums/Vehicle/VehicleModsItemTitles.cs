@@ -11,5 +11,8 @@ public enum VehicleModsItemTitles
     LicensePlateStyle,
 
     [Description("Change the type of your license plate.")]
-    LicensePlateType
+    LicensePlateType,
+
+    [Description("Randomize all valid vehicle mods.")]
+    RandomizeMods
 }

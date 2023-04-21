@@ -114,6 +114,8 @@
     <Compile Include="UI\Menus\Settings\SettingsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenu.cs" />
+    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenuBase.cs" />
+    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsWheelsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerFavoritesMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerClassMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerMenuBase.cs" />
