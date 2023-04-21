@@ -16,6 +16,8 @@ public class CustomVehicle
 
     public BindableProperty<LicensePlateStyle> LicensePlateStyle { get; set; } =
         new();
+
+    public BindableProperty<VehicleWheelType> WheelType { get; set; } = new();
 }
 
 public class CustomVehicleMod

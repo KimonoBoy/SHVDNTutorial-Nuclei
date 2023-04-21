@@ -20,8 +20,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     [JsonIgnore]
     public BindableProperty<List<VehicleWheelType>> ValidWheelTypes { get; set; } = new(new List<VehicleWheelType>());
 
-    [JsonIgnore]
-    public BindableProperty<VehicleWheelType> CurrentWheelType { get; set; } = new(VehicleWheelType.Lowrider);
+    [JsonIgnore] public BindableProperty<VehicleWheelType> CurrentWheelType { get; set; } = new();
 
 
     public event EventHandler LicensePlateInputRequested;

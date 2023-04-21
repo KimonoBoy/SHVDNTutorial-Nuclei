@@ -23,6 +23,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     {
         var vehicle = SpawnVehicle(e.VehicleHash.Value);
         vehicle.Mods.InstallModKit();
+        vehicle.Mods.WheelType = e.WheelType.Value;
 
         foreach (var customVehicleMod in e.VehicleMods.Value)
             vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
@@ -44,6 +45,8 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
         if (e.KeyCode == Keys.NumPad1)
             SpawnVehicle(VehicleHash.Adder);
+        else if (e.KeyCode == Keys.NumPad2)
+            SpawnVehicle(VehicleHash.DeathBike);
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicle

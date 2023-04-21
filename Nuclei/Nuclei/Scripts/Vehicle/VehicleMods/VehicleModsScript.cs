@@ -32,8 +32,16 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (CurrentVehicle == null) return;
 
         Random r = new();
-        var randomWheelType = r.Next(0, Service.ValidWheelTypes.Value.Count);
-        Service.CurrentWheelType.Value = (VehicleWheelType)randomWheelType;
+        if (!CurrentVehicle.Mods.AllowedWheelTypes.Contains(VehicleWheelType.BikeWheels))
+        {
+            var randomWheelType = r.Next(-1, CurrentVehicle.Mods.AllowedWheelTypes.Length);
+            Service.CurrentWheelType.Value = (VehicleWheelType)randomWheelType;
+        }
+        else
+        {
+            Service.CurrentWheelType.Value = VehicleWheelType.BikeWheels;
+        }
+
         foreach (var vehicleModType in modsToRandomize)
         {
             var currentMod = CurrentVehicle.Mods[vehicleModType];
@@ -106,7 +114,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
     private void UpdateCurrentWheelType(VehicleWheelType currentWheelType)
     {
-        if (CurrentVehicle.Mods.WheelType == currentWheelType) return;
+        if (CurrentVehicle.Mods.WheelType == Service.CurrentWheelType.Value) return;
 
         Service.CurrentWheelType.Value = CurrentVehicle.Mods.WheelType;
     }

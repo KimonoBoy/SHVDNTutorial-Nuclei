@@ -24,15 +24,19 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 
     private void WheelTypes()
     {
+        var allowedWheelTypes = typeof(VehicleWheelType).ToDisplayNameArray().Where(wheelType =>
+            Service.CurrentVehicle.Value.Mods.AllowedWheelTypes.Contains(
+                wheelType.GetHashFromDisplayName<VehicleWheelType>())).ToArray();
+
         var listItemWheelTypes = AddListItem(VehicleModsItemTitles.WheelType,
             (selected, index) =>
             {
                 Service.CurrentWheelType.Value = selected.GetHashFromDisplayName<VehicleWheelType>();
-            }, null,
-            typeof(VehicleWheelType).ToDisplayNameArray().Where(wheelType =>
-                Service.CurrentVehicle.Value.Mods.AllowedWheelTypes.Contains(
-                    wheelType.GetHashFromDisplayName<VehicleWheelType>())).ToArray());
-        listItemWheelTypes.SelectedItem = Service.CurrentWheelType.Value.GetLocalizedDisplayNameFromHash();
+            }, null, allowedWheelTypes);
+
+        var currentWheelTypeDisplayName = Service.CurrentWheelType.Value.GetLocalizedDisplayNameFromHash();
+        if (allowedWheelTypes.Contains(currentWheelTypeDisplayName))
+            listItemWheelTypes.SelectedItem = currentWheelTypeDisplayName;
     }
 
     private void OnCurrentWheelTypeChanged(object sender, ValueEventArgs<VehicleWheelType> e)

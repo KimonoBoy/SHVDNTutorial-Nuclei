@@ -59,6 +59,7 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
                 var customVehicle = new CustomVehicle();
                 customVehicle.Title.Value = userInput;
                 customVehicle.VehicleHash.Value = (VehicleHash)Service.CurrentVehicle.Value.Model.Hash;
+                customVehicle.WheelType.Value = Service.CurrentVehicle.Value.Mods.WheelType;
 
                 foreach (var vehicleMod in Service.CurrentVehicle.Value.Mods.ToArray())
                 {

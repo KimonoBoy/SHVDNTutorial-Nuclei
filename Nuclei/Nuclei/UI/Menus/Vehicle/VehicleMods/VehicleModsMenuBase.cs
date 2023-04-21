@@ -15,12 +15,6 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
     {
         Width = 550;
         Shown += OnShown;
-        Closed += OnClosed;
-    }
-
-    private void OnClosed(object sender, EventArgs e)
-    {
-        Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
     }
 
     private void OnShown(object sender, EventArgs e)
