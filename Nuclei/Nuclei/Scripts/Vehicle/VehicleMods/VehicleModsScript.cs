@@ -25,6 +25,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (CurrentVehicle == null) return;
 
         CurrentVehicle.Mods.WheelType = currentWheelType.Value;
+        CurrentVehicle.Mods[VehicleModType.FrontWheel].Index = -1;
+        CurrentVehicle.Mods[VehicleModType.RearWheel].Index = -1;
     }
 
     private void OnRandomizeModsRequested(object sender, List<VehicleModType> modsToRandomize)
@@ -32,6 +34,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (CurrentVehicle == null) return;
 
         Random r = new();
+        var randomWheelType = r.Next(0, Service.ValidWheelTypes.Value.Count);
+        Service.CurrentWheelType.Value = (VehicleWheelType)randomWheelType;
         foreach (var vehicleModType in modsToRandomize)
         {
             var currentMod = CurrentVehicle.Mods[vehicleModType];
@@ -99,6 +103,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
         UpdateFeature(Service.LicensePlate.Value, UpdateLicensePlate);
         UpdateFeature(Service.LicensePlateStyle.Value, UpdateLicensePlateStyle);
+        UpdateFeature(Service.CurrentWheelType.Value, UpdateCurrentWheelType);
     }
 
     private void UpdateCurrentWheelType(VehicleWheelType currentWheelType)

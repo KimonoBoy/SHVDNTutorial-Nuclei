@@ -11,13 +11,6 @@ namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
 public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 {
-    /// <summary>
-    ///     Used to store the selected index of the menu.
-    ///     This is used to prevent the menu from resetting to the first item when the menu is closed and reopened unless a new
-    ///     vehicle is selected.
-    /// </summary>
-    private static int _selectedIndex;
-
     protected VehicleModsMenuBase(Enum @enum) : base(@enum)
     {
         Width = 550;
@@ -27,11 +20,10 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 
     private void OnClosed(object sender, EventArgs e)
     {
-        _selectedIndex = SelectedIndex;
         Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
     }
 
-    protected virtual void OnShown(object sender, EventArgs e)
+    private void OnShown(object sender, EventArgs e)
     {
         if (Service.CurrentVehicle.Value == null)
         {
@@ -43,7 +35,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
         Service.CurrentVehicle.ValueChanged += OnVehicleChanged;
     }
 
-    protected virtual void OnVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
+    private void OnVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
     {
         if (!Visible) return;
 
@@ -53,7 +45,6 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
             return;
         }
 
-        _selectedIndex = 0;
         UpdateMenuItems();
     }
 
@@ -83,10 +74,5 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 
             listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
         }
-
-        if (_selectedIndex < Items.Count - 1 && _selectedIndex > 0)
-            SelectedIndex = _selectedIndex;
-        else
-            SelectedIndex = 0;
     }
 }
