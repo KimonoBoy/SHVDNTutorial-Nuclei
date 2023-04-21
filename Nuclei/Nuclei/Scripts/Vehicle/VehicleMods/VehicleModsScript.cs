@@ -25,8 +25,6 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (CurrentVehicle == null) return;
 
         CurrentVehicle.Mods.WheelType = currentWheelType.Value;
-        CurrentVehicle.Mods[VehicleModType.FrontWheel].Index = -1;
-        CurrentVehicle.Mods[VehicleModType.RearWheel].Index = -1;
     }
 
     private void OnRandomizeModsRequested(object sender, List<VehicleModType> modsToRandomize)
