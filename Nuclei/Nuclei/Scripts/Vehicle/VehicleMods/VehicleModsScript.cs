@@ -17,6 +17,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
         Service.LicensePlateStyle.ValueChanged += OnLicensePlateStyleChanged;
         Service.RandomizeModsRequested += OnRandomizeModsRequested;
+        Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
+    }
+
+    private void OnCurrentWheelTypeChanged(object sender, ValueEventArgs<VehicleWheelType> currentWheelType)
+    {
+        if (CurrentVehicle == null) return;
+
+        CurrentVehicle.Mods.WheelType = currentWheelType.Value;
     }
 
     private void OnRandomizeModsRequested(object sender, List<VehicleModType> modsToRandomize)
@@ -58,6 +66,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
         InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
+        UpdateFeature(Service.ValidWheelTypes.Value, UpdateValidWheelTypes);
+    }
+
+    private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
+    {
+        validWheelTypes.Clear();
+
+        validWheelTypes.AddRange(CurrentVehicle.Mods.AllowedWheelTypes);
     }
 
     private void UpdateLicensePlateStyle(LicensePlateStyle licensePlateStyle)
@@ -83,6 +99,13 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
         UpdateFeature(Service.LicensePlate.Value, UpdateLicensePlate);
         UpdateFeature(Service.LicensePlateStyle.Value, UpdateLicensePlateStyle);
+    }
+
+    private void UpdateCurrentWheelType(VehicleWheelType currentWheelType)
+    {
+        if (CurrentVehicle.Mods.WheelType == currentWheelType) return;
+
+        Service.CurrentWheelType.Value = CurrentVehicle.Mods.WheelType;
     }
 
     private void UpdateLicensePlate(string licensePlate)

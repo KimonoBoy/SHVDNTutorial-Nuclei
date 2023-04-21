@@ -14,5 +14,6 @@ public enum VehicleModsItemTitles
     LicensePlateType,
 
     [Description("Randomize all valid vehicle mods.")]
-    RandomizeMods
+    RandomizeMods,
+    WheelType
 }
