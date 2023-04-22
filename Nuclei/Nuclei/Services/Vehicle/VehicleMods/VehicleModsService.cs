@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using GTA;
 using Newtonsoft.Json;
 using Nuclei.Helpers.Utilities.BindableProperty;
@@ -23,6 +24,7 @@ public class VehicleModsService : GenericService<VehicleModsService>, IVehicleMo
     [JsonIgnore] public BindableProperty<VehicleWheelType> CurrentWheelType { get; set; } = new();
     [JsonIgnore] public BindableProperty<VehicleColor> CurrentRimColor { get; set; } = new();
     [JsonIgnore] public BindableProperty<bool> CurrentCustomTires { get; set; } = new();
+    [JsonIgnore] public BindableProperty<Color> CurrentTireSmokeColor { get; set; } = new(Color.Transparent);
 
 
     public event EventHandler LicensePlateInputRequested;

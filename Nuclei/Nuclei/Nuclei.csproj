@@ -64,6 +64,7 @@
     <Compile Include="Enums\UI\WeaponItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleModsItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
+    <Compile Include="Helpers\ExtensionMethods\ColorExtension.cs" />
     <Compile Include="Helpers\Utilities\BindableProperty\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Drawing;
 using GTA;
 using Nuclei.Helpers.Utilities.BindableProperty;
 
@@ -21,6 +22,7 @@ public class CustomVehicle
 
     public BindableProperty<VehicleColor> RimColor { get; set; } = new();
     public BindableProperty<bool> CustomTires { get; set; } = new();
+    public BindableProperty<Color> TireSmokeColor { get; set; } = new(Color.Transparent);
 }
 
 public class CustomVehicleMod

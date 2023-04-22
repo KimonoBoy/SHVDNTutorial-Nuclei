@@ -26,6 +26,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         vehicle.Mods.InstallModKit();
         vehicle.Mods.WheelType = customVehicle.WheelType.Value;
         vehicle.Mods.RimColor = customVehicle.RimColor.Value;
+        vehicle.Mods.TireSmokeColor = customVehicle.TireSmokeColor.Value;
 
         foreach (var customVehicleMod in customVehicle.VehicleMods.Value)
             vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;

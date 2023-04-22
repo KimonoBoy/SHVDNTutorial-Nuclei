@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using GTA;
 using Nuclei.Enums.Vehicle;
@@ -30,6 +31,20 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
         base.UpdateMenuItems();
         AddHeader("Tires");
         CustomTires();
+        TireSmokeColor();
+    }
+
+    private void TireSmokeColor()
+    {
+        /*
+         * This will be revisited later - there are a lot of colors in the Color struct. We will also implement
+         * functionality for the user to provide his own color from ARGB values.
+         */
+        var listItemTireSmokeColor = AddListItem(VehicleModsItemTitles.TireSmokeColor,
+            (selected, index) => { Service.CurrentTireSmokeColor.Value = selected; }, null,
+            typeof(Color).GetAllKnownColors());
+        if (listItemTireSmokeColor.Items.Contains(Service.CurrentTireSmokeColor.Value))
+            listItemTireSmokeColor.SelectedItem = Service.CurrentTireSmokeColor.Value;
     }
 
     private void CustomTires()

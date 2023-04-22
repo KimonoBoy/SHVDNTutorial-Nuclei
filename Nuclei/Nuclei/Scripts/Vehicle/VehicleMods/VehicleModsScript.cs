@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using GTA;
 using Nuclei.Helpers.Utilities.BindableProperty;
@@ -20,6 +21,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
         Service.CurrentRimColor.ValueChanged += OnCurrentRimColorChanged;
         Service.CurrentCustomTires.ValueChanged += OnCustomTiresChanged;
+        Service.CurrentTireSmokeColor.ValueChanged += OnCurrentTireSmokeChanged;
+    }
+
+    private void OnCurrentTireSmokeChanged(object sender, ValueEventArgs<Color> e)
+    {
+        if (CurrentVehicle == null) return;
+
+        CurrentVehicle.Mods.TireSmokeColor = e.Value;
     }
 
     private void OnCustomTiresChanged(object sender, ValueEventArgs<bool> customTires)
@@ -105,7 +114,6 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
         UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
         UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
-        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
     }
 
     private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
@@ -135,6 +143,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
+
+        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
     }
 
     private void UpdateCustomTires(bool customTires)
@@ -169,5 +179,6 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void InstallModKit()
     {
         CurrentVehicle.Mods.InstallModKit();
+        CurrentVehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true; // Revisited later.
     }
 }
