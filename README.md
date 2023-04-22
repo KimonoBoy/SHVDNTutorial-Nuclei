@@ -12,7 +12,7 @@ The next step involves adding the ability to store custom Vehicles. Once this pr
 
 To achieve this, we will first create the functionality to store each Vehicle, leveraging our state service and BindableJSONConverter to automatically save the entire Vehicle with its applied modifications.
 
-Expecting the mods to be completed sometime tonight or tomorrow, if no further issues occur.
+Expecting the vehicle mods to be completed sometime tonight or tomorrow, if no further issues occur.
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
