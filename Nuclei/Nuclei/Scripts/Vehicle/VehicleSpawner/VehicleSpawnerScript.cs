@@ -30,6 +30,9 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         foreach (var customVehicleMod in customVehicle.VehicleMods.Value)
             vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
 
+        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicle.CustomTires.Value;
+        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicle.CustomTires.Value;
+
         vehicle.Mods.LicensePlate = customVehicle.LicensePlate.Value;
         vehicle.Mods.LicensePlateStyle = customVehicle.LicensePlateStyle.Value;
     }

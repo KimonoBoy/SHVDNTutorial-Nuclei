@@ -28,6 +28,14 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
         WheelTypes();
         RimColors();
         base.UpdateMenuItems();
+        AddHeader("Tires");
+        CustomTires();
+    }
+
+    private void CustomTires()
+    {
+        var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitles.CustomTires, Service.CurrentCustomTires,
+            @checked => { Service.CurrentCustomTires.Value = @checked; });
     }
 
     private void RimColors()

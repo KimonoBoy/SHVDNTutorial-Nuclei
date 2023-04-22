@@ -19,6 +19,15 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.RandomizeModsRequested += OnRandomizeModsRequested;
         Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
         Service.CurrentRimColor.ValueChanged += OnCurrentRimColorChanged;
+        Service.CurrentCustomTires.ValueChanged += OnCustomTiresChanged;
+    }
+
+    private void OnCustomTiresChanged(object sender, ValueEventArgs<bool> customTires)
+    {
+        if (CurrentVehicle == null) return;
+
+        CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = customTires.Value;
+        CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = customTires.Value;
     }
 
     private void OnCurrentRimColorChanged(object sender, ValueEventArgs<VehicleColor> rimColor)
@@ -92,6 +101,11 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes, UpdateValidModTypes);
         UpdateFeature(Service.ValidWheelTypes, UpdateValidWheelTypes);
+        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
+        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
+        UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
+        UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
+        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
     }
 
     private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
@@ -121,11 +135,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
+    }
 
-        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
-        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
-        UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
-        UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
+    private void UpdateCustomTires(bool customTires)
+    {
+        if (customTires == CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation) return;
+
+        Service.CurrentCustomTires.Value = CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation &&
+                                           CurrentVehicle.Mods[VehicleModType.RearWheel].Variation;
     }
 
     private void UpdateCurrentRimColor(VehicleColor currentRimColor)

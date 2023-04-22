@@ -22,6 +22,7 @@ public class VehicleModsService : GenericService<VehicleModsService>, IVehicleMo
 
     [JsonIgnore] public BindableProperty<VehicleWheelType> CurrentWheelType { get; set; } = new();
     [JsonIgnore] public BindableProperty<VehicleColor> CurrentRimColor { get; set; } = new();
+    [JsonIgnore] public BindableProperty<bool> CurrentCustomTires { get; set; } = new();
 
 
     public event EventHandler LicensePlateInputRequested;

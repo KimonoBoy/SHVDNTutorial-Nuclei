@@ -83,7 +83,14 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitles.SaveCurrentVehicle,
             () =>
             {
+                if (Service.CurrentVehicle.Value == null)
+                {
+                    Notification.Show("You must enter a vehicle first.");
+                    return;
+                }
+
                 var userInput = Game.GetUserInput(WindowTitle.EnterMessage60, "", 60);
+
                 if (Service.CustomVehicles.Value.Any(v =>
                         v.Title.Value == userInput))
                 {
@@ -122,6 +129,11 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     RimColor =
                     {
                         Value = Service.CurrentVehicle.Value.Mods.RimColor
+                    },
+                    CustomTires =
+                    {
+                        Value = Service.CurrentVehicle.Value.Mods[VehicleModType.FrontWheel].Variation &&
+                                Service.CurrentVehicle.Value.Mods[VehicleModType.RearWheel].Variation
                     }
                 };
 
