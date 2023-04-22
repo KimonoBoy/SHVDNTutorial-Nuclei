@@ -132,8 +132,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     },
                     CustomTires =
                     {
-                        Value = Service.CurrentVehicle.Value.Mods[VehicleModType.FrontWheel].Variation &&
-                                Service.CurrentVehicle.Value.Mods[VehicleModType.RearWheel].Variation
+                        Value = Service.CurrentVehicle.Value.Mods[VehicleModType.FrontWheel].Variation
                     },
                     TireSmokeColor =
                     {

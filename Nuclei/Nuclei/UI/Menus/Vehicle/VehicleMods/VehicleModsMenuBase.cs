@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using GTA;
 using Nuclei.Helpers.ExtensionMethods;
@@ -15,6 +15,12 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
     {
         Width = 550;
         Shown += OnShown;
+        Closed += OnClosed;
+    }
+
+    private void OnClosed(object sender, EventArgs e)
+    {
+        Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
     }
 
     private void OnShown(object sender, EventArgs e)
@@ -42,7 +48,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
         UpdateMenuItems();
     }
 
-    protected abstract IEnumerable<VehicleModType> GetValidModTypes();
+    protected abstract ObservableCollection<VehicleModType> GetValidModTypes();
 
     protected virtual void UpdateMenuItems()
     {

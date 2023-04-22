@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using GTA;
@@ -53,7 +53,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         CurrentVehicle.Mods.WheelType = currentWheelType.Value;
     }
 
-    private void OnRandomizeModsRequested(object sender, List<VehicleModType> modsToRandomize)
+    private void OnRandomizeModsRequested(object sender, ObservableCollection<VehicleModType> modsToRandomize)
     {
         if (CurrentVehicle == null) return;
 
@@ -110,11 +110,6 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         InstallModKit();
         UpdateFeature(Service.ValidVehicleModTypes, UpdateValidModTypes);
         UpdateFeature(Service.ValidWheelTypes, UpdateValidWheelTypes);
-        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
-        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
-        UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
-        UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
-        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
     }
 
     private void UpdateTireSmokeColor(Color tireSmokeColor)
@@ -124,11 +119,11 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.CurrentTireSmokeColor.Value = CurrentVehicle.Mods.TireSmokeColor;
     }
 
-    private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
+    private void UpdateValidWheelTypes(ObservableCollection<VehicleWheelType> validWheelTypes)
     {
         validWheelTypes.Clear();
 
-        validWheelTypes.AddRange(CurrentVehicle.Mods.AllowedWheelTypes);
+        foreach (var vehicleWheelType in CurrentVehicle.Mods.AllowedWheelTypes) validWheelTypes.Add(vehicleWheelType);
     }
 
     private void UpdateLicensePlateStyle(LicensePlateStyle licensePlateStyle)
@@ -138,19 +133,25 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.LicensePlateStyle.Value = CurrentVehicle.Mods.LicensePlateStyle;
     }
 
-    private void UpdateValidModTypes(List<VehicleModType> validModTypes)
+    private void UpdateValidModTypes(ObservableCollection<VehicleModType> validModTypes)
     {
         validModTypes.Clear();
 
-        validModTypes.AddRange(from VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType))
-            let vehicleMod = CurrentVehicle.Mods[vehicleModType]
-            where vehicleMod.Count > 0
-            select vehicleModType);
+        foreach (VehicleModType vehicleModType in Enum.GetValues(typeof(VehicleModType)))
+        {
+            var vehicleMod = CurrentVehicle.Mods[vehicleModType];
+            if (vehicleMod.Count > 0) validModTypes.Add(vehicleModType);
+        }
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
+        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
+        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
+        UpdateFeature(Service.CurrentWheelType, UpdateWheelType);
+        UpdateFeature(Service.CurrentRimColor, UpdateRimColor);
+        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
         UpdateFeature(Service.CurrentTireSmokeColor, UpdateTireSmokeColor);
     }
 
@@ -162,14 +163,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
                                            CurrentVehicle.Mods[VehicleModType.RearWheel].Variation;
     }
 
-    private void UpdateCurrentRimColor(VehicleColor currentRimColor)
+    private void UpdateRimColor(VehicleColor currentRimColor)
     {
         if (currentRimColor == CurrentVehicle.Mods.RimColor) return;
 
         Service.CurrentRimColor.Value = CurrentVehicle.Mods.RimColor;
     }
 
-    private void UpdateCurrentWheelType(VehicleWheelType currentWheelType)
+    private void UpdateWheelType(VehicleWheelType currentWheelType)
     {
         if (currentWheelType == CurrentVehicle.Mods.WheelType) return;
 

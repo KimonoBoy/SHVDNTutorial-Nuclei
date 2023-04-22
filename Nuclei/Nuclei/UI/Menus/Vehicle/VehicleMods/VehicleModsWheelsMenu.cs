@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using GTA;
@@ -15,10 +15,6 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     {
         Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
         Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
-    }
-
-    private void OnCurrentTireSmokeColorChanged(object sender, ValueEventArgs<Color> e)
-    {
     }
 
     private void OnCurrentVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
@@ -52,6 +48,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     {
         var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitles.CustomTires, Service.CurrentCustomTires,
             @checked => { Service.CurrentCustomTires.Value = @checked; });
+        checkBoxCustomTires.Checked = Service.CurrentCustomTires.Value;
     }
 
     private void RimColors()
@@ -89,9 +86,9 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
         UpdateMenuItems();
     }
 
-    protected override IEnumerable<VehicleModType> GetValidModTypes()
+    protected override ObservableCollection<VehicleModType> GetValidModTypes()
     {
-        return Service.ValidVehicleModTypes.Value.Where(modType =>
-            modType is VehicleModType.FrontWheel or VehicleModType.RearWheel);
+        return new ObservableCollection<VehicleModType>(Service.ValidVehicleModTypes.Value.Where(modType =>
+            modType is VehicleModType.FrontWheel or VehicleModType.RearWheel));
     }
 }
