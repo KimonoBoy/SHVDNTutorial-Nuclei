@@ -7,6 +7,7 @@ using GTA;
 using GTA.UI;
 using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
@@ -17,6 +18,20 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
     {
     }
 
+    private string GetModdedVehicleDescription(CustomVehicle vehicle)
+    {
+        var spawnTitle = $"Spawn: {vehicle.VehicleHash.Value.GetLocalizedDisplayNameFromHash()}";
+        var mods = string.Empty;
+        foreach (var customVehicleMod in vehicle.VehicleMods.Value)
+        {
+            var vehicleMod = customVehicleMod.VehicleModType.Value.GetLocalizedDisplayNameFromHash();
+            var vehicleModIndex = customVehicleMod.ModIndex.Value;
+            mods += $"\n{vehicleMod}: {vehicleModIndex}";
+        }
+
+        return $"{spawnTitle}{mods}";
+    }
+
     protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
     {
         Clear();
@@ -24,7 +39,9 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         foreach (var customVehicle in (ObservableCollection<CustomVehicle>)newItems)
         {
             var itemSpawnCustomVehicle =
-                AddItem(customVehicle.Title.Value, "", () => { Service.SpawnVehicle(customVehicle); });
+                AddItem(customVehicle.Title.Value,
+                    $"{GetModdedVehicleDescription(customVehicle)}",
+                    () => { Service.SpawnVehicle(customVehicle); });
         }
     }
 
@@ -33,16 +50,17 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add when e.NewItems != null:
-                e.NewItems.Cast<CustomVehicle>().ToList().ForEach(v =>
+                e.NewItems.Cast<CustomVehicle>().ToList().ForEach(customVehicle =>
                 {
-                    var itemVehicle = AddItem(v.Title.Value, $"Spawn {v.Title.Value}",
-                        () => { Service.SpawnVehicle(v); });
+                    var itemVehicle = AddItem(customVehicle.Title.Value,
+                        $"{GetModdedVehicleDescription(customVehicle)}",
+                        () => { Service.SpawnVehicle(customVehicle); });
                 });
                 break;
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
-                e.OldItems.Cast<CustomVehicle>().ToList().ForEach(v =>
+                e.OldItems.Cast<CustomVehicle>().ToList().ForEach(customVehicle =>
                 {
-                    var item = Items.FirstOrDefault(i => i.Title == v.Title.Value);
+                    var item = Items.FirstOrDefault(i => i.Title == customVehicle.Title.Value);
                     if (item != null)
                     {
                         var itemIndex = Items.IndexOf(item);
@@ -128,7 +146,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 
     protected override void AddButtons()
     {
-        var buttonDelete = new InstructionalButton("Delete", Control.PhoneOption);
+        var buttonDelete = new InstructionalButton("Delete Vehicle", Control.Jump);
         Buttons.Add(buttonDelete);
     }
 }

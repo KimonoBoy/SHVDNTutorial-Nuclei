@@ -43,10 +43,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
                 Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
             else
                 Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);
-        }
 
-        if (Game.IsControlPressed(Control.PhoneOption))
-        {
             var customVehicle =
                 Service.CustomVehicles.Value.FirstOrDefault(
                     x => x.VehicleHash.Value == Service.CurrentVehicleHash.Value);
