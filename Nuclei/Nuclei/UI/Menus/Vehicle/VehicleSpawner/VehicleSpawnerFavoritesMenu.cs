@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using GTA;
@@ -13,10 +14,21 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
     {
     }
 
-    protected override void UpdateMenuItems(IEnumerable<VehicleHash> newItems)
+    protected override void OnShown(object sender, EventArgs e)
+    {
+        UpdateMenuItems(Service.FavoriteVehicles.Value);
+        Service.FavoriteVehicles.Value.CollectionChanged += OnVehicleCollectionChanged<VehicleHash>;
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        Service.CurrentVehicleHash.Value = title.GetHashFromDisplayName<VehicleHash>();
+    }
+
+    protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
     {
         Clear();
-        foreach (var vehicleHash in newItems)
+        foreach (var vehicleHash in (ObservableCollection<VehicleHash>)newItems)
         {
             var vehicleName = vehicleHash.GetLocalizedDisplayNameFromHash();
 
@@ -25,7 +37,7 @@ public class VehicleSpawnerFavoritesMenu : VehicleSpawnerMenuBase
         }
     }
 
-    protected override void OnVehicleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    protected override void OnVehicleCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
         {

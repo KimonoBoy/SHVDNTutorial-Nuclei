@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
@@ -42,6 +43,15 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
                 Service.FavoriteVehicles.Value.Remove(Service.CurrentVehicleHash.Value);
             else
                 Service.FavoriteVehicles.Value.Add(Service.CurrentVehicleHash.Value);
+        }
+
+        if (Game.IsControlPressed(Control.PhoneOption))
+        {
+            var customVehicle =
+                Service.CustomVehicles.Value.FirstOrDefault(
+                    x => x.VehicleHash.Value == Service.CurrentVehicleHash.Value);
+            if (Service.CustomVehicles.Value.Contains(customVehicle))
+                Service.CustomVehicles.Value.Remove(customVehicle);
         }
 
         if (e.KeyCode == Keys.NumPad1)

@@ -1,40 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using GTA;
 using GTA.UI;
+using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerService>
+public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 {
     public VehicleSpawnerSavedVehiclesMenu(Enum @enum) : base(@enum)
     {
-        Shown += OnShown;
     }
 
-    private void OnShown(object sender, EventArgs e)
-    {
-        GenerateMenu();
-    }
-
-    private void GenerateMenu()
+    protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
     {
         Clear();
-
         SaveCurrentVehicle();
-        AddItems();
-    }
-
-    private void AddItems()
-    {
-        foreach (var customVehicle in Service.CustomVehicles.Value)
+        foreach (var customVehicle in (ObservableCollection<CustomVehicle>)newItems)
         {
             var itemSpawnCustomVehicle =
                 AddItem(customVehicle.Title.Value, "", () => { Service.SpawnVehicle(customVehicle); });
         }
+    }
+
+    protected override void OnVehicleCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add when e.NewItems != null:
+                e.NewItems.Cast<CustomVehicle>().ToList().ForEach(v =>
+                {
+                    var itemVehicle = AddItem(v.Title.Value, $"Spawn {v.Title.Value}",
+                        () => { Service.SpawnVehicle(v); });
+                });
+                break;
+            case NotifyCollectionChangedAction.Remove when e.OldItems != null:
+                e.OldItems.Cast<CustomVehicle>().ToList().ForEach(v =>
+                {
+                    var item = Items.FirstOrDefault(i => i.Title == v.Title.Value);
+                    if (item != null)
+                    {
+                        var itemIndex = Items.IndexOf(item);
+                        Remove(item);
+                        if (Items.Count > 0) SelectedIndex = Math.Max(0, Math.Min(itemIndex, Items.Count - 1));
+                    }
+                });
+                break;
+        }
+    }
+
+    protected override void OnShown(object sender, EventArgs e)
+    {
+        UpdateMenuItems(Service.CustomVehicles.Value);
+        Service.CustomVehicles.Value.CollectionChanged += OnVehicleCollectionChanged<CustomVehicle>;
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        var vehicleHash = Service.CustomVehicles.Value.FirstOrDefault(v => v.Title.Value == title)?.VehicleHash.Value;
+
+        if (vehicleHash != null)
+            Service.CurrentVehicleHash.Value = (VehicleHash)vehicleHash;
     }
 
     private void SaveCurrentVehicle()
@@ -92,8 +123,12 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
 
 
                 Service.CustomVehicles.Value.Add(customVehicle);
-
-                GenerateMenu();
             });
+    }
+
+    protected override void AddButtons()
+    {
+        var buttonDelete = new InstructionalButton("Delete", Control.PhoneOption);
+        Buttons.Add(buttonDelete);
     }
 }

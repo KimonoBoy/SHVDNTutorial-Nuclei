@@ -15,15 +15,25 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
     public VehicleSpawnerClassMenu(Enum @enum) : base(@enum)
     {
         _vehicleClass = (VehicleClass)@enum;
-        AddVehicles();
     }
 
-    protected override void UpdateMenuItems(IEnumerable<VehicleHash> newItems)
+    protected override void OnShown(object sender, EventArgs e)
+    {
+        UpdateMenuItems(Service.FavoriteVehicles.Value);
+        Service.FavoriteVehicles.Value.CollectionChanged += OnVehicleCollectionChanged<VehicleHash>;
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        Service.CurrentVehicleHash.Value = title.GetHashFromDisplayName<VehicleHash>();
+    }
+
+    protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
     {
         AddVehicles();
     }
 
-    protected override void OnVehicleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    protected override void OnVehicleCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
         {
@@ -55,7 +65,7 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
 
             var itemSpawnVehicle = AddItem(vehicleName, $"Spawn {vehicleName}",
                 () => { Service.SpawnVehicle(vehicleHash); });
-            itemSpawnVehicle.Selected += (sender, args) => { UpdateSelectedItem(); };
+            itemSpawnVehicle.Selected += (sender, args) => { UpdateSelectedItem(vehicleName); };
 
             if (Service.FavoriteVehicles.Value.Contains(vehicleHash))
                 itemSpawnVehicle.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");

@@ -23,30 +23,23 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
     {
     }
 
-    protected abstract void UpdateMenuItems(IEnumerable<VehicleHash> newItems);
+    protected abstract void UpdateMenuItems<T>(IEnumerable<T> newItems);
+    protected abstract void OnVehicleCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e);
+    protected abstract void OnShown(object sender, EventArgs e);
 
-    private void OnShown(object sender, EventArgs e)
-    {
-        UpdateMenuItems(Service.FavoriteVehicles.Value);
-        Service.FavoriteVehicles.Value.CollectionChanged += OnVehicleCollectionChanged;
-    }
 
     private void OnClosed(object sender, EventArgs e)
     {
-        Service.FavoriteVehicles.Value.CollectionChanged -= OnVehicleCollectionChanged;
+        Service.FavoriteVehicles.Value.CollectionChanged -= OnVehicleCollectionChanged<VehicleHash>;
+        Service.CustomVehicles.Value.CollectionChanged -= OnVehicleCollectionChanged<CustomVehicle>;
     }
 
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
     {
-        UpdateSelectedItem();
+        UpdateSelectedItem(Items[e.Index].Title);
     }
 
-    protected abstract void OnVehicleCollectionChanged(object sender, NotifyCollectionChangedEventArgs e);
-
-    protected void UpdateSelectedItem()
-    {
-        Service.CurrentVehicleHash.Value = Items[SelectedIndex].Title.GetHashFromDisplayName<VehicleHash>();
-    }
+    protected abstract void UpdateSelectedItem(string title);
 
     protected override void AddButtons()
     {
