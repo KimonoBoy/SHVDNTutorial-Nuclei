@@ -11,9 +11,10 @@ using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.UI.Items;
+using Nuclei.UI.Menus.Base.ItemFactory;
 using Font = GTA.UI.Font;
 
-namespace Nuclei.UI.Menus.Abstracts;
+namespace Nuclei.UI.Menus.Base;
 
 public abstract class MenuBase : NativeMenu
 {
@@ -28,6 +29,11 @@ public abstract class MenuBase : NativeMenu
     private readonly ExceptionService _exceptionService = ExceptionService.Instance;
 
     /// <summary>
+    ///     The factory that creates menu items.
+    /// </summary>
+    private readonly MenuItemFactory _menuItemFactory = new();
+
+    /// <summary>
     ///     Whether the user is navigating up (true) or down (false).
     /// </summary>
     private bool _isMovingUp;
@@ -39,17 +45,7 @@ public abstract class MenuBase : NativeMenu
     /// <param name="description">The description of the menu.</param>
     protected MenuBase(string subtitle, string description) : base("Nuclei", subtitle, description)
     {
-        SubtitleFont = Font.Pricedown;
-        Banner.Color = Color.Black;
-        MaxItems = 12;
-        AddButtons();
-
-        Shown += OnShown;
-        SelectedIndexChanged += OnSelectedIndexChanged;
-
-        _exceptionService.ErrorOccurred += OnErrorOccurred;
-
-        Pool.Add(this);
+        InitializeMenu();
     }
 
     /// <summary>
@@ -65,6 +61,24 @@ public abstract class MenuBase : NativeMenu
     /// </summary>
     public static MenuBase LatestMenu { get; set; }
 
+    private void InitializeMenu()
+    {
+        SubtitleFont = Font.Pricedown;
+        Banner.Color = Color.Black;
+        MaxItems = 12;
+        AddButtons();
+
+        Shown += OnShown;
+        SelectedIndexChanged += OnSelectedIndexChanged;
+
+        _exceptionService.ErrorOccurred += OnErrorOccurred;
+
+        Pool.Add(this);
+    }
+
+    /// <summary>
+    ///     Used to display button key-presses for hotkeys and menu actions.
+    /// </summary>
     protected virtual void AddButtons()
     {
         var instructionalButtonHotKey = new InstructionalButton("Change Hotkey", Control.ReplayStartStopRecording);
@@ -116,16 +130,11 @@ public abstract class MenuBase : NativeMenu
     /// <param name="title">The 'title' of the item.</param>
     /// <param name="description">The description when the item is selected.</param>
     /// <param name="action">The action to perform when activated.</param>
-    /// <param name="hotkey">The hotkey to activate this item.</param>
+    /// <param name="altTitle">The altTitle to activate this item.</param>
     /// <returns>The item.</returns>
-    protected NativeItem AddItem(string title, string description = "", Action action = null, string hotkey = "")
+    protected NativeItem AddItem(string title, string description = "", Action action = null, string altTitle = "")
     {
-        var item = new NativeItem(title, description, hotkey);
-        item.AltTitleFont = Font.ChaletComprimeCologne;
-
-        // anonymous method to handle the event
-        item.Activated += (sender, args) => { action?.Invoke(); };
-
+        var item = _menuItemFactory.CreateNativeItem(title, description, action, altTitle);
         Add(item);
         return item;
     }
@@ -135,11 +144,11 @@ public abstract class MenuBase : NativeMenu
     /// </summary>
     /// <param name="enum">The Enum to get the Title and the Description from.</param>
     /// <param name="action">The action to perform when activated.</param>
-    /// <param name="hotkey">The hotkey to activate this item.</param>
+    /// <param name="altTitle">The altTitle to activate this item.</param>
     /// <returns>The item.</returns>
-    protected NativeItem AddItem(Enum @enum, Action action = null, string hotkey = "")
+    protected NativeItem AddItem(Enum @enum, Action action = null, string altTitle = "")
     {
-        return AddItem(@enum.ToPrettyString(), @enum.GetDescription(), action, hotkey);
+        return AddItem(@enum.ToPrettyString(), @enum.GetDescription(), action, altTitle);
     }
 
     /// <summary>
@@ -154,20 +163,7 @@ public abstract class MenuBase : NativeMenu
         BindableProperty<bool> bindableProperty = null,
         Action<bool> action = null)
     {
-        NativeCheckboxItem checkBoxItem;
-        if (bindableProperty != null)
-        {
-            checkBoxItem = new NativeCheckboxItem(title, description, bindableProperty.Value);
-            bindableProperty.ValueChanged += (sender, args) => checkBoxItem.Checked = args.Value;
-        }
-        else
-        {
-            checkBoxItem = new NativeCheckboxItem(title, description, false);
-        }
-
-        // anonymous method to handle the event
-        checkBoxItem.CheckboxChanged += (sender, args) => { action?.Invoke(checkBoxItem.Checked); };
-
+        var checkBoxItem = _menuItemFactory.CreateNativeCheckboxItem(title, description, bindableProperty, action);
         Add(checkBoxItem);
         return checkBoxItem;
     }
@@ -198,14 +194,8 @@ public abstract class MenuBase : NativeMenu
     protected NativeSliderItem AddSliderItem(string title, string description = "",
         BindableProperty<int> bindableProperty = null, Action<int> action = null, int value = 0, int maxValue = 10)
     {
-        var nativeSliderItem = new NativeSliderItem(title, description, maxValue, value);
-
-        if (bindableProperty != null)
-            bindableProperty.ValueChanged += (sender, args) => { nativeSliderItem.Value = args.Value; };
-
-
-        nativeSliderItem.ValueChanged += (sender, args) => { action?.Invoke(nativeSliderItem.Value); };
-
+        var nativeSliderItem =
+            _menuItemFactory.CreateNativeSliderItem(title, description, bindableProperty, action, value, maxValue);
         Add(nativeSliderItem);
         return nativeSliderItem;
     }
@@ -241,16 +231,10 @@ public abstract class MenuBase : NativeMenu
         Action<T, int> itemActivatedAction = null,
         params T[] items)
     {
-        var item = new NativeListItem<T>(title, description, items);
-
-        if (itemChangedAction != null)
-            item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
-
-        if (itemActivatedAction != null)
-            item.Activated += (sender, args) => { itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
-
-        Add(item);
-        return item;
+        var listItem = _menuItemFactory.CreateNativeListItem(title, description, itemChangedAction, itemActivatedAction,
+            items);
+        Add(listItem);
+        return listItem;
     }
 
 

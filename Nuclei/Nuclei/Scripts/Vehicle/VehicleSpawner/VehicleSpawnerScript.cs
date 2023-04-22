@@ -19,17 +19,18 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         KeyDown += OnKeyDown;
     }
 
-    private void OnCustomVehicleSpawned(object sender, CustomVehicle e)
+    private void OnCustomVehicleSpawned(object sender, CustomVehicle customVehicle)
     {
-        var vehicle = SpawnVehicle(e.VehicleHash.Value);
+        var vehicle = SpawnVehicle(customVehicle.VehicleHash.Value);
         vehicle.Mods.InstallModKit();
-        vehicle.Mods.WheelType = e.WheelType.Value;
+        vehicle.Mods.WheelType = customVehicle.WheelType.Value;
+        vehicle.Mods.RimColor = customVehicle.RimColor.Value;
 
-        foreach (var customVehicleMod in e.VehicleMods.Value)
+        foreach (var customVehicleMod in customVehicle.VehicleMods.Value)
             vehicle.Mods[customVehicleMod.VehicleModType.Value].Index = customVehicleMod.ModIndex.Value;
 
-        vehicle.Mods.LicensePlate = e.LicensePlate.Value;
-        vehicle.Mods.LicensePlateStyle = e.LicensePlateStyle.Value;
+        vehicle.Mods.LicensePlate = customVehicle.LicensePlate.Value;
+        vehicle.Mods.LicensePlateStyle = customVehicle.LicensePlateStyle.Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)

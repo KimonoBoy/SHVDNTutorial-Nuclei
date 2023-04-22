@@ -34,11 +34,11 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         if (Character == null) return;
 
-        UpdateFeature(Service.WantedLevel.Value, UpdateWantedLevel);
-        UpdateFeature(Service.IsNoiseless.Value, ProcessNoiseless);
-        UpdateFeature(Service.CanSuperJump.Value, ProcessSuperJump);
-        UpdateFeature(Service.IsOnePunchMan.Value, ProcessOnePunchMan);
-        UpdateFeature(Service.SuperSpeed.Value, ProcessSuperSpeed);
+        UpdateFeature(Service.WantedLevel, UpdateWantedLevel);
+        UpdateFeature(Service.IsNoiseless, ProcessNoiseless);
+        UpdateFeature(Service.CanSuperJump, ProcessSuperJump);
+        UpdateFeature(Service.IsOnePunchMan, ProcessOnePunchMan);
+        UpdateFeature(Service.SuperSpeed, ProcessSuperSpeed);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -71,16 +71,16 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         if (Character == null) return;
 
-        UpdateFeature(Service.IsInvincible.Value, UpdateInvincible);
-        UpdateFeature(Service.IsInvisible.Value, UpdateInvisible);
-        UpdateFeature(Service.HasInfiniteBreath.Value, UpdateInfiniteBreath);
-        UpdateFeature(Service.CanRideOnCars.Value, UpdateRideOnCars);
+        UpdateFeature(Service.IsInvincible, UpdateInvincible);
+        UpdateFeature(Service.IsInvisible, UpdateInvisible);
+        UpdateFeature(Service.HasInfiniteBreath, UpdateInfiniteBreath);
+        UpdateFeature(Service.CanRideOnCars, UpdateRideOnCars);
 
         /*
          * Process Functions that doesn't need to be called every tick.
          */
-        UpdateFeature(Service.HasInfiniteStamina.Value, ProcessInfiniteStamina);
-        UpdateFeature(Service.HasInfiniteSpecialAbility.Value, ProcessInfiniteSpecialAbility);
+        UpdateFeature(Service.HasInfiniteStamina, ProcessInfiniteStamina);
+        UpdateFeature(Service.HasInfiniteSpecialAbility, ProcessInfiniteSpecialAbility);
     }
 
     private void UpdateInvincible(bool invincible)
@@ -121,7 +121,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         if (Service.IsWantedLevelLocked.Value)
             Game.Player.WantedLevel = Service.LockedWantedLevel.Value;
 
-        if (Service.WantedLevel.Value != Game.Player.WantedLevel)
+        if (wantedLevel != Game.Player.WantedLevel)
             Service.WantedLevel.Value = Game.Player.WantedLevel;
     }
 

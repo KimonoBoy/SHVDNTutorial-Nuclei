@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Helpers.Utilities;
+using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
 using Nuclei.Services.Settings.Storage;
@@ -196,11 +197,11 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
     ///     Updates the feature if the service state is different from the game state.
     /// </summary>
     /// <typeparam name="T">The type.</typeparam>
-    /// <param name="value">The value from the service state.</param>
+    /// <param name="bindableProperty">The bindableProperty to reference.</param>
     /// <param name="action">The action to perform depending on the value.</param>
-    protected void UpdateFeature<T>(T value, Action<T> action)
+    protected void UpdateFeature<T>(BindableProperty<T> bindableProperty, Action<T> action)
     {
-        action(value);
+        action(bindableProperty.Value);
     }
 
     /// <summary>

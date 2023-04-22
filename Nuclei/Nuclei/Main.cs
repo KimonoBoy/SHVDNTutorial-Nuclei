@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Enums.UI;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 using Control = GTA.Control;
 using MainMenu = Nuclei.UI.Menus.MainMenu;
 

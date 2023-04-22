@@ -5,7 +5,7 @@ using Nuclei.Enums.Player;
 using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Player;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Player;
 

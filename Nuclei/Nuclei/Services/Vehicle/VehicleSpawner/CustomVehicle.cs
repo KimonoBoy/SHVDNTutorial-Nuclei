@@ -18,6 +18,8 @@ public class CustomVehicle
         new();
 
     public BindableProperty<VehicleWheelType> WheelType { get; set; } = new();
+
+    public BindableProperty<VehicleColor> RimColor { get; set; } = new();
 }
 
 public class CustomVehicleMod

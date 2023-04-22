@@ -12,7 +12,7 @@ namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
 
 public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 {
-    private const float MinProjectileDistance = 200.0f;
+    private const float MinProjectileDistance = 150.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
     private int _minShootInterval;
 
@@ -33,13 +33,12 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.FireRate.Value, UpdateFireRate);
+        UpdateFeature(Service.FireRate, UpdateFireRate);
     }
 
     private void UpdateFireRate(int fireRate)
     {
         if (!Service.HasVehicleWeapons.Value) return;
-        if (_minShootInterval == fireRate) return;
 
         _minShootInterval = fireRate * 25;
     }

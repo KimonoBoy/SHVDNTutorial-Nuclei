@@ -28,11 +28,17 @@ public enum MenuTitles
     [Description("Your favorite vehicles stored in one place!")]
     FavoriteVehicles,
 
+    [Description("All your saved vehicles in one place!")]
+    SavedVehicles,
+
     [Description("Vehicle Weapons - Customize your vehicle's weapons and arm it to the teeth!")]
     VehicleWeapons,
 
     [Description("Change vehicle mods with this easy-to-use menu!")]
     VehicleMods,
+
+    [Description("Change wheel type, wheels, colors and more.")]
+    Wheels,
 
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapons,
@@ -45,7 +51,5 @@ public enum MenuTitles
 
     [Description("Save and Load")] SaveAndLoad,
 
-    [Description("Change HotKeys")] HotKeys,
-    SavedVehicles,
-    Wheels
+    [Description("Change HotKeys")] HotKeys
 }

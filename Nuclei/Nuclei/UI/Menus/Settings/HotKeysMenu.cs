@@ -1,5 +1,5 @@
 ﻿using System;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Settings;
 

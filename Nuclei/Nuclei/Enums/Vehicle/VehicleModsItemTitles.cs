@@ -15,5 +15,10 @@ public enum VehicleModsItemTitles
 
     [Description("Randomize all valid vehicle mods.")]
     RandomizeMods,
-    WheelType
+
+    [Description("Change the wheel type.")]
+    WheelType,
+
+    [Description("Change the rim color of your wheels.")]
+    RimColor
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 using Nuclei.UI.Menus.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Vehicle.VehicleWeapons;

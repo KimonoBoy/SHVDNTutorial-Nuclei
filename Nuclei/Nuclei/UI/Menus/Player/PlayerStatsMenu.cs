@@ -1,6 +1,6 @@
 ﻿using System;
 using Nuclei.Services.Player;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Player;
 

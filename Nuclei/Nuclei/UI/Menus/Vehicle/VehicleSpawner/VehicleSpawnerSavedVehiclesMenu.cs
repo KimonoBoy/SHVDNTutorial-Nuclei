@@ -4,7 +4,7 @@ using GTA;
 using GTA.UI;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
@@ -56,10 +56,33 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
                     return;
                 }
 
-                var customVehicle = new CustomVehicle();
-                customVehicle.Title.Value = userInput;
-                customVehicle.VehicleHash.Value = (VehicleHash)Service.CurrentVehicle.Value.Model.Hash;
-                customVehicle.WheelType.Value = Service.CurrentVehicle.Value.Mods.WheelType;
+                var customVehicle = new CustomVehicle
+                {
+                    Title =
+                    {
+                        Value = userInput
+                    },
+                    VehicleHash =
+                    {
+                        Value = (VehicleHash)Service.CurrentVehicle.Value.Model.Hash
+                    },
+                    LicensePlate =
+                    {
+                        Value = Service.CurrentVehicle.Value.Mods.LicensePlate
+                    },
+                    LicensePlateStyle =
+                    {
+                        Value = Service.CurrentVehicle.Value.Mods.LicensePlateStyle
+                    },
+                    WheelType =
+                    {
+                        Value = Service.CurrentVehicle.Value.Mods.WheelType
+                    },
+                    RimColor =
+                    {
+                        Value = Service.CurrentVehicle.Value.Mods.RimColor
+                    }
+                };
 
                 foreach (var vehicleMod in Service.CurrentVehicle.Value.Mods.ToArray())
                 {
@@ -67,8 +90,6 @@ public class VehicleSpawnerSavedVehiclesMenu : GenericMenuBase<VehicleSpawnerSer
                     customVehicle.VehicleMods.Value.Add(customVehicleMod);
                 }
 
-                customVehicle.LicensePlate.Value = Service.CurrentVehicle.Value.Mods.LicensePlate;
-                customVehicle.LicensePlateStyle.Value = Service.CurrentVehicle.Value.Mods.LicensePlateStyle;
 
                 Service.CustomVehicles.Value.Add(customVehicle);
 

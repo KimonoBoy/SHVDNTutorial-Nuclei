@@ -13,13 +13,34 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     public VehicleModsWheelsMenu(Enum @enum) : base(@enum)
     {
         Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
+        Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
+    }
+
+    private void OnCurrentVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
+    {
+        if (currentVehicle.Value == null) return;
+        UpdateMenuItems();
     }
 
     protected override void UpdateMenuItems()
     {
         Clear();
         WheelTypes();
+        RimColors();
         base.UpdateMenuItems();
+    }
+
+    private void RimColors()
+    {
+        var listItemRimColor =
+            AddListItem(VehicleModsItemTitles.RimColor,
+                (selected, index) =>
+                {
+                    Service.CurrentRimColor.Value = selected.GetHashFromDisplayName<VehicleColor>();
+                }, null,
+                typeof(VehicleColor).ToDisplayNameArray());
+
+        listItemRimColor.SelectedItem = Service.CurrentVehicle.Value.Mods.RimColor.GetLocalizedDisplayNameFromHash();
     }
 
     private void WheelTypes()

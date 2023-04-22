@@ -1,7 +1,7 @@
 ﻿using System;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Settings;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Settings;
 

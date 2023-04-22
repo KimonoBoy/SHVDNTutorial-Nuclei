@@ -5,7 +5,7 @@ using GTA;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Vehicle.VehicleMods;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 

@@ -102,9 +102,11 @@
     <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
     <Compile Include="Services\Weapon\WeaponsService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
-    <Compile Include="UI\Menus\Abstracts\GenericMenuBase.cs" />
+    <Compile Include="UI\Menus\Base\GenericMenuBase.cs" />
+    <Compile Include="UI\Menus\Base\Configuration\MenuConfiguration.cs" />
+    <Compile Include="UI\Menus\Base\ItemFactory\MenuItemFactory.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
-    <Compile Include="UI\Menus\Abstracts\MenuBase.cs" />
+    <Compile Include="UI\Menus\Base\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Menus\Player\PlayerStatsMenu.cs" />
@@ -130,7 +132,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\Menus\Factory\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"

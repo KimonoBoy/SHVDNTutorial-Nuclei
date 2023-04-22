@@ -18,6 +18,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         Service.LicensePlateStyle.ValueChanged += OnLicensePlateStyleChanged;
         Service.RandomizeModsRequested += OnRandomizeModsRequested;
         Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
+        Service.CurrentRimColor.ValueChanged += OnCurrentRimColorChanged;
+    }
+
+    private void OnCurrentRimColorChanged(object sender, ValueEventArgs<VehicleColor> rimColor)
+    {
+        if (CurrentVehicle == null) return;
+
+        CurrentVehicle.Mods.RimColor = rimColor.Value;
     }
 
     private void OnCurrentWheelTypeChanged(object sender, ValueEventArgs<VehicleWheelType> currentWheelType)
@@ -42,12 +50,19 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             Service.CurrentWheelType.Value = VehicleWheelType.BikeWheels;
         }
 
+        var randomRimColor = r.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.CurrentRimColor.Value = (VehicleColor)randomRimColor;
+
+        var randomLicensePlateStyle = r.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
+        Service.LicensePlateStyle.Value = (LicensePlateStyle)randomLicensePlateStyle;
+
         foreach (var vehicleModType in modsToRandomize)
         {
             var currentMod = CurrentVehicle.Mods[vehicleModType];
             var randomMod = r.Next(-1, currentMod.Count);
             if (currentMod.Index == randomMod) continue;
             currentMod.Index = randomMod;
+            Yield();
         }
     }
 
@@ -75,8 +90,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (currentVehicle.Value == null) return;
 
         InstallModKit();
-        UpdateFeature(Service.ValidVehicleModTypes.Value, UpdateValidModTypes);
-        UpdateFeature(Service.ValidWheelTypes.Value, UpdateValidWheelTypes);
+        UpdateFeature(Service.ValidVehicleModTypes, UpdateValidModTypes);
+        UpdateFeature(Service.ValidWheelTypes, UpdateValidWheelTypes);
     }
 
     private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
@@ -107,21 +122,29 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.LicensePlate.Value, UpdateLicensePlate);
-        UpdateFeature(Service.LicensePlateStyle.Value, UpdateLicensePlateStyle);
-        UpdateFeature(Service.CurrentWheelType.Value, UpdateCurrentWheelType);
+        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
+        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
+        UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
+        UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
+    }
+
+    private void UpdateCurrentRimColor(VehicleColor currentRimColor)
+    {
+        if (currentRimColor == CurrentVehicle.Mods.RimColor) return;
+
+        Service.CurrentRimColor.Value = CurrentVehicle.Mods.RimColor;
     }
 
     private void UpdateCurrentWheelType(VehicleWheelType currentWheelType)
     {
-        if (CurrentVehicle.Mods.WheelType == Service.CurrentWheelType.Value) return;
+        if (currentWheelType == CurrentVehicle.Mods.WheelType) return;
 
         Service.CurrentWheelType.Value = CurrentVehicle.Mods.WheelType;
     }
 
     private void UpdateLicensePlate(string licensePlate)
     {
-        if (Service.LicensePlate.Value == CurrentVehicle.Mods.LicensePlate) return;
+        if (licensePlate == CurrentVehicle.Mods.LicensePlate) return;
 
         Service.LicensePlate.Value = CurrentVehicle.Mods.LicensePlate;
     }

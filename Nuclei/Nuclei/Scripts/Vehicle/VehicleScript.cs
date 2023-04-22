@@ -20,17 +20,10 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void OnTick(object sender, EventArgs e)
     {
-        UpdateFeature(Service.IsInVehicle, UpdateInVehicle);
-
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.CanDriveUnderWater.Value, ProcessDriveUnderWater);
-        UpdateFeature(Service.SpeedBoost.Value, ProcessSpeedBoost);
-    }
-
-    private void UpdateInVehicle(bool isInVehicle)
-    {
-        Service.IsInVehicle = CurrentVehicle != null;
+        UpdateFeature(Service.CanDriveUnderWater, ProcessDriveUnderWater);
+        UpdateFeature(Service.SpeedBoost, ProcessSpeedBoost);
     }
 
     private void OnRepairRequested(object sender, EventArgs e)
@@ -45,13 +38,13 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void UpdateVehicle(object sender, EventArgs e)
     {
-        UpdateFeature(Service.DoorsAlwaysLocked.Value, UpdateLockDoors);
+        UpdateFeature(Service.DoorsAlwaysLocked, UpdateLockDoors);
 
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.IsIndestructible.Value, UpdateIndestructible);
-        UpdateFeature(Service.HasSeatBelt.Value, UpdateSeatBelt);
-        UpdateFeature(Service.NeverFallOffBike.Value, UpdateNeverFallOffBike);
+        UpdateFeature(Service.IsIndestructible, UpdateIndestructible);
+        UpdateFeature(Service.HasSeatBelt, UpdateSeatBelt);
+        UpdateFeature(Service.NeverFallOffBike, UpdateNeverFallOffBike);
     }
 
     private void UpdateLockDoors(bool lockDoors)
@@ -66,7 +59,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void ProcessDriveUnderWater(bool driveUnderWater)
     {
-        if (!CurrentVehicle.IsEngineRunning && driveUnderWater)
+        if (!CurrentVehicle.IsEngineRunning && CurrentVehicle.IsInWater && driveUnderWater)
             CurrentVehicle.IsEngineRunning = true;
     }
 

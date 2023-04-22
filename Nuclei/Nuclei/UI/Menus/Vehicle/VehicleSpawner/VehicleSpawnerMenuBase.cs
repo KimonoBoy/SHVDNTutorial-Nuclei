@@ -6,7 +6,7 @@ using LemonUI.Menus;
 using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Nuclei.UI.Menus.Abstracts;
+using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
