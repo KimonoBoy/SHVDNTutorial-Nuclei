@@ -17,6 +17,10 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
         Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
     }
 
+    private void OnCurrentTireSmokeColorChanged(object sender, ValueEventArgs<Color> e)
+    {
+    }
+
     private void OnCurrentVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
     {
         if (currentVehicle.Value == null) return;
@@ -37,14 +41,11 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     private void TireSmokeColor()
     {
         /*
-         * This will be revisited later - there are a lot of colors in the Color struct. We will also implement
-         * functionality for the user to provide his own color from ARGB values.
+         * This will be revisited later...
          */
         var listItemTireSmokeColor = AddListItem(VehicleModsItemTitles.TireSmokeColor,
             (selected, index) => { Service.CurrentTireSmokeColor.Value = selected; }, null,
             typeof(Color).GetAllKnownColors());
-        if (listItemTireSmokeColor.Items.Contains(Service.CurrentTireSmokeColor.Value))
-            listItemTireSmokeColor.SelectedItem = Service.CurrentTireSmokeColor.Value;
     }
 
     private void CustomTires()

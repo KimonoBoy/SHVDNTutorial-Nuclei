@@ -114,6 +114,14 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
         UpdateFeature(Service.CurrentWheelType, UpdateCurrentWheelType);
         UpdateFeature(Service.CurrentRimColor, UpdateCurrentRimColor);
+        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
+    }
+
+    private void UpdateTireSmokeColor(Color tireSmokeColor)
+    {
+        if (tireSmokeColor == CurrentVehicle.Mods.TireSmokeColor) return;
+
+        Service.CurrentTireSmokeColor.Value = CurrentVehicle.Mods.TireSmokeColor;
     }
 
     private void UpdateValidWheelTypes(List<VehicleWheelType> validWheelTypes)
@@ -143,8 +151,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
-
-        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
+        UpdateFeature(Service.CurrentTireSmokeColor, UpdateTireSmokeColor);
     }
 
     private void UpdateCustomTires(bool customTires)
