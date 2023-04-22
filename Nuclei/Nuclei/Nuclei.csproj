@@ -92,6 +92,7 @@
     <Compile Include="Services\Settings\SettingsService.cs" />
     <Compile Include="Services\Settings\Storage\StorageService.cs" />
     <Compile Include="Services\Vehicle\IVehicleService.cs" />
+    <Compile Include="Services\Vehicle\VehicleMods\IVehicleModsService.cs" />
     <Compile Include="Services\Vehicle\VehicleMods\VehicleModsService.cs" />
     <Compile Include="Services\Vehicle\VehicleService.cs" />
     <Compile Include="Services\Vehicle\VehicleSpawner\CustomVehicle.cs" />

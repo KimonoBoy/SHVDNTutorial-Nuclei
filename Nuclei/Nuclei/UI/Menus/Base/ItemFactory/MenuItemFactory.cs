@@ -23,7 +23,7 @@ public class MenuItemFactory
         if (bindableProperty != null)
         {
             checkBoxItem = new NativeCheckboxItem(title, description, bindableProperty.Value);
-            bindableProperty.ValueChanged += (sender, args) => checkBoxItem.Checked = args.Value;
+            bindableProperty.ValueChanged += (_, args) => checkBoxItem.Checked = args.Value;
         }
         else
         {

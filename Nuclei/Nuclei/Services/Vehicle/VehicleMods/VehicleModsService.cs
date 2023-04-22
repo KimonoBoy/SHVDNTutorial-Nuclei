@@ -7,7 +7,7 @@ using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleMods;
 
-public class VehicleModsService : GenericService<VehicleModsService>
+public class VehicleModsService : GenericService<VehicleModsService>, IVehicleModsService
 {
     [JsonIgnore]
     public BindableProperty<List<VehicleModType>> ValidVehicleModTypes { get; set; } =
