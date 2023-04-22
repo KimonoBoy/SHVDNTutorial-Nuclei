@@ -103,7 +103,6 @@
     <Compile Include="Services\Weapon\WeaponsService.cs" />
     <Compile Include="UI\Items\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Base\GenericMenuBase.cs" />
-    <Compile Include="UI\Menus\Base\Configuration\MenuConfiguration.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\MenuItemFactory.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Base\MenuBase.cs" />
