@@ -21,15 +21,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
     private string GetModdedVehicleDescription(CustomVehicle vehicle)
     {
         var spawnTitle = $"Spawn: {vehicle.VehicleHash.Value.GetLocalizedDisplayNameFromHash()}";
-        var mods = string.Empty;
-        foreach (var customVehicleMod in vehicle.VehicleMods.Value)
-        {
-            var vehicleMod = customVehicleMod.VehicleModType.Value.GetLocalizedDisplayNameFromHash();
-            var vehicleModIndex = customVehicleMod.ModIndex.Value;
-            mods += $"\n{vehicleMod}: {vehicleModIndex}";
-        }
-
-        return $"{spawnTitle}{mods}";
+        return $"{spawnTitle}";
     }
 
     protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
