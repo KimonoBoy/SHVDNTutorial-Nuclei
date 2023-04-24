@@ -8,7 +8,7 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 ## Current Mod Progress
 Just did a HUGE refactor update. We'll be making more of these changes further down the line. For now:
 
-* BindableProperties has been removed and replaced with regular properties. Primarly because mapping BindableProperties through reflections is a much heavier task... This gave the mod a huge performance boost while still maintaining its statemanagement using an ObservableService class to handle the changed events - this also gives us better control over the different events that are triggered.    
+* BindableProperties has been removed and replaced with regular properties. Primarly because mapping BindableProperties through reflections is a much heavier task... This new update gave the mod a huge performance boost while still maintaining its statemanagement using an ObservableService class to handle the changed events - this also gives us better control over the different events that are triggered.    
 
 * Made the code more readable and easier to digest.  
 
