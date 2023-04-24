@@ -51,19 +51,14 @@ public class VehicleModsMenu : VehicleModsMenuBase
     {
         var listItemWindowTints = AddListItem(VehicleModsItemTitles.WindowTint,
             (selected, index) => { Service.CurrentWindowTint = (VehicleWindowTint)index; }, null,
-            value =>
-            {
-                if (Service.CurrentWindowTint != VehicleWindowTint.Invalid)
-                    return Service.CurrentWindowTint.GetLocalizedDisplayNameFromHash();
-                return VehicleWindowTint.None.GetLocalizedDisplayNameFromHash();
-            }, Service,
+            value => { return VehicleWindowTint.None.GetLocalizedDisplayNameFromHash(); }, Service,
             typeof(VehicleWindowTint).ToDisplayNameArray().Where(tint =>
                 tint.GetHashFromDisplayName<VehicleWindowTint>() != VehicleWindowTint.Invalid).ToArray());
 
-        if (Service.CurrentWindowTint == VehicleWindowTint.Invalid)
-            listItemWindowTints.SelectedIndex = 0;
-        else
+        if (listItemWindowTints.Contains(Service.CurrentWindowTint.GetLocalizedDisplayNameFromHash()))
             listItemWindowTints.SelectedItem = Service.CurrentWindowTint.GetLocalizedDisplayNameFromHash();
+        else
+            listItemWindowTints.SelectedIndex = 0;
     }
 
     private void BumpersMenu()

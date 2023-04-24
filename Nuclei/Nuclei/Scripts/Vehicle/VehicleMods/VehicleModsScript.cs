@@ -93,6 +93,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void UpdateWindowTint(VehicleWindowTint vehicleWindowTint)
     {
         if (vehicleWindowTint == CurrentVehicle.Mods.WindowTint) return;
+
         Service.CurrentWindowTint = CurrentVehicle.Mods.WindowTint;
     }
 
@@ -115,6 +116,9 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
             var randomRimColor = r.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
             Service.CurrentRimColor = (VehicleColor)randomRimColor;
+
+            var randomizeVehicleWindowTint = r.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
+            Service.CurrentWindowTint = (VehicleWindowTint)randomizeVehicleWindowTint;
 
             var randomLicensePlateStyle = r.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
             Service.LicensePlateStyle = (LicensePlateStyle)randomLicensePlateStyle;
