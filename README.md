@@ -18,6 +18,8 @@ Just did a HUGE refactor update. We'll be making more of these changes further d
 
 With the above in place, while other stuff are subject to change for optimization, I'm at this point in time now ready to continue updating the features of the mod itself. The Vehicle Modifications menu is still the current task at hand.  
 
+For now most collections are updated by assigning new collections or clearing one and adding new items, however we will implement the functionality of observable collections properly, to improve performance, for now I'll just make it work.
+
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
 All these updates and changes atm is for my own personal test-stage, rethinking how the different layers should interact to make the most sense, and single-ton instances are a challenge to test, scale
