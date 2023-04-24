@@ -2,91 +2,88 @@
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Helpers.Utilities;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
-using Nuclei.Services.Settings.Storage;
+using Nuclei.Services.Settings;
 using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Generics;
 
-public abstract class GenericScriptBase<TService> : Script where TService : GenericService<TService>, new()
+public abstract class GenericScriptBase<TService> : Script, IDisposable where TService : GenericService<TService>, new()
 {
-    /// <summary>
-    ///     Ped flag for seat belt.
-    ///     Setting this value to false will prevent the player from falling out of the vehicle when it crashes.
-    /// </summary>
-    protected const int FliesThroughWindscreen = 32;
-
-    /// <summary>
-    ///     Ped flag for drowning in water.
-    /// </summary>
-    protected const int DrownsInWater = 3;
-
     private static bool _eventsSubscribed;
 
-    /// <summary>
-    ///     A timer that can be subscribed to, that updates the game state every 100ms.
-    ///     This is way more efficient than subscribing to the Tick event, but scripts that require
-    ///     updates every tick should still subscribe to the Tick event.
-    /// </summary>
     protected static readonly CustomTimer GameStateTimer = new(100);
+    private static Ped _character;
+    private static GTA.Vehicle _currentVehicle;
+    private static GTA.Vehicle _lastVehicle;
 
     private readonly TService _defaultValuesService = new();
     private readonly StorageService _storageService = StorageService.Instance;
 
     protected GenericScriptBase()
     {
-        if (_storageService.GetStateService().GetState().AutoLoad.Value) Load();
-        if (_storageService.GetStateService().GetState().AutoSave.Value) _storageService.AutoSave.Value = true;
+        if (_storageService.GetStateService().GetState().AutoLoad) Load();
+        if (_storageService.GetStateService().GetState().AutoSave) _storageService.AutoSave = true;
 
         if (SubscribeToSharedEvents()) return;
     }
 
-    /// <summary>
-    ///     The service associated with the current script class.
-    /// </summary>
     protected TService Service => GenericService<TService>.Instance;
 
-    /// <summary>
-    ///     The exception service. Used to log exceptions and raise and throw errors.
-    /// </summary>
     protected ExceptionService ExceptionService => ExceptionService.Instance;
 
-    /// <summary>
-    ///     The state service. Used to save and load the state of the script to JSON files.
-    /// </summary>
     protected GenericStateService<TService> State => GenericStateService<TService>.Instance;
 
-    /// <summary>
-    ///     The vehicle the character is currently in.
-    /// </summary>
-    protected static GTA.Vehicle CurrentVehicle { get; private set; }
+    public static GTA.Vehicle CurrentVehicle
+    {
+        get => _currentVehicle;
+        private set
+        {
+            if (_currentVehicle == Game.Player.Character.CurrentVehicle) return;
+            _currentVehicle = value;
+        }
+    }
 
-    /// <summary>
-    ///     The character the player is currently controlling.
-    /// </summary>
-    protected static Ped Character { get; private set; }
+    public static Ped Character
+    {
+        get => _character;
+        private set
+        {
+            if (_character == Game.Player.Character) return;
+            _character = value;
+        }
+    }
 
-    /// <summary>
-    ///     The last vehicle the player was in.
-    /// </summary>
-    protected static GTA.Vehicle LastVehicle { get; private set; }
+    public static GTA.Vehicle LastVehicle
+    {
+        get => _lastVehicle;
+        private set
+        {
+            if (_lastVehicle == Game.Player.Character.LastVehicle) return;
+            _lastVehicle = value;
+        }
+    }
 
-    /// <summary>
-    ///     The current entity the player is controlling, returns either the character or the vehicle the character is in.
-    /// </summary>
-    protected static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
+    public static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
 
-    /// <summary>
-    ///     Subscribe to the events that are shared between all scripts.
-    /// </summary>
-    /// <returns></returns>
+    public void Dispose()
+    {
+        GameStateTimer?.Stop();
+        KeyDown -= OnKeyDown;
+        Tick -= OnTick;
+
+        _storageService.SaveRequested -= OnSaveRequested;
+        _storageService.LoadRequested -= OnLoadRequested;
+        _storageService.RestoreDefaultsRequested -= OnRestoreDefaultsRequested;
+
+        UnsubscribeOnExit();
+    }
+
     private bool SubscribeToSharedEvents()
     {
         // Ensures that the events are only subscribed once.
         if (_eventsSubscribed) return true;
-
         KeyDown += OnKeyDown;
         Tick += OnTick;
         Aborted += OnAborted;
@@ -102,46 +99,38 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         return false;
     }
 
-    /// <summary>
-    ///     Set the last vehicle the player was in.
-    /// </summary>
-    private void SetLastVehicle()
+    private void UpdateLastVehicle()
     {
-        if (CurrentVehicle != null)
-            LastVehicle = CurrentVehicle;
+        if (CurrentVehicle == null || LastVehicle == CurrentVehicle) return;
+
+        LastVehicle = CurrentVehicle;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
-        SetCharacter();
-        SetCurrentVehicle();
-        SetLastVehicle();
+        UpdateCurrentCharacter();
+        UpdateCurrentVehicle();
+        UpdateLastVehicle();
 
-        if (_storageService.AutoSave.Value && Game.IsPaused)
+        if (_storageService.AutoSave && Game.IsPaused)
             Save();
     }
 
-    /// <summary>
-    ///     Set the current character if the player has changed.
-    /// </summary>
-    private void SetCharacter()
+    private void UpdateCurrentCharacter()
     {
-        if (Character != Game.Player.Character)
-        {
-            Character = Game.Player.Character;
-            Service.Character.Value = Character;
-            Display.Notify("Character Change Registered", "Applying Settings");
-        }
+        if (Character == Game.Player.Character) return;
+        Character = Game.Player.Character;
+        Service.Character = Character;
+        Display.Notify("Character Change Registered", "Applying Settings");
     }
 
-    /// <summary>
-    ///     Set the current vehicle if the player is in a vehicle.
-    /// </summary>
-    private void SetCurrentVehicle()
+    private void UpdateCurrentVehicle()
     {
+        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
+
         CurrentVehicle =
             Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
-        Service.CurrentVehicle.Value = CurrentVehicle;
+        Service.CurrentVehicle = CurrentVehicle;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -154,8 +143,8 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
 
     private void OnAborted(object sender, EventArgs e)
     {
-        if (_storageService.AutoSave.Value) Save();
-        GameStateTimer?.Stop();
+        if (_storageService.AutoSave) Save();
+        Dispose();
     }
 
     private void OnRestoreDefaultsRequested(object sender, EventArgs e)
@@ -193,22 +182,14 @@ public abstract class GenericScriptBase<TService> : Script where TService : Gene
         Display.Notify("All Settings Loaded", "Successfully");
     }
 
-    /// <summary>
-    ///     Updates the feature if the service state is different from the game state.
-    /// </summary>
-    /// <typeparam name="T">The type.</typeparam>
-    /// <param name="bindableProperty">The bindableProperty to reference.</param>
-    /// <param name="action">The action to perform depending on the value.</param>
-    protected void UpdateFeature<T>(BindableProperty<T> bindableProperty, Action<T> action)
+    protected void UpdateFeature<T>(Func<T> getProperty, Action<T> action)
     {
-        action(bindableProperty.Value);
+        action(getProperty());
     }
 
-    /// <summary>
-    ///     Event subscription placed in this method ensures that the events subscribed to in the derived classes are only
-    ///     subscribed once.
-    /// </summary>
     protected virtual void SubscribeToEvents()
     {
     }
+
+    public abstract void UnsubscribeOnExit();
 }

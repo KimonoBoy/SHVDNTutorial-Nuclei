@@ -22,30 +22,36 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         GameStateTimer.SubscribeToTimerElapsed(UpdateVehicleWeapon);
     }
 
+    public override void UnsubscribeOnExit()
+    {
+        Tick -= OnTick;
+        GameStateTimer.UnsubscribeFromTimerElapsed(UpdateVehicleWeapon);
+    }
+
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        ProcessVehicleWeaponShoot(Service.VehicleWeapon.Value);
+        UpdateFeature(() => Service.VehicleWeapon, ProcessVehicleWeaponShoot);
     }
 
     private void UpdateVehicleWeapon(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.FireRate, UpdateFireRate);
+        UpdateFeature(() => Service.FireRate, UpdateFireRate);
     }
 
     private void UpdateFireRate(int fireRate)
     {
-        if (!Service.HasVehicleWeapons.Value) return;
+        if (!Service.HasVehicleWeapons) return;
 
         _minShootInterval = fireRate * 25;
     }
 
     private void ProcessVehicleWeaponShoot(uint weaponHash)
     {
-        if (!Service.HasVehicleWeapons.Value || !Game.IsKeyPressed(Keys.T)) return;
+        if (!Service.HasVehicleWeapons || !Game.IsKeyPressed(Keys.T)) return;
         RemoveDistantProjectiles();
 
         if (!IsTimeToShoot()) return;
@@ -55,11 +61,11 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         {
             // Defines the target point for the projectile.
             Vector3? targetPoint = null;
-            if (Service.PointAndShoot.Value && Character.IsAiming)
+            if (Service.PointAndShoot && Character.IsAiming)
                 targetPoint = GetCrosshairAimPoint(MinProjectileDistance);
 
             // Get shooting points based on the VehicleWeaponAttachment value
-            var shootingPoints = GetShootingPoints(Service.VehicleWeaponAttachment.Value);
+            var shootingPoints = GetShootingPoints(Service.VehicleWeaponAttachment);
             foreach (var shootingPoint in shootingPoints) ShootBullet(weaponHash, shootingPoint, targetPoint);
         }
         catch (CustomExceptionBase vehicleWeaponsException)

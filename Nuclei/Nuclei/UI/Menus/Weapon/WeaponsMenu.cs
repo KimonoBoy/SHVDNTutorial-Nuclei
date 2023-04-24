@@ -19,23 +19,20 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
 
     private void NoReload()
     {
-        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, Service.NoReload,
-            @checked => { Service.NoReload.Value = @checked; });
-
-        Shown += (sender, args) => { checkBoxNoReload.Enabled = Service.InfiniteAmmo.Value; };
-        Service.InfiniteAmmo.ValueChanged += (sender, args) => { checkBoxNoReload.Enabled = args.Value; };
+        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, () => Service.NoReload,
+            @checked => { Service.NoReload = @checked; }, Service);
     }
 
     private void InfiniteAmmo()
     {
-        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, Service.InfiniteAmmo,
-            @checked => { Service.InfiniteAmmo.Value = @checked; });
+        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, () => Service.InfiniteAmmo,
+            @checked => { Service.InfiniteAmmo = @checked; }, Service);
     }
 
     private void FireBullets()
     {
-        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, Service.FireBullets,
-            @checked => { Service.FireBullets.Value = @checked; });
+        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, () => Service.FireBullets,
+            @checked => { Service.FireBullets = @checked; }, Service);
     }
 
     private void GiveAllWeapons()

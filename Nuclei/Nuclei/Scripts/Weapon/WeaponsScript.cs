@@ -15,13 +15,20 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         GameStateTimer.SubscribeToTimerElapsed(UpdateWeapons);
     }
 
+    public override void UnsubscribeOnExit()
+    {
+        Tick -= OnTick;
+        Service.AllWeaponsRequested -= OnAllWeaponsRequested;
+        GameStateTimer.UnsubscribeFromTimerElapsed(UpdateWeapons);
+    }
+
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
 
-        UpdateFeature(Service.FireBullets, ProcessFireBullets);
-        UpdateFeature(Service.InfiniteAmmo, ProcessInfiniteAmmo);
-        UpdateFeature(Service.NoReload, ProcessNoReload);
+        UpdateFeature(() => Service.FireBullets, ProcessFireBullets);
+        UpdateFeature(() => Service.InfiniteAmmo, ProcessInfiniteAmmo);
+        UpdateFeature(() => Service.NoReload, ProcessNoReload);
     }
 
     private void UpdateWeapons(object sender, EventArgs e)
@@ -45,7 +52,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
     private void ProcessNoReload(bool noReload)
     {
         if (!Character.IsShooting) return;
-        var infiniteAmmoNoReload = noReload && Service.InfiniteAmmo.Value;
+        var infiniteAmmoNoReload = noReload && Service.InfiniteAmmo;
         if (infiniteAmmoNoReload)
             Function.Call(Hash.REFILL_AMMO_INSTANTLY, Character);
 

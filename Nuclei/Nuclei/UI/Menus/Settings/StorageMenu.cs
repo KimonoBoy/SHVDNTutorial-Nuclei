@@ -1,13 +1,13 @@
 ﻿using System;
 using Nuclei.Enums.UI;
-using Nuclei.Services.Settings.Storage;
+using Nuclei.Services.Settings;
 using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Settings;
 
-public class SaveAndLoadMenu : GenericMenuBase<StorageService>
+public class StorageMenu : GenericMenuBase<StorageService>
 {
-    public SaveAndLoadMenu(Enum @enum) : base(@enum)
+    public StorageMenu(Enum @enum) : base(@enum)
     {
         Save();
         Load();
@@ -33,13 +33,13 @@ public class SaveAndLoadMenu : GenericMenuBase<StorageService>
 
     private void AutoLoad()
     {
-        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, Service.AutoLoad,
-            @checked => { Service.AutoLoad.Value = @checked; });
+        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, () => Service.AutoLoad,
+            @checked => { Service.AutoLoad = @checked; }, Service);
     }
 
     private void AutoSave()
     {
-        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, Service.AutoSave,
-            @checked => { Service.AutoSave.Value = @checked; });
+        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, () => Service.AutoSave,
+            @checked => { Service.AutoSave = @checked; }, Service);
     }
 }

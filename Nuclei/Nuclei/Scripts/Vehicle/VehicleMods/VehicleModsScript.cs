@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using GTA;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle.VehicleMods;
 
@@ -14,83 +14,119 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
-        Service.CurrentVehicle.ValueChanged += OnCurrentVehicleChanged;
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
-        Service.LicensePlateStyle.ValueChanged += OnLicensePlateStyleChanged;
         Service.RandomizeModsRequested += OnRandomizeModsRequested;
-        Service.CurrentWheelType.ValueChanged += OnCurrentWheelTypeChanged;
-        Service.CurrentRimColor.ValueChanged += OnCurrentRimColorChanged;
-        Service.CurrentCustomTires.ValueChanged += OnCustomTiresChanged;
-        Service.CurrentTireSmokeColor.ValueChanged += OnCurrentTireSmokeChanged;
+        Service.PropertyChanged += OnPropertyChanged;
     }
 
-    private void OnCurrentTireSmokeChanged(object sender, ValueEventArgs<Color> e)
+    public override void UnsubscribeOnExit()
     {
-        if (CurrentVehicle == null) return;
-
-        CurrentVehicle.Mods.TireSmokeColor = e.Value;
+        Tick -= OnTick;
+        Service.LicensePlateInputRequested -= OnLicensePlateInputRequested;
+        Service.RandomizeModsRequested -= OnRandomizeModsRequested;
+        Service.PropertyChanged -= OnPropertyChanged;
     }
 
-    private void OnCustomTiresChanged(object sender, ValueEventArgs<bool> customTires)
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (CurrentVehicle == null) return;
+        if (Service.CurrentVehicle == null) return;
 
-        CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = customTires.Value;
-        CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = customTires.Value;
-    }
+        if (e.PropertyName == nameof(Service.CurrentVehicle))
+        {
+            InstallModKit();
+            UpdateFeature(() => Service.ValidVehicleModTypes, UpdateValidModTypes);
+            UpdateFeature(() => Service.ValidWheelTypes, UpdateValidWheelTypes);
+            UpdateFeature(() => Service.LicensePlate, UpdateLicensePlate);
+            UpdateFeature(() => Service.LicensePlateStyle, UpdateLicensePlateStyle);
+            UpdateFeature(() => Service.CurrentWheelType, UpdateWheelType);
+            UpdateFeature(() => Service.CurrentRimColor, UpdateRimColor);
+            UpdateFeature(() => Service.CurrentCustomTires, UpdateCustomTires);
+            UpdateFeature(() => Service.CurrentTireSmokeColor, UpdateTireSmokeColor);
+        }
 
-    private void OnCurrentRimColorChanged(object sender, ValueEventArgs<VehicleColor> rimColor)
-    {
-        if (CurrentVehicle == null) return;
+        if (e.PropertyName == nameof(Service.LicensePlate))
+        {
+            if (Service.LicensePlate == CurrentVehicle.Mods.LicensePlate) return;
+            CurrentVehicle.Mods.LicensePlate = Service.LicensePlate;
+        }
 
-        CurrentVehicle.Mods.RimColor = rimColor.Value;
-    }
+        if (e.PropertyName == nameof(Service.LicensePlateStyle))
+        {
+            if (Service.LicensePlateStyle == CurrentVehicle.Mods.LicensePlateStyle) return;
 
-    private void OnCurrentWheelTypeChanged(object sender, ValueEventArgs<VehicleWheelType> currentWheelType)
-    {
-        if (CurrentVehicle == null) return;
+            CurrentVehicle.Mods.LicensePlateStyle = Service.LicensePlateStyle;
+        }
 
-        CurrentVehicle.Mods.WheelType = currentWheelType.Value;
+        if (e.PropertyName == nameof(Service.CurrentWheelType))
+        {
+            if (Service.CurrentWheelType == CurrentVehicle.Mods.WheelType) return;
+
+            CurrentVehicle.Mods.WheelType = Service.CurrentWheelType;
+        }
+
+        if (e.PropertyName == nameof(Service.CurrentRimColor))
+        {
+            if (Service.CurrentRimColor == CurrentVehicle.Mods.RimColor) return;
+            CurrentVehicle.Mods.RimColor = Service.CurrentRimColor;
+        }
+
+        if (e.PropertyName == nameof(Service.CurrentCustomTires))
+        {
+            if (Service.CurrentCustomTires == CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation) return;
+            CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CurrentCustomTires;
+            CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CurrentCustomTires;
+        }
+
+        if (e.PropertyName == nameof(Service.CurrentTireSmokeColor))
+        {
+            if (Service.CurrentTireSmokeColor == CurrentVehicle.Mods.TireSmokeColor) return;
+            CurrentVehicle.Mods.TireSmokeColor = Service.CurrentTireSmokeColor;
+        }
     }
 
     private void OnRandomizeModsRequested(object sender, ObservableCollection<VehicleModType> modsToRandomize)
     {
         if (CurrentVehicle == null) return;
 
-        Random r = new();
-        if (!CurrentVehicle.Mods.AllowedWheelTypes.Contains(VehicleWheelType.BikeWheels))
+        try
         {
-            var randomWheelType = r.Next(-1, CurrentVehicle.Mods.AllowedWheelTypes.Length);
-            Service.CurrentWheelType.Value = (VehicleWheelType)randomWheelType;
+            Random r = new();
+            if (!Service.ValidWheelTypes.Contains(VehicleWheelType.BikeWheels))
+            {
+                var randomWheelType = r.Next(0, CurrentVehicle.Mods.AllowedWheelTypes.Length);
+                Service.CurrentWheelType = (VehicleWheelType)randomWheelType;
+            }
+            else
+            {
+                Service.CurrentWheelType = VehicleWheelType.BikeWheels;
+            }
+
+            var randomRimColor = r.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+            Service.CurrentRimColor = (VehicleColor)randomRimColor;
+
+            var randomLicensePlateStyle = r.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
+            Service.LicensePlateStyle = (LicensePlateStyle)randomLicensePlateStyle;
+
+            foreach (var vehicleModType in modsToRandomize)
+            {
+                var currentMod = CurrentVehicle.Mods[vehicleModType];
+                var randomMod = r.Next(-1, currentMod.Count);
+                if (currentMod.Index == randomMod) continue;
+                currentMod.Index = randomMod;
+                Yield();
+            }
+
+            var randomizeTireSmoke = r.Next(0, Service.TireSmokeColorDictionary.Count);
+            Service.CurrentTireSmokeColor = Service.TireSmokeColorDictionary.ElementAt(randomizeTireSmoke).Value;
+
+            var randomizeCustomTires = r.Next(0, 2);
+            Service.CurrentCustomTires = randomizeCustomTires != 0;
         }
-        else
+        catch (Exception e)
         {
-            Service.CurrentWheelType.Value = VehicleWheelType.BikeWheels;
+            // Need feedback on this.
+            ExceptionService.RaiseError(e);
         }
-
-        var randomRimColor = r.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        Service.CurrentRimColor.Value = (VehicleColor)randomRimColor;
-
-        var randomLicensePlateStyle = r.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
-        Service.LicensePlateStyle.Value = (LicensePlateStyle)randomLicensePlateStyle;
-
-        foreach (var vehicleModType in modsToRandomize)
-        {
-            var currentMod = CurrentVehicle.Mods[vehicleModType];
-            var randomMod = r.Next(-1, currentMod.Count);
-            if (currentMod.Index == randomMod) continue;
-            currentMod.Index = randomMod;
-            Yield();
-        }
-    }
-
-    private void OnLicensePlateStyleChanged(object sender, ValueEventArgs<LicensePlateStyle> licensePlateStyle)
-    {
-        if (CurrentVehicle == null) return;
-
-        if (licensePlateStyle.Value == CurrentVehicle.Mods.LicensePlateStyle) return;
-
-        CurrentVehicle.Mods.LicensePlateStyle = licensePlateStyle.Value;
     }
 
     private void OnLicensePlateInputRequested(object sender, EventArgs e)
@@ -103,20 +139,11 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         CurrentVehicle.Mods.LicensePlate = licensePlateInput;
     }
 
-    private void OnCurrentVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
-    {
-        if (currentVehicle.Value == null) return;
-
-        InstallModKit();
-        UpdateFeature(Service.ValidVehicleModTypes, UpdateValidModTypes);
-        UpdateFeature(Service.ValidWheelTypes, UpdateValidWheelTypes);
-    }
-
     private void UpdateTireSmokeColor(Color tireSmokeColor)
     {
         if (tireSmokeColor == CurrentVehicle.Mods.TireSmokeColor) return;
 
-        Service.CurrentTireSmokeColor.Value = CurrentVehicle.Mods.TireSmokeColor;
+        Service.CurrentTireSmokeColor = CurrentVehicle.Mods.TireSmokeColor;
     }
 
     private void UpdateValidWheelTypes(ObservableCollection<VehicleWheelType> validWheelTypes)
@@ -130,7 +157,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (licensePlateStyle == CurrentVehicle.Mods.LicensePlateStyle) return;
 
-        Service.LicensePlateStyle.Value = CurrentVehicle.Mods.LicensePlateStyle;
+        Service.LicensePlateStyle = CurrentVehicle.Mods.LicensePlateStyle;
     }
 
     private void UpdateValidModTypes(ObservableCollection<VehicleModType> validModTypes)
@@ -147,46 +174,44 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
-        UpdateFeature(Service.LicensePlate, UpdateLicensePlate);
-        UpdateFeature(Service.LicensePlateStyle, UpdateLicensePlateStyle);
-        UpdateFeature(Service.CurrentWheelType, UpdateWheelType);
-        UpdateFeature(Service.CurrentRimColor, UpdateRimColor);
-        UpdateFeature(Service.CurrentCustomTires, UpdateCustomTires);
-        UpdateFeature(Service.CurrentTireSmokeColor, UpdateTireSmokeColor);
+        UpdateFeature(() => Service.LicensePlate, UpdateLicensePlate);
+        UpdateFeature(() => Service.LicensePlateStyle, UpdateLicensePlateStyle);
+        UpdateFeature(() => Service.CurrentWheelType, UpdateWheelType);
+        UpdateFeature(() => Service.CurrentRimColor, UpdateRimColor);
+        UpdateFeature(() => Service.CurrentCustomTires, UpdateCustomTires);
     }
 
     private void UpdateCustomTires(bool customTires)
     {
         if (customTires == CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation) return;
 
-        Service.CurrentCustomTires.Value = CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation &&
-                                           CurrentVehicle.Mods[VehicleModType.RearWheel].Variation;
+        Service.CurrentCustomTires = CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation;
     }
 
     private void UpdateRimColor(VehicleColor currentRimColor)
     {
         if (currentRimColor == CurrentVehicle.Mods.RimColor) return;
 
-        Service.CurrentRimColor.Value = CurrentVehicle.Mods.RimColor;
+        Service.CurrentRimColor = CurrentVehicle.Mods.RimColor;
     }
 
     private void UpdateWheelType(VehicleWheelType currentWheelType)
     {
         if (currentWheelType == CurrentVehicle.Mods.WheelType) return;
 
-        Service.CurrentWheelType.Value = CurrentVehicle.Mods.WheelType;
+        Service.CurrentWheelType = CurrentVehicle.Mods.WheelType;
     }
 
     private void UpdateLicensePlate(string licensePlate)
     {
         if (licensePlate == CurrentVehicle.Mods.LicensePlate) return;
 
-        Service.LicensePlate.Value = CurrentVehicle.Mods.LicensePlate;
+        Service.LicensePlate = CurrentVehicle.Mods.LicensePlate;
     }
 
     private void InstallModKit()
     {
         CurrentVehicle.Mods.InstallModKit();
-        CurrentVehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true; // Revisited later.
+        CurrentVehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
     }
 }

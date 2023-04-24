@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using LemonUI.Menus;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle;
 using Nuclei.UI.Menus.Base;
@@ -27,6 +29,19 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         SeatBelt();
         NeverFallOffBike();
         DriveUnderWater();
+        Service.PropertyChanged += OnPropertyChanged;
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.CurrentVehicle))
+        {
+            var item = GetItem<NativeSubmenuItem>(MenuTitles.VehicleMods);
+            if (item == null) return;
+            item.Enabled = Service.CurrentVehicle != null;
+            UpdateAltTitleOnDisable(item, Service.CurrentVehicle != null,
+                Service.CurrentVehicle?.LocalizedName + " MENU", "No Vehicle");
+        }
     }
 
     private void AddVehicleModsMenu()
@@ -35,13 +50,8 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         var vehicleModItem = AddMenu(vehicleModsMenu);
         Shown += (sender, args) =>
         {
-            UpdateAltTitleOnDisable(vehicleModItem, Service.CurrentVehicle.Value != null,
-                Service.CurrentVehicle.Value?.LocalizedName + " MENU",
-                "No Vehicle");
-        };
-        Service.CurrentVehicle.ValueChanged += (sender, vehicle) =>
-        {
-            UpdateAltTitleOnDisable(vehicleModItem, vehicle.Value != null, vehicle.Value?.LocalizedName + " MENU",
+            UpdateAltTitleOnDisable(vehicleModItem, Service.CurrentVehicle != null,
+                Service.CurrentVehicle?.LocalizedName + " MENU",
                 "No Vehicle");
         };
     }
@@ -54,20 +64,20 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void LockDoors()
     {
-        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, Service.DoorsAlwaysLocked,
-            @checked => { Service.DoorsAlwaysLocked.Value = @checked; });
+        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, () => Service.DoorsAlwaysLocked,
+            @checked => { Service.DoorsAlwaysLocked = @checked; }, Service);
     }
 
     private void NeverFallOffBike()
     {
-        var checkBoxNeverFallOffBike = AddCheckbox(VehicleItemTitles.NeverFallOffBike, Service.NeverFallOffBike,
-            @checked => { Service.NeverFallOffBike.Value = @checked; });
+        var checkBoxNeverFallOffBike = AddCheckbox(VehicleItemTitles.NeverFallOffBike, () => Service.NeverFallOffBike,
+            @checked => { Service.NeverFallOffBike = @checked; }, Service);
     }
 
     private void DriveUnderWater()
     {
-        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, Service.CanDriveUnderWater,
-            @checked => { Service.CanDriveUnderWater.Value = @checked; });
+        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, () => Service.CanDriveUnderWater,
+            @checked => { Service.CanDriveUnderWater = @checked; }, Service);
     }
 
     private void AddVehicleSpawnerMenu()
@@ -83,14 +93,14 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void SpeedBoost()
     {
-        var sliderItemSpeedBoost = AddSliderItem(VehicleItemTitles.SpeedBoost, Service.SpeedBoost,
-            speedBoostValue => { Service.SpeedBoost.Value = speedBoostValue; }, 0, 5);
+        var sliderItemSpeedBoost = AddSliderItem(VehicleItemTitles.SpeedBoost, () => Service.SpeedBoost,
+            speedBoostValue => { Service.SpeedBoost = speedBoostValue; }, 0, 5, Service);
     }
 
     private void SeatBelt()
     {
-        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, Service.HasSeatBelt,
-            @checked => { Service.HasSeatBelt.Value = @checked; });
+        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, () => Service.HasSeatBelt,
+            @checked => { Service.HasSeatBelt = @checked; }, Service);
     }
 
     private void RepairVehicle()
@@ -100,7 +110,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void Indestructible()
     {
-        var checkBoxIndestructible = AddCheckbox(VehicleItemTitles.Indestructible, Service.IsIndestructible,
-            @checked => { Service.IsIndestructible.Value = @checked; });
+        var checkBoxIndestructible = AddCheckbox(VehicleItemTitles.Indestructible, () => Service.IsIndestructible,
+            @checked => { Service.IsIndestructible = @checked; }, Service);
     }
 }

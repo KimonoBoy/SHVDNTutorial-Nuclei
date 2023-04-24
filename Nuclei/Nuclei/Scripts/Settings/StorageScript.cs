@@ -1,5 +1,5 @@
 ﻿using Nuclei.Scripts.Generics;
-using Nuclei.Services.Settings.Storage;
+using Nuclei.Services.Settings;
 
 namespace Nuclei.Scripts.Settings;
 
@@ -7,7 +7,11 @@ public class StorageScript : GenericScriptBase<StorageService>
 {
     public StorageScript()
     {
-        Service.AutoSave.Value = State.GetState().AutoSave.Value;
-        Service.AutoLoad.Value = State.GetState().AutoLoad.Value;
+        Service.AutoSave = State.GetState().AutoSave;
+        Service.AutoLoad = State.GetState().AutoLoad;
+    }
+
+    public override void UnsubscribeOnExit()
+    {
     }
 }

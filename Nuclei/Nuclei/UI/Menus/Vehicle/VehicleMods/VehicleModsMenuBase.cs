@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using GTA;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Base;
 
@@ -20,32 +20,35 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 
     private void OnClosed(object sender, EventArgs e)
     {
-        Service.CurrentVehicle.ValueChanged -= OnVehicleChanged;
+        Service.PropertyChanged -= OnPropertyChanged;
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.CurrentVehicle))
+        {
+            if (!Visible) return;
+            if (Service.CurrentVehicle == null)
+            {
+                Back();
+                return;
+            }
+
+            UpdateMenuItems();
+        }
     }
 
     private void OnShown(object sender, EventArgs e)
     {
-        if (Service.CurrentVehicle.Value == null)
-        {
-            Back();
-            return;
-        }
-
-        UpdateMenuItems();
-        Service.CurrentVehicle.ValueChanged += OnVehicleChanged;
-    }
-
-    private void OnVehicleChanged(object sender, ValueEventArgs<GTA.Vehicle> currentVehicle)
-    {
         if (!Visible) return;
-
-        if (currentVehicle.Value == null)
+        if (Service.CurrentVehicle == null)
         {
             Back();
             return;
         }
 
         UpdateMenuItems();
+        Service.PropertyChanged += OnPropertyChanged;
     }
 
     protected abstract ObservableCollection<VehicleModType> GetValidModTypes();
@@ -59,11 +62,12 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
     {
         foreach (var modType in GetValidModTypes())
         {
-            var currentMod = Service.CurrentVehicle.Value.Mods[modType];
+            var currentMod = Service.CurrentVehicle.Mods[modType];
             var currentIndex = currentMod.Index;
             var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
                 (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; },
                 null,
+                null, Service,
                 Enumerable.Range(0, currentMod.Count + 1).ToList().Select(i =>
                 {
                     if (i == currentMod.Count) return "Stock" + $" {0}/{currentMod.Count}";
@@ -72,7 +76,18 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
                     return localizedString;
                 }).ToArray());
 
-            listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
+            if (currentIndex == 0)
+            {
+                /*
+                 * Weird fix, but works.
+                 */
+                listItem.SelectedIndex++;
+                listItem.SelectedIndex--;
+            }
+            else
+            {
+                listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
+            }
         }
     }
 }

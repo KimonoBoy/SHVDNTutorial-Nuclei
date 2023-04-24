@@ -18,9 +18,9 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
     {
     }
 
-    private string GetModdedVehicleDescription(CustomVehicle vehicle)
+    private string GetModdedVehicleDescription(CustomVehicleDto vehicleDto)
     {
-        var spawnTitle = $"Spawn: {vehicle.VehicleHash.Value.GetLocalizedDisplayNameFromHash()}";
+        var spawnTitle = $"Spawn: {vehicleDto.VehicleHash.GetLocalizedDisplayNameFromHash()}";
         return $"{spawnTitle}";
     }
 
@@ -28,10 +28,10 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
     {
         Clear();
         SaveCurrentVehicle();
-        foreach (var customVehicle in (ObservableCollection<CustomVehicle>)newItems)
+        foreach (var customVehicle in (ObservableCollection<CustomVehicleDto>)newItems)
         {
             var itemSpawnCustomVehicle =
-                AddItem(customVehicle.Title.Value,
+                AddItem(customVehicle.Title,
                     $"{GetModdedVehicleDescription(customVehicle)}",
                     () => { Service.SpawnVehicle(customVehicle); });
         }
@@ -42,17 +42,17 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add when e.NewItems != null:
-                e.NewItems.Cast<CustomVehicle>().ToList().ForEach(customVehicle =>
+                e.NewItems.Cast<CustomVehicleDto>().ToList().ForEach(customVehicle =>
                 {
-                    var itemVehicle = AddItem(customVehicle.Title.Value,
+                    var itemVehicle = AddItem(customVehicle.Title,
                         $"{GetModdedVehicleDescription(customVehicle)}",
                         () => { Service.SpawnVehicle(customVehicle); });
                 });
                 break;
             case NotifyCollectionChangedAction.Remove when e.OldItems != null:
-                e.OldItems.Cast<CustomVehicle>().ToList().ForEach(customVehicle =>
+                e.OldItems.Cast<CustomVehicleDto>().ToList().ForEach(customVehicle =>
                 {
-                    var item = Items.FirstOrDefault(i => i.Title == customVehicle.Title.Value);
+                    var item = Items.FirstOrDefault(i => i.Title == customVehicle.Title);
                     if (item != null)
                     {
                         var itemIndex = Items.IndexOf(item);
@@ -66,16 +66,16 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 
     protected override void OnShown(object sender, EventArgs e)
     {
-        UpdateMenuItems(Service.CustomVehicles.Value);
-        Service.CustomVehicles.Value.CollectionChanged += OnVehicleCollectionChanged<CustomVehicle>;
+        UpdateMenuItems(Service.CustomVehicles);
+        Service.CustomVehicles.CollectionChanged += OnVehicleCollectionChanged<CustomVehicleDto>;
     }
 
     protected override void UpdateSelectedItem(string title)
     {
-        var vehicleHash = Service.CustomVehicles.Value.FirstOrDefault(v => v.Title.Value == title)?.VehicleHash.Value;
+        var vehicleHash = Service.CustomVehicles.FirstOrDefault(v => v.Title == title)?.VehicleHash;
 
         if (vehicleHash != null)
-            Service.CurrentVehicleHash.Value = (VehicleHash)vehicleHash;
+            Service.CurrentVehicleHash = (VehicleHash)vehicleHash;
     }
 
     private void SaveCurrentVehicle()
@@ -83,16 +83,16 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitles.SaveCurrentVehicle,
             () =>
             {
-                if (Service.CurrentVehicle.Value == null)
+                if (Service.CurrentVehicle == null)
                 {
-                    Notification.Show("You must enter a vehicle first.");
+                    Notification.Show("You must enter a vehicleDto first.");
                     return;
                 }
 
                 var userInput = Game.GetUserInput(WindowTitle.EnterMessage60, "", 60);
 
-                if (Service.CustomVehicles.Value.Any(v =>
-                        v.Title.Value == userInput))
+                if (Service.CustomVehicles.Any(v =>
+                        v.Title == userInput))
                 {
                     Notification.Show("Vehicle with that title already exists. Please enter a unique title.");
                     return;
@@ -100,54 +100,30 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 
                 if (string.IsNullOrEmpty(userInput))
                 {
-                    Notification.Show("Please enter a title to save the vehicle.");
+                    Notification.Show("Please enter a title to save the vehicleDto.");
                     return;
                 }
 
-                var customVehicle = new CustomVehicle
+                var customVehicle = new CustomVehicleDto
                 {
-                    Title =
-                    {
-                        Value = userInput
-                    },
-                    VehicleHash =
-                    {
-                        Value = (VehicleHash)Service.CurrentVehicle.Value.Model.Hash
-                    },
-                    LicensePlate =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods.LicensePlate
-                    },
-                    LicensePlateStyle =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods.LicensePlateStyle
-                    },
-                    WheelType =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods.WheelType
-                    },
-                    RimColor =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods.RimColor
-                    },
-                    CustomTires =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods[VehicleModType.FrontWheel].Variation
-                    },
-                    TireSmokeColor =
-                    {
-                        Value = Service.CurrentVehicle.Value.Mods.TireSmokeColor
-                    }
+                    Title = userInput,
+                    VehicleHash = (VehicleHash)Service.CurrentVehicle.Model.Hash,
+                    LicensePlate = Service.CurrentVehicle.Mods.LicensePlate,
+                    LicensePlateStyle = Service.CurrentVehicle.Mods.LicensePlateStyle,
+                    WheelType = Service.CurrentVehicle.Mods.WheelType,
+                    RimColor = Service.CurrentVehicle.Mods.RimColor,
+                    CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
+                    TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor
                 };
 
-                foreach (var vehicleMod in Service.CurrentVehicle.Value.Mods.ToArray())
+                foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())
                 {
-                    var customVehicleMod = new CustomVehicleMod(vehicleMod.Type, vehicleMod.Index);
-                    customVehicle.VehicleMods.Value.Add(customVehicleMod);
+                    var customVehicleMod = new CustomVehicleModDto(vehicleMod.Type, vehicleMod.Index);
+                    customVehicle.VehicleMods.Add(customVehicleMod);
                 }
 
 
-                Service.CustomVehicles.Value.Add(customVehicle);
+                Service.CustomVehicles.Add(customVehicle);
             });
     }
 

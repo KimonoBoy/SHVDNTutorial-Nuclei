@@ -8,6 +8,8 @@ namespace Nuclei.Scripts.Vehicle;
 
 public class VehicleScript : GenericScriptBase<VehicleService>
 {
+    private const int FliesThroughWindscreen = 32;
+
     private DateTime _speedBoostTimer = DateTime.UtcNow;
 
     protected override void SubscribeToEvents()
@@ -18,12 +20,20 @@ public class VehicleScript : GenericScriptBase<VehicleService>
         GameStateTimer.SubscribeToTimerElapsed(UpdateVehicle);
     }
 
+    public override void UnsubscribeOnExit()
+    {
+        Tick -= OnTick;
+        Service.RepairRequested -= OnRepairRequested;
+        Service.VehicleFlipRequested -= OnVehicleFlipRequested;
+        GameStateTimer.UnsubscribeFromTimerElapsed(UpdateVehicle);
+    }
+
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.CanDriveUnderWater, ProcessDriveUnderWater);
-        UpdateFeature(Service.SpeedBoost, ProcessSpeedBoost);
+        UpdateFeature(() => Service.CanDriveUnderWater, ProcessDriveUnderWater);
+        UpdateFeature(() => Service.SpeedBoost, ProcessSpeedBoost);
     }
 
     private void OnRepairRequested(object sender, EventArgs e)
@@ -38,13 +48,13 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void UpdateVehicle(object sender, EventArgs e)
     {
-        UpdateFeature(Service.DoorsAlwaysLocked, UpdateLockDoors);
+        UpdateFeature(() => Service.DoorsAlwaysLocked, UpdateLockDoors);
 
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(Service.IsIndestructible, UpdateIndestructible);
-        UpdateFeature(Service.HasSeatBelt, UpdateSeatBelt);
-        UpdateFeature(Service.NeverFallOffBike, UpdateNeverFallOffBike);
+        UpdateFeature(() => Service.IsIndestructible, UpdateIndestructible);
+        UpdateFeature(() => Service.HasSeatBelt, UpdateSeatBelt);
+        UpdateFeature(() => Service.NeverFallOffBike, UpdateNeverFallOffBike);
     }
 
     private void UpdateLockDoors(bool lockDoors)
@@ -71,7 +81,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
         _speedBoostTimer = DateTime.UtcNow;
 
-        CurrentVehicle.Speed += speedValue / 2.0f;
+        CurrentVehicle.Speed += speedValue / 1.5f;
     }
 
     private void UpdateIndestructible(bool indestructible)

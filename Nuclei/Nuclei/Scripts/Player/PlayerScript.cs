@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -6,7 +7,6 @@ using GTA.Math;
 using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
@@ -17,28 +17,45 @@ namespace Nuclei.Scripts.Player;
 
 public class PlayerScript : GenericScriptBase<PlayerService>
 {
+    private const int DrownsInWater = 3;
     private DateTime _lastEntityCheck = DateTime.UtcNow;
 
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
         KeyDown += OnKeyDown;
-        Service.PlayerFixed += OnPlayerFixed;
-        Service.WantedLevel.ValueChanged += OnWantedLevelChanged;
+        Service.PlayerFixRequested += OnPlayerFixRequested;
         Service.CashInputRequested += OnCashInputRequested;
         Service.AddCashRequested += OnAddCashRequested;
+        Service.PropertyChanged += OnPropertyChanged;
         GameStateTimer.SubscribeToTimerElapsed(UpdatePlayer);
+    }
+
+    public override void UnsubscribeOnExit()
+    {
+        Tick -= OnTick;
+        KeyDown -= OnKeyDown;
+        Service.PlayerFixRequested -= OnPlayerFixRequested;
+        Service.CashInputRequested -= OnCashInputRequested;
+        Service.AddCashRequested -= OnAddCashRequested;
+        Service.PropertyChanged -= OnPropertyChanged;
+        GameStateTimer.UnsubscribeFromTimerElapsed(UpdatePlayer);
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.WantedLevel)) Game.Player.WantedLevel = Service.WantedLevel;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
 
-        UpdateFeature(Service.WantedLevel, UpdateWantedLevel);
-        UpdateFeature(Service.IsNoiseless, ProcessNoiseless);
-        UpdateFeature(Service.CanSuperJump, ProcessSuperJump);
-        UpdateFeature(Service.IsOnePunchMan, ProcessOnePunchMan);
-        UpdateFeature(Service.SuperSpeed, ProcessSuperSpeed);
+        UpdateFeature(() => Service.WantedLevel, UpdateWantedLevel);
+        UpdateFeature(() => Service.IsNoiseless, ProcessNoiseless);
+        UpdateFeature(() => Service.CanSuperJump, ProcessSuperJump);
+        UpdateFeature(() => Service.IsOnePunchMan, ProcessOnePunchMan);
+        UpdateFeature(() => Service.SuperSpeed, ProcessSuperSpeed);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -46,15 +63,10 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         if (e.KeyCode == Keys.T && e.Control) CurrentEntity.TeleportToBlip(BlipSprite.Waypoint);
     }
 
-    private void OnPlayerFixed(object sender, EventArgs e)
+    private void OnPlayerFixRequested(object sender, EventArgs e)
     {
         Character.Health = Character.MaxHealth;
         Character.Armor = Game.Player.MaxArmor;
-    }
-
-    private void OnWantedLevelChanged(object sender, ValueEventArgs<int> wantedLevel)
-    {
-        Game.Player.WantedLevel = wantedLevel.Value;
     }
 
     private void OnCashInputRequested(object sender, EventArgs e)
@@ -71,16 +83,16 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         if (Character == null) return;
 
-        UpdateFeature(Service.IsInvincible, UpdateInvincible);
-        UpdateFeature(Service.IsInvisible, UpdateInvisible);
-        UpdateFeature(Service.HasInfiniteBreath, UpdateInfiniteBreath);
-        UpdateFeature(Service.CanRideOnCars, UpdateRideOnCars);
+        UpdateFeature(() => Service.IsInvincible, UpdateInvincible);
+        UpdateFeature(() => Service.IsInvisible, UpdateInvisible);
+        UpdateFeature(() => Service.HasInfiniteBreath, UpdateInfiniteBreath);
+        UpdateFeature(() => Service.CanRideOnCars, UpdateRideOnCars);
 
         /*
          * Process Functions that doesn't need to be called every tick.
          */
-        UpdateFeature(Service.HasInfiniteStamina, ProcessInfiniteStamina);
-        UpdateFeature(Service.HasInfiniteSpecialAbility, ProcessInfiniteSpecialAbility);
+        UpdateFeature(() => Service.HasInfiniteStamina, ProcessInfiniteStamina);
+        UpdateFeature(() => Service.HasInfiniteSpecialAbility, ProcessInfiniteSpecialAbility);
     }
 
     private void UpdateInvincible(bool invincible)
@@ -118,11 +130,11 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void UpdateWantedLevel(int wantedLevel)
     {
-        if (Service.IsWantedLevelLocked.Value)
-            Game.Player.WantedLevel = Service.LockedWantedLevel.Value;
+        if (Service.IsWantedLevelLocked)
+            Game.Player.WantedLevel = Service.LockedWantedLevel;
 
         if (wantedLevel != Game.Player.WantedLevel)
-            Service.WantedLevel.Value = Game.Player.WantedLevel;
+            Service.WantedLevel = Game.Player.WantedLevel;
     }
 
     /// <summary>

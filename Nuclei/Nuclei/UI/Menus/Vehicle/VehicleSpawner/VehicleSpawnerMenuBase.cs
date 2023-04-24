@@ -30,8 +30,8 @@ public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerSer
 
     private void OnClosed(object sender, EventArgs e)
     {
-        Service.FavoriteVehicles.Value.CollectionChanged -= OnVehicleCollectionChanged<VehicleHash>;
-        Service.CustomVehicles.Value.CollectionChanged -= OnVehicleCollectionChanged<CustomVehicle>;
+        Service.FavoriteVehicles.CollectionChanged -= OnVehicleCollectionChanged<VehicleHash>;
+        Service.CustomVehicles.CollectionChanged -= OnVehicleCollectionChanged<CustomVehicleDto>;
     }
 
     private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)

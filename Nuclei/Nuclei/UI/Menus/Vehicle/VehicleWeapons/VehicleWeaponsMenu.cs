@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using GTA;
 using GTA.Native;
 using LemonUI.Elements;
+using LemonUI.Menus;
 using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
@@ -19,6 +21,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     public VehicleWeaponsMenu(Enum @enum) : base(@enum)
     {
+        Service.PropertyChanged += OnPropertyChanged;
         Width = 550;
 
         ExcludeWeapons();
@@ -32,25 +35,29 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         GeneratePlayerWeaponsItems();
     }
 
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.FireRate))
+        {
+            var item = GetItem<NativeSliderItem>(VehicleWeaponsItemTitles.FireRate);
+            item.Description =
+                $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball and Grenades) often work better with a higher timer.";
+        }
+    }
+
     private void PointAndShoot()
     {
-        var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitles.PointAndShoot, Service.PointAndShoot,
-            @checked => { Service.PointAndShoot.Value = @checked; });
+        var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitles.PointAndShoot, () => Service.PointAndShoot,
+            @checked => { Service.PointAndShoot = @checked; }, Service);
     }
 
     private void AdjustFireRate()
     {
-        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, Service.FireRate,
-            value => { Service.FireRate.Value = value; }, 0, 20);
+        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, () => Service.FireRate,
+            value => { Service.FireRate = value; }, 0, 20, Service);
 
         sliderItemFireRate.Description =
-            $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball, Grenades, etc) often work better with a higher timer.";
-
-        Service.FireRate.ValueChanged += (sender, args) =>
-        {
-            sliderItemFireRate.Description =
-                $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate.Value * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball and Grenades) often work better with a higher timer.";
-        };
+            $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball, Grenades, etc) often work better with a higher timer.";
     }
 
     private void ExcludeWeapons()
@@ -61,8 +68,9 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void VehicleWeapons()
     {
-        var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons, Service.HasVehicleWeapons,
-            @checked => { Service.HasVehicleWeapons.Value = @checked; });
+        var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons,
+            () => Service.HasVehicleWeapons,
+            @checked => { Service.HasVehicleWeapons = @checked; }, Service);
     }
 
     private void AddStandardExcludedHashes()
@@ -133,13 +141,14 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         var weaponDisplayName = weaponHash.GetLocalizedDisplayNameFromHash();
         var itemPlayerWeapon = AddItem(weaponDisplayName,
             $"Set WeaponsMenu: {weaponDisplayName}",
-            () => { Service.VehicleWeapon.Value = (uint)weaponHash; });
+            () => { Service.VehicleWeapon = (uint)weaponHash; });
 
-        Service.VehicleWeapon.ValueChanged += (sender, args) =>
+        Service.PropertyChanged += (sender, args) =>
         {
-            itemPlayerWeapon.RightBadge = args.Value == (uint)weaponHash
-                ? _starTexture
-                : null;
+            if (args.PropertyName == nameof(Service.VehicleWeapon))
+                itemPlayerWeapon.RightBadge = Service.VehicleWeapon == (uint)weaponHash
+                    ? _starTexture
+                    : null;
         };
     }
 
@@ -162,13 +171,14 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
         var itemVehicleWeapon = AddItem(vehicleWeaponDisplayName,
             $"Set WeaponsMenu: {vehicleWeaponDisplayName}",
-            () => { Service.VehicleWeapon.Value = (uint)vehicleWeaponHash; });
+            () => { Service.VehicleWeapon = (uint)vehicleWeaponHash; });
 
-        Service.VehicleWeapon.ValueChanged += (sender, args) =>
+        Service.PropertyChanged += (sender, args) =>
         {
-            itemVehicleWeapon.RightBadge = args.Value == (uint)vehicleWeaponHash
-                ? _starTexture
-                : null;
+            if (args.PropertyName == nameof(Service.VehicleWeapon))
+                itemVehicleWeapon.RightBadge = Service.VehicleWeapon == (uint)vehicleWeaponHash
+                    ? _starTexture
+                    : null;
         };
     }
 
@@ -177,13 +187,10 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
         var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitles.WeaponAttachmentPoints,
             (selected, index) =>
             {
-                Service.VehicleWeaponAttachment.Value = selected.GetHashFromDisplayName<VehicleWeaponAttachmentPoint>();
+                Service.VehicleWeaponAttachment = selected.GetHashFromDisplayName<VehicleWeaponAttachmentPoint>();
             }, null,
+            value => Service.VehicleWeaponAttachment.GetLocalizedDisplayNameFromHash(),
+            Service,
             typeof(VehicleWeaponAttachmentPoint).ToDisplayNameArray());
-
-        Service.VehicleWeaponAttachment.ValueChanged += (sender, args) =>
-        {
-            listItemWeaponAttachmentPoints.SelectedItem = args.Value.GetLocalizedDisplayNameFromHash();
-        };
     }
 }

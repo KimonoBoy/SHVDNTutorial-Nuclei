@@ -19,13 +19,13 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
 
     protected override void OnShown(object sender, EventArgs e)
     {
-        UpdateMenuItems(Service.FavoriteVehicles.Value);
-        Service.FavoriteVehicles.Value.CollectionChanged += OnVehicleCollectionChanged<VehicleHash>;
+        UpdateMenuItems(Service.FavoriteVehicles);
+        Service.FavoriteVehicles.CollectionChanged += OnVehicleCollectionChanged<VehicleHash>;
     }
 
     protected override void UpdateSelectedItem(string title)
     {
-        Service.CurrentVehicleHash.Value = title.GetHashFromDisplayName<VehicleHash>();
+        Service.CurrentVehicleHash = title.GetHashFromDisplayName<VehicleHash>();
     }
 
     protected override void UpdateMenuItems<T>(IEnumerable<T> newItems)
@@ -67,7 +67,7 @@ public class VehicleSpawnerClassMenu : VehicleSpawnerMenuBase
                 () => { Service.SpawnVehicle(vehicleHash); });
             itemSpawnVehicle.Selected += (sender, args) => { UpdateSelectedItem(vehicleName); };
 
-            if (Service.FavoriteVehicles.Value.Contains(vehicleHash))
+            if (Service.FavoriteVehicles.Contains(vehicleHash))
                 itemSpawnVehicle.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
             else
                 itemSpawnVehicle.RightBadge = null;

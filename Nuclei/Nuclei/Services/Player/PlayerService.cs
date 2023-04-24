@@ -1,118 +1,209 @@
 ﻿using System;
 using Nuclei.Enums.Player;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Player;
 
-public class PlayerService : GenericService<PlayerService>, IPlayerService
+public class PlayerService : GenericService<PlayerService>
 {
-    /// <summary>
-    ///     A property that can set the cash hash.
-    /// </summary>
-    public BindableProperty<CashHash> AddCash { get; set; } = new();
+    private CashHash _addCash;
 
-    /// <summary>
-    ///     A property that can set the super speed hash.
-    /// </summary>
-    public BindableProperty<SuperSpeedHash> SuperSpeed { get; set; } = new();
+    private bool _canRideOnCars;
 
-    /// <summary>
-    ///     A property that defines whether or not the player is one punch man.
-    /// </summary>
-    public BindableProperty<bool> IsOnePunchMan { get; set; } = new();
+    private bool _canSuperJump;
 
-    /// <summary>
-    ///     A property that defines whether or not the player is invisible.
-    /// </summary>
-    public BindableProperty<bool> IsInvisible { get; set; } = new();
+    private bool _hasInfiniteBreath;
 
-    /// <summary>
-    ///     A property that defines whether or not the player can ride on cars without falling over.
-    /// </summary>
-    public BindableProperty<bool> CanRideOnCars { get; set; } = new();
+    private bool _hasInfiniteSpecialAbility;
 
-    /// <summary>
-    ///     A property that defines whether or not the player is noiseless.
-    /// </summary>
-    public BindableProperty<bool> IsNoiseless { get; set; } = new();
+    private bool _hasInfiniteStamina;
 
-    /// <summary>
-    ///     A property that defines whether or not the Wanted Level
-    ///     will be locked at its current value.
-    /// </summary>
-    public BindableProperty<bool> IsWantedLevelLocked { get; set; } = new();
+    private bool _isInvincible;
 
-    /// <summary>
-    ///     The Wanted Level to default to when the IsWantedLevelLocked is true.
-    /// </summary>
-    public BindableProperty<int> LockedWantedLevel { get; set; } = new();
+    private bool _isInvisible;
 
-    /// <summary>
-    ///     A property that defines whether or not the player has infinite special ability.
-    /// </summary>
-    public BindableProperty<bool> HasInfiniteSpecialAbility { get; set; } = new();
+    private bool _isNoiseless;
 
-    /// <summary>
-    ///     A property that defines whether or not the player has infinite stamina.
-    /// </summary>
-    public BindableProperty<bool> HasInfiniteStamina { get; set; } = new();
+    private bool _isOnePunchMan;
 
-    /// <summary>
-    ///     A property that defines whether or not the player has infinite underwater breath.
-    /// </summary>
-    public BindableProperty<bool> HasInfiniteBreath { get; set; } = new();
+    private bool _isWantedLevelLocked;
 
-    /// <summary>
-    ///     A property that determines whether the player is invincible or not.
-    /// </summary>
-    public BindableProperty<bool> IsInvincible { get; set; } = new();
+    private int _lockedWantedLevel;
 
-    /// <summary>
-    ///     A property that represents the wanted level of the player.
-    /// </summary>
-    public BindableProperty<int> WantedLevel { get; set; } = new();
+    private SuperSpeedHash _superSpeed;
 
-    /// <summary>
-    ///     A property that defines whether or not the player can super jump.
-    /// </summary>
-    public BindableProperty<bool> CanSuperJump { get; set; } = new();
+    private int _wantedLevel;
 
-    /// <summary>
-    ///     An event that is invoked when the player is fixed.
-    /// </summary>
-    public event EventHandler PlayerFixed;
-
-    /// <summary>
-    ///     A method that invokes the `PlayerFixed` event.
-    /// </summary>
-    public void RequestFixPlayer()
+    public CashHash AddCash
     {
-        PlayerFixed?.Invoke(this, EventArgs.Empty);
+        get => _addCash;
+        set
+        {
+            if (_addCash == value) return;
+            _addCash = value;
+            OnPropertyChanged();
+        }
     }
 
-    /// <summary>
-    ///     An event that is invoked when the RequestCashInput is called.
-    /// </summary>
+    public SuperSpeedHash SuperSpeed
+    {
+        get => _superSpeed;
+        set
+        {
+            if (_superSpeed == value) return;
+            _superSpeed = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsOnePunchMan
+    {
+        get => _isOnePunchMan;
+        set
+        {
+            if (_isOnePunchMan == value) return;
+            _isOnePunchMan = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsInvisible
+    {
+        get => _isInvisible;
+        set
+        {
+            if (_isInvisible == value) return;
+            _isInvisible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool CanRideOnCars
+    {
+        get => _canRideOnCars;
+        set
+        {
+            if (_canRideOnCars == value) return;
+            _canRideOnCars = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsNoiseless
+    {
+        get => _isNoiseless;
+        set
+        {
+            if (_isNoiseless == value) return;
+            _isNoiseless = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsWantedLevelLocked
+    {
+        get => _isWantedLevelLocked;
+        set
+        {
+            if (_isWantedLevelLocked == value) return;
+            _isWantedLevelLocked = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int LockedWantedLevel
+    {
+        get => _lockedWantedLevel;
+        set
+        {
+            if (_lockedWantedLevel == value) return;
+            _lockedWantedLevel = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool HasInfiniteSpecialAbility
+    {
+        get => _hasInfiniteSpecialAbility;
+        set
+        {
+            if (_hasInfiniteSpecialAbility == value) return;
+            _hasInfiniteSpecialAbility = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool HasInfiniteStamina
+    {
+        get => _hasInfiniteStamina;
+        set
+        {
+            if (_hasInfiniteStamina == value) return;
+            _hasInfiniteStamina = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool HasInfiniteBreath
+    {
+        get => _hasInfiniteBreath;
+        set
+        {
+            if (_hasInfiniteBreath == value) return;
+            _hasInfiniteBreath = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool IsInvincible
+    {
+        get => _isInvincible;
+        set
+        {
+            if (_isInvincible == value) return;
+            _isInvincible = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int WantedLevel
+    {
+        get => _wantedLevel;
+        set
+        {
+            if (_wantedLevel == value) return;
+            _wantedLevel = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool CanSuperJump
+    {
+        get => _canSuperJump;
+        set
+        {
+            if (_canSuperJump == value) return;
+            _canSuperJump = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public event EventHandler PlayerFixRequested;
+
+    public void RequestFixPlayer()
+    {
+        PlayerFixRequested?.Invoke(this, EventArgs.Empty);
+    }
+
     public event EventHandler CashInputRequested;
 
-    /// <summary>
-    ///     A method that invokes the `CashInputRequested` event.
-    /// </summary>
     public void RequestCashInput()
     {
         CashInputRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <summary>
-    ///     An event that is invoked when the RequestCashResult is called.
-    /// </summary>
     public event EventHandler<CashHash> AddCashRequested;
 
-    /// <summary>
-    ///     A method that invokes the `ÀddCashRequested` event.
-    /// </summary>
-    /// <param name="cashHash">The hash to get the Cash Amount from.</param>
     public void RequestCashResult(CashHash cashHash)
     {
         AddCashRequested?.Invoke(this, cashHash);

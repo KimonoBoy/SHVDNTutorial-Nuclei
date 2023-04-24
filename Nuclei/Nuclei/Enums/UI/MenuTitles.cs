@@ -49,7 +49,7 @@ public enum MenuTitles
     [Description("Save/Load and Change HotKeys")]
     Settings,
 
-    [Description("Save and Load")] SaveAndLoad,
+    [Description("Save and Load")] Storage,
 
     [Description("Change HotKeys")] HotKeys
 }

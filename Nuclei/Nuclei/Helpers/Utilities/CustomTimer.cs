@@ -28,7 +28,7 @@ public class CustomTimer
             TimerElapsed += eventHandler;
     }
 
-    private void UnsubscribeFromTimerElapsed(EventHandler eventHandler)
+    public void UnsubscribeFromTimerElapsed(EventHandler eventHandler)
     {
         if (TimerElapsed != null && TimerElapsed.GetInvocationList().Contains(eventHandler))
             TimerElapsed -= eventHandler;
@@ -40,8 +40,9 @@ public class CustomTimer
         _timer.Dispose();
 
         // Unsubscribe all custom event handlers
-        if (TimerElapsed != null)
-            foreach (var handler in TimerElapsed.GetInvocationList())
-                UnsubscribeFromTimerElapsed((EventHandler)handler);
+        if (TimerElapsed == null) return;
+
+        foreach (var handler in TimerElapsed.GetInvocationList())
+            UnsubscribeFromTimerElapsed((EventHandler)handler);
     }
 }

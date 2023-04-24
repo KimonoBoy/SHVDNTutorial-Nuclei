@@ -16,13 +16,7 @@ public class MainMenu : MenuBase
         AddVehicleMenu();
         AddWeaponsMenu();
 
-        AddSettingsMenu();
-    }
-
-    private void AddWeaponsMenu()
-    {
-        var weaponsMenu = new WeaponsMenu(MenuTitles.Weapons);
-        AddMenu(weaponsMenu);
+        AddStorageMenu();
     }
 
     private void AddVehicleMenu()
@@ -31,15 +25,21 @@ public class MainMenu : MenuBase
         AddMenu(vehicleMenu);
     }
 
+    private void AddWeaponsMenu()
+    {
+        var weaponsMenu = new WeaponsMenu(MenuTitles.Weapons);
+        AddMenu(weaponsMenu);
+    }
+
     private void AddPlayerMenu()
     {
         var playerMenu = new PlayerMenu(MenuTitles.Player);
         AddMenu(playerMenu);
     }
 
-    private void AddSettingsMenu()
+    private void AddStorageMenu()
     {
-        var settingsMenu = new SettingsMenu(MenuTitles.Settings);
-        AddMenu(settingsMenu);
+        var storageMenu = new StorageMenu(MenuTitles.Storage);
+        AddMenu(storageMenu);
     }
 }

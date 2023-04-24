@@ -1,61 +1,101 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GTA;
-using Nuclei.Helpers.Utilities.BindableProperty;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerService : GenericService<VehicleSpawnerService>, IVehicleSpawnerService
+public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
 {
-    /// <summary>
-    ///     A property that contains the current selected vehicle hash.
-    /// </summary>
-    public BindableProperty<VehicleHash> CurrentVehicleHash { get; set; } = new();
+    private VehicleHash _currentVehicleHash;
 
-    /// <summary>
-    ///     A property that indicates whether the spawned vehicle should have its engines running.
-    /// </summary>
-    public BindableProperty<bool> EnginesRunning { get; set; } = new();
+    private ObservableCollection<CustomVehicleDto> _customVehicles = new();
 
-    /// <summary>
-    ///     A property that indicates whether the spawned vehicle should be warped into.
-    /// </summary>
-    public BindableProperty<bool> WarpInSpawned { get; set; } = new();
+    private bool _enginesRunning;
 
-    /// <summary>
-    ///     A property that indicates which seat the player should be placed at when spawning a vehicle.
-    /// </summary>
-    public BindableProperty<VehicleSeat> VehicleSeat { get; set; } =
-        new(GTA.VehicleSeat.Driver);
+    private ObservableCollection<VehicleHash> _favoriteVehicles = new();
 
-    /// <summary>
-    ///     A property that contains the list of favorite vehicles.
-    /// </summary>
-    public BindableProperty<ObservableCollection<VehicleHash>> FavoriteVehicles { get; set; } =
-        new(new ObservableCollection<VehicleHash>());
+    private VehicleSeat _vehicleSeat = VehicleSeat.Driver;
 
-    public BindableProperty<ObservableCollection<CustomVehicle>> CustomVehicles { get; set; } =
-        new(new ObservableCollection<CustomVehicle>());
+    private bool _warpInSpawned;
 
-    /// <summary>
-    ///     An event that is raised when a vehicle is spawned.
-    /// </summary>
+    public VehicleHash CurrentVehicleHash
+    {
+        get => _currentVehicleHash;
+        set
+        {
+            if (_currentVehicleHash == value) return;
+            _currentVehicleHash = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool EnginesRunning
+    {
+        get => _enginesRunning;
+        set
+        {
+            if (_enginesRunning == value) return;
+            _enginesRunning = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool WarpInSpawned
+    {
+        get => _warpInSpawned;
+        set
+        {
+            if (_warpInSpawned == value) return;
+            _warpInSpawned = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public VehicleSeat VehicleSeat
+    {
+        get => _vehicleSeat;
+        set
+        {
+            if (_vehicleSeat == value) return;
+            _vehicleSeat = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<VehicleHash> FavoriteVehicles
+    {
+        get => _favoriteVehicles;
+        set
+        {
+            if (_favoriteVehicles == value) return;
+            _favoriteVehicles = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public ObservableCollection<CustomVehicleDto> CustomVehicles
+    {
+        get => _customVehicles;
+        set
+        {
+            if (_customVehicles == value) return;
+            _customVehicles = value;
+            OnPropertyChanged();
+        }
+    }
+
     public event EventHandler<VehicleHash> VehicleSpawned;
 
-    /// <summary>
-    ///     Spawns a vehicle with the given VehicleHash.
-    /// </summary>
-    /// <param name="vehicleHash"></param>
     public void SpawnVehicle(VehicleHash vehicleHash)
     {
         VehicleSpawned?.Invoke(this, vehicleHash);
     }
 
-    public event EventHandler<CustomVehicle> CustomVehicleSpawned;
+    public event EventHandler<CustomVehicleDto> CustomVehicleSpawned;
 
-    public void SpawnVehicle(CustomVehicle customVehicle)
+    public void SpawnVehicle(CustomVehicleDto customVehicleDto)
     {
-        CustomVehicleSpawned?.Invoke(this, customVehicle);
+        CustomVehicleSpawned?.Invoke(this, customVehicleDto);
     }
 }
