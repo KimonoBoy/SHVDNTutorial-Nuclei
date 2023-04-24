@@ -82,6 +82,18 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             if (Service.CurrentTireSmokeColor == CurrentVehicle.Mods.TireSmokeColor) return;
             CurrentVehicle.Mods.TireSmokeColor = Service.CurrentTireSmokeColor;
         }
+
+        if (e.PropertyName == nameof(Service.CurrentWindowTint))
+        {
+            if (Service.CurrentWindowTint == CurrentVehicle.Mods.WindowTint) return;
+            CurrentVehicle.Mods.WindowTint = Service.CurrentWindowTint;
+        }
+    }
+
+    private void UpdateWindowTint(VehicleWindowTint vehicleWindowTint)
+    {
+        if (vehicleWindowTint == CurrentVehicle.Mods.WindowTint) return;
+        Service.CurrentWindowTint = CurrentVehicle.Mods.WindowTint;
     }
 
     private void OnRandomizeModsRequested(object sender, ObservableCollection<VehicleModType> modsToRandomize)
@@ -179,6 +191,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateFeature(() => Service.CurrentWheelType, UpdateWheelType);
         UpdateFeature(() => Service.CurrentRimColor, UpdateRimColor);
         UpdateFeature(() => Service.CurrentCustomTires, UpdateCustomTires);
+        UpdateFeature(() => Service.CurrentWindowTint, UpdateWindowTint);
     }
 
     private void UpdateCustomTires(bool customTires)

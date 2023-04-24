@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Base;
@@ -30,7 +31,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
             if (!Visible) return;
             if (Service.CurrentVehicle == null)
             {
-                Back();
+                NavigateToMenu(MenuTitles.Vehicle);
                 return;
             }
 
@@ -43,7 +44,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
         if (!Visible) return;
         if (Service.CurrentVehicle == null)
         {
-            Back();
+            NavigateToMenu(MenuTitles.Vehicle);
             return;
         }
 

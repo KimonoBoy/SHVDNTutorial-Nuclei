@@ -23,6 +23,7 @@ public class CustomVehicleDto : ObservableService
     private ObservableCollection<CustomVehicleModDto> _vehicleMods = new();
 
     private VehicleWheelType _wheelType;
+    private VehicleWindowTint _windowTint;
 
     public string Title
     {
@@ -119,6 +120,17 @@ public class CustomVehicleDto : ObservableService
         {
             if (_tireSmokeColor == value) return;
             _tireSmokeColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public VehicleWindowTint WindowTint
+    {
+        get => _windowTint;
+        set
+        {
+            if (value == _windowTint) return;
+            _windowTint = value;
             OnPropertyChanged();
         }
     }

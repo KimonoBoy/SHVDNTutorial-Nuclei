@@ -85,7 +85,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
             {
                 if (Service.CurrentVehicle == null)
                 {
-                    Notification.Show("You must enter a vehicleDto first.");
+                    Notification.Show("You must enter a vehicle first.");
                     return;
                 }
 
@@ -100,7 +100,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 
                 if (string.IsNullOrEmpty(userInput))
                 {
-                    Notification.Show("Please enter a title to save the vehicleDto.");
+                    Notification.Show("Please enter a title to save the vehicle.");
                     return;
                 }
 
@@ -113,7 +113,8 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     WheelType = Service.CurrentVehicle.Mods.WheelType,
                     RimColor = Service.CurrentVehicle.Mods.RimColor,
                     CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
-                    TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor
+                    TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
+                    WindowTint = Service.CurrentVehicle.Mods.WindowTint
                 };
 
                 foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())

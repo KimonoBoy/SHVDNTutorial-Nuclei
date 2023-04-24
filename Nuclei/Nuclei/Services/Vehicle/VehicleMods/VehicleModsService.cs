@@ -16,6 +16,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
 
     private Color _currentTireSmokeColor;
     private VehicleWheelType _currentWheelType;
+    private VehicleWindowTint _currentWindowTint;
     private string _licensePlate;
     private LicensePlateStyle _licensePlateStyle;
 
@@ -129,6 +130,18 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value.Equals(_currentTireSmokeColor)) return;
             _currentTireSmokeColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public VehicleWindowTint CurrentWindowTint
+    {
+        get => _currentWindowTint;
+        set
+        {
+            if (value == _currentWindowTint) return;
+            _currentWindowTint = value;
             OnPropertyChanged();
         }
     }

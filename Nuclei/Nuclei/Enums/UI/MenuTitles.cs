@@ -51,5 +51,8 @@ public enum MenuTitles
 
     [Description("Save and Load")] Storage,
 
-    [Description("Change HotKeys")] HotKeys
+    [Description("Change HotKeys")] HotKeys,
+
+    [Description("Change Front and Rear Bumpers.")]
+    Bumpers
 }

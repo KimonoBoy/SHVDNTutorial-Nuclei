@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 
@@ -34,7 +35,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
             if (!Visible) return;
             if (Service.CurrentVehicle == null)
             {
-                Back();
+                NavigateToMenu(MenuTitles.Vehicle);
                 return;
             }
 
@@ -83,7 +84,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
             AddListItem(VehicleModsItemTitles.RimColor,
                 (selected, index) => { Service.CurrentRimColor = selected.GetHashFromDisplayName<VehicleColor>(); },
                 null,
-                value => Service.CurrentRimColor.GetLocalizedDisplayNameFromHash(),
+                value => { return Service.CurrentRimColor.GetLocalizedDisplayNameFromHash(); },
                 Service,
                 typeof(VehicleColor).ToDisplayNameArray());
 

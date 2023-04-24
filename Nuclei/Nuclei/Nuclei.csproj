@@ -103,6 +103,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Menus\Settings\StorageMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMenu.cs" />
+    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsBumpersMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenuBase.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsWheelsMenu.cs" />

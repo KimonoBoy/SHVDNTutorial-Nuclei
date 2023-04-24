@@ -199,13 +199,28 @@ public abstract class MenuBase : NativeMenu
         Notification.Show($"~r~~h~{exception.Prefix}~h~:\n\n~w~{exception.Message}");
     }
 
-    public T GetItem<T>(string title) where T : NativeItem
+    protected NativeMenu NavigateToMenu(string subTitle)
+    {
+        var allMenusInPool = Pool.Where(menu => menu is NativeMenu).Cast<NativeMenu>().ToList();
+        var menu = allMenusInPool.FirstOrDefault(menu => menu.Subtitle == subTitle);
+        if (menu == null) throw new NullReferenceException($"Menu with subtitle '{subTitle}' not found.");
+        Visible = false;
+        menu.Visible = true;
+        return menu;
+    }
+
+    protected NativeMenu NavigateToMenu(Enum @enum)
+    {
+        return NavigateToMenu(@enum.GetLocalizedDisplayNameFromHash());
+    }
+
+    protected T GetItem<T>(string title) where T : NativeItem
     {
         var item = Items.FirstOrDefault(item => item.Title == title);
         return item == null ? throw new NullReferenceException($"Item with title '{title}' not found.") : item as T;
     }
 
-    public T GetItem<T>(Enum @enum) where T : NativeItem
+    protected T GetItem<T>(Enum @enum) where T : NativeItem
     {
         return GetItem<T>(@enum.GetLocalizedDisplayNameFromHash());
     }

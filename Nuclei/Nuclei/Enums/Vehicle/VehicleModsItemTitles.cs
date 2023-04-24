@@ -24,5 +24,8 @@ public enum VehicleModsItemTitles
     CustomTires,
 
     [Description("Change the colors of your tires smoke.")]
-    TireSmokeColor
+    TireSmokeColor,
+
+    [Description("Tint the windows of your vehicle.")]
+    WindowTint
 }

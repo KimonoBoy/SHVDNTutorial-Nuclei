@@ -44,6 +44,12 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
             var listItemWantedLevel = GetItem<NativeListItem<int>>(PlayerItemTitles.WantedLevel);
             listItemWantedLevel.SelectedItem = Service.WantedLevel;
         }
+
+        if (e.PropertyName == nameof(Service.SuperSpeed))
+        {
+            var listItemSuperSpeed = GetItem<NativeListItem<string>>(PlayerItemTitles.SuperSpeed);
+            listItemSuperSpeed.SelectedItem = Service.SuperSpeed.GetLocalizedDisplayNameFromHash();
+        }
     }
 
     private void FixPlayer()

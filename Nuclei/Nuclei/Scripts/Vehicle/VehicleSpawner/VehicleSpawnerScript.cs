@@ -43,6 +43,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
         vehicle.Mods.WheelType = customVehicleDto.WheelType;
         vehicle.Mods.RimColor = customVehicleDto.RimColor;
+        vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
 
         foreach (var customVehicleMod in customVehicleDto.VehicleMods)
             vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
@@ -76,6 +77,8 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
             SpawnVehicle(VehicleHash.Adder);
         else if (e.KeyCode == Keys.NumPad2)
             SpawnVehicle(VehicleHash.DeathBike);
+        else if (e.KeyCode == Keys.NumPad3)
+            SpawnVehicle(VehicleHash.SultanRS);
     }
 
     // Handles VehicleSpawned event by spawning the corresponding vehicleDto

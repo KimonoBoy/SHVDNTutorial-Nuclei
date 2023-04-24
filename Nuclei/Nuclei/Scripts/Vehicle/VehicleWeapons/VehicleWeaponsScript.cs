@@ -13,6 +13,7 @@ namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
 public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
 {
     private const float MinProjectileDistance = 150.0f;
+    private const float ProjectileDistanceNoHit = 75.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
     private int _minShootInterval;
 
