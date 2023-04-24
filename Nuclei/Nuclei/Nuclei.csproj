@@ -64,10 +64,8 @@
     <Compile Include="Enums\UI\WeaponItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleModsItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
-    <Compile Include="Helpers\Utilities\BindableProperty\BindableProperty.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
-    <Compile Include="Helpers\Utilities\BindableProperty\BindablePropertyJSONConverter.cs" />
     <Compile Include="Helpers\Utilities\CustomTimer.cs" />
     <Compile Include="Helpers\Utilities\Logger.cs" />
     <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
