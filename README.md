@@ -6,13 +6,17 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-The initial implementation for Vehicle Modifications has been completed. Currently, all ModTypes are automatically applied based on the Current Vehicle selected by the user. The menu updates itself dynamically when the user switches between vehicles, even if they warp directly to a new one.
+Just did a HUGE refactor update. We'll be making more of these changes further down the line. For now:
 
-The next step involves adding the ability to store custom Vehicles. Once this process is complete, the modifications menu will be further categorized to include different mods such as turbo, colors, wheel types (High End, Low Rider, etc.), neon lights, bulletproof tires, and more.
+* BindableProperties has been removed and replaced with regular properties. Primarly because mapping BindableProperties through reflections is a much heavier task... This gave the mod a huge performance boost while still maintaining its statemanagement using an ObservableService class to handle the changed events - this also gives us better control over the different events that are triggered.    
 
-To achieve this, we will first create the functionality to store each Vehicle, leveraging our state service and BindableJSONConverter to automatically save the entire Vehicle with its applied modifications.
+* Made the code more readable and easier to digest.  
 
-Expecting the vehicle mods to be completed sometime tonight or tomorrow, if no further issues occur.
+* Fixed the mods menu to work properly with the mods currently implemented.  
+
+* Optimized the way the events are triggered.  
+
+With the above in place, while other stuff are subject to change for optimization, I'm at this point in time now ready to continue updating the features of the mod itself. The Vehicle Modifications menu is still the current task at hand.  
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
