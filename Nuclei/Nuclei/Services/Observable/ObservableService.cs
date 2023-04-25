@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace Nuclei.Services.Observable;
 
-public abstract class ObservableService : INotifyPropertyChanged
+public class ObservableService : INotifyPropertyChanged
 {
     public event PropertyChangedEventHandler PropertyChanged;
 

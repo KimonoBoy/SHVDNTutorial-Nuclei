@@ -66,16 +66,15 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
             var currentMod = Service.CurrentVehicle.Mods[modType];
             var currentIndex = currentMod.Index;
             var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
-                (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; },
-                null,
                 null, Service,
-                Enumerable.Range(0, currentMod.Count + 1).ToList().Select(i =>
-                {
-                    if (i == currentMod.Count) return "Stock" + $" {0}/{currentMod.Count}";
-                    currentMod.Index = i;
-                    var localizedString = currentMod.LocalizedName + $" {i + 1}/{currentMod.Count}";
-                    return localizedString;
-                }).ToArray());
+                (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; }, Enumerable
+                    .Range(0, currentMod.Count + 1).ToList().Select(i =>
+                    {
+                        if (i == currentMod.Count) return "Stock" + $" {0}/{currentMod.Count}";
+                        currentMod.Index = i;
+                        var localizedString = currentMod.LocalizedName + $" {i + 1}/{currentMod.Count}";
+                        return localizedString;
+                    }).ToArray());
 
             if (currentIndex == 0)
             {

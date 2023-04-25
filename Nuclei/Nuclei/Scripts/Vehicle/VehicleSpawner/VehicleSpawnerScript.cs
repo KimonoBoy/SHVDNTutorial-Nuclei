@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
@@ -44,6 +45,50 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         vehicle.Mods.WheelType = customVehicleDto.WheelType;
         vehicle.Mods.RimColor = customVehicleDto.RimColor;
         vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
+        vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
+
+        vehicle.Mods.NeonLightsColor = Color.White;
+        switch (customVehicleDto.NeonLightsLayout)
+        {
+            case NeonLightsLayout.Off:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.Front:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.Back:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.FrontAndBack:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.Sides:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                break;
+            case NeonLightsLayout.FrontBackAndSides:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
 
         foreach (var customVehicleMod in customVehicleDto.VehicleMods)
             vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;

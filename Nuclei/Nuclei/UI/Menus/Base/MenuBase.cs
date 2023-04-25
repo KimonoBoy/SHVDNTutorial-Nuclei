@@ -92,7 +92,7 @@ public abstract class MenuBase : NativeMenu
 
     protected NativeItem AddItem(string title, string description = "", Action action = null, string altTitle = "")
     {
-        var item = _itemFactoryService.CreateNativeItem(title, description, action, altTitle);
+        var item = _itemFactoryService.CreateNativeItem(title, description, altTitle, action);
         Add(item);
         return item;
     }
@@ -104,65 +104,83 @@ public abstract class MenuBase : NativeMenu
 
     protected NativeCheckboxItem AddCheckbox(string title, string description = "",
         Func<bool> getProperty = null,
-        Action<bool> action = null,
-        ObservableService propertyObserver = null)
+        ObservableService propertyObserver = null,
+        Action<bool> action = null)
     {
         var checkBoxItem =
-            _itemFactoryService.CreateNativeCheckboxItem(title, description, getProperty, action, propertyObserver);
+            _itemFactoryService.CreateNativeCheckboxItem(title, description, getProperty, propertyObserver, action);
         Add(checkBoxItem);
         return checkBoxItem;
     }
 
     protected NativeCheckboxItem AddCheckbox(Enum @enum, Func<bool> getProperty = null,
-        Action<bool> action = null,
-        ObservableService propertyObserver = null)
+        ObservableService propertyObserver = null,
+        Action<bool> action = null)
     {
-        return AddCheckbox(@enum.ToPrettyString(), @enum.GetDescription(), getProperty, action, propertyObserver);
+        return AddCheckbox(@enum.ToPrettyString(), @enum.GetDescription(), getProperty, propertyObserver, action);
     }
 
     protected NativeSliderItem AddSliderItem(string title, string description = "",
-        Func<int> getProperty = null, Action<int> action = null, int value = 0, int maxValue = 10,
-        ObservableService propertyObserver = null)
+        Func<int> getProperty = null,
+        ObservableService propertyObserver = null, Action<int> action = null, int value = 0, int maxValue = 10)
     {
-        var nativeSliderItem = _itemFactoryService.CreateNativeSliderItem(title, description, getProperty, action,
-            value,
-            maxValue, propertyObserver);
+        var nativeSliderItem = _itemFactoryService.CreateNativeSliderItem(title, description, getProperty,
+            propertyObserver, value, maxValue, action);
         Add(nativeSliderItem);
         return nativeSliderItem;
     }
 
     protected NativeSliderItem AddSliderItem(Enum @enum,
         Func<int> getProperty = null,
-        Action<int> action = null, int value = 0, int maxValue = 10,
-        ObservableService propertyObserver = null)
+        ObservableService propertyObserver = null,
+        Action<int> action = null, int value = 0, int maxValue = 10)
     {
-        return AddSliderItem(@enum.ToPrettyString(), @enum.GetDescription(), getProperty, action, value, maxValue,
-            propertyObserver);
+        return AddSliderItem(@enum.ToPrettyString(), @enum.GetDescription(), getProperty,
+            propertyObserver, action, value, maxValue);
     }
 
-    protected NativeListItem<T> AddListItem<T>(string title, string description = "",
-        Action<T, int> itemChangedAction = null,
-        Action<T, int> itemActivatedAction = null,
-        Func<int, T> getProperty = null,
-        ObservableService propertyChangedSource = null,
+    protected NativeListItem<T> AddListItem<T>(string title, string description,
+        Func<int> getProperty,
+        ObservableService propertyChangedSource,
+        Action<T, int> itemChangedAction,
         params T[] items)
     {
-        var listItem = _itemFactoryService.CreateNativeListItem(title, description, itemChangedAction,
-            itemActivatedAction,
-            getProperty, propertyChangedSource, items);
+        var listItem = _itemFactoryService.CreateNativeListItem(title, description,
+            getProperty, propertyChangedSource, itemChangedAction, items);
         Add(listItem);
         return listItem;
     }
 
     protected NativeListItem<T> AddListItem<T>(Enum @enum,
-        Action<T, int> itemChangedAction = null,
-        Action<T, int> itemActivatedAction = null,
-        Func<int, T> getProperty = null,
-        ObservableService propertyChangedSource = null,
+        Func<int> getProperty,
+        ObservableService propertyChangedSource,
+        Action<T, int> itemChangedAction,
         params T[] items)
     {
-        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(), itemChangedAction, itemActivatedAction,
-            getProperty, propertyChangedSource, items);
+        return AddListItem(@enum.ToPrettyString(), @enum.GetDescription(),
+            getProperty, propertyChangedSource, itemChangedAction, items);
+    }
+
+    protected NativeListItem<T> AddActivateListItem<T>(string title, string description = "",
+        Func<int> getProperty = null,
+        ObservableService propertyChangedSource = null,
+        Action<T, int> itemActivatedAction = null,
+        params T[] items)
+    {
+        var listItem = _itemFactoryService.CreateNativeActivateListItem(title, description,
+            getProperty, propertyChangedSource, itemActivatedAction, items);
+        Add(listItem);
+        return listItem;
+    }
+
+    protected NativeListItem<T> AddActivateListItem<T>(Enum @enum,
+        Func<int> getProperty = null,
+        ObservableService propertyChangedSource = null,
+        Action<T, int> itemActivatedAction = null,
+        params T[] items)
+    {
+        return AddActivateListItem(@enum.ToPrettyString(), @enum.GetDescription(),
+            getProperty, propertyChangedSource, itemActivatedAction, items);
     }
 
     protected NativeSubmenuItem AddMenu(MenuBase subMenu)

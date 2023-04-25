@@ -1,7 +1,5 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
-using LemonUI.Menus;
 using Nuclei.Enums;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
@@ -34,22 +32,6 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
         OnePunchMan();
         SuperSpeed();
         Invisible();
-        Service.PropertyChanged += OnPropertyChanged;
-    }
-
-    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Service.WantedLevel))
-        {
-            var listItemWantedLevel = GetItem<NativeListItem<int>>(PlayerItemTitles.WantedLevel);
-            listItemWantedLevel.SelectedItem = Service.WantedLevel;
-        }
-
-        if (e.PropertyName == nameof(Service.SuperSpeed))
-        {
-            var listItemSuperSpeed = GetItem<NativeListItem<string>>(PlayerItemTitles.SuperSpeed);
-            listItemSuperSpeed.SelectedItem = Service.SuperSpeed.GetLocalizedDisplayNameFromHash();
-        }
     }
 
     private void FixPlayer()
@@ -60,29 +42,22 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
     private void Invincible()
     {
         var checkBoxInvincible = AddCheckbox(PlayerItemTitles.Invincible,
-            () => Service.IsInvincible,
-            @checked => { Service.IsInvincible = @checked; }, Service);
+            () => Service.IsInvincible, Service, @checked => { Service.IsInvincible = @checked; });
     }
 
     private void AdjustWantedLevel()
     {
         var listItemWantedLevel = AddListItem(PlayerItemTitles.WantedLevel,
-            (item, index) =>
-            {
-                Service.WantedLevel = item;
-                Service.LockedWantedLevel = item;
-            },
-            null,
-            value => Service.WantedLevel,
+            () => Service.WantedLevel,
             Service,
-            0, 1, 2, 3, 4, 5);
+            (item, index) => { Service.WantedLevel = index; }, 0, 1, 2,
+            3, 4, 5);
     }
 
     private void LockWantedLevel()
     {
         var checkBoxLockWantedLevel = AddCheckbox(PlayerItemTitles.LockWantedLevel,
-            () => Service.IsWantedLevelLocked,
-            @checked => { Service.IsWantedLevelLocked = @checked; }, Service);
+            () => Service.IsWantedLevelLocked, Service, @checked => { Service.IsWantedLevelLocked = @checked; });
     }
 
     private void AddCash()
@@ -90,11 +65,9 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
         var allCashHash = Enum.GetValues(typeof(CashHash)).Cast<CashHash>().ToList();
 
         var listItemAddCash = AddListItem(PlayerItemTitles.AddCash,
-            (selected, index) => { Service.AddCash = (CashHash)index; },
-            (selected, index) => { Service.RequestCashResult((CashHash)index); },
-            value => Service.AddCash.GetLocalizedDisplayNameFromHash(),
-            Service,
+            () => (int)Service.AddCash, Service, (selected, index) => { Service.AddCash = (CashHash)index; },
             allCashHash.Select(c => c.GetDescription()).ToArray());
+        listItemAddCash.Activated += (sender, args) => { Service.RequestCashResult(Service.AddCash); };
     }
 
     private void CashInput()
@@ -105,65 +78,58 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
     private void InfiniteStamina()
     {
         var checkBoxInfiniteStamina = AddCheckbox(PlayerItemTitles.InfiniteStamina,
-            () => Service.HasInfiniteStamina,
-            @checked => { Service.HasInfiniteStamina = @checked; }, Service);
+            () => Service.HasInfiniteStamina, Service, @checked => { Service.HasInfiniteStamina = @checked; });
     }
 
     private void InfiniteBreath()
     {
         var checkBoxInfiniteBreath = AddCheckbox(PlayerItemTitles.InfiniteBreath,
-            () => Service.HasInfiniteBreath,
-            @checked => { Service.HasInfiniteBreath = @checked; }, Service);
+            () => Service.HasInfiniteBreath, Service, @checked => { Service.HasInfiniteBreath = @checked; });
     }
 
     private void InfiniteSpecialAbility()
     {
         var checkBoxInfiniteSpecialAbility = AddCheckbox(PlayerItemTitles.InfiniteSpecialAbility,
-            () => Service.HasInfiniteSpecialAbility,
-            @checked => { Service.HasInfiniteSpecialAbility = @checked; }, Service);
+            () => Service.HasInfiniteSpecialAbility, Service,
+            @checked => { Service.HasInfiniteSpecialAbility = @checked; });
     }
 
     private void Noiseless()
     {
         var checkBoxNoiseless = AddCheckbox(PlayerItemTitles.Noiseless,
-            () => Service.IsNoiseless,
-            @checked => { Service.IsNoiseless = @checked; }, Service);
+            () => Service.IsNoiseless, Service, @checked => { Service.IsNoiseless = @checked; });
     }
 
     private void RideOnCars()
     {
         var checkBoxRideOnCars = AddCheckbox(PlayerItemTitles.RideOnCars,
-            () => Service.CanRideOnCars,
-            @checked => { Service.CanRideOnCars = @checked; }, Service);
+            () => Service.CanRideOnCars, Service, @checked => { Service.CanRideOnCars = @checked; });
     }
 
     private void SuperJump()
     {
         var checkBoxSuperJump = AddCheckbox(PlayerItemTitles.SuperJump,
-            () => Service.CanSuperJump,
-            @checked => { Service.CanSuperJump = @checked; }, Service);
+            () => Service.CanSuperJump, Service, @checked => { Service.CanSuperJump = @checked; });
     }
 
     private void OnePunchMan()
     {
-        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, () => Service.IsOnePunchMan,
-            @checked => { Service.IsOnePunchMan = @checked; }, Service);
+        var checkBoxOnePunchMan = AddCheckbox(PlayerItemTitles.OnePunchMan, () => Service.IsOnePunchMan, Service,
+            @checked => { Service.IsOnePunchMan = @checked; });
     }
 
     private void SuperSpeed()
     {
         var listItemSuperSpeed = AddListItem(PlayerItemTitles.SuperSpeed,
-            (selected, index) => { Service.SuperSpeed = (SuperSpeedHash)index; },
-            null,
-            value => Service.SuperSpeed.GetLocalizedDisplayNameFromHash(),
+            () => (int)Service.SuperSpeed,
             Service,
+            (selected, index) => { Service.SuperSpeed = (SuperSpeedHash)index; },
             typeof(SuperSpeedHash).ToDisplayNameArray());
     }
 
     private void Invisible()
     {
         var checkBoxInvisible = AddCheckbox(PlayerItemTitles.Invisible,
-            () => Service.IsInvisible,
-            @checked => { Service.IsInvisible = @checked; }, Service);
+            () => Service.IsInvisible, Service, @checked => { Service.IsInvisible = @checked; });
     }
 }

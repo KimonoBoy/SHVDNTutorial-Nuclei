@@ -42,23 +42,26 @@ public class VehicleModsMenu : VehicleModsMenuBase
         RandomizeMods();
         WheelsMenu();
         BumpersMenu();
+        HeadLightsMenu();
         WindowTints();
         base.UpdateMenuItems();
         LicensePlate();
     }
 
+    private void HeadLightsMenu()
+    {
+        var headLightsMenu = new VehicleModsLightsMenu(MenuTitles.Headlights);
+        AddMenu(headLightsMenu);
+    }
+
+
     private void WindowTints()
     {
         var listItemWindowTints = AddListItem(VehicleModsItemTitles.WindowTint,
-            (selected, index) => { Service.CurrentWindowTint = (VehicleWindowTint)index; }, null,
-            value => { return VehicleWindowTint.None.GetLocalizedDisplayNameFromHash(); }, Service,
+            () => (int)VehicleWindowTint.None, Service,
+            (selected, index) => { Service.CurrentWindowTint = (VehicleWindowTint)index; },
             typeof(VehicleWindowTint).ToDisplayNameArray().Where(tint =>
                 tint.GetHashFromDisplayName<VehicleWindowTint>() != VehicleWindowTint.Invalid).ToArray());
-
-        if (listItemWindowTints.Contains(Service.CurrentWindowTint.GetLocalizedDisplayNameFromHash()))
-            listItemWindowTints.SelectedItem = Service.CurrentWindowTint.GetLocalizedDisplayNameFromHash();
-        else
-            listItemWindowTints.SelectedIndex = 0;
     }
 
     private void BumpersMenu()
@@ -103,15 +106,14 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
         var listItemLicensePlateStyle =
             AddListItem(VehicleModsItemTitles.LicensePlateStyle,
+                () => (int)Service.LicensePlateStyle, Service,
                 (selected, index) =>
                 {
                     Service.LicensePlateStyle = selected.GetHashFromDisplayName<LicensePlateStyle>();
-                }, null,
-                value => Service.LicensePlateStyle.GetLocalizedDisplayNameFromHash(), Service,
-                typeof(LicensePlateStyle).ToDisplayNameArray());
+                }, typeof(LicensePlateStyle).ToDisplayNameArray());
 
-        listItemLicensePlateStyle.SelectedItem =
-            Service.LicensePlateStyle.GetLocalizedDisplayNameFromHash();
+        // listItemLicensePlateStyle.SelectedItem =
+        //     Service.LicensePlateStyle.GetLocalizedDisplayNameFromHash();
 
         Service.LicensePlateInputRequested += (sender, args) => { itemLicensePlate.AltTitle = Service.LicensePlate; };
     }

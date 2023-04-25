@@ -51,7 +51,6 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     {
         if (Character == null) return;
 
-        UpdateFeature(() => Service.WantedLevel, UpdateWantedLevel);
         UpdateFeature(() => Service.IsNoiseless, ProcessNoiseless);
         UpdateFeature(() => Service.CanSuperJump, ProcessSuperJump);
         UpdateFeature(() => Service.IsOnePunchMan, ProcessOnePunchMan);
@@ -87,6 +86,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         UpdateFeature(() => Service.IsInvisible, UpdateInvisible);
         UpdateFeature(() => Service.HasInfiniteBreath, UpdateInfiniteBreath);
         UpdateFeature(() => Service.CanRideOnCars, UpdateRideOnCars);
+        UpdateFeature(() => Service.WantedLevel, UpdateWantedLevel);
 
         /*
          * Process Functions that doesn't need to be called every tick.
@@ -130,10 +130,10 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
     private void UpdateWantedLevel(int wantedLevel)
     {
-        if (Service.IsWantedLevelLocked)
-            Game.Player.WantedLevel = Service.LockedWantedLevel;
+        // if (Service.IsWantedLevelLocked)
+        //     Game.Player.WantedLevel = Service.LockedWantedLevel;
 
-        if (wantedLevel != Game.Player.WantedLevel)
+        if (Service.WantedLevel != Game.Player.WantedLevel)
             Service.WantedLevel = Game.Player.WantedLevel;
     }
 

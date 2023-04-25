@@ -49,16 +49,14 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
     private void WarpInSpawned()
     {
         var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitles.WarpInSpawned,
-            () => Service.WarpInSpawned,
-            @checked => { Service.WarpInSpawned = @checked; }, Service);
+            () => Service.WarpInSpawned, Service, @checked => { Service.WarpInSpawned = @checked; });
     }
 
     private void SelectSeat()
     {
         var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
-            (selected, index) => { Service.VehicleSeat = (VehicleSeat)index - 1; },
-            null,
-            value => { return Service.VehicleSeat.GetLocalizedDisplayNameFromHash(); }, Service,
+            () => (int)Service.VehicleSeat, Service,
+            (selected, index) => { Service.VehicleSeat = (VehicleSeat)index; },
             VehicleSeat.Driver.GetLocalizedDisplayNameFromHash(),
             VehicleSeat.Passenger.GetLocalizedDisplayNameFromHash(),
             VehicleSeat.LeftRear.GetLocalizedDisplayNameFromHash(),
@@ -71,8 +69,7 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
     private void EnginesRunning()
     {
         var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitles.EnginesRunning,
-            () => Service.EnginesRunning,
-            @checked => { Service.EnginesRunning = @checked; }, Service);
+            () => Service.EnginesRunning, Service, @checked => { Service.EnginesRunning = @checked; });
     }
 
     private void GenerateVehicleClassMenus()

@@ -12,5 +12,7 @@ public enum VehicleSpawnerItemTitles
 
     [Description("Start the engine of the spawned vehicle immediately.")]
     EnginesRunning,
+
+    [Description("Save the vehicle your character is currently in.")]
     SaveCurrentVehicle
 }

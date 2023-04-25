@@ -7,8 +7,8 @@ namespace Nuclei.UI.Menus.Base.ItemFactory;
 
 public class ItemFactoryService
 {
-    public NativeItem CreateNativeItem(string title, string description = "", Action action = null,
-        string altTitle = "")
+    public NativeItem CreateNativeItem(string title, string description = "",
+        string altTitle = "", Action action = null)
     {
         var item = new NativeItem(title, description, altTitle);
         item.AltTitleFont = Font.ChaletComprimeCologne;
@@ -17,7 +17,7 @@ public class ItemFactoryService
     }
 
     public NativeCheckboxItem CreateNativeCheckboxItem(string title, string description = "",
-        Func<bool> getProperty = null, Action<bool> action = null, ObservableService propertyChangedSource = null)
+        Func<bool> getProperty = null, ObservableService propertyChangedSource = null, Action<bool> action = null)
     {
         var checkBoxItem = new NativeCheckboxItem(title, description);
 
@@ -34,8 +34,8 @@ public class ItemFactoryService
     }
 
     public NativeSliderItem CreateNativeSliderItem(string title, string description = "",
-        Func<int> getProperty = null, Action<int> action = null, int value = 0, int maxValue = 10,
-        ObservableService propertyChangedSource = null)
+        Func<int> getProperty = null,
+        ObservableService propertyChangedSource = null, int value = 0, int maxValue = 10, Action<int> action = null)
     {
         var nativeSliderItem = new NativeSliderItem(title, description, maxValue, value);
         if (getProperty != null && action != null && propertyChangedSource != null)
@@ -50,26 +50,37 @@ public class ItemFactoryService
     }
 
     public NativeListItem<T> CreateNativeListItem<T>(string title, string description = "",
-        Action<T, int> itemChangedAction = null, Action<T, int> itemActivatedAction = null,
-        Func<int, T> getProperty = null, ObservableService propertyChangedSource = null, params T[] items)
+        Func<int> getProperty = null, ObservableService propertyChangedSource = null,
+        Action<T, int> itemChangedAction = null,
+        params T[] items)
     {
         var item = new NativeListItem<T>(title, description, items);
 
         if (getProperty != null && propertyChangedSource != null)
-        {
-            if (item.SelectedIndex >= 0 && item.SelectedIndex < items.Length)
-                // Set initial value
-                getProperty(item.SelectedIndex);
-
             propertyChangedSource.PropertyChanged += (sender, args) =>
             {
-                if (item.SelectedIndex >= 0 && item.SelectedIndex < items.Length)
-                    // Update value on property change
-                    getProperty(item.SelectedIndex);
+                var newIndex = getProperty();
+                if (newIndex >= 0 && newIndex < item.Items.Count) item.SelectedIndex = newIndex;
             };
-        }
 
         item.ItemChanged += (sender, args) => { itemChangedAction?.Invoke(args.Object, args.Index); };
+
+        return item;
+    }
+
+    public NativeListItem<T> CreateNativeActivateListItem<T>(string title, string description = "",
+        Func<int> getProperty = null,
+        ObservableService propertyChangedSource = null,
+        Action<T, int> itemActivatedAction = null, params T[] items)
+    {
+        var item = new NativeListItem<T>(title, description, items);
+
+        if (getProperty != null && propertyChangedSource != null)
+            propertyChangedSource.PropertyChanged += (sender, args) =>
+            {
+                var newIndex = getProperty();
+                if (newIndex >= 0 && newIndex < item.Items.Count) item.SelectedIndex = newIndex;
+            };
 
         item.Activated += (sender, args) => { itemActivatedAction?.Invoke(item.SelectedItem, item.SelectedIndex); };
 

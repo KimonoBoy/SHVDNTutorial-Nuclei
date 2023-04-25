@@ -33,13 +33,13 @@ public class StorageMenu : GenericMenuBase<StorageService>
 
     private void AutoLoad()
     {
-        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, () => Service.AutoLoad,
-            @checked => { Service.AutoLoad = @checked; }, Service);
+        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, () => Service.AutoLoad, Service,
+            @checked => { Service.AutoLoad = @checked; });
     }
 
     private void AutoSave()
     {
-        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, () => Service.AutoSave,
-            @checked => { Service.AutoSave = @checked; }, Service);
+        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, () => Service.AutoSave, Service,
+            @checked => { Service.AutoSave = @checked; });
     }
 }

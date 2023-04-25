@@ -26,7 +26,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_currentVehicleHash == value) return;
             _currentVehicleHash = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentVehicleHash));
         }
     }
 
@@ -37,7 +37,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_enginesRunning == value) return;
             _enginesRunning = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_enginesRunning));
         }
     }
 
@@ -48,7 +48,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_warpInSpawned == value) return;
             _warpInSpawned = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_warpInSpawned));
         }
     }
 
@@ -59,7 +59,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_vehicleSeat == value) return;
             _vehicleSeat = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_vehicleSeat));
         }
     }
 
@@ -70,7 +70,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_favoriteVehicles == value) return;
             _favoriteVehicles = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_favoriteVehicles));
         }
     }
 
@@ -81,7 +81,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_customVehicles == value) return;
             _customVehicles = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_customVehicles));
         }
     }
 

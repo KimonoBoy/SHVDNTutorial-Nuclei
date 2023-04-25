@@ -19,7 +19,7 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
         {
             if (_hasVehicleWeapons == value) return;
             _hasVehicleWeapons = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_hasVehicleWeapons));
         }
     }
 
@@ -30,7 +30,7 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
         {
             if (_vehicleWeaponAttachment == value) return;
             _vehicleWeaponAttachment = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_vehicleWeaponAttachment));
         }
     }
 
@@ -41,7 +41,7 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
         {
             if (_vehicleWeapon == value) return;
             _vehicleWeapon = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_vehicleWeapon));
         }
     }
 
@@ -52,7 +52,7 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
         {
             if (_fireRate == value) return;
             _fireRate = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_fireRate));
         }
     }
 
@@ -63,7 +63,7 @@ public class VehicleWeaponsService : GenericService<VehicleWeaponsService>
         {
             if (_pointAndShoot == value) return;
             _pointAndShoot = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_pointAndShoot));
         }
     }
 }

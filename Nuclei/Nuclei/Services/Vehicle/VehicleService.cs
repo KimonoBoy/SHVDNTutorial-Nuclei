@@ -6,15 +6,10 @@ namespace Nuclei.Services.Vehicle;
 public class VehicleService : GenericService<VehicleService>
 {
     private bool _canDriveUnderWater;
-
     private bool _doorsAlwaysLocked;
-
     private bool _hasSeatBelt;
-
     private bool _isIndestructible;
-
     private bool _neverFallOffBike;
-
     private int _speedBoost;
 
     public bool CanDriveUnderWater
@@ -24,7 +19,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_canDriveUnderWater == value) return;
             _canDriveUnderWater = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_canDriveUnderWater));
         }
     }
 
@@ -35,7 +30,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_speedBoost == value) return;
             _speedBoost = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_speedBoost));
         }
     }
 
@@ -46,7 +41,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_hasSeatBelt == value) return;
             _hasSeatBelt = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_hasSeatBelt));
         }
     }
 
@@ -57,7 +52,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_doorsAlwaysLocked == value) return;
             _doorsAlwaysLocked = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_doorsAlwaysLocked));
         }
     }
 
@@ -68,7 +63,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_neverFallOffBike == value) return;
             _neverFallOffBike = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_neverFallOffBike));
         }
     }
 
@@ -79,7 +74,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_isIndestructible == value) return;
             _isIndestructible = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_isIndestructible));
         }
     }
 

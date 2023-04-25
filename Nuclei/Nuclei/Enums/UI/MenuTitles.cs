@@ -40,6 +40,12 @@ public enum MenuTitles
     [Description("Change wheel type, wheels, colors and more.")]
     Wheels,
 
+    [Description("Change Front and Rear Bumpers.")]
+    Bumpers,
+
+    [Description("A menu for adjusting vehicle headlights.")]
+    Headlights,
+
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapons,
 
@@ -51,8 +57,5 @@ public enum MenuTitles
 
     [Description("Save and Load")] Storage,
 
-    [Description("Change HotKeys")] HotKeys,
-
-    [Description("Change Front and Rear Bumpers.")]
-    Bumpers
+    [Description("Change HotKeys")] HotKeys
 }

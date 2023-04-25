@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using GTA;
 using Newtonsoft.Json;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleMods;
@@ -11,6 +12,7 @@ namespace Nuclei.Services.Vehicle.VehicleMods;
 public class VehicleModsService : GenericService<VehicleModsService>
 {
     private bool _currentCustomTires;
+    private NeonLightsLayout _currentNeonLightsLayout = NeonLightsLayout.Off;
 
     private VehicleColor _currentRimColor;
 
@@ -22,6 +24,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
 
     private ObservableCollection<VehicleModType> _validVehicleModTypes = new();
     private ObservableCollection<VehicleWheelType> _validWheelTypes = new();
+    private bool _xenonHeadLights;
 
     [JsonIgnore]
     public Dictionary<string, Color> TireSmokeColorDictionary { get; set; } = new()
@@ -46,7 +49,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (Equals(value, _validWheelTypes)) return;
             _validWheelTypes = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_validWheelTypes));
         }
     }
 
@@ -58,7 +61,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (Equals(value, _validVehicleModTypes)) return;
             _validVehicleModTypes = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_validVehicleModTypes));
         }
     }
 
@@ -70,7 +73,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _licensePlateStyle) return;
             _licensePlateStyle = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_licensePlateStyle));
         }
     }
 
@@ -82,7 +85,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _licensePlate) return;
             _licensePlate = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_licensePlate));
         }
     }
 
@@ -94,7 +97,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _currentWheelType) return;
             _currentWheelType = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentWheelType));
         }
     }
 
@@ -106,7 +109,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _currentRimColor) return;
             _currentRimColor = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentRimColor));
         }
     }
 
@@ -118,7 +121,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _currentCustomTires) return;
             _currentCustomTires = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentCustomTires));
         }
     }
 
@@ -130,7 +133,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value.Equals(_currentTireSmokeColor)) return;
             _currentTireSmokeColor = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentTireSmokeColor));
         }
     }
 
@@ -142,7 +145,31 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _currentWindowTint) return;
             _currentWindowTint = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_currentWindowTint));
+        }
+    }
+
+    [JsonIgnore]
+    public bool XenonHeadLights
+    {
+        get => _xenonHeadLights;
+        set
+        {
+            if (value == _xenonHeadLights) return;
+            _xenonHeadLights = value;
+            OnPropertyChanged(nameof(_xenonHeadLights));
+        }
+    }
+
+    [JsonIgnore]
+    public NeonLightsLayout CurrentNeonLightsLayout
+    {
+        get => _currentNeonLightsLayout;
+        set
+        {
+            if (value == _currentNeonLightsLayout) return;
+            _currentNeonLightsLayout = value;
+            OnPropertyChanged(nameof(_currentNeonLightsLayout));
         }
     }
 

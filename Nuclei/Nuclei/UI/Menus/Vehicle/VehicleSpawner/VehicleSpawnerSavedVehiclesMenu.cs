@@ -7,6 +7,7 @@ using GTA;
 using GTA.UI;
 using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
@@ -114,15 +115,32 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     RimColor = Service.CurrentVehicle.Mods.RimColor,
                     CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
                     TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
-                    WindowTint = Service.CurrentVehicle.Mods.WindowTint
+                    WindowTint = Service.CurrentVehicle.Mods.WindowTint,
+                    XenonHeadLights = Service.CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled,
+                    NeonLightsLayout = NeonLightsLayout.Off
                 };
+
+                if (Enum.GetValues(typeof(VehicleNeonLight)).Cast<VehicleNeonLight>()
+                    .All(n => Service.CurrentVehicle.Mods.HasNeonLight(n)))
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.FrontBackAndSides;
+                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back) &&
+                         Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.FrontAndBack;
+                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Left) &&
+                         Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Right))
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.Sides;
+                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.Front;
+                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back))
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.Back;
+                else
+                    customVehicle.NeonLightsLayout = NeonLightsLayout.Off;
 
                 foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())
                 {
                     var customVehicleMod = new CustomVehicleModDto(vehicleMod.Type, vehicleMod.Index);
                     customVehicle.VehicleMods.Add(customVehicleMod);
                 }
-
 
                 Service.CustomVehicles.Add(customVehicle);
             });

@@ -27,5 +27,11 @@ public enum VehicleModsItemTitles
     TireSmokeColor,
 
     [Description("Tint the windows of your vehicle.")]
-    WindowTint
+    WindowTint,
+
+    [Description("Toggle Xenon Headlights on/off.")]
+    XenonHeadLights,
+
+    [Description("Where under the vehicle should the neon lights be placed?")]
+    NeonLightsLayout
 }

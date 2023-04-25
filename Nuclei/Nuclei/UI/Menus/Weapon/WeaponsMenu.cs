@@ -10,29 +10,62 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
     public WeaponsMenu(Enum @enum) : base(@enum)
     {
         WeaponComponentsMenu();
+
         AddHeader("Basics");
         GiveAllWeapons();
         InfiniteAmmo();
         NoReload();
+
+        AddHeader("Utilities");
         FireBullets();
+        ExplosiveBullets();
+
+        AddHeader("Gutties");
+        LevitationGun();
+        GravityGun();
+        TeleportGun();
+    }
+
+    private void TeleportGun()
+    {
+        var checkBoxTeleportGun = AddCheckbox(WeaponItemTitles.TeleportGun, () => Service.TeleportGun, Service,
+            @checked => { Service.TeleportGun = @checked; });
+    }
+
+    private void GravityGun()
+    {
+        var checkBoxGravityGun = AddCheckbox(WeaponItemTitles.GravityGun, () => Service.GravityGun, Service,
+            @checked => { Service.GravityGun = @checked; });
+    }
+
+    private void LevitationGun()
+    {
+        var checkBoxLevitationGun = AddCheckbox(WeaponItemTitles.LevitationGun, () => Service.LevitationGun, Service,
+            @checked => { Service.LevitationGun = @checked; });
+    }
+
+    private void ExplosiveBullets()
+    {
+        var checkBoxExplosiveBullets = AddCheckbox(WeaponItemTitles.ExplosiveBullets, () => Service.ExplosiveBullets,
+            Service, @checked => { Service.ExplosiveBullets = @checked; });
     }
 
     private void NoReload()
     {
-        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, () => Service.NoReload,
-            @checked => { Service.NoReload = @checked; }, Service);
+        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, () => Service.NoReload, Service,
+            @checked => { Service.NoReload = @checked; });
     }
 
     private void InfiniteAmmo()
     {
-        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, () => Service.InfiniteAmmo,
-            @checked => { Service.InfiniteAmmo = @checked; }, Service);
+        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, () => Service.InfiniteAmmo, Service,
+            @checked => { Service.InfiniteAmmo = @checked; });
     }
 
     private void FireBullets()
     {
-        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, () => Service.FireBullets,
-            @checked => { Service.FireBullets = @checked; }, Service);
+        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, () => Service.FireBullets, Service,
+            @checked => { Service.FireBullets = @checked; });
     }
 
     private void GiveAllWeapons()

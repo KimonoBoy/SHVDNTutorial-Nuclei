@@ -1,171 +1,46 @@
 ﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using GTA;
-using Nuclei.Services.Observable;
+using Nuclei.Enums.Vehicle;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
-public class CustomVehicleDto : ObservableService
+public class CustomVehicleDto
 {
-    private bool _customTires;
+    public string Title { get; set; }
 
-    private string _licensePlate;
+    public VehicleHash VehicleHash { get; set; }
 
-    private LicensePlateStyle _licensePlateStyle;
+    public ObservableCollection<CustomVehicleModDto> VehicleMods { get; set; } = new();
 
-    private VehicleColor _rimColor;
+    public string LicensePlate { get; set; }
 
-    private Color _tireSmokeColor = Color.Transparent;
-    private string _title;
+    public LicensePlateStyle LicensePlateStyle { get; set; }
 
-    private VehicleHash _vehicleHash;
+    public VehicleWheelType WheelType { get; set; }
 
-    private ObservableCollection<CustomVehicleModDto> _vehicleMods = new();
+    public VehicleColor RimColor { get; set; }
 
-    private VehicleWheelType _wheelType;
-    private VehicleWindowTint _windowTint;
+    public bool CustomTires { get; set; }
 
-    public string Title
-    {
-        get => _title;
-        set
-        {
-            if (_title == value) return;
-            _title = value;
-            OnPropertyChanged();
-        }
-    }
+    public Color TireSmokeColor { get; set; } = Color.Transparent;
 
-    public VehicleHash VehicleHash
-    {
-        get => _vehicleHash;
-        set
-        {
-            if (_vehicleHash == value) return;
-            _vehicleHash = value;
-            OnPropertyChanged();
-        }
-    }
+    public VehicleWindowTint WindowTint { get; set; }
 
-    public ObservableCollection<CustomVehicleModDto> VehicleMods
-    {
-        get => _vehicleMods;
-        set
-        {
-            if (_vehicleMods == value) return;
-            _vehicleMods = value;
-            OnPropertyChanged();
-        }
-    }
+    public bool XenonHeadLights { get; set; }
 
-    public string LicensePlate
-    {
-        get => _licensePlate;
-        set
-        {
-            if (_licensePlate == value) return;
-            _licensePlate = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public LicensePlateStyle LicensePlateStyle
-    {
-        get => _licensePlateStyle;
-        set
-        {
-            if (_licensePlateStyle == value) return;
-            _licensePlateStyle = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public VehicleWheelType WheelType
-    {
-        get => _wheelType;
-        set
-        {
-            if (_wheelType == value) return;
-            _wheelType = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public VehicleColor RimColor
-    {
-        get => _rimColor;
-        set
-        {
-            if (_rimColor == value) return;
-            _rimColor = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public bool CustomTires
-    {
-        get => _customTires;
-        set
-        {
-            if (_customTires == value) return;
-            _customTires = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public Color TireSmokeColor
-    {
-        get => _tireSmokeColor;
-        set
-        {
-            if (_tireSmokeColor == value) return;
-            _tireSmokeColor = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public VehicleWindowTint WindowTint
-    {
-        get => _windowTint;
-        set
-        {
-            if (value == _windowTint) return;
-            _windowTint = value;
-            OnPropertyChanged();
-        }
-    }
+    public NeonLightsLayout NeonLightsLayout { get; set; }
 }
 
-public class CustomVehicleModDto : ObservableService
+public class CustomVehicleModDto
 {
-    private int _modIndex;
-    private VehicleModType _vehicleModType;
-
     public CustomVehicleModDto(VehicleModType vehicleModType, int modIndex)
     {
         VehicleModType = vehicleModType;
         ModIndex = modIndex;
     }
 
-    public VehicleModType VehicleModType
-    {
-        get => _vehicleModType;
-        set
-        {
-            if (_vehicleModType == value) return;
-            _vehicleModType = value;
-            OnPropertyChanged();
-        }
-    }
+    public VehicleModType VehicleModType { get; set; }
 
-    public int ModIndex
-    {
-        get => _modIndex;
-        set
-        {
-            if (_modIndex == value) return;
-            _modIndex = value;
-            OnPropertyChanged();
-        }
-    }
+    public int ModIndex { get; set; }
 }

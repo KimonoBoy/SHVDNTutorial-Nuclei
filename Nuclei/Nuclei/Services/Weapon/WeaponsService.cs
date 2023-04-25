@@ -6,28 +6,17 @@ namespace Nuclei.Services.Weapon;
 public class WeaponsService : GenericService<WeaponsService>
 {
     private int _accuracy;
-
     private bool _aimBot;
-
     private bool _explosiveBullets;
-
     private bool _fireBullets;
-
     private bool _gravityGun;
     private bool _infiniteAmmo;
-
     private bool _levitationGun;
-
     private bool _noReload;
-
     private bool _oneHitKill;
-
     private bool _shootObjects;
-
     private bool _shootPeds;
-
     private bool _shootVehicles;
-
     private bool _teleportGun;
 
     public bool InfiniteAmmo
@@ -37,7 +26,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_infiniteAmmo == value) return;
             _infiniteAmmo = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_infiniteAmmo));
         }
     }
 
@@ -48,7 +37,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_noReload == value) return;
             _noReload = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_noReload));
         }
     }
 
@@ -59,7 +48,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_fireBullets == value) return;
             _fireBullets = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_fireBullets));
         }
     }
 
@@ -70,7 +59,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_explosiveBullets == value) return;
             _explosiveBullets = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_explosiveBullets));
         }
     }
 
@@ -81,7 +70,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_oneHitKill == value) return;
             _oneHitKill = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_oneHitKill));
         }
     }
 
@@ -92,7 +81,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_accuracy == value) return;
             _accuracy = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_accuracy));
         }
     }
 
@@ -103,7 +92,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_gravityGun == value) return;
             _gravityGun = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_gravityGun));
         }
     }
 
@@ -114,7 +103,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_teleportGun == value) return;
             _teleportGun = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_teleportGun));
         }
     }
 
@@ -125,7 +114,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_levitationGun == value) return;
             _levitationGun = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_levitationGun));
         }
     }
 
@@ -136,7 +125,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootVehicles == value) return;
             _shootVehicles = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_shootVehicles));
         }
     }
 
@@ -147,7 +136,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootPeds == value) return;
             _shootPeds = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_shootPeds));
         }
     }
 
@@ -158,7 +147,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootObjects == value) return;
             _shootObjects = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_shootObjects));
         }
     }
 
@@ -169,7 +158,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_aimBot == value) return;
             _aimBot = value;
-            OnPropertyChanged();
+            OnPropertyChanged(nameof(_aimBot));
         }
     }
 

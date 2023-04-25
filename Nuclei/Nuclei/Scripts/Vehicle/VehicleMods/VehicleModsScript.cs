@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle.VehicleMods;
 
@@ -42,6 +43,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             UpdateFeature(() => Service.CurrentRimColor, UpdateRimColor);
             UpdateFeature(() => Service.CurrentCustomTires, UpdateCustomTires);
             UpdateFeature(() => Service.CurrentTireSmokeColor, UpdateTireSmokeColor);
+            UpdateFeature(() => Service.CurrentNeonLightsLayout, UpdateNeonLightsLayout);
+            // UpdateFeature(() => Service.CurrentWindowTint, UpdateWindowTint);
         }
 
         if (e.PropertyName == nameof(Service.LicensePlate))
@@ -88,14 +91,68 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             if (Service.CurrentWindowTint == CurrentVehicle.Mods.WindowTint) return;
             CurrentVehicle.Mods.WindowTint = Service.CurrentWindowTint;
         }
+
+        if (e.PropertyName == nameof(Service.XenonHeadLights))
+        {
+            if (Service.XenonHeadLights ==
+                CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled) return;
+            CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = Service.XenonHeadLights;
+        }
+
+        if (e.PropertyName == nameof(Service.CurrentNeonLightsLayout))
+        {
+            if (GetNeonLightsLayout() != NeonLightsLayout.Off)
+                CurrentVehicle.Mods.NeonLightsColor = Color.White;
+            switch (Service.CurrentNeonLightsLayout)
+            {
+                case NeonLightsLayout.Off:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                    break;
+                case NeonLightsLayout.Front:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                    break;
+                case NeonLightsLayout.Back:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                    break;
+                case NeonLightsLayout.FrontAndBack:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                    break;
+                case NeonLightsLayout.Sides:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                    break;
+                case NeonLightsLayout.FrontBackAndSides:
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                    CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 
-    private void UpdateWindowTint(VehicleWindowTint vehicleWindowTint)
-    {
-        if (vehicleWindowTint == CurrentVehicle.Mods.WindowTint) return;
-
-        Service.CurrentWindowTint = CurrentVehicle.Mods.WindowTint;
-    }
+    // private void UpdateWindowTint(VehicleWindowTint vehicleWindowTint)
+    // {
+    //     if (vehicleWindowTint == CurrentVehicle.Mods.WindowTint) return;
+    //
+    //     Service.CurrentWindowTint = CurrentVehicle.Mods.WindowTint;
+    // }
 
     private void OnRandomizeModsRequested(object sender, ObservableCollection<VehicleModType> modsToRandomize)
     {
@@ -195,7 +252,33 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateFeature(() => Service.CurrentWheelType, UpdateWheelType);
         UpdateFeature(() => Service.CurrentRimColor, UpdateRimColor);
         UpdateFeature(() => Service.CurrentCustomTires, UpdateCustomTires);
-        UpdateFeature(() => Service.CurrentWindowTint, UpdateWindowTint);
+    }
+
+    private NeonLightsLayout GetNeonLightsLayout()
+    {
+        if (Enum.GetValues(typeof(VehicleNeonLight)).Cast<VehicleNeonLight>()
+            .All(n => Service.CurrentVehicle.Mods.HasNeonLight(n)))
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.FrontBackAndSides;
+        else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back) &&
+                 Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.FrontAndBack;
+        else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Left) &&
+                 Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Right))
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.Sides;
+        else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.Front;
+        else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back))
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.Back;
+        else
+            Service.CurrentNeonLightsLayout = NeonLightsLayout.Off;
+
+        return Service.CurrentNeonLightsLayout;
+    }
+
+    private void UpdateNeonLightsLayout(NeonLightsLayout obj)
+    {
+        if (Service.CurrentNeonLightsLayout != GetNeonLightsLayout())
+            Service.CurrentNeonLightsLayout = GetNeonLightsLayout();
     }
 
     private void UpdateCustomTires(bool customTires)

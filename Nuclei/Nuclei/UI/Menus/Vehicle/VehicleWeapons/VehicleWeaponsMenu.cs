@@ -48,13 +48,13 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     private void PointAndShoot()
     {
         var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitles.PointAndShoot, () => Service.PointAndShoot,
-            @checked => { Service.PointAndShoot = @checked; }, Service);
+            Service, @checked => { Service.PointAndShoot = @checked; });
     }
 
     private void AdjustFireRate()
     {
-        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, () => Service.FireRate,
-            value => { Service.FireRate = value; }, 0, 20, Service);
+        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, () => Service.FireRate, Service,
+            value => { Service.FireRate = value; }, 0, 20);
 
         sliderItemFireRate.Description =
             $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball, Grenades, etc) often work better with a higher timer.";
@@ -69,8 +69,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     private void VehicleWeapons()
     {
         var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons,
-            () => Service.HasVehicleWeapons,
-            @checked => { Service.HasVehicleWeapons = @checked; }, Service);
+            () => Service.HasVehicleWeapons, Service, @checked => { Service.HasVehicleWeapons = @checked; });
     }
 
     private void AddStandardExcludedHashes()
@@ -185,12 +184,11 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     private void WeaponAttachmentPoints()
     {
         var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitles.WeaponAttachmentPoints,
+            () => (int)Service.VehicleWeaponAttachment,
+            Service,
             (selected, index) =>
             {
                 Service.VehicleWeaponAttachment = selected.GetHashFromDisplayName<VehicleWeaponAttachmentPoint>();
-            }, null,
-            value => Service.VehicleWeaponAttachment.GetLocalizedDisplayNameFromHash(),
-            Service,
-            typeof(VehicleWeaponAttachmentPoint).ToDisplayNameArray());
+            }, typeof(VehicleWeaponAttachmentPoint).ToDisplayNameArray());
     }
 }
