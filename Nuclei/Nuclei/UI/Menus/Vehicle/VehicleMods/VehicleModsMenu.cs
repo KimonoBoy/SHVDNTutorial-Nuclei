@@ -24,15 +24,22 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     private void OnShown(object sender, EventArgs e)
     {
-        Service.PropertyChanged += OnPropertyChanged;
         UpdateMenuItems();
+        Service.PropertyChanged += OnPropertyChanged;
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Service.CurrentVehicle))
+        {
             if (Service.CurrentVehicle == null)
+            {
                 NavigateToMenu(MenuTitles.Vehicle);
+                return;
+            }
+
+            UpdateMenuItems();
+        }
     }
 
     protected override void UpdateMenuItems()
@@ -58,10 +65,9 @@ public class VehicleModsMenu : VehicleModsMenuBase
     private void WindowTints()
     {
         var listItemWindowTints = AddListItem(VehicleModsItemTitles.WindowTint,
-            () => (int)VehicleWindowTint.None, Service,
+            () => (int)Service.CurrentWindowTint, Service,
             (selected, index) => { Service.CurrentWindowTint = (VehicleWindowTint)index; },
-            typeof(VehicleWindowTint).ToDisplayNameArray().Where(tint =>
-                tint.GetHashFromDisplayName<VehicleWindowTint>() != VehicleWindowTint.Invalid).ToArray());
+            typeof(VehicleWindowTint).ToDisplayNameArray());
     }
 
     private void BumpersMenu()
@@ -111,9 +117,6 @@ public class VehicleModsMenu : VehicleModsMenuBase
                 {
                     Service.LicensePlateStyle = selected.GetHashFromDisplayName<LicensePlateStyle>();
                 }, typeof(LicensePlateStyle).ToDisplayNameArray());
-
-        // listItemLicensePlateStyle.SelectedItem =
-        //     Service.LicensePlateStyle.GetLocalizedDisplayNameFromHash();
 
         Service.LicensePlateInputRequested += (sender, args) => { itemLicensePlate.AltTitle = Service.LicensePlate; };
     }

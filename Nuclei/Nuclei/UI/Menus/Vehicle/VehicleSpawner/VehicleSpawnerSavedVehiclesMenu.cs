@@ -120,22 +120,6 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     NeonLightsLayout = NeonLightsLayout.Off
                 };
 
-                if (Enum.GetValues(typeof(VehicleNeonLight)).Cast<VehicleNeonLight>()
-                    .All(n => Service.CurrentVehicle.Mods.HasNeonLight(n)))
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.FrontBackAndSides;
-                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back) &&
-                         Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.FrontAndBack;
-                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Left) &&
-                         Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Right))
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.Sides;
-                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Front))
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.Front;
-                else if (Service.CurrentVehicle.Mods.HasNeonLight(VehicleNeonLight.Back))
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.Back;
-                else
-                    customVehicle.NeonLightsLayout = NeonLightsLayout.Off;
-
                 foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())
                 {
                     var customVehicleMod = new CustomVehicleModDto(vehicleMod.Type, vehicleMod.Index);
