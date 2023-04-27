@@ -85,7 +85,6 @@
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
     <Compile Include="Services\Generics\GenericService.cs" />
     <Compile Include="Services\Generics\GenericStateService.cs" />
-    <Compile Include="Services\Observable\ObservableDictionary.cs" />
     <Compile Include="Services\Observable\ObservableService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
