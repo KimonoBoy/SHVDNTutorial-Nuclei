@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using GTA;
@@ -10,11 +11,11 @@ using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Observable;
-using Nuclei.UI.Menus.Base.CustomItems;
 using Nuclei.UI.Menus.Base.ItemFactory;
+using Nuclei.UI.Menus.Base.ItemFactory.CustomItems;
 using Font = GTA.UI.Font;
 
-namespace Nuclei.UI.Menus.Base;
+namespace NewUltimateTest.UI.Menus.Base;
 
 public abstract class MenuBase : NativeMenu
 {
@@ -22,7 +23,9 @@ public abstract class MenuBase : NativeMenu
 
     private readonly ExceptionService _exceptionService = ExceptionService.Instance;
 
-    private readonly ItemFactoryService _itemFactoryService = new();
+    protected readonly ItemFactoryService _itemFactoryService = new();
+
+    private readonly Dictionary<string, MenuBase> subMenus = new();
 
     private bool _isMovingUp;
 
@@ -49,7 +52,21 @@ public abstract class MenuBase : NativeMenu
 
         _exceptionService.ErrorOccurred += OnErrorOccurred;
 
-        Pool.Add(this);
+        // Check if the menu with the same subtitle is already in the Pool
+        var existingMenu = Pool.OfType<MenuBase>().FirstOrDefault(menu => menu.Subtitle == Subtitle);
+
+        if (existingMenu == null)
+        {
+            // If the menu does not exist, add it to the Pool
+            Pool.Add(this);
+        }
+        else
+        {
+            // If the menu already exists, remove the current instance and use the existing one
+            Pool.Remove(this);
+            Subtitle = existingMenu.Subtitle;
+            Description = existingMenu.Description;
+        }
     }
 
     protected virtual void AddButtons()
@@ -185,10 +202,17 @@ public abstract class MenuBase : NativeMenu
 
     protected NativeSubmenuItem AddMenu(MenuBase subMenu)
     {
-        var subMenuItem = AddSubMenu(subMenu);
-        subMenuItem.AltTitle = "Menu";
-        subMenuItem.AltTitleFont = Font.ChaletComprimeCologne;
-        return subMenuItem;
+        if (subMenus.ContainsKey(subMenu.Subtitle))
+            // If the submenu already exists, get a reference to it
+            subMenu = subMenus[subMenu.Subtitle];
+        else
+            // If the submenu does not exist, add it to the dictionary
+            subMenus.Add(subMenu.Subtitle, subMenu);
+
+        var submenuItem = AddSubMenu(subMenu);
+        submenuItem.AltTitle = "Menu";
+        submenuItem.AltTitleFont = Font.ChaletComprimeCologne;
+        return submenuItem;
     }
 
     protected NativeHeaderItem AddHeader(string title)
@@ -198,7 +222,7 @@ public abstract class MenuBase : NativeMenu
         return headerItem;
     }
 
-    protected void UpdateAltTitleOnDisable(NativeSubmenuItem itemToUpdate, bool condition,
+    protected void UpdateAltTitleOnCondition(NativeSubmenuItem itemToUpdate, bool condition,
         string enabled, string disabled)
     {
         var altTitle = condition ? $"{enabled}" : $"{disabled}";
@@ -221,10 +245,14 @@ public abstract class MenuBase : NativeMenu
     {
         var allMenusInPool = Pool.Where(menu => menu is NativeMenu).Cast<NativeMenu>().ToList();
         var menu = allMenusInPool.FirstOrDefault(menu => menu.Subtitle == subTitle);
-        if (menu == null) throw new NullReferenceException($"Menu with subtitle '{subTitle}' not found.");
-        Visible = false;
-        menu.Visible = true;
-        return menu;
+        if (menu != null)
+        {
+            Visible = false;
+            menu.Visible = true;
+            return menu;
+        }
+
+        throw new NullReferenceException($"Menu with subtitle '{subTitle}' not found.");
     }
 
     protected NativeMenu NavigateToMenu(Enum @enum)

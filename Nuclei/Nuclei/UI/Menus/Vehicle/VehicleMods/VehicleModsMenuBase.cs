@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
@@ -7,6 +7,7 @@ using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.UI.Menus.Base;
+using Nuclei.UI.Menus.Base.ItemFactory;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
@@ -14,7 +15,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 {
     protected VehicleModsMenuBase(Enum @enum) : base(@enum)
     {
-        Width = 550;
+        Width = 500;
         Shown += OnShown;
         Closed += OnClosed;
     }
@@ -24,70 +25,72 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
         Service.PropertyChanged -= OnPropertyChanged;
     }
 
+    private void OnShown(object sender, EventArgs e)
+    {
+        Service.PropertyChanged += OnPropertyChanged;
+        if (Service.CurrentVehicle == null) return;
+        GenerateMenu();
+    }
+
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Service.CurrentVehicle))
         {
             if (!Visible) return;
+
             if (Service.CurrentVehicle == null)
             {
                 NavigateToMenu(MenuTitles.Vehicle);
                 return;
             }
 
-            UpdateMenuItems();
+            GenerateMenu();
         }
     }
 
-    private void OnShown(object sender, EventArgs e)
-    {
-        if (!Visible) return;
-        if (Service.CurrentVehicle == null)
-        {
-            NavigateToMenu(MenuTitles.Vehicle);
-            return;
-        }
+    protected abstract IEnumerable<VehicleMod> GetValidMods();
 
-        UpdateMenuItems();
-        Service.PropertyChanged += OnPropertyChanged;
+    protected virtual void PreModTypeMods()
+    {
     }
 
-    protected abstract ObservableCollection<VehicleModType> GetValidModTypes();
-
-    protected virtual void UpdateMenuItems()
+    protected virtual void PostModTypeMods()
     {
-        GenerateModsMenu();
     }
 
-    private void GenerateModsMenu()
+    protected void GenerateMenu()
     {
-        foreach (var modType in GetValidModTypes())
+        if (Service.CurrentVehicle == null) return;
+
+        Clear();
+        PreModTypeMods();
+        foreach (var vehicleMod in GetValidMods())
         {
-            var currentMod = Service.CurrentVehicle.Mods[modType];
-            var currentIndex = currentMod.Index;
-            var listItem = AddListItem(modType.GetLocalizedDisplayNameFromHash(), "",
+            var currentIndex = vehicleMod.Index;
+            var listItemTest = AddListItem(vehicleMod.Type.GetLocalizedDisplayNameFromHash(), "",
                 null, Service,
-                (value, index) => { currentMod.Index = index == currentMod.Count ? -1 : index; }, Enumerable
-                    .Range(0, currentMod.Count + 1).ToList().Select(i =>
-                    {
-                        if (i == currentMod.Count) return "Stock" + $" {0}/{currentMod.Count}";
-                        currentMod.Index = i;
-                        var localizedString = currentMod.LocalizedName + $" {i + 1}/{currentMod.Count}";
-                        return localizedString;
-                    }).ToArray());
+                (value, index) => { vehicleMod.Index = index; },
+                Enumerable.Range(0, vehicleMod.Count + 1).Select(index =>
+                {
+                    if (index == -1) return $"Stock {0} / {vehicleMod.Count}";
+                    vehicleMod.Index = index;
+                    string localizedName;
+                    if (index == vehicleMod.Count)
+                        localizedName = $"{vehicleMod.LocalizedName} {0} / {vehicleMod.Count}";
+                    else
+                        localizedName = vehicleMod.LocalizedName + $" {index + 1} / {vehicleMod.Count}";
+                    return localizedName;
+                }).ToArray());
 
-            if (currentIndex == 0)
+            listItemTest.SetSelectedIndexSafe(currentIndex == -1 ? vehicleMod.Count : currentIndex);
+            if (!listItemTest.Any()) return;
+            if (listItemTest.SelectedIndex == 0)
             {
-                /*
-                 * Weird fix, but works.
-                 */
-                listItem.SelectedIndex++;
-                listItem.SelectedIndex--;
-            }
-            else
-            {
-                listItem.SelectedIndex = currentIndex == -1 ? currentMod.Count : currentIndex;
+                listItemTest.SelectedIndex++;
+                listItemTest.SelectedIndex--;
             }
         }
+
+        PostModTypeMods();
     }
 }

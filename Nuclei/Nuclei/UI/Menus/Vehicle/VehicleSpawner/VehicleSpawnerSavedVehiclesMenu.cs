@@ -7,7 +7,6 @@ using GTA;
 using GTA.UI;
 using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
-using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
@@ -117,7 +116,10 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
                     WindowTint = Service.CurrentVehicle.Mods.WindowTint,
                     XenonHeadLights = Service.CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled,
-                    NeonLightsLayout = NeonLightsLayout.Off
+                    NeonLightsLayout = Service.NeonLightsLayout,
+                    PrimaryColor = Service.CurrentVehicle.Mods.PrimaryColor,
+                    SecondaryColor = Service.CurrentVehicle.Mods.SecondaryColor,
+                    Turbo = Service.CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled
                 };
 
                 foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())

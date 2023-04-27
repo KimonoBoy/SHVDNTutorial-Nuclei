@@ -15,39 +15,39 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     private const float MinProjectileDistance = 150.0f;
     private const float ProjectileDistanceNoHit = 75.0f;
     private DateTime _lastShotTime = DateTime.UtcNow;
-    private int _minShootInterval;
+    private float _minShootInterval;
 
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
-        GameStateTimer.SubscribeToTimerElapsed(UpdateVehicleWeapon);
     }
 
-    public override void UnsubscribeOnExit()
+    protected override void UnsubscribeOnExit()
     {
         Tick -= OnTick;
-        GameStateTimer.UnsubscribeFromTimerElapsed(UpdateVehicleWeapon);
+    }
+
+    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
+    {
+        ProcessFireRate();
+    }
+
+    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
+    {
+    }
+
+    private void ProcessFireRate()
+    {
+        if (Math.Abs(_minShootInterval - Service.FireRate * 25.0f) < 1.0f) return;
+
+        _minShootInterval = Service.FireRate * 25.0f;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        UpdateFeature(() => Service.VehicleWeapon, ProcessVehicleWeaponShoot);
-    }
-
-    private void UpdateVehicleWeapon(object sender, EventArgs e)
-    {
-        if (CurrentVehicle == null) return;
-
-        UpdateFeature(() => Service.FireRate, UpdateFireRate);
-    }
-
-    private void UpdateFireRate(int fireRate)
-    {
-        if (!Service.HasVehicleWeapons) return;
-
-        _minShootInterval = fireRate * 25;
+        ProcessVehicleWeaponShoot(Service.VehicleWeapon);
     }
 
     private void ProcessVehicleWeaponShoot(uint weaponHash)

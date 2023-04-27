@@ -2,7 +2,7 @@
 using LemonUI.Menus;
 using Font = GTA.UI.Font;
 
-namespace Nuclei.UI.Menus.Base.CustomItems;
+namespace Nuclei.UI.Menus.Base.ItemFactory.CustomItems;
 
 public class NativeHeaderItem : NativeItem
 {

@@ -63,6 +63,7 @@
     <Compile Include="Enums\UI\VehicleWeaponsItemTitles.cs" />
     <Compile Include="Enums\UI\WeaponItemTitles.cs" />
     <Compile Include="Enums\Vehicle\NeonLightsLayout.cs" />
+    <Compile Include="Enums\Vehicle\TireSmokeColor.cs" />
     <Compile Include="Enums\Vehicle\VehicleModsItemTitles.cs" />
     <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
     <Compile Include="Services\Generics\GenericService.cs" />
     <Compile Include="Services\Generics\GenericStateService.cs" />
+    <Compile Include="Services\Observable\ObservableDictionary.cs" />
     <Compile Include="Services\Observable\ObservableService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
@@ -95,9 +97,10 @@
     <Compile Include="Services\Vehicle\VehicleWeapons\VehicleWeaponsService.cs" />
     <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
     <Compile Include="Services\Weapon\WeaponsService.cs" />
-    <Compile Include="UI\Menus\Base\CustomItems\NativeHeaderItem.cs" />
+    <Compile Include="UI\Menus\Base\ItemFactory\CustomItems\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Base\GenericMenuBase.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\ItemFactoryService.cs" />
+    <Compile Include="UI\Menus\Base\ItemFactory\NativeListItemExtension.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Base\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
@@ -105,7 +108,6 @@
     <Compile Include="UI\Menus\Settings\StorageMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsBumpersMenu.cs" />
-    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsLightsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenuBase.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsWheelsMenu.cs" />

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -27,34 +26,27 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         Service.PlayerFixRequested += OnPlayerFixRequested;
         Service.CashInputRequested += OnCashInputRequested;
         Service.AddCashRequested += OnAddCashRequested;
-        Service.PropertyChanged += OnPropertyChanged;
-        GameStateTimer.SubscribeToTimerElapsed(UpdatePlayer);
+        Service.RegisterAction(() => Service.WantedLevel, () => { Game.Player.WantedLevel = Service.WantedLevel; });
+        Service.RegisterAction(() => Service.IsInvincible, () => { Game.Player.IsInvincible = Service.IsInvincible; });
     }
 
-    public override void UnsubscribeOnExit()
+    protected override void UnsubscribeOnExit()
     {
         Tick -= OnTick;
         KeyDown -= OnKeyDown;
         Service.PlayerFixRequested -= OnPlayerFixRequested;
         Service.CashInputRequested -= OnCashInputRequested;
         Service.AddCashRequested -= OnAddCashRequested;
-        Service.PropertyChanged -= OnPropertyChanged;
-        GameStateTimer.UnsubscribeFromTimerElapsed(UpdatePlayer);
-    }
-
-    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Service.WantedLevel)) Game.Player.WantedLevel = Service.WantedLevel;
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
 
-        UpdateFeature(() => Service.IsNoiseless, ProcessNoiseless);
-        UpdateFeature(() => Service.CanSuperJump, ProcessSuperJump);
-        UpdateFeature(() => Service.IsOnePunchMan, ProcessOnePunchMan);
-        UpdateFeature(() => Service.SuperSpeed, ProcessSuperSpeed);
+        ProcessNoiseless();
+        ProcessSuperJump();
+        ProcessOnePunchMan();
+        ProcessSuperSpeed();
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -78,71 +70,69 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         AddCash(cashHash);
     }
 
-    private void UpdatePlayer(object sender, EventArgs e)
+    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
     {
         if (Character == null) return;
 
-        UpdateFeature(() => Service.IsInvincible, UpdateInvincible);
-        UpdateFeature(() => Service.IsInvisible, UpdateInvisible);
-        UpdateFeature(() => Service.HasInfiniteBreath, UpdateInfiniteBreath);
-        UpdateFeature(() => Service.CanRideOnCars, UpdateRideOnCars);
-        UpdateFeature(() => Service.WantedLevel, UpdateWantedLevel);
-
-        /*
-         * Process Functions that doesn't need to be called every tick.
-         */
-        UpdateFeature(() => Service.HasInfiniteStamina, ProcessInfiniteStamina);
-        UpdateFeature(() => Service.HasInfiniteSpecialAbility, ProcessInfiniteSpecialAbility);
+        ProcessInvincible();
+        ProcessInvisible();
+        ProcessInfiniteBreath();
+        ProcessRideOnCars();
+        ProcessInfiniteStamina();
+        ProcessInfiniteSpecialAbility();
     }
 
-    private void UpdateInvincible(bool invincible)
+    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
     {
-        if (Character.IsInvincible == invincible) return;
-
-        Character.IsInvincible = invincible;
+        UpdateWantedLevel();
     }
 
-    private static void UpdateInvisible(bool invisible)
+    private void ProcessInvincible()
     {
-        Character.IsVisible = !invisible;
-        Character.CanBeTargetted = !invisible;
-        Game.Player.IgnoredByEveryone = invisible;
+        if (Character.IsInvincible == Service.IsInvincible) return;
+
+        Character.IsInvincible = Service.IsInvincible;
     }
 
-    private static void UpdateInfiniteBreath(bool infiniteBreath)
+    private void ProcessInvisible()
     {
-        if (Character.GetConfigFlag(DrownsInWater) == !infiniteBreath) return;
+        Character.IsVisible = !Service.IsInvisible;
+        Character.CanBeTargetted = !Service.IsInvisible;
+        Game.Player.IgnoredByEveryone = Service.IsInvisible;
+    }
+
+    private void ProcessInfiniteBreath()
+    {
+        if (Character.GetConfigFlag(DrownsInWater) == !Service.HasInfiniteBreath) return;
 
         /*
          * False: Can't drown in water. (InfiniteBreath)
          * True: Can drown in water. (Not InfiniteBreath)  
          */
-        Character.SetConfigFlag(DrownsInWater, !infiniteBreath);
+        Character.SetConfigFlag(DrownsInWater, !Service.HasInfiniteBreath);
     }
 
-    private void UpdateRideOnCars(bool rideOnCars)
+    private void ProcessRideOnCars()
     {
-        if (Character.CanRagdoll == !rideOnCars) return;
+        if (Character.CanRagdoll == !Service.CanRideOnCars) return;
 
         // False means the player won't fall over.
-        Character.CanRagdoll = !rideOnCars;
+        Character.CanRagdoll = !Service.CanRideOnCars;
     }
 
-    private void UpdateWantedLevel(int wantedLevel)
+    private void UpdateWantedLevel()
     {
-        // if (Service.IsWantedLevelLocked)
-        //     Game.Player.WantedLevel = Service.LockedWantedLevel;
+        if (Service.WantedLevel == Game.Player.WantedLevel) return;
 
-        if (Service.WantedLevel != Game.Player.WantedLevel)
-            Service.WantedLevel = Game.Player.WantedLevel;
+        Service.WantedLevel = Game.Player.WantedLevel;
     }
 
     /// <summary>
     ///     The noise level increases slowly over time. This prevents that.
     /// </summary>
-    private void ProcessNoiseless(bool noiseless)
+    private void ProcessNoiseless()
     {
-        if (!noiseless) return;
+        if (!Service.IsNoiseless) return;
 
         Function.Call(Hash.SET_PLAYER_NOISE_MULTIPLIER, Game.Player, 0.0f);
         Function.Call(Hash.SET_PLAYER_SNEAKING_NOISE_MULTIPLIER, Game.Player, 0.0f);
@@ -152,9 +142,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     ///     When sprinting or swimming, if the amount of time you can sprint for
     ///     drops below 5 seconds, RESET STAMINA to FULL.
     /// </summary>
-    private void ProcessInfiniteStamina(bool infiniteStamina)
+    private void ProcessInfiniteStamina()
     {
-        if (!infiniteStamina) return;
+        if (!Service.HasInfiniteStamina) return;
         if (!Character.IsRunning && !Character.IsSprinting &&
             !Character.IsSwimming) return;
 
@@ -165,11 +155,10 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// <summary>
     ///     Restores Special Ability Meter to Full.
     /// </summary>
-    private void ProcessInfiniteSpecialAbility(bool infiniteSpecialAbility)
+    private void ProcessInfiniteSpecialAbility()
     {
-        if (!infiniteSpecialAbility) return;
+        if (!Service.HasInfiniteSpecialAbility) return;
         var isAbilityMeterFull = Function.Call<bool>(Hash.IS_SPECIAL_ABILITY_METER_FULL, Game.Player);
-
         if (isAbilityMeterFull) return;
 
         Function.Call(Hash.SPECIAL_ABILITY_FILL_METER, Game.Player, true);
@@ -179,9 +168,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     ///     Processes the OnePunchMan feature. When active, hitting an entity with a melee weapon will apply immense force,
     ///     pushing it away.
     /// </summary>
-    private void ProcessOnePunchMan(bool onePunchMan)
+    private void ProcessOnePunchMan()
     {
-        if (!onePunchMan) return;
+        if (!Service.IsOnePunchMan) return;
         if (!Character.IsInMeleeCombat) return;
 
         // Check for damaged entities only once every 100 milliseconds
@@ -248,14 +237,14 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     ///     If the player is not sprinting, the SuperSpeed is disabled.
     ///     If the entityForceMultiplier is 0.0f, the entities the player is touching will not be affected.
     /// </summary>
-    private void ProcessSuperSpeed(SuperSpeedHash superSpeed)
+    private void ProcessSuperSpeed()
     {
         int maxSpeed;
         float entityForceMultiplier;
 
         Game.Player.SetRunSpeedMultThisFrame(1.49f);
 
-        switch (superSpeed)
+        switch (Service.SuperSpeed)
         {
             case SuperSpeedHash.Fast:
                 return; // Do nothing, only apply the run speed multiplier.
@@ -276,6 +265,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
                 return;
         }
 
+        if (!Character.IsRunning && !Character.IsSprinting) return;
         ProcessSuperSpeedTicks(maxSpeed, entityForceMultiplier);
     }
 
@@ -334,9 +324,9 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// <summary>
     ///     Allows the player to jump as high as a building.
     /// </summary>
-    private void ProcessSuperJump(bool superJump)
+    private void ProcessSuperJump()
     {
-        if (!superJump) return;
+        if (!Service.CanSuperJump) return;
 
         Game.Player.SetSuperJumpThisFrame();
     }

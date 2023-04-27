@@ -25,5 +25,8 @@ public enum WeaponItemTitles
     [Description("Implemented later...")] GravityGun,
 
     [Description("Teleport to any location by shooting at the location.")]
-    TeleportGun
+    TeleportGun,
+
+    [Description("Shoot vehicles out of your gun.")]
+    VehicleGun
 }

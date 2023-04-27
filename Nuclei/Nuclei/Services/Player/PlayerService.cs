@@ -41,7 +41,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_addCash == value) return;
             _addCash = value;
-            OnPropertyChanged(nameof(_addCash));
+            OnPropertyChanged();
         }
     }
 
@@ -52,7 +52,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_superSpeed == value) return;
             _superSpeed = value;
-            OnPropertyChanged(nameof(_superSpeed));
+            OnPropertyChanged();
         }
     }
 
@@ -63,7 +63,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_isOnePunchMan == value) return;
             _isOnePunchMan = value;
-            OnPropertyChanged(nameof(_isOnePunchMan));
+            OnPropertyChanged();
         }
     }
 
@@ -74,7 +74,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_isInvisible == value) return;
             _isInvisible = value;
-            OnPropertyChanged(nameof(_isInvisible));
+            OnPropertyChanged();
         }
     }
 
@@ -85,7 +85,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_canRideOnCars == value) return;
             _canRideOnCars = value;
-            OnPropertyChanged(nameof(_canRideOnCars));
+            OnPropertyChanged();
         }
     }
 
@@ -96,7 +96,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_isNoiseless == value) return;
             _isNoiseless = value;
-            OnPropertyChanged(nameof(_isNoiseless));
+            OnPropertyChanged();
         }
     }
 
@@ -107,7 +107,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_isWantedLevelLocked == value) return;
             _isWantedLevelLocked = value;
-            OnPropertyChanged(nameof(_isWantedLevelLocked));
+            OnPropertyChanged();
         }
     }
 
@@ -118,7 +118,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_lockedWantedLevel == value) return;
             _lockedWantedLevel = value;
-            OnPropertyChanged(nameof(_lockedWantedLevel));
+            OnPropertyChanged();
         }
     }
 
@@ -129,7 +129,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_hasInfiniteSpecialAbility == value) return;
             _hasInfiniteSpecialAbility = value;
-            OnPropertyChanged(nameof(_hasInfiniteSpecialAbility));
+            OnPropertyChanged();
         }
     }
 
@@ -140,7 +140,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_hasInfiniteStamina == value) return;
             _hasInfiniteStamina = value;
-            OnPropertyChanged(nameof(_hasInfiniteStamina));
+            OnPropertyChanged();
         }
     }
 
@@ -151,7 +151,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_hasInfiniteBreath == value) return;
             _hasInfiniteBreath = value;
-            OnPropertyChanged(nameof(_hasInfiniteBreath));
+            OnPropertyChanged();
         }
     }
 
@@ -162,7 +162,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_isInvincible == value) return;
             _isInvincible = value;
-            OnPropertyChanged(nameof(_isInvincible));
+            OnPropertyChanged();
         }
     }
 
@@ -173,7 +173,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_wantedLevel == value) return;
             _wantedLevel = value;
-            OnPropertyChanged(nameof(_wantedLevel));
+            OnPropertyChanged();
         }
     }
 
@@ -184,7 +184,7 @@ public class PlayerService : GenericService<PlayerService>
         {
             if (_canSuperJump == value) return;
             _canSuperJump = value;
-            OnPropertyChanged(nameof(_canSuperJump));
+            OnPropertyChanged();
         }
     }
 

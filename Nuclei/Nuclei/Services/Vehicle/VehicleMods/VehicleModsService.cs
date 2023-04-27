@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using GTA;
 using Newtonsoft.Json;
@@ -11,69 +10,89 @@ namespace Nuclei.Services.Vehicle.VehicleMods;
 
 public class VehicleModsService : GenericService<VehicleModsService>
 {
-    private bool _currentCustomTires;
-    private NeonLightsLayout _currentNeonLightsLayout = NeonLightsLayout.Off;
-
-    private VehicleColor _currentRimColor;
-
-    private Color _currentTireSmokeColor;
-    private VehicleWheelType _currentWheelType;
-    private VehicleWindowTint _currentWindowTint;
+    private bool _customTires;
     private string _licensePlate;
     private LicensePlateStyle _licensePlateStyle;
+    private VehicleColor _primaryColor;
+    private VehicleColor _rimColor;
+    private VehicleColor _secondaryColor;
+    private TireSmokeColor _tireSmokeColor;
 
-    private ObservableCollection<VehicleModType> _validVehicleModTypes = new();
-    private ObservableCollection<VehicleWheelType> _validWheelTypes = new();
-    private bool _xenonHeadLights;
+    private List<VehicleMod> _vehicleMods = new();
+    private VehicleWheelType _wheelType;
 
     [JsonIgnore]
-    public Dictionary<string, Color> TireSmokeColorDictionary { get; set; } = new()
+    public List<VehicleMod> VehicleMods
     {
-        { "White", Color.FromArgb(255, 255, 255) },
-        { "Black", Color.FromArgb(20, 20, 20) },
-        { "Blue", Color.FromArgb(0, 174, 239) },
-        { "Yellow", Color.FromArgb(252, 238, 0) },
-        { "Purple", Color.FromArgb(132, 102, 226) },
-        { "Orange", Color.FromArgb(255, 127, 0) },
-        { "Green", Color.FromArgb(114, 204, 114) },
-        { "Red", Color.FromArgb(226, 6, 6) },
-        { "Pink", Color.FromArgb(203, 54, 148) },
-        { "Patriot", Color.FromArgb(0, 0, 0) }
+        get => _vehicleMods;
+        set
+        {
+            if (Equals(value, _vehicleMods)) return;
+            _vehicleMods = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public VehicleWheelType WheelType
+    {
+        get => _wheelType;
+        set
+        {
+            if (value == _wheelType) return;
+            _wheelType = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public VehicleColor RimColor
+    {
+        get => _rimColor;
+        set
+        {
+            if (value == _rimColor) return;
+            _rimColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public Dictionary<TireSmokeColor, Color> TireSmokeColorDictionary { get; set; } = new()
+    {
+        { TireSmokeColor.White, Color.FromArgb(255, 255, 255) },
+        { TireSmokeColor.Black, Color.FromArgb(20, 20, 20) },
+        { TireSmokeColor.Blue, Color.FromArgb(0, 174, 239) },
+        { TireSmokeColor.Yellow, Color.FromArgb(252, 238, 0) },
+        { TireSmokeColor.Purple, Color.FromArgb(132, 102, 226) },
+        { TireSmokeColor.Orange, Color.FromArgb(255, 127, 0) },
+        { TireSmokeColor.Green, Color.FromArgb(114, 204, 114) },
+        { TireSmokeColor.Red, Color.FromArgb(226, 6, 6) },
+        { TireSmokeColor.Pink, Color.FromArgb(203, 54, 148) },
+        { TireSmokeColor.Patriot, Color.FromArgb(0, 0, 0) }
     };
 
     [JsonIgnore]
-    public ObservableCollection<VehicleWheelType> ValidWheelTypes
+    public TireSmokeColor TireSmokeColor
     {
-        get => _validWheelTypes;
+        get => _tireSmokeColor;
         set
         {
-            if (Equals(value, _validWheelTypes)) return;
-            _validWheelTypes = value;
-            OnPropertyChanged(nameof(_validWheelTypes));
+            if (value == _tireSmokeColor) return;
+            _tireSmokeColor = value;
+            OnPropertyChanged();
         }
     }
 
     [JsonIgnore]
-    public ObservableCollection<VehicleModType> ValidVehicleModTypes
+    public bool CustomTires
     {
-        get => _validVehicleModTypes;
+        get => _customTires;
         set
         {
-            if (Equals(value, _validVehicleModTypes)) return;
-            _validVehicleModTypes = value;
-            OnPropertyChanged(nameof(_validVehicleModTypes));
-        }
-    }
-
-    [JsonIgnore]
-    public LicensePlateStyle LicensePlateStyle
-    {
-        get => _licensePlateStyle;
-        set
-        {
-            if (value == _licensePlateStyle) return;
-            _licensePlateStyle = value;
-            OnPropertyChanged(nameof(_licensePlateStyle));
+            if (value == _customTires) return;
+            _customTires = value;
+            OnPropertyChanged();
         }
     }
 
@@ -85,91 +104,43 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _licensePlate) return;
             _licensePlate = value;
-            OnPropertyChanged(nameof(_licensePlate));
+            OnPropertyChanged();
         }
     }
 
     [JsonIgnore]
-    public VehicleWheelType CurrentWheelType
+    public LicensePlateStyle LicensePlateStyle
     {
-        get => _currentWheelType;
+        get => _licensePlateStyle;
         set
         {
-            if (value == _currentWheelType) return;
-            _currentWheelType = value;
-            OnPropertyChanged(nameof(_currentWheelType));
+            if (value == _licensePlateStyle) return;
+            _licensePlateStyle = value;
+            OnPropertyChanged();
         }
     }
 
     [JsonIgnore]
-    public VehicleColor CurrentRimColor
+    public VehicleColor PrimaryColor
     {
-        get => _currentRimColor;
+        get => _primaryColor;
         set
         {
-            if (value == _currentRimColor) return;
-            _currentRimColor = value;
-            OnPropertyChanged(nameof(_currentRimColor));
+            if (value == _primaryColor) return;
+            _primaryColor = value;
+            OnPropertyChanged();
         }
     }
 
     [JsonIgnore]
-    public bool CurrentCustomTires
+    public VehicleColor SecondaryColor
     {
-        get => _currentCustomTires;
+        get => _secondaryColor;
         set
         {
-            if (value == _currentCustomTires) return;
-            _currentCustomTires = value;
-            OnPropertyChanged(nameof(_currentCustomTires));
-        }
-    }
-
-    [JsonIgnore]
-    public Color CurrentTireSmokeColor
-    {
-        get => _currentTireSmokeColor;
-        set
-        {
-            if (value.Equals(_currentTireSmokeColor)) return;
-            _currentTireSmokeColor = value;
-            OnPropertyChanged(nameof(_currentTireSmokeColor));
-        }
-    }
-
-    [JsonIgnore]
-    public VehicleWindowTint CurrentWindowTint
-    {
-        get => _currentWindowTint;
-        set
-        {
-            if (value == _currentWindowTint) return;
-            _currentWindowTint = value;
-            OnPropertyChanged(nameof(_currentWindowTint));
-        }
-    }
-
-    [JsonIgnore]
-    public bool XenonHeadLights
-    {
-        get => _xenonHeadLights;
-        set
-        {
-            if (value == _xenonHeadLights) return;
-            _xenonHeadLights = value;
-            OnPropertyChanged(nameof(_xenonHeadLights));
-        }
-    }
-
-    [JsonIgnore]
-    public NeonLightsLayout CurrentNeonLightsLayout
-    {
-        get => _currentNeonLightsLayout;
-        set
-        {
-            if (value == _currentNeonLightsLayout) return;
-            _currentNeonLightsLayout = value;
-            OnPropertyChanged(nameof(_currentNeonLightsLayout));
+            if (value == _secondaryColor) return;
+            _secondaryColor = value;
+            OnPropertyChanged();
         }
     }
 
@@ -180,10 +151,10 @@ public class VehicleModsService : GenericService<VehicleModsService>
         LicensePlateInputRequested?.Invoke(this, EventArgs.Empty);
     }
 
-    public event EventHandler<ObservableCollection<VehicleModType>> RandomizeModsRequested;
+    public event EventHandler RandomizeAllModsRequested;
 
-    public void RequestRandomizeMods(ObservableCollection<VehicleModType> vehicleModTypes)
+    public void RequestRandomizeMods()
     {
-        RandomizeModsRequested?.Invoke(this, vehicleModTypes);
+        RandomizeAllModsRequested?.Invoke(this, EventArgs.Empty);
     }
 }

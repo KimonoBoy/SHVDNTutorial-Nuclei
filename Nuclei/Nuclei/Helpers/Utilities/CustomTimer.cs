@@ -22,13 +22,13 @@ public class CustomTimer
         TimerElapsed?.Invoke(this, EventArgs.Empty);
     }
 
-    public void SubscribeToTimerElapsed(EventHandler eventHandler)
+    internal void SubscribeToTimerElapsed(EventHandler eventHandler)
     {
         if (TimerElapsed == null || !TimerElapsed.GetInvocationList().Contains(eventHandler))
             TimerElapsed += eventHandler;
     }
 
-    public void UnsubscribeFromTimerElapsed(EventHandler eventHandler)
+    private void UnsubscribeFromTimerElapsed(EventHandler eventHandler)
     {
         if (TimerElapsed != null && TimerElapsed.GetInvocationList().Contains(eventHandler))
             TimerElapsed -= eventHandler;

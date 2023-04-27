@@ -16,7 +16,7 @@ public class StorageService : GenericService<StorageService>
             if (_autoSave != value)
             {
                 _autoSave = value;
-                OnPropertyChanged(nameof(_autoSave));
+                OnPropertyChanged();
             }
         }
     }
@@ -29,7 +29,7 @@ public class StorageService : GenericService<StorageService>
             if (_autoLoad != value)
             {
                 _autoLoad = value;
-                OnPropertyChanged(nameof(_autoLoad));
+                OnPropertyChanged();
             }
         }
     }

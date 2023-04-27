@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Linq;
 using GTA;
 using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.UI.Menus.Base.ItemFactory;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
@@ -13,111 +13,84 @@ public class VehicleModsMenu : VehicleModsMenuBase
 {
     public VehicleModsMenu(Enum @enum) : base(@enum)
     {
-        Shown += OnShown;
-        Closed += OnClosed;
     }
 
-    private void OnClosed(object sender, EventArgs e)
+    protected override void PreModTypeMods()
     {
-        Service.PropertyChanged -= OnPropertyChanged;
-    }
-
-    private void OnShown(object sender, EventArgs e)
-    {
-        UpdateMenuItems();
-        Service.PropertyChanged += OnPropertyChanged;
-    }
-
-    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Service.CurrentVehicle))
-        {
-            if (Service.CurrentVehicle == null)
-            {
-                NavigateToMenu(MenuTitles.Vehicle);
-                return;
-            }
-
-            UpdateMenuItems();
-        }
-    }
-
-    protected override void UpdateMenuItems()
-    {
-        Clear();
-
-        RandomizeMods();
+        RandomizeAllMods();
         WheelsMenu();
         BumpersMenu();
-        HeadLightsMenu();
-        WindowTints();
-        base.UpdateMenuItems();
+        PrimaryColor();
+        SecondaryColor();
+    }
+
+    private void SecondaryColor()
+    {
+        var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
+            () => (int)Service.SecondaryColor, Service,
+            (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
+            typeof(VehicleColor).ToDisplayNameArray());
+        listItemSecondaryColor.SetSelectedIndexSafe((int)Service.SecondaryColor);
+    }
+
+    private void PrimaryColor()
+    {
+        var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
+            Service,
+            (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
+            typeof(VehicleColor).ToDisplayNameArray());
+        listItemPrimaryColor.SetSelectedIndexSafe((int)Service.PrimaryColor);
+    }
+
+    protected virtual void RandomizeAllMods()
+    {
+        var itemRandomizeMods = AddItem(VehicleModsItemTitles.RandomizeMods, () =>
+        {
+            Service.RequestRandomizeMods();
+            GenerateMenu();
+        });
+    }
+
+    protected override void PostModTypeMods()
+    {
         LicensePlate();
+        LicensePlateStyle();
     }
 
-    private void HeadLightsMenu()
+    private void LicensePlateStyle()
     {
-        var headLightsMenu = new VehicleModsLightsMenu(MenuTitles.Headlights);
-        AddMenu(headLightsMenu);
+        var listItemLicensePlateStyle = AddListItem(VehicleModsItemTitles.LicensePlateStyle,
+            () => (int)Service.LicensePlateStyle, Service,
+            (value, index) => { Service.LicensePlateStyle = (LicensePlateStyle)index; },
+            typeof(LicensePlateStyle).ToDisplayNameArray());
+        listItemLicensePlateStyle.SetSelectedIndexSafe((int)Service.LicensePlateStyle);
     }
 
-
-    private void WindowTints()
+    private void LicensePlate()
     {
-        var listItemWindowTints = AddListItem(VehicleModsItemTitles.WindowTint,
-            () => (int)Service.CurrentWindowTint, Service,
-            (selected, index) => { Service.CurrentWindowTint = (VehicleWindowTint)index; },
-            typeof(VehicleWindowTint).ToDisplayNameArray());
+        var itemLicensePlate =
+            AddItem(VehicleModsItemTitles.LicensePlate, () => { Service.RequestLicensePlateInput(); },
+                Service.LicensePlate);
+        Service.LicensePlateInputRequested += (_, _) => { itemLicensePlate.AltTitle = Service.LicensePlate; };
+    }
+
+    protected override IEnumerable<VehicleMod> GetValidMods()
+    {
+        return Service.VehicleMods.Where(vehicleMod =>
+            vehicleMod.Type != VehicleModType.FrontWheel && vehicleMod.Type != VehicleModType.RearWheel);
     }
 
     private void BumpersMenu()
     {
-        if (!Service.ValidVehicleModTypes.Contains(VehicleModType.FrontBumper) &&
-            !Service.ValidVehicleModTypes.Contains(VehicleModType.RearBumper)) return;
-
+        if (Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.FrontBumper) &&
+            Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.RearBumper)) return;
         var bumpersMenu = new VehicleModsBumpersMenu(MenuTitles.Bumpers);
         AddMenu(bumpersMenu);
-    }
-
-    private void RandomizeMods()
-    {
-        var itemRandomizeMods = AddItem(VehicleModsItemTitles.RandomizeMods,
-            () =>
-            {
-                Service.RequestRandomizeMods(Service.ValidVehicleModTypes);
-                UpdateMenuItems();
-            });
     }
 
     private void WheelsMenu()
     {
         var wheelsMenu = new VehicleModsWheelsMenu(MenuTitles.Wheels);
         AddMenu(wheelsMenu);
-    }
-
-    protected override ObservableCollection<VehicleModType> GetValidModTypes()
-    {
-        return new ObservableCollection<VehicleModType>(Service.ValidVehicleModTypes.Where(modType =>
-            modType != VehicleModType.FrontWheel && modType != VehicleModType.RearWheel &&
-            modType != VehicleModType.FrontBumper && modType != VehicleModType.RearBumper));
-    }
-
-    private void LicensePlate()
-    {
-        if (Service.CurrentVehicle == null) return;
-
-        var itemLicensePlate =
-            AddItem(VehicleModsItemTitles.LicensePlate, () => Service.RequestLicensePlateInput());
-        itemLicensePlate.AltTitle = Service.CurrentVehicle.Mods.LicensePlate;
-
-        var listItemLicensePlateStyle =
-            AddListItem(VehicleModsItemTitles.LicensePlateStyle,
-                () => (int)Service.LicensePlateStyle, Service,
-                (selected, index) =>
-                {
-                    Service.LicensePlateStyle = selected.GetHashFromDisplayName<LicensePlateStyle>();
-                }, typeof(LicensePlateStyle).ToDisplayNameArray());
-
-        Service.LicensePlateInputRequested += (sender, args) => { itemLicensePlate.AltTitle = Service.LicensePlate; };
     }
 }

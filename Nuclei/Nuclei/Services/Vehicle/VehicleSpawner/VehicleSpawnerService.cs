@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GTA;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
@@ -14,6 +15,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
     private bool _enginesRunning;
 
     private ObservableCollection<VehicleHash> _favoriteVehicles = new();
+    private NeonLightsLayout _neonLightsLayout;
 
     private VehicleSeat _vehicleSeat = VehicleSeat.Driver;
 
@@ -26,7 +28,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_currentVehicleHash == value) return;
             _currentVehicleHash = value;
-            OnPropertyChanged(nameof(_currentVehicleHash));
+            OnPropertyChanged();
         }
     }
 
@@ -37,7 +39,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_enginesRunning == value) return;
             _enginesRunning = value;
-            OnPropertyChanged(nameof(_enginesRunning));
+            OnPropertyChanged();
         }
     }
 
@@ -48,7 +50,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_warpInSpawned == value) return;
             _warpInSpawned = value;
-            OnPropertyChanged(nameof(_warpInSpawned));
+            OnPropertyChanged();
         }
     }
 
@@ -59,7 +61,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_vehicleSeat == value) return;
             _vehicleSeat = value;
-            OnPropertyChanged(nameof(_vehicleSeat));
+            OnPropertyChanged();
         }
     }
 
@@ -70,7 +72,7 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_favoriteVehicles == value) return;
             _favoriteVehicles = value;
-            OnPropertyChanged(nameof(_favoriteVehicles));
+            OnPropertyChanged();
         }
     }
 
@@ -81,7 +83,18 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_customVehicles == value) return;
             _customVehicles = value;
-            OnPropertyChanged(nameof(_customVehicles));
+            OnPropertyChanged();
+        }
+    }
+
+    public NeonLightsLayout NeonLightsLayout
+    {
+        get => _neonLightsLayout;
+        set
+        {
+            if (value == _neonLightsLayout) return;
+            _neonLightsLayout = value;
+            OnPropertyChanged();
         }
     }
 

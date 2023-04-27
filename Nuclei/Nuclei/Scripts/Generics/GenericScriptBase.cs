@@ -12,14 +12,14 @@ namespace Nuclei.Scripts.Generics;
 public abstract class GenericScriptBase<TService> : Script, IDisposable where TService : GenericService<TService>, new()
 {
     private static bool _eventsSubscribed;
-
-    protected static readonly CustomTimer GameStateTimer = new(100);
     private static Ped _character;
     private static GTA.Vehicle _currentVehicle;
     private static GTA.Vehicle _lastVehicle;
 
     private readonly TService _defaultValuesService = new();
     private readonly StorageService _storageService = StorageService.Instance;
+
+    private readonly CustomTimer GameStateTimer = new(100);
 
     protected GenericScriptBase()
     {
@@ -91,19 +91,14 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
+        GameStateTimer.TimerElapsed += ProcessGameStatesTimer;
+        GameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
 
         _eventsSubscribed = true;
 
         SubscribeToEvents();
 
         return false;
-    }
-
-    private void UpdateLastVehicle()
-    {
-        if (CurrentVehicle == null || LastVehicle == CurrentVehicle) return;
-
-        LastVehicle = CurrentVehicle;
     }
 
     private void OnTick(object sender, EventArgs e)
@@ -114,23 +109,6 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
         if (_storageService.AutoSave && Game.IsPaused)
             Save();
-    }
-
-    private void UpdateCurrentCharacter()
-    {
-        if (Character == Game.Player.Character) return;
-        Character = Game.Player.Character;
-        Service.Character = Character;
-        Display.Notify("Character Change Registered", "Applying Settings");
-    }
-
-    private void UpdateCurrentVehicle()
-    {
-        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
-
-        CurrentVehicle =
-            Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
-        Service.CurrentVehicle = CurrentVehicle;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -168,6 +146,37 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         Save();
     }
 
+    protected abstract void SubscribeToEvents();
+
+    protected abstract void UnsubscribeOnExit();
+
+    protected abstract void ProcessGameStatesTimer(object sender, EventArgs e);
+
+    protected abstract void UpdateServiceStatesTimer(object sender, EventArgs e);
+
+    private void UpdateLastVehicle()
+    {
+        if (CurrentVehicle == null || LastVehicle == CurrentVehicle) return;
+
+        LastVehicle = CurrentVehicle;
+    }
+
+    private void UpdateCurrentCharacter()
+    {
+        if (Character == Game.Player.Character) return;
+        Character = Game.Player.Character;
+        Service.Character = Character;
+    }
+
+    private void UpdateCurrentVehicle()
+    {
+        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
+
+        CurrentVehicle =
+            Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
+        Service.CurrentVehicle = CurrentVehicle;
+    }
+
     protected void Save()
     {
         State.SetState(Service);
@@ -181,15 +190,4 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         if (loadedStorageService != null) Service.SetState(loadedStorageService);
         Display.Notify("All Settings Loaded", "Successfully");
     }
-
-    protected void UpdateFeature<T>(Func<T> getProperty, Action<T> action)
-    {
-        action(getProperty());
-    }
-
-    protected virtual void SubscribeToEvents()
-    {
-    }
-
-    public abstract void UnsubscribeOnExit();
 }

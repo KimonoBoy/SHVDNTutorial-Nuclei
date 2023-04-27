@@ -10,8 +10,10 @@ public class ItemFactoryService
     public NativeItem CreateNativeItem(string title, string description = "",
         string altTitle = "", Action action = null)
     {
-        var item = new NativeItem(title, description, altTitle);
-        item.AltTitleFont = Font.ChaletComprimeCologne;
+        var item = new NativeItem(title, description, altTitle)
+        {
+            AltTitleFont = Font.ChaletComprimeCologne
+        };
         item.Activated += (sender, args) => { action?.Invoke(); };
         return item;
     }

@@ -19,7 +19,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_canDriveUnderWater == value) return;
             _canDriveUnderWater = value;
-            OnPropertyChanged(nameof(_canDriveUnderWater));
+            OnPropertyChanged();
         }
     }
 
@@ -30,7 +30,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_speedBoost == value) return;
             _speedBoost = value;
-            OnPropertyChanged(nameof(_speedBoost));
+            OnPropertyChanged();
         }
     }
 
@@ -41,7 +41,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_hasSeatBelt == value) return;
             _hasSeatBelt = value;
-            OnPropertyChanged(nameof(_hasSeatBelt));
+            OnPropertyChanged();
         }
     }
 
@@ -52,7 +52,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_doorsAlwaysLocked == value) return;
             _doorsAlwaysLocked = value;
-            OnPropertyChanged(nameof(_doorsAlwaysLocked));
+            OnPropertyChanged();
         }
     }
 
@@ -63,7 +63,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_neverFallOffBike == value) return;
             _neverFallOffBike = value;
-            OnPropertyChanged(nameof(_neverFallOffBike));
+            OnPropertyChanged();
         }
     }
 
@@ -74,7 +74,7 @@ public class VehicleService : GenericService<VehicleService>
         {
             if (_isIndestructible == value) return;
             _isIndestructible = value;
-            OnPropertyChanged(nameof(_isIndestructible));
+            OnPropertyChanged();
         }
     }
 

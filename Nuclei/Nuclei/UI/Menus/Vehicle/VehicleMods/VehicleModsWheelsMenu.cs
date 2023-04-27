@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
-using Nuclei.Enums.UI;
+using LemonUI.Menus;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.UI.Menus.Base.ItemFactory;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
@@ -13,6 +14,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 {
     public VehicleModsWheelsMenu(Enum @enum) : base(@enum)
     {
+        Width = 600;
         Shown += OnShown;
         Closed += OnClosed;
     }
@@ -25,94 +27,117 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     private void OnShown(object sender, EventArgs e)
     {
         Service.PropertyChanged += OnPropertyChanged;
-        UpdateMenuItems();
     }
 
     private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Service.CurrentVehicle))
+        if (Service.CurrentVehicle == null) return;
+        if (e.PropertyName == nameof(Service.WheelType))
         {
-            if (!Visible) return;
-            if (Service.CurrentVehicle == null)
+            var filteredMods = Service.VehicleMods.Where(vehicleMod => vehicleMod.Count > 0 &&
+                                                                       vehicleMod.Type is VehicleModType.FrontWheel
+                                                                           or VehicleModType.RearWheel);
+
+            // Clear the filtered mods and get the new ones, then add them to the menu replacing the old ones
+            foreach (var vehicleMod in filteredMods)
             {
-                NavigateToMenu(MenuTitles.Vehicle);
-                return;
+                // find the associated listitem and update its corresponding values
+                var oldListItem = Items.OfType<NativeListItem<string>>()
+                    .FirstOrDefault(nativeListItem =>
+                        nativeListItem.Title == vehicleMod.Type.GetLocalizedDisplayNameFromHash());
+                if (oldListItem == null) continue;
+
+                // Create a new list item
+                var newListItem = _itemFactoryService.CreateNativeListItem(
+                    vehicleMod.Type.GetLocalizedDisplayNameFromHash(), "",
+                    null, Service,
+                    (value, index) => { vehicleMod.Index = index; },
+                    Enumerable.Range(0, vehicleMod.Count + 1).Select(index =>
+                    {
+                        if (index == -1) return $"Stock {0} / {vehicleMod.Count}";
+                        vehicleMod.Index = index;
+                        string localizedName;
+                        if (index == vehicleMod.Count)
+                            localizedName = $"{vehicleMod.LocalizedName} {0} / {vehicleMod.Count}";
+                        else
+                            localizedName = vehicleMod.LocalizedName + $" {index + 1} / {vehicleMod.Count}";
+                        return localizedName;
+                    }).ToArray());
+
+                // Replace the old list item with the new one
+                var index = Items.IndexOf(oldListItem);
+                Items[index] = newListItem;
+                if (newListItem.Items.Count > 0)
+                {
+                    newListItem.SelectedIndex++;
+                    newListItem.SelectedIndex--;
+                }
             }
-
-            UpdateMenuItems();
         }
-
-        if (e.PropertyName == nameof(Service.CurrentWheelType)) UpdateMenuItems();
     }
 
-    protected override void UpdateMenuItems()
+    protected override void PreModTypeMods()
     {
-        Clear();
         WheelTypes();
+    }
+
+    protected override void PostModTypeMods()
+    {
         RimColors();
-        base.UpdateMenuItems();
         AddHeader("Tires");
         CustomTires();
         TireSmokeColor();
     }
 
+    private void CustomTires()
+    {
+        var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitles.CustomTires, () => Service.CustomTires, Service,
+            @checked => { Service.CustomTires = @checked; });
+        checkBoxCustomTires.Checked = Service.CustomTires;
+    }
+
     private void TireSmokeColor()
     {
         var listItemTireSmokeColor = AddListItem(VehicleModsItemTitles.TireSmokeColor,
-            () =>
-            {
-                var color = Service.CurrentTireSmokeColor;
-                var index = Service.TireSmokeColorDictionary.ToList()
-                    .IndexOf(Service.TireSmokeColorDictionary.FirstOrDefault(s => s.Value == color));
-
-                return index;
-            }, Service,
-            (selected, index) => { Service.CurrentTireSmokeColor = Service.TireSmokeColorDictionary[selected]; },
-            Service.TireSmokeColorDictionary.Keys.ToArray());
-
-        // listItemTireSmokeColor.SelectedItem = Service.TireSmokeColorDictionary
-        //     .FirstOrDefault(s => s.Value == Service.CurrentTireSmokeColor).Key;
-    }
-
-    private void CustomTires()
-    {
-        var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitles.CustomTires, () => Service.CurrentCustomTires,
-            Service, @checked => { Service.CurrentCustomTires = @checked; });
-        checkBoxCustomTires.Checked = Service.CurrentCustomTires;
+            () => (int)Service.TireSmokeColor,
+            Service,
+            (value, index) => { Service.TireSmokeColor = (TireSmokeColor)index; },
+            Enumerable.Range(0, Service.TireSmokeColorDictionary.Keys.Count)
+                .Select(index =>
+                    $"{((TireSmokeColor)index).GetLocalizedDisplayNameFromHash()} {index} / {Service.TireSmokeColorDictionary.Count - 1}")
+                .ToArray());
+        listItemTireSmokeColor.SetSelectedIndexSafe((int)Service.TireSmokeColor);
     }
 
     private void RimColors()
     {
-        var listItemRimColor =
-            AddListItem(VehicleModsItemTitles.RimColor,
-                () => (int)Service.CurrentRimColor,
-                Service,
-                (selected, index) => { Service.CurrentRimColor = selected.GetHashFromDisplayName<VehicleColor>(); },
-                typeof(VehicleColor).ToDisplayNameArray());
-
-        // listItemRimColor.SelectedItem = Service.CurrentVehicle.Mods.RimColor.GetLocalizedDisplayNameFromHash();
+        var listItemRimColor = AddListItem(VehicleModsItemTitles.RimColor,
+            () => (int)Service.RimColor,
+            Service,
+            (value, index) =>
+            {
+                Service.RimColor =
+                    (VehicleColor)index;
+            },
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length)
+                .Select(index =>
+                    $"{((VehicleColor)index).GetLocalizedDisplayNameFromHash()} {index} / {Enum.GetValues(typeof(VehicleColor)).Length - 1}")
+                .ToArray());
+        listItemRimColor.SetSelectedIndexSafe((int)Service.RimColor);
     }
 
     private void WheelTypes()
     {
-        var allowedWheelTypes = typeof(VehicleWheelType).ToDisplayNameArray().Where(wheelType =>
-            Service.CurrentVehicle.Mods.AllowedWheelTypes.Contains(
-                wheelType.GetHashFromDisplayName<VehicleWheelType>())).ToArray();
-
-        var listItemWheelTypes = AddListItem(VehicleModsItemTitles.WheelType,
-            () => (int)Service.CurrentWheelType, Service,
-            (selected, index) => { Service.CurrentWheelType = selected.GetHashFromDisplayName<VehicleWheelType>(); },
-            allowedWheelTypes);
-
-        // if (allowedWheelTypes.Contains(Service.CurrentWheelType.GetLocalizedDisplayNameFromHash()))
-        //     listItemWheelTypes.SelectedItem = Service.CurrentWheelType.GetLocalizedDisplayNameFromHash();
-        // else
-        //     listItemWheelTypes.SelectedIndex = 0;
+        var listItemWheelType = AddListItem(VehicleModsItemTitles.WheelType, () => (int)Service.WheelType,
+            Service,
+            (value, index) => { Service.WheelType = (VehicleWheelType)index; },
+            typeof(VehicleWheelType).ToDisplayNameArray());
+        listItemWheelType.SetSelectedIndexSafe((int)Service.WheelType);
     }
 
-    protected override ObservableCollection<VehicleModType> GetValidModTypes()
+    protected override IEnumerable<VehicleMod> GetValidMods()
     {
-        return new ObservableCollection<VehicleModType>(Service.ValidVehicleModTypes.Where(modType =>
-            modType is VehicleModType.FrontWheel or VehicleModType.RearWheel));
+        return Service.VehicleMods.Where(vehicleMod =>
+            vehicleMod.Type is VehicleModType.FrontWheel or VehicleModType.RearWheel);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using GTA;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Weapon;
@@ -7,6 +8,7 @@ public class WeaponsService : GenericService<WeaponsService>
 {
     private int _accuracy;
     private bool _aimBot;
+    private VehicleHash _currentVehicleGun;
     private bool _explosiveBullets;
     private bool _fireBullets;
     private bool _gravityGun;
@@ -26,7 +28,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_infiniteAmmo == value) return;
             _infiniteAmmo = value;
-            OnPropertyChanged(nameof(_infiniteAmmo));
+            OnPropertyChanged();
         }
     }
 
@@ -37,7 +39,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_noReload == value) return;
             _noReload = value;
-            OnPropertyChanged(nameof(_noReload));
+            OnPropertyChanged();
         }
     }
 
@@ -48,7 +50,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_fireBullets == value) return;
             _fireBullets = value;
-            OnPropertyChanged(nameof(_fireBullets));
+            OnPropertyChanged();
         }
     }
 
@@ -59,7 +61,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_explosiveBullets == value) return;
             _explosiveBullets = value;
-            OnPropertyChanged(nameof(_explosiveBullets));
+            OnPropertyChanged();
         }
     }
 
@@ -70,7 +72,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_oneHitKill == value) return;
             _oneHitKill = value;
-            OnPropertyChanged(nameof(_oneHitKill));
+            OnPropertyChanged();
         }
     }
 
@@ -81,7 +83,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_accuracy == value) return;
             _accuracy = value;
-            OnPropertyChanged(nameof(_accuracy));
+            OnPropertyChanged();
         }
     }
 
@@ -92,7 +94,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_gravityGun == value) return;
             _gravityGun = value;
-            OnPropertyChanged(nameof(_gravityGun));
+            OnPropertyChanged();
         }
     }
 
@@ -103,7 +105,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_teleportGun == value) return;
             _teleportGun = value;
-            OnPropertyChanged(nameof(_teleportGun));
+            OnPropertyChanged();
         }
     }
 
@@ -114,7 +116,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_levitationGun == value) return;
             _levitationGun = value;
-            OnPropertyChanged(nameof(_levitationGun));
+            OnPropertyChanged();
         }
     }
 
@@ -125,7 +127,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootVehicles == value) return;
             _shootVehicles = value;
-            OnPropertyChanged(nameof(_shootVehicles));
+            OnPropertyChanged();
         }
     }
 
@@ -136,7 +138,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootPeds == value) return;
             _shootPeds = value;
-            OnPropertyChanged(nameof(_shootPeds));
+            OnPropertyChanged();
         }
     }
 
@@ -147,7 +149,7 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_shootObjects == value) return;
             _shootObjects = value;
-            OnPropertyChanged(nameof(_shootObjects));
+            OnPropertyChanged();
         }
     }
 
@@ -158,7 +160,18 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (_aimBot == value) return;
             _aimBot = value;
-            OnPropertyChanged(nameof(_aimBot));
+            OnPropertyChanged();
+        }
+    }
+
+    public VehicleHash CurrentVehicleGun
+    {
+        get => _currentVehicleGun;
+        set
+        {
+            if (value == _currentVehicleGun) return;
+            _currentVehicleGun = value;
+            OnPropertyChanged();
         }
     }
 

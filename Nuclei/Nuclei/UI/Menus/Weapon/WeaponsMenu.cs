@@ -1,5 +1,7 @@
 ﻿using System;
+using GTA;
 using Nuclei.Enums.UI;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Weapon;
 using Nuclei.UI.Menus.Base;
 
@@ -24,6 +26,14 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
         LevitationGun();
         GravityGun();
         TeleportGun();
+        VehicleGun();
+    }
+
+    private void VehicleGun()
+    {
+        var listItemVehicleGun = AddListItem(WeaponItemTitles.VehicleGun, () => (int)Service.CurrentVehicleGun, Service,
+            (value, index) => { Service.CurrentVehicleGun = (VehicleHash)index; },
+            typeof(VehicleHash).ToDisplayNameArray());
     }
 
     private void TeleportGun()

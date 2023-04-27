@@ -11,42 +11,41 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
 
+    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
+    {
+    }
+
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
         Service.AllWeaponsRequested += OnAllWeaponsRequested;
-        GameStateTimer.SubscribeToTimerElapsed(UpdateWeapons);
     }
 
-    public override void UnsubscribeOnExit()
+    protected override void UnsubscribeOnExit()
     {
         Tick -= OnTick;
         Service.AllWeaponsRequested -= OnAllWeaponsRequested;
-        GameStateTimer.UnsubscribeFromTimerElapsed(UpdateWeapons);
+    }
+
+    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
+    {
     }
 
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
 
-        void ProcessFeature(Func<bool> isEnabled, Action<bool> process)
-        {
-            var enabled = isEnabled();
-            if (enabled)
-                process(enabled);
-        }
-
-        ProcessFeature(() => Service.FireBullets, ProcessFireBullets);
-        ProcessFeature(() => Service.InfiniteAmmo, ProcessInfiniteAmmo);
-        ProcessFeature(() => Service.NoReload, ProcessNoReload);
-        ProcessFeature(() => Service.ExplosiveBullets, ProcessExplosiveBullets);
-        ProcessFeature(() => Service.LevitationGun, ProcessLevitationGun);
-        ProcessFeature(() => Service.TeleportGun, ProcessTeleportGun);
+        ProcessFireBullets();
+        ProcessInfiniteAmmo();
+        ProcessNoReload();
+        ProcessExplosiveBullets();
+        ProcessLevitationGun();
+        ProcessTeleportGun();
     }
 
-    private void ProcessTeleportGun(bool teleportGun)
+    private void ProcessTeleportGun()
     {
-        if (!teleportGun || !Character.IsAiming || !Character.IsShooting) return;
+        if (!Service.TeleportGun || !Character.IsAiming || !Character.IsShooting) return;
 
         if ((DateTime.UtcNow - _teleportGunLastShot).TotalMilliseconds < 500) return;
         _teleportGunLastShot = DateTime.UtcNow;
@@ -63,9 +62,9 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         CurrentEntity.Position = targetLocation.Value;
     }
 
-    private void ProcessLevitationGun(bool levitationGun)
+    private void ProcessLevitationGun()
     {
-        if (!levitationGun) return;
+        if (!Service.LevitationGun) return;
 
         var targetedEntity = Game.Player.TargetedEntity;
 
@@ -78,21 +77,16 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         targetedEntity.ApplyForce(Vector3.WorldUp * 0.2f);
     }
 
-    private void ProcessExplosiveBullets(bool explosiveBullets)
+    private void ProcessExplosiveBullets()
     {
-        if (explosiveBullets)
+        if (Service.ExplosiveBullets)
             Game.Player.SetExplosiveAmmoThisFrame();
     }
 
-    private void UpdateWeapons(object sender, EventArgs e)
+    private void ProcessInfiniteAmmo()
     {
-        if (Character == null) return;
-    }
-
-    private void ProcessInfiniteAmmo(bool infiniteAmmo)
-    {
-        if (!infiniteAmmo || (!Character.IsReloading &&
-                              Character.Weapons.Current.Ammo != Character.Weapons.Current.AmmoInClip)) return;
+        if (!Service.InfiniteAmmo || (!Character.IsReloading &&
+                                      Character.Weapons.Current.Ammo != Character.Weapons.Current.AmmoInClip)) return;
         if (Character.Weapons.Current.Ammo == Character.Weapons.Current.AmmoInClip &&
             Character.Weapons.Current.Ammo >= 10)
             return;
@@ -101,11 +95,11 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         Character.Weapons.Current.AmmoInClip = Character.Weapons.Current.MaxAmmoInClip;
     }
 
-    private void ProcessNoReload(bool noReload)
+    private void ProcessNoReload()
     {
         if (!Character.IsShooting) return;
 
-        var infiniteAmmoNoReload = noReload && Service.InfiniteAmmo;
+        var infiniteAmmoNoReload = Service.NoReload && Service.InfiniteAmmo;
         if (infiniteAmmoNoReload)
             Function.Call(Hash.REFILL_AMMO_INSTANTLY, Character);
 
@@ -113,9 +107,9 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         Character.Weapons.Current.InfiniteAmmo = infiniteAmmoNoReload;
     }
 
-    private void ProcessFireBullets(bool isFireBullets)
+    private void ProcessFireBullets()
     {
-        if (isFireBullets)
+        if (Service.FireBullets)
             Game.Player.SetFireAmmoThisFrame();
     }
 

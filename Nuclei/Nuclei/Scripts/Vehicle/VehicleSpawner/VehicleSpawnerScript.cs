@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -8,13 +7,16 @@ using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 {
+    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
+    {
+    }
+
     protected override void SubscribeToEvents()
     {
         Tick += OnTick;
@@ -23,7 +25,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         KeyDown += OnKeyDown;
     }
 
-    public override void UnsubscribeOnExit()
+    protected override void UnsubscribeOnExit()
     {
         Tick -= OnTick;
         Service.VehicleSpawned -= OnVehicleSpawned;
@@ -31,9 +33,12 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         KeyDown -= OnKeyDown;
     }
 
+    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
+    {
+    }
+
     private void OnTick(object sender, EventArgs e)
     {
-        Display.DrawTextElement(Service.VehicleSeat.ToString(), 100.0f, 100.0f, Color.AliceBlue);
     }
 
     private void OnCustomVehicleSpawned(object sender, CustomVehicleDto customVehicleDto)
@@ -55,6 +60,11 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
         vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
         vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
+
+        vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
+        vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
+
+        vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
