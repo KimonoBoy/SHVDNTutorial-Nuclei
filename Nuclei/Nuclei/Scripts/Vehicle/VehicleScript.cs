@@ -60,19 +60,18 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void ProcessLockDoors()
     {
-        if (!Service.DoorsAlwaysLocked) return;
-
-        GTA.Vehicle vehicle;
+        if (!Character.IsGettingIntoVehicle && CurrentVehicle == null) return;
         if (Character.IsGettingIntoVehicle)
         {
-            vehicle = World.GetClosestVehicle(Character.Position, 10.0f);
+            var vehicle = World.GetClosestVehicle(Character.Position, 10.0f);
             if (vehicle != null)
                 vehicle.LockStatus = VehicleLockStatus.Unlocked;
         }
 
         if (CurrentVehicle == null) return;
 
-        CurrentVehicle.LockStatus = VehicleLockStatus.CannotEnter;
+        CurrentVehicle.LockStatus =
+            Service.DoorsAlwaysLocked ? VehicleLockStatus.CannotEnter : VehicleLockStatus.Unlocked;
     }
 
     private void ProcessDriveUnderWater()

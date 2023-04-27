@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
@@ -26,8 +27,14 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         Service.PlayerFixRequested += OnPlayerFixRequested;
         Service.CashInputRequested += OnCashInputRequested;
         Service.AddCashRequested += OnAddCashRequested;
-        Service.RegisterAction(() => Service.WantedLevel, () => { Game.Player.WantedLevel = Service.WantedLevel; });
-        Service.RegisterAction(() => Service.IsInvincible, () => { Game.Player.IsInvincible = Service.IsInvincible; });
+        Service.PropertyChanged += OnPropertyChanged;
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.WantedLevel)) Game.Player.WantedLevel = Service.WantedLevel;
+
+        if (e.PropertyName == nameof(Service.IsInvisible)) Game.Player.IsInvincible = Service.IsInvisible;
     }
 
     protected override void UnsubscribeOnExit()
