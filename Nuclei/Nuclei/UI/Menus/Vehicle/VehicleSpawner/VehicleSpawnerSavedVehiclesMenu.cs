@@ -83,6 +83,9 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitles.SaveCurrentVehicle,
             () =>
             {
+                /*
+                 * Due for later. Lets finish the Modicfications Menu first before updating this.
+                 */
                 if (Service.CurrentVehicle == null)
                 {
                     Notification.Show("You must enter a vehicle first.");
