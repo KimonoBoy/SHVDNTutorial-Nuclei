@@ -6,19 +6,11 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Just did a HUGE refactor update. We'll be making more of these changes further down the line. For now:
+Finally the Modifications Menu is ready to be finished.
 
-* BindableProperties has been removed and replaced with regular properties. Primarly because mapping BindableProperties through reflections is a much heavier task... This new update gave the mod a huge performance boost while still maintaining its statemanagement using an ObservableService class to handle the changed events - this also gives us better control over the different events that are triggered.    
+* Finishing the Modifications Menu - or at least adding all the features, we might change how each item is represented later.
 
-* Made the code more readable and easier to digest.  
-
-* Fixed the mods menu to work properly with the mods currently implemented.  
-
-* Optimized the way the events are triggered.  
-
-With the above in place, while other stuff are subject to change for optimization, I'm at this point in time now ready to continue updating the features of the mod itself. The Vehicle Modifications menu is still the current task at hand.  
-
-For now most collections are updated by assigning new collections or clearing one and adding new items, however we will implement the functionality of observable collections properly, to improve performance, for now I'll just make it work.
+* Once the above is complete, we'll update the save & load functionality of our services, including the stored CustomVehicles.
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
