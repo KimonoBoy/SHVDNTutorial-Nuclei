@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.UI;
 
-public enum WeaponItemTitles
+public enum WeaponItemTitle
 {
     [Description("Give all weapons in game.")]
     GiveAllWeapons,

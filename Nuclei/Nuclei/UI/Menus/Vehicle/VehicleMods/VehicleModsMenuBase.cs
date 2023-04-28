@@ -15,7 +15,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 {
     protected VehicleModsMenuBase(Enum @enum) : base(@enum)
     {
-        Width = 500;
+        Width = 620;
         Shown += OnShown;
         Closed += OnClosed;
     }
@@ -40,7 +40,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 
             if (Service.CurrentVehicle == null)
             {
-                NavigateToMenu(MenuTitles.Vehicle);
+                NavigateToMenu(MenuTitle.Vehicle);
                 return;
             }
 

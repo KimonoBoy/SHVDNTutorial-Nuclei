@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.UI;
 
-public enum VehicleSpawnerItemTitles
+public enum VehicleSpawnerItemTitle
 {
     [Description("Puts the player in the Selected Seat of the spawned vehicle immediately.")]
     WarpInSpawned,

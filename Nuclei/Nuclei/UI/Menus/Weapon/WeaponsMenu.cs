@@ -31,61 +31,61 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
 
     private void VehicleGun()
     {
-        var listItemVehicleGun = AddListItem(WeaponItemTitles.VehicleGun, () => (int)Service.CurrentVehicleGun, Service,
+        var listItemVehicleGun = AddListItem(WeaponItemTitle.VehicleGun, () => (int)Service.CurrentVehicleGun, Service,
             (value, index) => { Service.CurrentVehicleGun = (VehicleHash)index; },
             typeof(VehicleHash).ToDisplayNameArray());
     }
 
     private void TeleportGun()
     {
-        var checkBoxTeleportGun = AddCheckbox(WeaponItemTitles.TeleportGun, () => Service.TeleportGun, Service,
+        var checkBoxTeleportGun = AddCheckbox(WeaponItemTitle.TeleportGun, () => Service.TeleportGun, Service,
             @checked => { Service.TeleportGun = @checked; });
     }
 
     private void GravityGun()
     {
-        var checkBoxGravityGun = AddCheckbox(WeaponItemTitles.GravityGun, () => Service.GravityGun, Service,
+        var checkBoxGravityGun = AddCheckbox(WeaponItemTitle.GravityGun, () => Service.GravityGun, Service,
             @checked => { Service.GravityGun = @checked; });
     }
 
     private void LevitationGun()
     {
-        var checkBoxLevitationGun = AddCheckbox(WeaponItemTitles.LevitationGun, () => Service.LevitationGun, Service,
+        var checkBoxLevitationGun = AddCheckbox(WeaponItemTitle.LevitationGun, () => Service.LevitationGun, Service,
             @checked => { Service.LevitationGun = @checked; });
     }
 
     private void ExplosiveBullets()
     {
-        var checkBoxExplosiveBullets = AddCheckbox(WeaponItemTitles.ExplosiveBullets, () => Service.ExplosiveBullets,
+        var checkBoxExplosiveBullets = AddCheckbox(WeaponItemTitle.ExplosiveBullets, () => Service.ExplosiveBullets,
             Service, @checked => { Service.ExplosiveBullets = @checked; });
     }
 
     private void NoReload()
     {
-        var checkBoxNoReload = AddCheckbox(WeaponItemTitles.NoReload, () => Service.NoReload, Service,
+        var checkBoxNoReload = AddCheckbox(WeaponItemTitle.NoReload, () => Service.NoReload, Service,
             @checked => { Service.NoReload = @checked; });
     }
 
     private void InfiniteAmmo()
     {
-        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitles.InfiniteAmmo, () => Service.InfiniteAmmo, Service,
+        var checkBoxInfiniteAmmo = AddCheckbox(WeaponItemTitle.InfiniteAmmo, () => Service.InfiniteAmmo, Service,
             @checked => { Service.InfiniteAmmo = @checked; });
     }
 
     private void FireBullets()
     {
-        var checkBoxFireBullets = AddCheckbox(WeaponItemTitles.FireBullets, () => Service.FireBullets, Service,
+        var checkBoxFireBullets = AddCheckbox(WeaponItemTitle.FireBullets, () => Service.FireBullets, Service,
             @checked => { Service.FireBullets = @checked; });
     }
 
     private void GiveAllWeapons()
     {
-        var itemGiveAllWeapons = AddItem(WeaponItemTitles.GiveAllWeapons, () => { Service.RequestAllWeapons(); });
+        var itemGiveAllWeapons = AddItem(WeaponItemTitle.GiveAllWeapons, () => { Service.RequestAllWeapons(); });
     }
 
     private void WeaponComponentsMenu()
     {
-        var weaponComponents = new WeaponComponentsMenu(MenuTitles.WeaponComponents);
+        var weaponComponents = new WeaponComponentsMenu(MenuTitle.WeaponComponents);
         AddMenu(weaponComponents);
     }
 }

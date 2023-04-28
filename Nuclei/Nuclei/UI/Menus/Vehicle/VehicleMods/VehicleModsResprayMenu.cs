@@ -23,14 +23,14 @@ public class VehicleModsResprayMenu : VehicleModsMenuBase
     {
         PrimaryColor();
         SecondaryColor();
-        PearlscentColor();
+        PearlescentColor();
     }
 
-    private void PearlscentColor()
+    private void PearlescentColor()
     {
-        var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.PearlscentColor,
-            () => (int)Service.PearlscentColor, Service,
-            (value, index) => { Service.PearlscentColor = (VehicleColor)index; },
+        var listItemPearlescentColor = AddListItem(VehicleModsItemTitle.PearlescentColor,
+            () => (int)Service.PearlescentColor, Service,
+            (value, index) => { Service.PearlescentColor = (VehicleColor)index; },
             Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
             {
                 var count = Enum.GetValues(typeof(VehicleColor)).Length;
@@ -42,12 +42,12 @@ public class VehicleModsResprayMenu : VehicleModsMenuBase
                     localizedName += $" {index} / {count - 1}";
                 return localizedName;
             }).ToArray());
-        listItemSecondaryColor.SetSelectedIndexSafe((int)Service.PearlscentColor);
+        listItemPearlescentColor.SetSelectedIndexSafe((int)Service.PearlescentColor);
     }
 
     private void SecondaryColor()
     {
-        var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
+        var listItemSecondaryColor = AddListItem(VehicleModsItemTitle.SecondaryColor,
             () => (int)Service.SecondaryColor, Service,
             (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
             Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
@@ -66,7 +66,7 @@ public class VehicleModsResprayMenu : VehicleModsMenuBase
 
     private void PrimaryColor()
     {
-        var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
+        var listItemPrimaryColor = AddListItem(VehicleModsItemTitle.PrimaryColor, () => (int)Service.PrimaryColor,
             Service,
             (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
             Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>

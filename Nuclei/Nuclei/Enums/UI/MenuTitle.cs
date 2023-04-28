@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.UI;
 
-public enum MenuTitles
+public enum MenuTitle
 {
     [Description("One menu to rule them all! Access all the features and options in one convenient location.")]
     Main,

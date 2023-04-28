@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.UI;
 
-public enum SettingsTitles
+public enum SettingsTitle
 {
     [Description("Automatically saves changes made.")]
     AutoSave,

@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.Vehicle;
 
-public enum VehicleModsItemTitles
+public enum VehicleModsItemTitle
 {
     [Description("Change your license plate.")]
     LicensePlate,
@@ -45,5 +45,8 @@ public enum VehicleModsItemTitles
     SecondaryColor,
 
     [Description("Your vehicles pearlescent color.")]
-    PearlscentColor
+    PearlescentColor,
+
+    [Description("The color of your neon lights.")]
+    NeonLightsColor
 }

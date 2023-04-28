@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Nuclei.Enums;
+namespace Nuclei.Enums.UI;
 
-public enum PlayerItemTitles
+public enum PlayerItemTitle
 {
     [Description("Rejuvenate yourself with this powerful elixir that replenishes your health and armor in a flash!")]
     FixPlayer,

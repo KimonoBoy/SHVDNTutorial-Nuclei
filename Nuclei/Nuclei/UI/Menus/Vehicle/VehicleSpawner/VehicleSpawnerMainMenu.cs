@@ -27,7 +27,7 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
     {
         if (e.PropertyName == nameof(Service.WarpInSpawned))
         {
-            var item = GetItem<NativeListItem<string>>(VehicleSpawnerItemTitles.SelectSeat);
+            var item = GetItem<NativeListItem<string>>(VehicleSpawnerItemTitle.SelectSeat);
             item.Enabled = Service.WarpInSpawned;
             if (item.Enabled)
                 item.SelectedItem = Service.VehicleSeat.GetLocalizedDisplayNameFromHash();
@@ -36,25 +36,25 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
 
     private void AddSavedVehiclesMenu()
     {
-        var savedVehiclesMenu = new VehicleSpawnerSavedVehiclesMenu(MenuTitles.SavedVehicles);
+        var savedVehiclesMenu = new VehicleSpawnerSavedVehiclesMenu(MenuTitle.SavedVehicles);
         AddMenu(savedVehiclesMenu);
     }
 
     private void AddFavoriteVehiclesMenu()
     {
-        var favoriteVehiclesMenu = new VehicleSpawnerFavoritesMenu(MenuTitles.FavoriteVehicles);
+        var favoriteVehiclesMenu = new VehicleSpawnerFavoritesMenu(MenuTitle.FavoriteVehicles);
         AddMenu(favoriteVehiclesMenu);
     }
 
     private void WarpInSpawned()
     {
-        var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitles.WarpInSpawned,
+        var checkBoxWarpInSpawned = AddCheckbox(VehicleSpawnerItemTitle.WarpInSpawned,
             () => Service.WarpInSpawned, Service, @checked => { Service.WarpInSpawned = @checked; });
     }
 
     private void SelectSeat()
     {
-        var listItemSeat = AddListItem(VehicleSpawnerItemTitles.SelectSeat,
+        var listItemSeat = AddListItem(VehicleSpawnerItemTitle.SelectSeat,
             () => (int)Service.VehicleSeat, Service,
             (selected, index) => { Service.VehicleSeat = (VehicleSeat)index; },
             VehicleSeat.Driver.GetLocalizedDisplayNameFromHash(),
@@ -68,7 +68,7 @@ public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
 
     private void EnginesRunning()
     {
-        var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitles.EnginesRunning,
+        var checkBoxEnginesRunning = AddCheckbox(VehicleSpawnerItemTitle.EnginesRunning,
             () => Service.EnginesRunning, Service, @checked => { Service.EnginesRunning = @checked; });
     }
 

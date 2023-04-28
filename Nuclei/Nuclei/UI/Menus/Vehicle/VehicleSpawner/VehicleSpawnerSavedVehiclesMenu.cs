@@ -80,7 +80,7 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
 
     private void SaveCurrentVehicle()
     {
-        var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitles.SaveCurrentVehicle,
+        var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitle.SaveCurrentVehicle,
             () =>
             {
                 /*

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Drawing;
 using GTA;
 using GTA.Native;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle;
+using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Vehicle;
 
@@ -32,6 +34,10 @@ public class VehicleScript : GenericScriptBase<VehicleService>
     private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
+
+        Display.DrawTextElement(
+            $"{CurrentVehicle.Mods.NeonLightsColor}",
+            600.0f, 100.0f, Color.Brown);
 
         ProcessDriveUnderWater();
         ProcessSpeedBoost();

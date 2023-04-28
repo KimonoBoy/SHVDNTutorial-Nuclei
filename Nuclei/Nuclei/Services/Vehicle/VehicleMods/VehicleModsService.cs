@@ -13,7 +13,9 @@ public class VehicleModsService : GenericService<VehicleModsService>
     private bool _customTires;
     private string _licensePlate;
     private LicensePlateStyle _licensePlateStyle;
-    private VehicleColor _pearlscentColor;
+    private NeonLightsColor _neonLightsColor;
+    private NeonLightsLayout _neonLightsLayout;
+    private VehicleColor _pearlescentColor;
     private VehicleColor _primaryColor;
     private VehicleColor _rimColor;
     private VehicleColor _secondaryColor;
@@ -61,7 +63,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     }
 
     [JsonIgnore]
-    public Dictionary<TireSmokeColor, Color> TireSmokeColorDictionary { get; set; } = new()
+    public Dictionary<TireSmokeColor, Color> TireSmokeColorDictionary { get; } = new()
     {
         { TireSmokeColor.White, Color.FromArgb(255, 255, 255) },
         { TireSmokeColor.Black, Color.FromArgb(20, 20, 20) },
@@ -73,6 +75,24 @@ public class VehicleModsService : GenericService<VehicleModsService>
         { TireSmokeColor.Red, Color.FromArgb(226, 6, 6) },
         { TireSmokeColor.Pink, Color.FromArgb(203, 54, 148) },
         { TireSmokeColor.Patriot, Color.FromArgb(0, 0, 0) }
+    };
+
+    [JsonIgnore]
+    public Dictionary<NeonLightsColor, Color> NeonLightsColorDictionary { get; } = new()
+    {
+        { NeonLightsColor.White, Color.FromArgb(222, 222, 255) },
+        { NeonLightsColor.Blue, Color.FromArgb(2, 21, 255) },
+        { NeonLightsColor.ElectricBlue, Color.FromArgb(3, 83, 255) },
+        { NeonLightsColor.MintGreen, Color.FromArgb(0, 255, 140) },
+        { NeonLightsColor.LimeGreen, Color.FromArgb(94, 255, 1) },
+        { NeonLightsColor.Yellow, Color.FromArgb(255, 255, 0) },
+        { NeonLightsColor.GoldenShower, Color.FromArgb(255, 150, 5) },
+        { NeonLightsColor.Orange, Color.FromArgb(255, 62, 0) },
+        { NeonLightsColor.Red, Color.FromArgb(255, 1, 1) },
+        { NeonLightsColor.PonyPink, Color.FromArgb(255, 50, 100) },
+        { NeonLightsColor.HotPink, Color.FromArgb(255, 5, 190) },
+        { NeonLightsColor.Purple, Color.FromArgb(35, 1, 255) },
+        { NeonLightsColor.Blacklight, Color.FromArgb(15, 3, 255) }
     };
 
     [JsonIgnore]
@@ -172,13 +192,37 @@ public class VehicleModsService : GenericService<VehicleModsService>
     }
 
     [JsonIgnore]
-    public VehicleColor PearlscentColor
+    public VehicleColor PearlescentColor
     {
-        get => _pearlscentColor;
+        get => _pearlescentColor;
         set
         {
-            if (value == _pearlscentColor) return;
-            _pearlscentColor = value;
+            if (value == _pearlescentColor) return;
+            _pearlescentColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public NeonLightsLayout NeonLightsLayout
+    {
+        get => _neonLightsLayout;
+        set
+        {
+            if (value == _neonLightsLayout) return;
+            _neonLightsLayout = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public NeonLightsColor NeonLightsColor
+    {
+        get => _neonLightsColor;
+        set
+        {
+            if (value == _neonLightsColor) return;
+            _neonLightsColor = value;
             OnPropertyChanged();
         }
     }

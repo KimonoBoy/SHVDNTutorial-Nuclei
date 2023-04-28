@@ -39,7 +39,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
     {
         if (e.PropertyName == nameof(Service.FireRate))
         {
-            var item = GetItem<NativeSliderItem>(VehicleWeaponsItemTitles.FireRate);
+            var item = GetItem<NativeSliderItem>(VehicleWeaponsItemTitle.FireRate);
             item.Description =
                 $"Time Between Shots:\n\n0: Every frame.\n\nCurrent Value: {Service.FireRate * 25}ms.\n\nMax: {500}ms\n\n~r~Note: Projectiles that stays alive long (e.g. Snowball and Grenades) often work better with a higher timer.";
         }
@@ -47,13 +47,13 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void PointAndShoot()
     {
-        var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitles.PointAndShoot, () => Service.PointAndShoot,
+        var checkBoxPointAndShoot = AddCheckbox(VehicleWeaponsItemTitle.PointAndShoot, () => Service.PointAndShoot,
             Service, @checked => { Service.PointAndShoot = @checked; });
     }
 
     private void AdjustFireRate()
     {
-        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitles.FireRate, () => Service.FireRate, Service,
+        var sliderItemFireRate = AddSliderItem(VehicleWeaponsItemTitle.FireRate, () => Service.FireRate, Service,
             value => { Service.FireRate = value; }, 0, 20);
 
         sliderItemFireRate.Description =
@@ -68,7 +68,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void VehicleWeapons()
     {
-        var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitles.VehicleWeapons,
+        var checkBoxVehicleWeapons = AddCheckbox(VehicleWeaponsItemTitle.VehicleWeapons,
             () => Service.HasVehicleWeapons, Service, @checked => { Service.HasVehicleWeapons = @checked; });
     }
 
@@ -183,7 +183,7 @@ public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
 
     private void WeaponAttachmentPoints()
     {
-        var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitles.WeaponAttachmentPoints,
+        var listItemWeaponAttachmentPoints = AddListItem(VehicleWeaponsItemTitle.WeaponAttachmentPoints,
             () => (int)Service.VehicleWeaponAttachment,
             Service,
             (selected, index) =>

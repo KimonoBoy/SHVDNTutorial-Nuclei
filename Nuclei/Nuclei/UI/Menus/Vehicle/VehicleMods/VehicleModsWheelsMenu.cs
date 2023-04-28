@@ -13,7 +13,6 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 {
     public VehicleModsWheelsMenu(Enum @enum) : base(@enum)
     {
-        Width = 600;
         Shown += OnShown;
         Closed += OnClosed;
     }
@@ -50,14 +49,14 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 
     private void CustomTires()
     {
-        var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitles.CustomTires, () => Service.CustomTires, Service,
+        var checkBoxCustomTires = AddCheckbox(VehicleModsItemTitle.CustomTires, () => Service.CustomTires, Service,
             @checked => { Service.CustomTires = @checked; });
         checkBoxCustomTires.Checked = Service.CustomTires;
     }
 
     private void TireSmokeColor()
     {
-        var listItemTireSmokeColor = AddListItem(VehicleModsItemTitles.TireSmokeColor,
+        var listItemTireSmokeColor = AddListItem(VehicleModsItemTitle.TireSmokeColor,
             () => (int)Service.TireSmokeColor,
             Service,
             (value, index) => { Service.TireSmokeColor = (TireSmokeColor)index; },
@@ -70,7 +69,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 
     private void RimColors()
     {
-        var listItemRimColor = AddListItem(VehicleModsItemTitles.RimColor,
+        var listItemRimColor = AddListItem(VehicleModsItemTitle.RimColor,
             () => (int)Service.RimColor,
             Service,
             (value, index) =>
@@ -87,7 +86,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 
     private void WheelTypes()
     {
-        var listItemWheelType = AddListItem(VehicleModsItemTitles.WheelType, () => (int)Service.WheelType,
+        var listItemWheelType = AddListItem(VehicleModsItemTitle.WheelType, () => (int)Service.WheelType,
             Service,
             (value, index) => { Service.WheelType = (VehicleWheelType)index; },
             typeof(VehicleWheelType).ToDisplayNameArray());

@@ -27,19 +27,19 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     private void ResprayMenu()
     {
-        var resprayMenu = new VehicleModsResprayMenu(MenuTitles.Respray);
+        var resprayMenu = new VehicleModsResprayMenu(MenuTitle.Respray);
         AddMenu(resprayMenu);
     }
 
     private void HeadLightsMenu()
     {
-        var headLightsMenu = new VehicleModsLightsMenu(MenuTitles.Headlights);
+        var headLightsMenu = new VehicleModsLightsMenu(MenuTitle.Headlights);
         AddMenu(headLightsMenu);
     }
 
     private void WindowTint()
     {
-        var listItemTintColor = AddListItem(VehicleModsItemTitles.WindowTint, () => (int)Service.WindowTint, Service,
+        var listItemTintColor = AddListItem(VehicleModsItemTitle.WindowTint, () => (int)Service.WindowTint, Service,
             (value, index) => { Service.WindowTint = (VehicleWindowTint)index; },
             Enumerable.Range(0, Enum.GetValues(typeof(VehicleWindowTint)).Length - 1).Select(index =>
             {
@@ -57,7 +57,7 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     protected virtual void RandomizeAllMods()
     {
-        var itemRandomizeMods = AddItem(VehicleModsItemTitles.RandomizeMods, () =>
+        var itemRandomizeMods = AddItem(VehicleModsItemTitle.RandomizeMods, () =>
         {
             Service.RequestRandomizeMods();
             GenerateMenu();
@@ -72,7 +72,7 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     private void LicensePlateStyle()
     {
-        var listItemLicensePlateStyle = AddListItem(VehicleModsItemTitles.LicensePlateStyle,
+        var listItemLicensePlateStyle = AddListItem(VehicleModsItemTitle.LicensePlateStyle,
             () => (int)Service.LicensePlateStyle, Service,
             (value, index) => { Service.LicensePlateStyle = (LicensePlateStyle)index; },
             Enumerable.Range(0, Enum.GetValues(typeof(LicensePlateStyle)).Length).Select(index =>
@@ -92,7 +92,7 @@ public class VehicleModsMenu : VehicleModsMenuBase
     private void LicensePlate()
     {
         var itemLicensePlate =
-            AddItem(VehicleModsItemTitles.LicensePlate, () => { Service.RequestLicensePlateInput(); },
+            AddItem(VehicleModsItemTitle.LicensePlate, () => { Service.RequestLicensePlateInput(); },
                 Service.LicensePlate);
         Service.LicensePlateInputRequested += (_, _) => { itemLicensePlate.AltTitle = Service.LicensePlate; };
     }
@@ -107,13 +107,13 @@ public class VehicleModsMenu : VehicleModsMenuBase
     {
         if (Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.FrontBumper) &&
             Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.RearBumper)) return;
-        var bumpersMenu = new VehicleModsBumpersMenu(MenuTitles.Bumpers);
+        var bumpersMenu = new VehicleModsBumpersMenu(MenuTitle.Bumpers);
         AddMenu(bumpersMenu);
     }
 
     private void WheelsMenu()
     {
-        var wheelsMenu = new VehicleModsWheelsMenu(MenuTitles.Wheels);
+        var wheelsMenu = new VehicleModsWheelsMenu(MenuTitle.Wheels);
         AddMenu(wheelsMenu);
     }
 }

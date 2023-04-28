@@ -21,25 +21,25 @@ public class MainMenu : MenuBase
 
     private void AddVehicleMenu()
     {
-        var vehicleMenu = new VehicleMenu(MenuTitles.Vehicle);
+        var vehicleMenu = new VehicleMenu(MenuTitle.Vehicle);
         AddMenu(vehicleMenu);
     }
 
     private void AddWeaponsMenu()
     {
-        var weaponsMenu = new WeaponsMenu(MenuTitles.Weapons);
+        var weaponsMenu = new WeaponsMenu(MenuTitle.Weapons);
         AddMenu(weaponsMenu);
     }
 
     private void AddPlayerMenu()
     {
-        var playerMenu = new PlayerMenu(MenuTitles.Player);
+        var playerMenu = new PlayerMenu(MenuTitle.Player);
         AddMenu(playerMenu);
     }
 
     private void AddStorageMenu()
     {
-        var storageMenu = new StorageMenu(MenuTitles.Storage);
+        var storageMenu = new StorageMenu(MenuTitle.Storage);
         AddMenu(storageMenu);
     }
 }

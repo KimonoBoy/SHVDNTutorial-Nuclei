@@ -2,7 +2,7 @@
 
 namespace Nuclei.Enums.UI;
 
-public enum VehicleItemTitles
+public enum VehicleItemTitle
 {
     [Description("Repairs the vehicle completely.")]
     RepairVehicle,

@@ -47,7 +47,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
     {
         if (e.PropertyName == nameof(Service.CurrentVehicle))
         {
-            var item = GetItem<NativeSubmenuItem>(MenuTitles.VehicleMods);
+            var item = GetItem<NativeSubmenuItem>(MenuTitle.VehicleMods);
             if (item == null) return;
             item.Enabled = Service.CurrentVehicle != null;
             UpdateAltTitleOnCondition(item, Service.CurrentVehicle != null,
@@ -57,7 +57,7 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void AddVehicleModsMenu()
     {
-        var vehicleModsMenu = new VehicleModsMenu(MenuTitles.VehicleMods);
+        var vehicleModsMenu = new VehicleModsMenu(MenuTitle.VehicleMods);
         var vehicleModItem = AddMenu(vehicleModsMenu);
         Shown += (sender, args) =>
         {
@@ -69,59 +69,59 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
 
     private void AddVehicleWeaponsMenu()
     {
-        var vehicleWeaponsMenu = new VehicleWeaponsMenu(MenuTitles.VehicleWeapons);
+        var vehicleWeaponsMenu = new VehicleWeaponsMenu(MenuTitle.VehicleWeapons);
         AddMenu(vehicleWeaponsMenu);
     }
 
     private void LockDoors()
     {
-        var checkBoxLockDoors = AddCheckbox(VehicleItemTitles.LockDoors, () => Service.DoorsAlwaysLocked, Service,
+        var checkBoxLockDoors = AddCheckbox(VehicleItemTitle.LockDoors, () => Service.DoorsAlwaysLocked, Service,
             @checked => { Service.DoorsAlwaysLocked = @checked; });
     }
 
     private void NeverFallOffBike()
     {
-        var checkBoxNeverFallOffBike = AddCheckbox(VehicleItemTitles.NeverFallOffBike, () => Service.NeverFallOffBike,
+        var checkBoxNeverFallOffBike = AddCheckbox(VehicleItemTitle.NeverFallOffBike, () => Service.NeverFallOffBike,
             Service, @checked => { Service.NeverFallOffBike = @checked; });
     }
 
     private void DriveUnderWater()
     {
-        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitles.DriveUnderWater, () => Service.CanDriveUnderWater,
+        var checkBoxDriveUnderWater = AddCheckbox(VehicleItemTitle.DriveUnderWater, () => Service.CanDriveUnderWater,
             Service, @checked => { Service.CanDriveUnderWater = @checked; });
     }
 
     private void AddVehicleSpawnerMenu()
     {
-        var vehicleSpawnerMenu = new VehicleSpawnerMainMenu(MenuTitles.SpawnVehicle);
+        var vehicleSpawnerMenu = new VehicleSpawnerMainMenu(MenuTitle.SpawnVehicle);
         AddMenu(vehicleSpawnerMenu);
     }
 
     private void FlipVehicle()
     {
-        var itemFlipVehicle = AddItem(VehicleItemTitles.FlipVehicle, () => { Service.RequestVehicleFlip(); });
+        var itemFlipVehicle = AddItem(VehicleItemTitle.FlipVehicle, () => { Service.RequestVehicleFlip(); });
     }
 
     private void SpeedBoost()
     {
-        var sliderItemSpeedBoost = AddSliderItem(VehicleItemTitles.SpeedBoost, () => Service.SpeedBoost, Service,
+        var sliderItemSpeedBoost = AddSliderItem(VehicleItemTitle.SpeedBoost, () => Service.SpeedBoost, Service,
             speedBoostValue => { Service.SpeedBoost = speedBoostValue; }, 0, 5);
     }
 
     private void SeatBelt()
     {
-        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitles.SeatBelt, () => Service.HasSeatBelt, Service,
+        var checkBoxSeatBelt = AddCheckbox(VehicleItemTitle.SeatBelt, () => Service.HasSeatBelt, Service,
             @checked => { Service.HasSeatBelt = @checked; });
     }
 
     private void RepairVehicle()
     {
-        var itemRepairVehicle = AddItem(VehicleItemTitles.RepairVehicle, () => { Service.RequestRepair(); });
+        var itemRepairVehicle = AddItem(VehicleItemTitle.RepairVehicle, () => { Service.RequestRepair(); });
     }
 
     private void Indestructible()
     {
-        var checkBoxIndestructible = AddCheckbox(VehicleItemTitles.Indestructible, () => Service.IsIndestructible,
+        var checkBoxIndestructible = AddCheckbox(VehicleItemTitle.Indestructible, () => Service.IsIndestructible,
             Service, @checked => { Service.IsIndestructible = @checked; });
     }
 }

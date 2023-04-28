@@ -18,28 +18,28 @@ public class StorageMenu : GenericMenuBase<StorageService>
 
     private void RestoreDefaults()
     {
-        var itemRestoreDefault = AddItem(SettingsTitles.RestoreDefault, () => { Service.RestoreDefaults(); });
+        var itemRestoreDefault = AddItem(SettingsTitle.RestoreDefault, () => { Service.RestoreDefaults(); });
     }
 
     private void Load()
     {
-        var itemLoad = AddItem(SettingsTitles.Load, () => { Service.Load(); }, "CTRL + SHIFT + L");
+        var itemLoad = AddItem(SettingsTitle.Load, () => { Service.Load(); }, "CTRL + SHIFT + L");
     }
 
     private void Save()
     {
-        var itemSave = AddItem(SettingsTitles.Save, () => { Service.Save(); }, "CTRL + SHIFT + S");
+        var itemSave = AddItem(SettingsTitle.Save, () => { Service.Save(); }, "CTRL + SHIFT + S");
     }
 
     private void AutoLoad()
     {
-        var checkBoxAutoLoad = AddCheckbox(SettingsTitles.AutoLoad, () => Service.AutoLoad, Service,
+        var checkBoxAutoLoad = AddCheckbox(SettingsTitle.AutoLoad, () => Service.AutoLoad, Service,
             @checked => { Service.AutoLoad = @checked; });
     }
 
     private void AutoSave()
     {
-        var checkBoxAutoSave = AddCheckbox(SettingsTitles.AutoSave, () => Service.AutoSave, Service,
+        var checkBoxAutoSave = AddCheckbox(SettingsTitle.AutoSave, () => Service.AutoSave, Service,
             @checked => { Service.AutoSave = @checked; });
     }
 }

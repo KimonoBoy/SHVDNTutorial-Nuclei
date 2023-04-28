@@ -10,7 +10,7 @@ namespace Nuclei;
 
 public class Main : Script
 {
-    private readonly MainMenu _mainMenu = new(MenuTitles.Main);
+    private readonly MainMenu _mainMenu = new(MenuTitle.Main);
 
     public Main()
     {
