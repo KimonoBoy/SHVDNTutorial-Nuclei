@@ -22,6 +22,15 @@ public class VehicleModsMenu : VehicleModsMenuBase
         BumpersMenu();
         PrimaryColor();
         SecondaryColor();
+        WindowTint();
+    }
+
+    private void WindowTint()
+    {
+        var listItemTintColor = AddListItem(VehicleModsItemTitles.WindowTint, () => (int)Service.WindowTint, Service,
+            (value, index) => { Service.WindowTint = (VehicleWindowTint)index; },
+            typeof(VehicleWindowTint).ToDisplayNameArray());
+        listItemTintColor.SetSelectedIndexSafe((int)Service.WindowTint);
     }
 
     private void SecondaryColor()

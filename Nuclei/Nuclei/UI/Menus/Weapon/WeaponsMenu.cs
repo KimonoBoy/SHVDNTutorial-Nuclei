@@ -32,11 +32,7 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
     private void VehicleGun()
     {
         var listItemVehicleGun = AddListItem(WeaponItemTitles.VehicleGun, () => (int)Service.CurrentVehicleGun, Service,
-            (value, index) =>
-            {
-                Service.ShootVehicles = true;
-                Service.CurrentVehicleGun = (VehicleHash)index;
-            },
+            (value, index) => { Service.CurrentVehicleGun = (VehicleHash)index; },
             typeof(VehicleHash).ToDisplayNameArray());
     }
 

@@ -20,6 +20,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
 
     private List<VehicleMod> _vehicleMods = new();
     private VehicleWheelType _wheelType;
+    private VehicleWindowTint _windowTint;
 
     [JsonIgnore]
     public List<VehicleMod> VehicleMods
@@ -140,6 +141,18 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _secondaryColor) return;
             _secondaryColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public VehicleWindowTint WindowTint
+    {
+        get => _windowTint;
+        set
+        {
+            if (value == _windowTint) return;
+            _windowTint = value;
             OnPropertyChanged();
         }
     }

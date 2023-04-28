@@ -29,6 +29,17 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         SeatBelt();
         NeverFallOffBike();
         DriveUnderWater();
+        Shown += OnShown;
+        Closed += OnClosed;
+    }
+
+    private void OnClosed(object sender, EventArgs e)
+    {
+        Service.PropertyChanged -= OnPropertyChanged;
+    }
+
+    private void OnShown(object sender, EventArgs e)
+    {
         Service.PropertyChanged += OnPropertyChanged;
     }
 

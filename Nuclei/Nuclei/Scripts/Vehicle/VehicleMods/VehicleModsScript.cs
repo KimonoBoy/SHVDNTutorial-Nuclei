@@ -41,6 +41,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 
             Service.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
             Service.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+
+            Service.WindowTint = (VehicleWindowTint)random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
         }
         catch (Exception exception)
         {
@@ -91,6 +93,9 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             case nameof(Service.SecondaryColor):
                 CurrentVehicle.Mods.SecondaryColor = Service.SecondaryColor;
                 break;
+            case nameof(Service.WindowTint):
+                CurrentVehicle.Mods.WindowTint = Service.WindowTint;
+                break;
         }
     }
 
@@ -125,11 +130,19 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateModTypes();
         UpdatePrimaryColor();
         UpdateSecondaryColor();
+        UpdateWindowTint();
         UpdateRimColor();
         UpdateTireSmokeColor();
         UpdateCustomTires();
         UpdateLicensePlate();
         UpdateLicensePlateStyle();
+    }
+
+    private void UpdateWindowTint()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.WindowTint = CurrentVehicle.Mods.WindowTint;
     }
 
     private void UpdateSecondaryColor()
