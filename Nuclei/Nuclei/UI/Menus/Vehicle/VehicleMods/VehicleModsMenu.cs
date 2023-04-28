@@ -21,9 +21,14 @@ public class VehicleModsMenu : VehicleModsMenuBase
         WheelsMenu();
         BumpersMenu();
         HeadLightsMenu();
-        PrimaryColor();
-        SecondaryColor();
+        ResprayMenu();
         WindowTint();
+    }
+
+    private void ResprayMenu()
+    {
+        var resprayMenu = new VehicleModsResprayMenu(MenuTitles.Respray);
+        AddMenu(resprayMenu);
     }
 
     private void HeadLightsMenu()
@@ -50,43 +55,43 @@ public class VehicleModsMenu : VehicleModsMenuBase
         listItemTintColor.SetSelectedIndexSafe((int)Service.WindowTint);
     }
 
-    private void SecondaryColor()
-    {
-        var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
-            () => (int)Service.SecondaryColor, Service,
-            (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
-            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
-            {
-                var count = Enum.GetValues(typeof(VehicleColor)).Length;
-                if (index == -1) return $"None {0} / {count - 1}";
-                var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
-                if (index == count)
-                    localizedName += $" {0} / {count - 1}";
-                else
-                    localizedName += $" {index} / {count - 1}";
-                return localizedName;
-            }).ToArray());
-        listItemSecondaryColor.SetSelectedIndexSafe((int)Service.SecondaryColor);
-    }
-
-    private void PrimaryColor()
-    {
-        var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
-            Service,
-            (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
-            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
-            {
-                var count = Enum.GetValues(typeof(VehicleColor)).Length;
-                if (index == -1) return $"None {0} / {count - 1}";
-                var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
-                if (index == count)
-                    localizedName += $" {0} / {count - 1}";
-                else
-                    localizedName += $" {index} / {count - 1}";
-                return localizedName;
-            }).ToArray());
-        listItemPrimaryColor.SetSelectedIndexSafe((int)Service.PrimaryColor);
-    }
+    // private void SecondaryColor()
+    // {
+    //     var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
+    //         () => (int)Service.SecondaryColor, Service,
+    //         (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
+    //         Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
+    //         {
+    //             var count = Enum.GetValues(typeof(VehicleColor)).Length;
+    //             if (index == -1) return $"None {0} / {count - 1}";
+    //             var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
+    //             if (index == count)
+    //                 localizedName += $" {0} / {count - 1}";
+    //             else
+    //                 localizedName += $" {index} / {count - 1}";
+    //             return localizedName;
+    //         }).ToArray());
+    //     listItemSecondaryColor.SetSelectedIndexSafe((int)Service.SecondaryColor);
+    // }
+    //
+    // private void PrimaryColor()
+    // {
+    //     var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
+    //         Service,
+    //         (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
+    //         Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
+    //         {
+    //             var count = Enum.GetValues(typeof(VehicleColor)).Length;
+    //             if (index == -1) return $"None {0} / {count - 1}";
+    //             var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
+    //             if (index == count)
+    //                 localizedName += $" {0} / {count - 1}";
+    //             else
+    //                 localizedName += $" {index} / {count - 1}";
+    //             return localizedName;
+    //         }).ToArray());
+    //     listItemPrimaryColor.SetSelectedIndexSafe((int)Service.PrimaryColor);
+    // }
 
     protected virtual void RandomizeAllMods()
     {

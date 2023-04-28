@@ -110,6 +110,7 @@
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsHeadLightsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsMenuBase.cs" />
+    <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsResprayMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleMods\VehicleModsWheelsMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerFavoritesMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerClassMenu.cs" />

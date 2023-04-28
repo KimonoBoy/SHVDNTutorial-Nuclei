@@ -46,6 +46,8 @@ public enum MenuTitles
     [Description("A menu for adjusting vehicle headlights.")]
     Headlights,
 
+    [Description("Vehicle resprays!")] Respray,
+
     [Description("Customize everything about your weapons and arm yourself to the teeth!")]
     Weapons,
 

@@ -35,9 +35,15 @@ public enum VehicleModsItemTitles
     [Description("Where under the vehicle should the neon lights be placed?")]
     NeonLightsLayout,
 
+    [Description("Change the color type.")]
+    ColorType,
+
     [Description("Your vehicles primary color.")]
     PrimaryColor,
 
     [Description("Your vehicles secondary color.")]
-    SecondaryColor
+    SecondaryColor,
+
+    [Description("Your vehicles pearlescent color.")]
+    PearlscentColor
 }

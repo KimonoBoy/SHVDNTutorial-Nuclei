@@ -43,6 +43,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             Service.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
             Service.WindowTint = (VehicleWindowTint)random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
+
+            Service.PearlscentColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
         }
         catch (Exception exception)
         {
@@ -93,6 +95,9 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             case nameof(Service.SecondaryColor):
                 CurrentVehicle.Mods.SecondaryColor = Service.SecondaryColor;
                 break;
+            case nameof(Service.PearlscentColor):
+                CurrentVehicle.Mods.PearlescentColor = Service.PearlscentColor;
+                break;
             case nameof(Service.WindowTint):
                 CurrentVehicle.Mods.WindowTint = Service.WindowTint;
                 break;
@@ -133,6 +138,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateModTypes();
         UpdatePrimaryColor();
         UpdateSecondaryColor();
+        UpdatePearlscentColor();
         UpdateWindowTint();
         UpdateXenonHeadLights();
         UpdateRimColor();
@@ -140,6 +146,13 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdateCustomTires();
         UpdateLicensePlate();
         UpdateLicensePlateStyle();
+    }
+
+    private void UpdatePearlscentColor()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.PearlscentColor = CurrentVehicle.Mods.PearlescentColor;
     }
 
     private void UpdateXenonHeadLights()

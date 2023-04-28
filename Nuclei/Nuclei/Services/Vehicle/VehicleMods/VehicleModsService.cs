@@ -13,6 +13,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     private bool _customTires;
     private string _licensePlate;
     private LicensePlateStyle _licensePlateStyle;
+    private VehicleColor _pearlscentColor;
     private VehicleColor _primaryColor;
     private VehicleColor _rimColor;
     private VehicleColor _secondaryColor;
@@ -166,6 +167,18 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _xenonHeadLights) return;
             _xenonHeadLights = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public VehicleColor PearlscentColor
+    {
+        get => _pearlscentColor;
+        set
+        {
+            if (value == _pearlscentColor) return;
+            _pearlscentColor = value;
             OnPropertyChanged();
         }
     }
