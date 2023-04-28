@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using LemonUI.Menus;
 using Nuclei.Enums.UI;
 using Nuclei.Services.Vehicle;
@@ -28,14 +29,19 @@ public class VehicleMenu : GenericMenuBase<VehicleService>
         SeatBelt();
         NeverFallOffBike();
         DriveUnderWater();
-        Service.RegisterAction(() => Service.CurrentVehicle, () =>
+        Service.PropertyChanged += OnPropertyChanged;
+    }
+
+    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Service.CurrentVehicle))
         {
             var item = GetItem<NativeSubmenuItem>(MenuTitles.VehicleMods);
             if (item == null) return;
             item.Enabled = Service.CurrentVehicle != null;
             UpdateAltTitleOnCondition(item, Service.CurrentVehicle != null,
                 Service.CurrentVehicle?.LocalizedName + " MENU", "No Vehicle");
-        });
+        }
     }
 
     private void AddVehicleModsMenu()

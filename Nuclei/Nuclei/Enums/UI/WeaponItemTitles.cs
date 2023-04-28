@@ -27,6 +27,7 @@ public enum WeaponItemTitles
     [Description("Teleport to any location by shooting at the location.")]
     TeleportGun,
 
-    [Description("Shoot vehicles out of your gun.")]
+    [Description(
+        "What is even more fun than bullets? Vehicles as bullets.\n\n~b~Note: This version is just for testing purposes only - we'll make it better later.")]
     VehicleGun
 }

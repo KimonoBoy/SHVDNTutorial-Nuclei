@@ -41,6 +41,27 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         ProcessExplosiveBullets();
         ProcessLevitationGun();
         ProcessTeleportGun();
+        ProcessShootVehicles();
+    }
+
+    private void ProcessShootVehicles()
+    {
+        if (!Character.IsAiming || !Character.IsShooting) return;
+        var model = new Model(VehicleHash.Adder);
+        model.Request(1000);
+        if (!model.IsLoaded) return;
+        Vector3? targetLocation;
+        var vehicle = World.CreateVehicle(model,
+            Character.Position + Character.ForwardVector * 2.0f,
+            Character.Heading);
+        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
+
+        if (crosshairCoords.DidHit)
+            targetLocation = crosshairCoords.HitPosition;
+        else
+            targetLocation = GameplayCamera.Position + GameplayCamera.Direction;
+
+        vehicle.ApplyForce(targetLocation.Value + Character.ForwardVector * 1000.0f);
     }
 
     private void ProcessTeleportGun()
