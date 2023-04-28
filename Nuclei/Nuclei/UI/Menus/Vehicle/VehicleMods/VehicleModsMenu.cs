@@ -20,9 +20,16 @@ public class VehicleModsMenu : VehicleModsMenuBase
         RandomizeAllMods();
         WheelsMenu();
         BumpersMenu();
+        HeadLightsMenu();
         PrimaryColor();
         SecondaryColor();
         WindowTint();
+    }
+
+    private void HeadLightsMenu()
+    {
+        var headLightsMenu = new VehicleModsHeadLightsMenu(MenuTitles.Headlights);
+        AddMenu(headLightsMenu);
     }
 
     private void WindowTint()

@@ -96,6 +96,9 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             case nameof(Service.WindowTint):
                 CurrentVehicle.Mods.WindowTint = Service.WindowTint;
                 break;
+            case nameof(Service.XenonHeadLights):
+                CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = Service.XenonHeadLights;
+                break;
         }
     }
 
@@ -131,11 +134,19 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         UpdatePrimaryColor();
         UpdateSecondaryColor();
         UpdateWindowTint();
+        UpdateXenonHeadLights();
         UpdateRimColor();
         UpdateTireSmokeColor();
         UpdateCustomTires();
         UpdateLicensePlate();
         UpdateLicensePlateStyle();
+    }
+
+    private void UpdateXenonHeadLights()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.XenonHeadLights = CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled;
     }
 
     private void UpdateWindowTint()

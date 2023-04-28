@@ -21,6 +21,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     private List<VehicleMod> _vehicleMods = new();
     private VehicleWheelType _wheelType;
     private VehicleWindowTint _windowTint;
+    private bool _xenonHeadLights;
 
     [JsonIgnore]
     public List<VehicleMod> VehicleMods
@@ -153,6 +154,18 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _windowTint) return;
             _windowTint = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public bool XenonHeadLights
+    {
+        get => _xenonHeadLights;
+        set
+        {
+            if (value == _xenonHeadLights) return;
+            _xenonHeadLights = value;
             OnPropertyChanged();
         }
     }
