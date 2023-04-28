@@ -163,14 +163,14 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
     private void UpdateCurrentCharacter()
     {
-        if (Character == Game.Player.Character) return;
+        if (Service.Character == Game.Player.Character) return;
         Character = Game.Player.Character;
         Service.Character = Character;
     }
 
     private void UpdateCurrentVehicle()
     {
-        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
+        if (Service.CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
 
         CurrentVehicle =
             Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;

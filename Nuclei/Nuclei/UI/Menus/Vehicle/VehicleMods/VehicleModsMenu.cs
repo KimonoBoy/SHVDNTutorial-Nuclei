@@ -36,7 +36,17 @@ public class VehicleModsMenu : VehicleModsMenuBase
     {
         var listItemTintColor = AddListItem(VehicleModsItemTitles.WindowTint, () => (int)Service.WindowTint, Service,
             (value, index) => { Service.WindowTint = (VehicleWindowTint)index; },
-            typeof(VehicleWindowTint).ToDisplayNameArray());
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleWindowTint)).Length - 1).Select(index =>
+            {
+                var count = Enum.GetValues(typeof(VehicleWindowTint)).Length - 1;
+                if (index == -1) return $"None {0} / {count - 1}";
+                var localizedName = ((VehicleWindowTint)index).GetLocalizedDisplayNameFromHash();
+                if (index == count)
+                    localizedName += $" {0} / {count - 1}";
+                else
+                    localizedName += $" {index} / {count - 1}";
+                return localizedName;
+            }).ToArray());
         listItemTintColor.SetSelectedIndexSafe((int)Service.WindowTint);
     }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
-using LemonUI.Menus;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.UI.Menus.Base.ItemFactory;
@@ -33,47 +32,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     {
         if (Service.CurrentVehicle == null) return;
         if (e.PropertyName == nameof(Service.WheelType))
-        {
-            var filteredMods = Service.VehicleMods.Where(vehicleMod => vehicleMod.Count > 0 &&
-                                                                       vehicleMod.Type is VehicleModType.FrontWheel
-                                                                           or VehicleModType.RearWheel);
-
-            // Clear the filtered mods and get the new ones, then add them to the menu replacing the old ones
-            foreach (var vehicleMod in filteredMods)
-            {
-                // find the associated listitem and update its corresponding values
-                var oldListItem = Items.OfType<NativeListItem<string>>()
-                    .FirstOrDefault(nativeListItem =>
-                        nativeListItem.Title == vehicleMod.Type.GetLocalizedDisplayNameFromHash());
-                if (oldListItem == null) continue;
-
-                // Create a new list item
-                var newListItem = _itemFactoryService.CreateNativeListItem(
-                    vehicleMod.Type.GetLocalizedDisplayNameFromHash(), "",
-                    null, Service,
-                    (value, index) => { vehicleMod.Index = index; },
-                    Enumerable.Range(0, vehicleMod.Count + 1).Select(index =>
-                    {
-                        if (index == -1) return $"Stock {0} / {vehicleMod.Count}";
-                        vehicleMod.Index = index;
-                        string localizedName;
-                        if (index == vehicleMod.Count)
-                            localizedName = $"{vehicleMod.LocalizedName} {0} / {vehicleMod.Count}";
-                        else
-                            localizedName = vehicleMod.LocalizedName + $" {index + 1} / {vehicleMod.Count}";
-                        return localizedName;
-                    }).ToArray());
-
-                // Replace the old list item with the new one
-                var index = Items.IndexOf(oldListItem);
-                Items[index] = newListItem;
-                if (newListItem.Items.Count > 0)
-                {
-                    newListItem.SelectedIndex++;
-                    newListItem.SelectedIndex--;
-                }
-            }
-        }
+            GenerateMenu();
     }
 
     protected override void PreModTypeMods()
@@ -137,7 +96,9 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
 
     protected override IEnumerable<VehicleMod> GetValidMods()
     {
-        return Service.VehicleMods.Where(vehicleMod =>
-            vehicleMod.Type is VehicleModType.FrontWheel or VehicleModType.RearWheel);
+        if (Service.CurrentVehicle.IsMotorcycle)
+            return Service.VehicleMods.Where(vehicleMod =>
+                vehicleMod.Type == VehicleModType.FrontWheel || vehicleMod.Type == VehicleModType.RearWheel);
+        return Service.VehicleMods.Where(vehicleMod => vehicleMod.Type == VehicleModType.FrontWheel);
     }
 }

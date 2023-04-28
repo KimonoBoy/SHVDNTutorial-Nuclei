@@ -13,6 +13,17 @@ public static class NativeListItemExtensions
     /// <param name="index">The index to be set.</param>
     public static void SetSelectedIndexSafe<T>(this NativeListItem<T> listItem, int index)
     {
-        if (index >= 0 && index < listItem.Items.Count) listItem.SelectedIndex = index;
+        if (listItem.Items.Count == 0)
+        {
+            listItem.SelectedIndex = -1;
+            return;
+        }
+
+        if (index >= 0 && index < listItem.Items.Count)
+            listItem.SelectedIndex = index;
+        else if (index == -1)
+            listItem.SelectedIndex = listItem.Items.Count - 1;
+        else
+            listItem.SelectedIndex = 0;
     }
 }

@@ -67,6 +67,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
         foreach (var vehicleMod in GetValidMods())
         {
             var currentIndex = vehicleMod.Index;
+            if (vehicleMod.Count <= 0) continue;
             var listItemTest = AddListItem(vehicleMod.Type.GetLocalizedDisplayNameFromHash(), "",
                 null, Service,
                 (value, index) => { vehicleMod.Index = index; },
@@ -84,7 +85,7 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
 
             listItemTest.SetSelectedIndexSafe(currentIndex == -1 ? vehicleMod.Count : currentIndex);
             if (!listItemTest.Any()) return;
-            if (listItemTest.SelectedIndex == 0)
+            if (listItemTest.SelectedIndex == 0 && listItemTest.Items.Count > 0)
             {
                 listItemTest.SelectedIndex++;
                 listItemTest.SelectedIndex--;
