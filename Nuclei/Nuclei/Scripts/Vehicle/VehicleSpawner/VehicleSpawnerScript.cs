@@ -43,28 +43,35 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
     private void OnCustomVehicleSpawned(object sender, CustomVehicleDto customVehicleDto)
     {
-        var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
-        vehicle.Mods.InstallModKit();
-        vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
-        vehicle.Mods.WheelType = customVehicleDto.WheelType;
-        vehicle.Mods.RimColor = customVehicleDto.RimColor;
-        vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
-        vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
+        try
+        {
+            var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
+            vehicle.Mods.InstallModKit();
+            vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
+            vehicle.Mods.WheelType = customVehicleDto.WheelType;
+            vehicle.Mods.RimColor = customVehicleDto.RimColor;
+            vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
+            vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
 
-        foreach (var customVehicleMod in customVehicleDto.VehicleMods)
-            vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
+            foreach (var customVehicleMod in customVehicleDto.VehicleMods)
+                vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
 
-        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
-        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
-        vehicle.Mods.TireSmokeColor = customVehicleDto.TireSmokeColor;
+            vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
+            vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
+            vehicle.Mods.TireSmokeColor = customVehicleDto.TireSmokeColor;
 
-        vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
-        vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
+            vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
+            vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
 
-        vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
-        vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
+            vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
+            vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
 
-        vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
+            vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
+        }
+        catch (Exception e)
+        {
+            ExceptionService.RaiseError(e);
+        }
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -176,20 +183,20 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     /// </exception>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
-        // Calculate the heading of the vehicleDto based on the player's heading.
+        // Calculate the heading of the vehicle based on the player's heading.
         var heading = GetVehicleHeading();
 
         // Create the Vehicle from the model, position it in front of the player, and set its heading.
         var vehicle = World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
 
-        // Release the vehicleDto model resources.
+        // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();
 
-        // Set the vehicleDto as persistent so it doesn't despawn.
-        vehicle.IsPersistent = true;
+        // Set the vehicle as persistent so it doesn't despawn.
+        // vehicle.IsPersistent = true;
 
         if (!vehicle.Exists())
-            throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicleDto object: {vehicleHash}");
+            throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
 
         // Set the vehicleDto's properties and place the player inside if necessary.
         InitializeVehicle(vehicle);

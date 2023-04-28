@@ -8,6 +8,7 @@ using GTA.UI;
 using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.Services.Exception;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
@@ -83,55 +84,61 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
         var itemSaveCurrentVehicle = AddItem(VehicleSpawnerItemTitle.SaveCurrentVehicle,
             () =>
             {
-                /*
+                try
+                {
+                    /*
                  * Due for later. Lets finish the Modicfications Menu first before updating this.
                  */
-                if (Service.CurrentVehicle == null)
-                {
-                    Notification.Show("You must enter a vehicle first.");
-                    return;
+                    if (Service.CurrentVehicle == null)
+                    {
+                        Notification.Show("You must enter a vehicle first.");
+                        return;
+                    }
+
+                    var userInput = Game.GetUserInput(WindowTitle.EnterMessage60, "", 60);
+
+                    if (Service.CustomVehicles.Any(v =>
+                            v.Title == userInput))
+                    {
+                        Notification.Show("Vehicle with that title already exists. Please enter a unique title.");
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(userInput))
+                    {
+                        Notification.Show("Please enter a title to save the vehicle.");
+                        return;
+                    }
+
+                    var customVehicle = new CustomVehicleDto
+                    {
+                        Title = userInput,
+                        VehicleHash = (VehicleHash)Service.CurrentVehicle.Model.Hash,
+                        LicensePlate = Service.CurrentVehicle.Mods.LicensePlate,
+                        LicensePlateStyle = Service.CurrentVehicle.Mods.LicensePlateStyle,
+                        WheelType = Service.CurrentVehicle.Mods.WheelType,
+                        RimColor = Service.CurrentVehicle.Mods.RimColor,
+                        CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
+                        TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
+                        WindowTint = Service.CurrentVehicle.Mods.WindowTint,
+                        XenonHeadLights = Service.CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled,
+                        PrimaryColor = Service.CurrentVehicle.Mods.PrimaryColor,
+                        SecondaryColor = Service.CurrentVehicle.Mods.SecondaryColor,
+                        Turbo = Service.CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled
+                    };
+
+                    foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())
+                    {
+                        var customVehicleMod = new CustomVehicleModDto(vehicleMod.Type, vehicleMod.Index);
+                        customVehicle.VehicleMods.Add(customVehicleMod);
+                    }
+
+                    Service.CustomVehicles.Add(customVehicle);
                 }
-
-                var userInput = Game.GetUserInput(WindowTitle.EnterMessage60, "", 60);
-
-                if (Service.CustomVehicles.Any(v =>
-                        v.Title == userInput))
+                catch (Exception e)
                 {
-                    Notification.Show("Vehicle with that title already exists. Please enter a unique title.");
-                    return;
+                    ExceptionService.Instance.RaiseError(e);
                 }
-
-                if (string.IsNullOrEmpty(userInput))
-                {
-                    Notification.Show("Please enter a title to save the vehicle.");
-                    return;
-                }
-
-                var customVehicle = new CustomVehicleDto
-                {
-                    Title = userInput,
-                    VehicleHash = (VehicleHash)Service.CurrentVehicle.Model.Hash,
-                    LicensePlate = Service.CurrentVehicle.Mods.LicensePlate,
-                    LicensePlateStyle = Service.CurrentVehicle.Mods.LicensePlateStyle,
-                    WheelType = Service.CurrentVehicle.Mods.WheelType,
-                    RimColor = Service.CurrentVehicle.Mods.RimColor,
-                    CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
-                    TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
-                    WindowTint = Service.CurrentVehicle.Mods.WindowTint,
-                    XenonHeadLights = Service.CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled,
-                    NeonLightsLayout = Service.NeonLightsLayout,
-                    PrimaryColor = Service.CurrentVehicle.Mods.PrimaryColor,
-                    SecondaryColor = Service.CurrentVehicle.Mods.SecondaryColor,
-                    Turbo = Service.CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled
-                };
-
-                foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())
-                {
-                    var customVehicleMod = new CustomVehicleModDto(vehicleMod.Type, vehicleMod.Index);
-                    customVehicle.VehicleMods.Add(customVehicleMod);
-                }
-
-                Service.CustomVehicles.Add(customVehicle);
             });
     }
 

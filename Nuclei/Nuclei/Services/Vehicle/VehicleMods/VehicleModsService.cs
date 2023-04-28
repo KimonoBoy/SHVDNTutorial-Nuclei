@@ -63,7 +63,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     }
 
     [JsonIgnore]
-    public Dictionary<TireSmokeColor, Color> TireSmokeColorDictionary { get; } = new()
+    public Dictionary<TireSmokeColor, Color> TireSmokeColorDictionary { get; set; } = new()
     {
         { TireSmokeColor.White, Color.FromArgb(255, 255, 255) },
         { TireSmokeColor.Black, Color.FromArgb(20, 20, 20) },
@@ -78,7 +78,7 @@ public class VehicleModsService : GenericService<VehicleModsService>
     };
 
     [JsonIgnore]
-    public Dictionary<NeonLightsColor, Color> NeonLightsColorDictionary { get; } = new()
+    public Dictionary<NeonLightsColor, Color> NeonLightsColorDictionary { get; set; } = new()
     {
         { NeonLightsColor.White, Color.FromArgb(222, 222, 255) },
         { NeonLightsColor.Blue, Color.FromArgb(2, 21, 255) },

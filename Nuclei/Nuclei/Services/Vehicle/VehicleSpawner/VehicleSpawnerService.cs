@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using GTA;
-using Nuclei.Enums.Vehicle;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
@@ -15,7 +14,6 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
     private bool _enginesRunning;
 
     private ObservableCollection<VehicleHash> _favoriteVehicles = new();
-    private NeonLightsLayout _neonLightsLayout;
 
     private VehicleSeat _vehicleSeat = VehicleSeat.Driver;
 
@@ -83,17 +81,6 @@ public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
         {
             if (_customVehicles == value) return;
             _customVehicles = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public NeonLightsLayout NeonLightsLayout
-    {
-        get => _neonLightsLayout;
-        set
-        {
-            if (value == _neonLightsLayout) return;
-            _neonLightsLayout = value;
             OnPropertyChanged();
         }
     }

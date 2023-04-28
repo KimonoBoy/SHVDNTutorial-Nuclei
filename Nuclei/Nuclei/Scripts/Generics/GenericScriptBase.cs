@@ -91,8 +91,8 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
-        GameStateTimer.SubscribeToTimerElapsed(ProcessGameStatesTimer);
-        GameStateTimer.SubscribeToTimerElapsed(UpdateServiceStatesTimer);
+        GameStateTimer.TimerElapsed += ProcessGameStatesTimer;
+        GameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
 
         _eventsSubscribed = true;
 
@@ -163,14 +163,14 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
     private void UpdateCurrentCharacter()
     {
-        if (Service.Character == Game.Player.Character) return;
+        if (Character == Game.Player.Character) return;
         Character = Game.Player.Character;
         Service.Character = Character;
     }
 
     private void UpdateCurrentVehicle()
     {
-        if (Service.CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
+        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
 
         CurrentVehicle =
             Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;

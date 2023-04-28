@@ -67,7 +67,8 @@ public class VehicleModsLightsMenu : VehicleModsMenuBase
 
     private void XenonHeadlights()
     {
-        var checkBoxXenonHeadLights = AddCheckbox(VehicleModsItemTitle.XenonHeadLights, () => Service.XenonHeadLights,
+        var checkBoxXenonHeadLights = AddCheckbox(VehicleModsItemTitle.XenonHeadLights,
+            () => Service.XenonHeadLights,
             Service,
             @checked => { Service.XenonHeadLights = @checked; });
     }

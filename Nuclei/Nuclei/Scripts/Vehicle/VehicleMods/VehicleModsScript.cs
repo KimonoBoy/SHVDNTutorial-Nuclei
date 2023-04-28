@@ -22,41 +22,35 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         if (CurrentVehicle == null) return;
 
         Random random = new();
-        try
-        {
-            Service.WheelType = (VehicleWheelType)random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
 
-            foreach (var vehicleMod in Service.VehicleMods)
-                vehicleMod.Index = random.Next(0, vehicleMod.Count + 1);
+        Service.WheelType = (VehicleWheelType)random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
 
-            Service.RimColor =
-                (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        foreach (var vehicleMod in Service.VehicleMods)
+            vehicleMod.Index = random.Next(0, vehicleMod.Count + 1);
 
-            Service.TireSmokeColor = (TireSmokeColor)random.Next(0, Service.TireSmokeColorDictionary.Values.Count + 1);
+        Service.RimColor =
+            (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-            Service.CustomTires = random.Next(0, 2) == 1;
+        Service.TireSmokeColor = (TireSmokeColor)random.Next(0, Service.TireSmokeColorDictionary.Values.Count + 1);
 
-            Service.LicensePlateStyle =
-                (LicensePlateStyle)random.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
+        Service.CustomTires = random.Next(0, 2) == 1;
 
-            Service.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-            Service.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.LicensePlateStyle =
+            (LicensePlateStyle)random.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
 
-            Service.WindowTint = (VehicleWindowTint)random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
+        Service.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-            Service.PearlescentColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.WindowTint = (VehicleWindowTint)random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
 
-            Service.XenonHeadLights = random.Next(0, 2) == 1;
+        Service.PearlescentColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-            Service.NeonLightsLayout =
-                (NeonLightsLayout)random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
+        Service.XenonHeadLights = random.Next(0, 2) == 1;
 
-            Service.NeonLightsColor = (NeonLightsColor)random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
-        }
-        catch (Exception exception)
-        {
-            ExceptionService.RaiseError(exception);
-        }
+        Service.NeonLightsLayout =
+            (NeonLightsLayout)random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
+
+        Service.NeonLightsColor = (NeonLightsColor)random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
     }
 
     private void OnLicensePlateInputRequested(object sender, EventArgs e)
@@ -185,8 +179,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (CurrentVehicle == null) return;
 
-        InstallModKits();
         Service.VehicleMods.Clear();
+        InstallModKits();
         UpdateWheelType();
         UpdateModTypes();
         UpdatePrimaryColor();
@@ -207,6 +201,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     {
         if (CurrentVehicle == null) return;
 
+
         Service.NeonLightsColor = Service.NeonLightsColorDictionary
             .FirstOrDefault(color => color.Value == CurrentVehicle.Mods.NeonLightsColor).Key;
     }
@@ -214,6 +209,7 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
     private void UpdateNeonLightsLayout()
     {
         if (CurrentVehicle == null) return;
+
 
         if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Front) &&
             CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Back) &&
