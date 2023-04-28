@@ -55,9 +55,9 @@ public class VehicleModsMenu : VehicleModsMenuBase
         var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
             () => (int)Service.SecondaryColor, Service,
             (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
-            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length - 1).Select(index =>
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
             {
-                var count = Enum.GetValues(typeof(VehicleColor)).Length - 1;
+                var count = Enum.GetValues(typeof(VehicleColor)).Length;
                 if (index == -1) return $"None {0} / {count - 1}";
                 var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
                 if (index == count)
@@ -74,9 +74,9 @@ public class VehicleModsMenu : VehicleModsMenuBase
         var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
             Service,
             (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
-            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length - 1).Select(index =>
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length).Select(index =>
             {
-                var count = Enum.GetValues(typeof(VehicleColor)).Length - 1;
+                var count = Enum.GetValues(typeof(VehicleColor)).Length;
                 if (index == -1) return $"None {0} / {count - 1}";
                 var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
                 if (index == count)
@@ -108,7 +108,17 @@ public class VehicleModsMenu : VehicleModsMenuBase
         var listItemLicensePlateStyle = AddListItem(VehicleModsItemTitles.LicensePlateStyle,
             () => (int)Service.LicensePlateStyle, Service,
             (value, index) => { Service.LicensePlateStyle = (LicensePlateStyle)index; },
-            typeof(LicensePlateStyle).ToDisplayNameArray());
+            Enumerable.Range(0, Enum.GetValues(typeof(LicensePlateStyle)).Length).Select(index =>
+            {
+                var count = Enum.GetValues(typeof(LicensePlateStyle)).Length;
+                if (index == -1) return $"None {0} / {count - 1}";
+                var localizedName = ((LicensePlateStyle)index).GetLocalizedDisplayNameFromHash();
+                if (index == count)
+                    localizedName += $" {0} / {count - 1}";
+                else
+                    localizedName += $" {index} / {count - 1}";
+                return localizedName;
+            }).ToArray());
         listItemLicensePlateStyle.SetSelectedIndexSafe((int)Service.LicensePlateStyle);
     }
 
