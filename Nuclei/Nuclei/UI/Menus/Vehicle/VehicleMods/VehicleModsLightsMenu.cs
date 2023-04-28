@@ -5,9 +5,9 @@ using Nuclei.Enums.Vehicle;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
-public class VehicleModsHeadLightsMenu : VehicleModsMenuBase
+public class VehicleModsLightsMenu : VehicleModsMenuBase
 {
-    public VehicleModsHeadLightsMenu(Enum @enum) : base(@enum)
+    public VehicleModsLightsMenu(Enum @enum) : base(@enum)
     {
     }
 

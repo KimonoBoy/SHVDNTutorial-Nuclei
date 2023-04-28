@@ -91,8 +91,8 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
-        GameStateTimer.TimerElapsed += ProcessGameStatesTimer;
-        GameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
+        GameStateTimer.SubscribeToTimerElapsed(ProcessGameStatesTimer);
+        GameStateTimer.SubscribeToTimerElapsed(UpdateServiceStatesTimer);
 
         _eventsSubscribed = true;
 
