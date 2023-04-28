@@ -55,7 +55,17 @@ public class VehicleModsMenu : VehicleModsMenuBase
         var listItemSecondaryColor = AddListItem(VehicleModsItemTitles.SecondaryColor,
             () => (int)Service.SecondaryColor, Service,
             (value, index) => { Service.SecondaryColor = (VehicleColor)index; },
-            typeof(VehicleColor).ToDisplayNameArray());
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length - 1).Select(index =>
+            {
+                var count = Enum.GetValues(typeof(VehicleColor)).Length - 1;
+                if (index == -1) return $"None {0} / {count - 1}";
+                var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
+                if (index == count)
+                    localizedName += $" {0} / {count - 1}";
+                else
+                    localizedName += $" {index} / {count - 1}";
+                return localizedName;
+            }).ToArray());
         listItemSecondaryColor.SetSelectedIndexSafe((int)Service.SecondaryColor);
     }
 
@@ -64,7 +74,17 @@ public class VehicleModsMenu : VehicleModsMenuBase
         var listItemPrimaryColor = AddListItem(VehicleModsItemTitles.PrimaryColor, () => (int)Service.PrimaryColor,
             Service,
             (value, index) => { Service.PrimaryColor = (VehicleColor)index; },
-            typeof(VehicleColor).ToDisplayNameArray());
+            Enumerable.Range(0, Enum.GetValues(typeof(VehicleColor)).Length - 1).Select(index =>
+            {
+                var count = Enum.GetValues(typeof(VehicleColor)).Length - 1;
+                if (index == -1) return $"None {0} / {count - 1}";
+                var localizedName = ((VehicleColor)index).GetLocalizedDisplayNameFromHash();
+                if (index == count)
+                    localizedName += $" {0} / {count - 1}";
+                else
+                    localizedName += $" {index} / {count - 1}";
+                return localizedName;
+            }).ToArray());
         listItemPrimaryColor.SetSelectedIndexSafe((int)Service.PrimaryColor);
     }
 
