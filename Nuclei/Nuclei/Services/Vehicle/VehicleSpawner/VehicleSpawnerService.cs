@@ -8,15 +8,10 @@ namespace Nuclei.Services.Vehicle.VehicleSpawner;
 public class VehicleSpawnerService : GenericService<VehicleSpawnerService>
 {
     private VehicleHash _currentVehicleHash;
-
     private ObservableCollection<CustomVehicleDto> _customVehicles = new();
-
     private bool _enginesRunning;
-
     private ObservableCollection<VehicleHash> _favoriteVehicles = new();
-
     private VehicleSeat _vehicleSeat = VehicleSeat.Driver;
-
     private bool _warpInSpawned;
 
     public VehicleHash CurrentVehicleHash

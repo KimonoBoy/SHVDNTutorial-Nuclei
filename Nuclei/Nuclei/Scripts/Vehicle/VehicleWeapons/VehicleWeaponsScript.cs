@@ -155,13 +155,13 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
     private void RemoveDistantProjectiles()
     {
         var projectilesFurtherThanMinProjectileDistance = World.GetAllProjectiles()
-            .Where(p => p.Position.DistanceTo(Character.Position) >= MinProjectileDistance);
+            .OrderByDescending(p => p.Position.DistanceTo(Character.Position));
 
         foreach (var projectile in projectilesFurtherThanMinProjectileDistance)
         {
-            projectile.MarkAsNoLongerNeeded();
-            projectile.Explode();
-            if (projectile.Exists())
+            projectile.IsRecordingCollisions = true;
+            if (projectile.HasCollided) projectile.Explode();
+            if (projectile.IsAlive && projectile.Position.DistanceTo(Character.Position) >= MinProjectileDistance)
                 projectile.Delete();
         }
     }

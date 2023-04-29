@@ -33,8 +33,8 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     private void HeadLightsMenu()
     {
-        var headLightsMenu = new VehicleModsLightsMenu(MenuTitle.Headlights);
-        AddMenu(headLightsMenu);
+        var lightsMenu = new VehicleModsLightsMenu(MenuTitle.Lights);
+        AddMenu(lightsMenu);
     }
 
     private void WindowTint()

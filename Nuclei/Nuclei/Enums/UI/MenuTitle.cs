@@ -44,7 +44,7 @@ public enum MenuTitle
     Bumpers,
 
     [Description("A menu for adjusting vehicle headlights.")]
-    Headlights,
+    Lights,
 
     [Description("Vehicle resprays!")] Respray,
 

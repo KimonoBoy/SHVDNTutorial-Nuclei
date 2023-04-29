@@ -99,22 +99,22 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
             SpawnVehicle(VehicleHash.SultanRS);
     }
 
-    // Handles VehicleSpawned event by spawning the corresponding vehicleDto
+    // Handles VehicleSpawned event by spawning the corresponding vehicle
     private void OnVehicleSpawned(object sender, VehicleHash vehicleHash)
     {
         SpawnVehicle(vehicleHash);
     }
 
     /// <summary>
-    ///     Spawns a vehicleDto with the given VehicleHash at the player's current position.
+    ///     Spawns a vehicle with the given VehicleHash at the player's current position.
     /// </summary>
-    /// <param name="vehicleHash">The VehicleHash of the vehicleDto to be spawned.</param>
+    /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
     private GTA.Vehicle SpawnVehicle(VehicleHash vehicleHash)
     {
         const int maxAttempts = 3;
         var currentAttempt = 1;
 
-        // Attempt to spawn the vehicleDto up to a maximum number of attempts.
+        // Attempt to spawn the vehicle up to a maximum number of attempts.
         while (currentAttempt <= maxAttempts)
             try
             {
@@ -143,7 +143,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     /// <summary>
     ///     Creates a Model object from the given VehicleHash and validates its existence in the game files.
     /// </summary>
-    /// <param name="vehicleHash">The VehicleHash of the vehicleDto model to be created.</param>
+    /// <param name="vehicleHash">The VehicleHash of the vehicle model to be created.</param>
     /// <returns>A validated Model object corresponding to the given VehicleHash.</returns>
     /// <exception cref="VehicleModelNotFoundException">Thrown when the model is invalid.</exception>
     /// <exception cref="VehicleModelRequestTimedOutException">
@@ -161,7 +161,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         {
             // Request the model and wait up to 1000 ms for it to load.
             if (!vehicleModel.Request(1000))
-                throw new VehicleModelRequestTimedOutException($"Loading of vehicleDto model timed out: {vehicleHash}");
+                throw new VehicleModelRequestTimedOutException($"Loading of vehicle model timed out: {vehicleHash}");
         }
         else
         {
@@ -172,13 +172,13 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Creates and positions a vehicleDto using the provided Model object.
+    ///     Creates and positions a vehicle using the provided Model object.
     /// </summary>
-    /// <param name="vehicleModel">The Model object of the vehicleDto to be created.</param>
+    /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
     /// <param name="vehicleHash">The vehicleHash</param>
-    /// <returns>The spawned vehicleDto.</returns>
+    /// <returns>The spawned vehicle.</returns>
     /// <exception cref="VehicleSpawnFailedException">
-    ///     Thrown when the vehicleDto object is not created successfully or does not
+    ///     Thrown when the vehicle object is not created successfully or does not
     ///     exist.
     /// </exception>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
@@ -198,16 +198,16 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         if (!vehicle.Exists())
             throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
 
-        // Set the vehicleDto's properties and place the player inside if necessary.
+        // Set the vehicle's properties and place the player inside if necessary.
         InitializeVehicle(vehicle);
 
         return vehicle;
     }
 
     /// <summary>
-    ///     Calculates the vehicleDto heading based on the player's heading and the WarpInSpawned setting.
+    ///     Calculates the vehicle heading based on the player's heading and the WarpInSpawned setting.
     /// </summary>
-    /// <returns>A float value representing the vehicleDto heading.</returns>
+    /// <returns>A float value representing the vehicle heading.</returns>
     private float GetVehicleHeading()
     {
         if (!Service.WarpInSpawned) return Game.Player.Character.Heading + 90.0f;
@@ -216,16 +216,16 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Calculates the vehicleDto position in front of the player.
+    ///     Calculates the vehicle position in front of the player.
     /// </summary>
-    /// <returns>A Vector3 value representing the vehicleDto position.</returns>
+    /// <returns>A Vector3 value representing the vehicle position.</returns>
     private Vector3 GetVehiclePosition()
     {
         return Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f;
     }
 
     /// <summary>
-    ///     Sets the vehicleDto's properties and places the player inside if WarpInSpawned is enabled.
+    ///     Sets the vehicle's properties and places the player inside if WarpInSpawned is enabled.
     /// </summary>
     /// <param name="vehicle">The GTA.Vehicle object to initialize.</param>
     private void InitializeVehicle(GTA.Vehicle vehicle)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GTA;
 using GTA.Native;
 using Nuclei.Scripts.Generics;
@@ -60,18 +61,24 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void ProcessLockDoors()
     {
-        if (!Character.IsGettingIntoVehicle && CurrentVehicle == null) return;
-        if (Character.IsGettingIntoVehicle)
+        // if (Character.IsGettingIntoVehicle)
+        // {
+        //     var vehicle = World.GetClosestVehicle(Character.Position, 10.0f);
+        //     if (vehicle != null)
+        //         vehicle.LockStatus = VehicleLockStatus.Unlocked;
+        // }
+        //
+        // if (CurrentVehicle == null) return;
+        //
+        // CurrentVehicle.LockStatus =
+        //     Service.DoorsAlwaysLocked ? VehicleLockStatus.CannotEnter : VehicleLockStatus.Unlocked;
+        World.GetAllProjectiles().ToList().ForEach(p =>
         {
-            var vehicle = World.GetClosestVehicle(Character.Position, 10.0f);
-            if (vehicle != null)
-                vehicle.LockStatus = VehicleLockStatus.Unlocked;
-        }
+            if (p.WeaponHash != WeaponHash.Flare) return;
 
-        if (CurrentVehicle == null) return;
-
-        CurrentVehicle.LockStatus =
-            Service.DoorsAlwaysLocked ? VehicleLockStatus.CannotEnter : VehicleLockStatus.Unlocked;
+            p.Model.MarkAsNoLongerNeeded();
+            p.MarkAsNoLongerNeeded();
+        });
     }
 
     private void ProcessDriveUnderWater()
