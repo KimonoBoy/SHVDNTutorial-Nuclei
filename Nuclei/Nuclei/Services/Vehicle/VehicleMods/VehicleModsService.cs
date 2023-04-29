@@ -17,9 +17,11 @@ public class VehicleModsService : GenericService<VehicleModsService>
     private NeonLightsLayout _neonLightsLayout;
     private VehicleColor _pearlescentColor;
     private VehicleColor _primaryColor;
+    private bool _rainbowMode;
     private VehicleColor _rimColor;
     private VehicleColor _secondaryColor;
     private TireSmokeColor _tireSmokeColor;
+    private bool _turbo;
 
     private List<VehicleMod> _vehicleMods = new();
     private VehicleWheelType _wheelType;
@@ -223,6 +225,30 @@ public class VehicleModsService : GenericService<VehicleModsService>
         {
             if (value == _neonLightsColor) return;
             _neonLightsColor = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public bool Turbo
+    {
+        get => _turbo;
+        set
+        {
+            if (value == _turbo) return;
+            _turbo = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public bool RainbowMode
+    {
+        get => _rainbowMode;
+        set
+        {
+            if (value == _rainbowMode) return;
+            _rainbowMode = value;
             OnPropertyChanged();
         }
     }

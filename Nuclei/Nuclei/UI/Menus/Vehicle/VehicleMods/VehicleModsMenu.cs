@@ -22,7 +22,14 @@ public class VehicleModsMenu : VehicleModsMenuBase
         BumpersMenu();
         HeadLightsMenu();
         ResprayMenu();
+        TurboCharged();
         WindowTint();
+    }
+
+    private void TurboCharged()
+    {
+        var checkBoxTurbo = AddCheckbox(VehicleModsItemTitle.Turbo, () => Service.Turbo, Service,
+            @checked => Service.Turbo = @checked);
     }
 
     private void ResprayMenu()

@@ -24,6 +24,13 @@ public class VehicleModsResprayMenu : VehicleModsMenuBase
         PrimaryColor();
         SecondaryColor();
         PearlescentColor();
+        RainbowMode();
+    }
+
+    private void RainbowMode()
+    {
+        var checkBoxRainbowMode = AddCheckbox(VehicleModsItemTitle.RainbowMode, () => Service.RainbowMode, Service,
+            @checked => Service.RainbowMode = @checked);
     }
 
     private void PearlescentColor()

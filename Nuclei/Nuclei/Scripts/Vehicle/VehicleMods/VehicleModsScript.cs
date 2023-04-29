@@ -10,18 +10,40 @@ namespace Nuclei.Scripts.Vehicle.VehicleMods;
 
 public class VehicleModsScript : GenericScriptBase<VehicleModsService>
 {
+    private readonly Random random = new();
+    private DateTime _rainBowModeInterval = DateTime.UtcNow;
+
     protected override void SubscribeToEvents()
     {
+        Tick += OnTick;
         Service.PropertyChanged += OnPropertyChanged;
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
         Service.RandomizeAllModsRequested += OnRandomizeAllModsRequested;
     }
 
-    private void OnRandomizeAllModsRequested(object sender, EventArgs e)
+    private void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        Random random = new();
+        ProcessRainbowMode();
+    }
+
+    private void ProcessRainbowMode()
+    {
+        if (!Service.RainbowMode) return;
+        if ((DateTime.UtcNow - _rainBowModeInterval).TotalMilliseconds <= 50) return;
+
+        CurrentVehicle.Mods.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        CurrentVehicle.Mods.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        CurrentVehicle.Mods.PearlescentColor =
+            (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+
+        _rainBowModeInterval = DateTime.UtcNow;
+    }
+
+    private void OnRandomizeAllModsRequested(object sender, EventArgs e)
+    {
+        if (CurrentVehicle == null) return;
 
         Service.WheelType = (VehicleWheelType)random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
 
@@ -51,6 +73,8 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
             (NeonLightsLayout)random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
 
         Service.NeonLightsColor = (NeonLightsColor)random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
+
+        Service.Turbo = random.Next(0, 2) == 1;
     }
 
     private void OnLicensePlateInputRequested(object sender, EventArgs e)
@@ -151,6 +175,9 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
                 CurrentVehicle.Mods.NeonLightsColor = Service.NeonLightsColorDictionary
                     .FirstOrDefault(color => color.Key == Service.NeonLightsColor).Value;
                 break;
+            case nameof(Service.Turbo):
+                CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = Service.Turbo;
+                break;
         }
     }
 
@@ -183,18 +210,26 @@ public class VehicleModsScript : GenericScriptBase<VehicleModsService>
         InstallModKits();
         UpdateWheelType();
         UpdateModTypes();
+        UpdateTurbo();
         UpdatePrimaryColor();
         UpdateSecondaryColor();
         UpdatePearlescentColor();
         UpdateWindowTint();
-        UpdateXenonHeadLights();
-        UpdateNeonLightsLayout();
-        UpdateNeonLightsColor();
         UpdateRimColor();
         UpdateTireSmokeColor();
         UpdateCustomTires();
+        UpdateXenonHeadLights();
+        UpdateNeonLightsLayout();
+        UpdateNeonLightsColor();
         UpdateLicensePlate();
         UpdateLicensePlateStyle();
+    }
+
+    private void UpdateTurbo()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.Turbo = CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled;
     }
 
     private void UpdateNeonLightsColor()

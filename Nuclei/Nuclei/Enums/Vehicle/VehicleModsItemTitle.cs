@@ -10,9 +10,6 @@ public enum VehicleModsItemTitle
     [Description("Change the style of your license plate.")]
     LicensePlateStyle,
 
-    [Description("Change the type of your license plate.")]
-    LicensePlateType,
-
     [Description("Randomize all valid vehicle mods.")]
     RandomizeMods,
 
@@ -21,6 +18,8 @@ public enum VehicleModsItemTitle
 
     [Description("Change the rim color of your wheels.")]
     RimColor,
+
+    [Description("Are you using Custom Tires?")]
     CustomTires,
 
     [Description("Change the colors of your tires smoke.")]
@@ -35,9 +34,6 @@ public enum VehicleModsItemTitle
     [Description("Where under the vehicle should the neon lights be placed?")]
     NeonLightsLayout,
 
-    [Description("Change the color type.")]
-    ColorType,
-
     [Description("Your vehicles primary color.")]
     PrimaryColor,
 
@@ -48,5 +44,10 @@ public enum VehicleModsItemTitle
     PearlescentColor,
 
     [Description("The color of your neon lights.")]
-    NeonLightsColor
+    NeonLightsColor,
+
+    [Description("Activate Turbo.")] Turbo,
+
+    [Description("Every second the color of your ")]
+    RainbowMode
 }
