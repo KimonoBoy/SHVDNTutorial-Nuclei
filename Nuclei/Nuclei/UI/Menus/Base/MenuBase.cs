@@ -15,7 +15,7 @@ using Nuclei.UI.Menus.Base.ItemFactory;
 using Nuclei.UI.Menus.Base.ItemFactory.CustomItems;
 using Font = GTA.UI.Font;
 
-namespace NewUltimateTest.UI.Menus.Base;
+namespace Nuclei.UI.Menus.Base;
 
 public abstract class MenuBase : NativeMenu
 {

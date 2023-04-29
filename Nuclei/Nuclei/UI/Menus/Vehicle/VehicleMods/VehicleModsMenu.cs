@@ -22,8 +22,19 @@ public class VehicleModsMenu : VehicleModsMenuBase
         BumpersMenu();
         HeadLightsMenu();
         ResprayMenu();
+        InteriorMenu();
         TurboCharged();
         WindowTint();
+    }
+
+    private void InteriorMenu()
+    {
+        if (Service.VehicleMods.Count(vehicleMod => vehicleMod.Type is VehicleModType.Dashboard
+                or VehicleModType.DialDesign or VehicleModType.DoorSpeakers
+                or VehicleModType.Ornaments or VehicleModType.Seats or VehicleModType.Speakers
+                or VehicleModType.SteeringWheels) <= 0) return;
+        var interiorMenu = new VehicleModsInteriorMenu(MenuTitle.Interior);
+        AddMenu(interiorMenu);
     }
 
     private void TurboCharged()
@@ -106,14 +117,17 @@ public class VehicleModsMenu : VehicleModsMenuBase
 
     protected override IEnumerable<VehicleMod> GetValidMods()
     {
-        return Service.VehicleMods.Where(vehicleMod =>
-            vehicleMod.Type != VehicleModType.FrontWheel && vehicleMod.Type != VehicleModType.RearWheel);
+        return Service.VehicleMods.Where(vehicleMod => vehicleMod.Type is not
+            (VehicleModType.FrontWheel or VehicleModType.RearWheel or VehicleModType.FrontBumper or
+            VehicleModType.RearBumper or VehicleModType.Dashboard or VehicleModType.DialDesign or
+            VehicleModType.DoorSpeakers or VehicleModType.Speakers or VehicleModType.Ornaments or
+            VehicleModType.Seats or VehicleModType.SteeringWheels));
     }
 
     private void BumpersMenu()
     {
-        if (Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.FrontBumper) &&
-            Service.VehicleMods.All(vehicleMod => vehicleMod.Type != VehicleModType.RearBumper)) return;
+        if (Service.VehicleMods.Count(vehicleMod => vehicleMod.Type is VehicleModType.FrontBumper
+                or VehicleModType.RearBumper) <= 0) return;
         var bumpersMenu = new VehicleModsBumpersMenu(MenuTitle.Bumpers);
         AddMenu(bumpersMenu);
     }

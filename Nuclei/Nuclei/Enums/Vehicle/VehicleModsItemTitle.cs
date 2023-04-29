@@ -48,6 +48,6 @@ public enum VehicleModsItemTitle
 
     [Description("Activate Turbo.")] Turbo,
 
-    [Description("Every second the color of your ")]
+    [Description("Every 50ms the color of your vehicle changes.")]
     RainbowMode
 }

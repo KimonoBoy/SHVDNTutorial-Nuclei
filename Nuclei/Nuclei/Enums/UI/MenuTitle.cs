@@ -59,5 +59,6 @@ public enum MenuTitle
 
     [Description("Save and Load")] Storage,
 
-    [Description("Change HotKeys")] HotKeys
+    [Description("Change HotKeys")] HotKeys,
+    Interior
 }
