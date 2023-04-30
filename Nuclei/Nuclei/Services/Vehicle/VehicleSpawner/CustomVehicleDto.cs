@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using GTA;
 using Nuclei.Enums.Vehicle;
 
@@ -8,31 +7,39 @@ namespace Nuclei.Services.Vehicle.VehicleSpawner;
 public class CustomVehicleDto
 {
     public string Title { get; set; }
+
     public VehicleHash VehicleHash { get; set; }
     public List<CustomVehicleModDto> VehicleMods { get; set; } = new();
-    public string LicensePlate { get; set; }
-    public LicensePlateStyle LicensePlateStyle { get; set; }
+
     public VehicleWheelType WheelType { get; set; }
+
     public VehicleColor RimColor { get; set; }
-    public VehicleColor PrimaryColor { get; set; }
-    public VehicleColor SecondaryColor { get; set; }
-    public Color TireSmokeColor { get; set; }
-    public VehicleWindowTint WindowTint { get; set; }
+
+    public TireSmokeColor TireSmokeColor { get; set; }
+
     public bool CustomTires { get; set; }
+
+    public string LicensePlate { get; set; }
+
+    public LicensePlateStyle LicensePlateStyle { get; set; }
+
+    public VehicleColor PrimaryColor { get; set; }
+
+    public VehicleColor SecondaryColor { get; set; }
+
+    public VehicleColor PearlescentColor { get; set; }
+
+    public VehicleWindowTint WindowTint { get; set; }
+
     public bool XenonHeadLights { get; set; }
+
     public NeonLightsLayout NeonLightsLayout { get; set; }
+
+    public NeonLightsColor NeonLightsColor { get; set; }
+
     public bool Turbo { get; set; }
 
-
-    /*
-     * Below will be implemented later.
-     */
-    public VehicleColor PearlColor { get; set; }
-    public VehicleColor TrimColor { get; set; }
-    public VehicleColor DashboardColor { get; set; }
-    public VehicleColor CustomPrimaryColor { get; set; }
-    public VehicleColor CustomSecondaryColor { get; set; }
-    public VehicleColor CustomTiresColor { get; set; }
+    public bool RainbowMode { get; set; }
 }
 
 public class CustomVehicleModDto

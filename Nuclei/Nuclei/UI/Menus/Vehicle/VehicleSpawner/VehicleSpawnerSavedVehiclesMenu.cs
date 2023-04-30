@@ -9,6 +9,7 @@ using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Exception;
+using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
@@ -114,17 +115,28 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
                     {
                         Title = userInput,
                         VehicleHash = (VehicleHash)Service.CurrentVehicle.Model.Hash,
-                        LicensePlate = Service.CurrentVehicle.Mods.LicensePlate,
-                        LicensePlateStyle = Service.CurrentVehicle.Mods.LicensePlateStyle,
-                        WheelType = Service.CurrentVehicle.Mods.WheelType,
-                        RimColor = Service.CurrentVehicle.Mods.RimColor,
-                        CustomTires = Service.CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation,
-                        TireSmokeColor = Service.CurrentVehicle.Mods.TireSmokeColor,
-                        WindowTint = Service.CurrentVehicle.Mods.WindowTint,
-                        XenonHeadLights = Service.CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled,
-                        PrimaryColor = Service.CurrentVehicle.Mods.PrimaryColor,
-                        SecondaryColor = Service.CurrentVehicle.Mods.SecondaryColor,
-                        Turbo = Service.CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled
+
+                        LicensePlate = VehicleModsService.Instance.LicensePlate,
+                        LicensePlateStyle = VehicleModsService.Instance.LicensePlateStyle,
+
+                        WheelType = VehicleModsService.Instance.WheelType,
+                        CustomTires = VehicleModsService.Instance.CustomTires,
+                        RimColor = VehicleModsService.Instance.RimColor,
+
+                        PrimaryColor = VehicleModsService.Instance.PrimaryColor,
+                        SecondaryColor = VehicleModsService.Instance.SecondaryColor,
+                        PearlescentColor = VehicleModsService.Instance.PearlescentColor,
+
+                        NeonLightsLayout = VehicleModsService.Instance.NeonLightsLayout,
+                        NeonLightsColor = VehicleModsService.Instance.NeonLightsColor,
+
+                        WindowTint = VehicleModsService.Instance.WindowTint,
+
+                        XenonHeadLights = VehicleModsService.Instance.XenonHeadLights,
+                        Turbo = VehicleModsService.Instance.Turbo,
+
+                        TireSmokeColor = VehicleModsService.Instance.TireSmokeColor,
+                        RainbowMode = VehicleModsService.Instance.RainbowMode
                     };
 
                     foreach (var vehicleMod in Service.CurrentVehicle.Mods.ToArray())

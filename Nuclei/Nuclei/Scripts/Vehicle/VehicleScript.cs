@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using GTA;
+using GTA.Math;
 using GTA.Native;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle;
@@ -61,24 +61,11 @@ public class VehicleScript : GenericScriptBase<VehicleService>
 
     private void ProcessLockDoors()
     {
-        // if (Character.IsGettingIntoVehicle)
-        // {
-        //     var vehicle = World.GetClosestVehicle(Character.Position, 10.0f);
-        //     if (vehicle != null)
-        //         vehicle.LockStatus = VehicleLockStatus.Unlocked;
-        // }
-        //
-        // if (CurrentVehicle == null) return;
-        //
-        // CurrentVehicle.LockStatus =
-        //     Service.DoorsAlwaysLocked ? VehicleLockStatus.CannotEnter : VehicleLockStatus.Unlocked;
-        World.GetAllProjectiles().ToList().ForEach(p =>
-        {
-            if (p.WeaponHash != WeaponHash.Flare) return;
-
-            p.Model.MarkAsNoLongerNeeded();
-            p.MarkAsNoLongerNeeded();
-        });
+        /*
+         * We'll implement this later.
+         *
+         * Need to think of a good way to make this less intrusive for the player.
+         */
     }
 
     private void ProcessDriveUnderWater()
@@ -94,16 +81,21 @@ public class VehicleScript : GenericScriptBase<VehicleService>
         if ((DateTime.UtcNow - _speedBoostTimer).TotalMilliseconds < 100) return;
 
         _speedBoostTimer = DateTime.UtcNow;
-
-        CurrentVehicle.Speed += Service.SpeedBoost / 1.5f;
+        CurrentVehicle.Speed += Service.SpeedBoost;
+        CurrentVehicle.ApplyForce(Vector3.WorldUp * -2.0f);
     }
 
     private void ProcessIndestructible()
     {
         if (CurrentVehicle.IsInvincible == Service.IsIndestructible) return;
 
+        CurrentVehicle.Repair();
         CurrentVehicle.IsInvincible = Service.IsIndestructible;
         CurrentVehicle.CanBeVisiblyDamaged = !Service.IsIndestructible;
+        CurrentVehicle.CanTiresBurst = !Service.IsIndestructible;
+        CurrentVehicle.CanEngineDegrade = !Service.IsIndestructible;
+        CurrentVehicle.CanWheelsBreak = !Service.IsIndestructible;
+        Function.Call(Hash.SET_DONT_PROCESS_VEHICLE_GLASS, CurrentVehicle, Service.IsIndestructible);
     }
 
     private void ProcessSeatBelt()

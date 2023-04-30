@@ -3,9 +3,11 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Vehicle;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
+using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Control = GTA.Control;
 
@@ -43,35 +45,75 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
 
     private void OnCustomVehicleSpawned(object sender, CustomVehicleDto customVehicleDto)
     {
-        try
+        var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
+        // Install modkit first, otherwise the game will crash
+        vehicle.Mods.InstallModKit();
+        vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
+
+        // Wheels
+        vehicle.Mods.WheelType = customVehicleDto.WheelType;
+        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
+        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
+
+        // Mod Types
+        foreach (var customVehicleMod in customVehicleDto.VehicleMods)
+            vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
+
+        // License Plate
+        vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
+        vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
+
+        // Toggles
+        vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
+        vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
+        VehicleModsService.Instance.RainbowMode = customVehicleDto.RainbowMode;
+
+        switch (customVehicleDto.NeonLightsLayout)
         {
-            var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
-            vehicle.Mods.InstallModKit();
-            vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
-            vehicle.Mods.WheelType = customVehicleDto.WheelType;
-            vehicle.Mods.RimColor = customVehicleDto.RimColor;
-            vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
-            vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
-
-            foreach (var customVehicleMod in customVehicleDto.VehicleMods)
-                vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
-
-            vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
-            vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
-            vehicle.Mods.TireSmokeColor = customVehicleDto.TireSmokeColor;
-
-            vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
-            vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
-
-            vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
-            vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
-
-            vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
+            case NeonLightsLayout.Front:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.Back:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.FrontAndBack:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
+            case NeonLightsLayout.Sides:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                break;
+            case NeonLightsLayout.FrontBackAndSides:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
-        catch (Exception e)
-        {
-            ExceptionService.RaiseError(e);
-        }
+
+        // Colors and Tints
+        vehicle.Mods.NeonLightsColor = VehicleModsService.Instance.NeonLightsColorDictionary
+            .FirstOrDefault(neonLightsColor => neonLightsColor.Key == customVehicleDto.NeonLightsColor).Value;
+        vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
+        vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
+        vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
+        vehicle.Mods.PearlescentColor = customVehicleDto.PearlescentColor;
+        vehicle.Mods.RimColor = customVehicleDto.RimColor;
+        vehicle.Mods.TireSmokeColor = VehicleModsService.Instance.TireSmokeColorDictionary
+            .FirstOrDefault(color => color.Key == customVehicleDto.TireSmokeColor).Value;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
