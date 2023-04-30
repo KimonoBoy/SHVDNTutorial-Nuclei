@@ -28,7 +28,12 @@ public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
     private void OnShown(object sender, EventArgs e)
     {
         Service.PropertyChanged += OnPropertyChanged;
-        if (Service.CurrentVehicle == null) return;
+        if (Service.CurrentVehicle == null)
+        {
+            NavigateToMenu(MenuTitle.Vehicle);
+            return;
+        }
+
         GenerateMenu();
     }
 

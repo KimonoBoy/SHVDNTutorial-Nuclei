@@ -80,6 +80,7 @@
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />
+    <Compile Include="Scripts\Weapon\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponsScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />

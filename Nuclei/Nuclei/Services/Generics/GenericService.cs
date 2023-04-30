@@ -16,6 +16,7 @@ public abstract class GenericService<TService> : ObservableService where TServic
 
     private Ped _character;
     private GTA.Vehicle _currentVehicle;
+    private GTA.Weapon _currentWeapon;
 
     [JsonIgnore]
     public Ped Character
@@ -37,6 +38,18 @@ public abstract class GenericService<TService> : ObservableService where TServic
         {
             if (_currentVehicle == value) return;
             _currentVehicle = value;
+            OnPropertyChanged();
+        }
+    }
+
+    [JsonIgnore]
+    public GTA.Weapon CurrentWeapon
+    {
+        get => _currentWeapon;
+        set
+        {
+            if (_currentWeapon == value) return;
+            _currentWeapon = value;
             OnPropertyChanged();
         }
     }

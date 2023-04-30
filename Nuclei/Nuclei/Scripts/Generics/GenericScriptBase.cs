@@ -20,6 +20,7 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
     private readonly StorageService _storageService = StorageService.Instance;
 
     private readonly CustomTimer GameStateTimer = new(100);
+    private GTA.Weapon _currentWeapon;
 
     protected GenericScriptBase()
     {
@@ -65,6 +66,16 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         }
     }
 
+    public GTA.Weapon CurrentWeapon
+    {
+        get => _currentWeapon;
+        set
+        {
+            if (_currentWeapon == Game.Player.Character.Weapons.Current) return;
+            _currentWeapon = value;
+        }
+    }
+
     public static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
 
     public void Dispose()
@@ -106,9 +117,16 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         UpdateCurrentCharacter();
         UpdateCurrentVehicle();
         UpdateLastVehicle();
+        UpdateCurrentWeapon();
 
         if (_storageService.AutoSave && Game.IsPaused)
             Save();
+    }
+
+    private void UpdateCurrentWeapon()
+    {
+        CurrentWeapon = Game.Player.Character.Weapons.Current;
+        Service.CurrentWeapon = CurrentWeapon;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -163,15 +181,12 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
     private void UpdateCurrentCharacter()
     {
-        if (Character == Game.Player.Character) return;
         Character = Game.Player.Character;
         Service.Character = Character;
     }
 
     private void UpdateCurrentVehicle()
     {
-        if (CurrentVehicle == Game.Player.Character.CurrentVehicle) return;
-
         CurrentVehicle =
             Game.Player.Character.IsInVehicle() ? Game.Player.Character.CurrentVehicle : null;
         Service.CurrentVehicle = CurrentVehicle;

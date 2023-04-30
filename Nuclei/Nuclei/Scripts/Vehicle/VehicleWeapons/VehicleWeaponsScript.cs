@@ -83,8 +83,7 @@ public class VehicleWeaponsScript : GenericScriptBase<VehicleWeaponsService>
         var raycastResult = World.Raycast(
             GameplayCamera.Position,
             GameplayCamera.Position + GameplayCamera.Direction * maxDistance,
-            IntersectFlags.Everything,
-            Character);
+            IntersectFlags.Everything, Character);
 
         if (raycastResult.DidHit)
             return raycastResult.HitPosition;
