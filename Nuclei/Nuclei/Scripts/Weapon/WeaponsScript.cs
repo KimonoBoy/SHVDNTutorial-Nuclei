@@ -15,9 +15,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
-    private Vector3 _previousCameraDirection;
-
-    private DateTime _previousCameraDirectionTime;
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
 
     protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
@@ -68,7 +65,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             {
                 _grabbedEntity = targetedEntity;
                 _grabbedEntityDistance = Vector3.Distance(Character.Position, _grabbedEntity.Position);
-                _previousCameraDirection = GameplayCamera.Direction;
             }
         }
         else
@@ -103,10 +99,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
                 var releaseVelocity = accumulatedVelocity * 500.0f;
                 _grabbedEntity.ApplyForce(releaseVelocity);
                 _grabbedEntity = null;
-            }
-            else
-            {
-                _previousCameraDirection = GameplayCamera.Direction;
             }
 
             _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
