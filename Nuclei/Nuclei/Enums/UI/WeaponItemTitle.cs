@@ -22,7 +22,7 @@ public enum WeaponItemTitle
     [Description("Levitate objects, vehicles and people with your gun.")]
     LevitationGun,
 
-    [Description("Implemented later...")] GravityGun,
+    [Description("Aim at an entity and hold down J.")] GravityGun,
 
     [Description("Teleport to any location by shooting at the location.")]
     TeleportGun,
