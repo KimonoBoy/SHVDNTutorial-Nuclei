@@ -10,7 +10,7 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
   * Release the target by releasing **J**  
   * By moving your cursor around quickly while releasing the **J** key sends the target flying.  
   
-We'll improve on this Gravity Gun, by setting a timer for easier throwing object. We'll also add functionality for changing the distance between you and the grabbed target.  
+Gravity gun now accumulates velocity over time to yield a great throwing experience.
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
