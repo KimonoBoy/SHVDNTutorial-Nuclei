@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
@@ -11,6 +12,7 @@ namespace Nuclei.Scripts.Weapon;
 
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
+    private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
     private Vector3 _previousCameraDirection;
@@ -71,6 +73,12 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         }
         else
         {
+            if (_grabbedEntity is Ped ped)
+            {
+                ped.Task.ClearAll();
+                ped.Task.LookAt(Character);
+            }
+
             _grabbedEntity.Draw3DRectangleAroundObject();
 
             var cameraPosition = GameplayCamera.Position;
@@ -91,7 +99,8 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
             if (!Game.IsKeyPressed(Keys.J))
             {
-                var releaseVelocity = (GameplayCamera.Direction - _previousCameraDirection) * 5000.0f;
+                var accumulatedVelocity = CalculateAccumulatedVelocity(200);
+                var releaseVelocity = accumulatedVelocity * 500.0f;
                 _grabbedEntity.ApplyForce(releaseVelocity);
                 _grabbedEntity = null;
             }
@@ -99,6 +108,9 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             {
                 _previousCameraDirection = GameplayCamera.Direction;
             }
+
+            _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
+                DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
         }
     }
 
@@ -115,6 +127,20 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         }
 
         return null;
+    }
+
+    private Vector3 CalculateAccumulatedVelocity(long durationMs)
+    {
+        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        var accumulatedVelocity = new Vector3();
+
+        _cameraDirectionsTimestamps.RemoveAll(timestampedDirection =>
+            currentTime - timestampedDirection.Item2 > durationMs);
+
+        for (var i = 1; i < _cameraDirectionsTimestamps.Count; i++)
+            accumulatedVelocity += _cameraDirectionsTimestamps[i].Item1 - _cameraDirectionsTimestamps[i - 1].Item1;
+
+        return accumulatedVelocity;
     }
 
     private void ProcessTeleportGun()
