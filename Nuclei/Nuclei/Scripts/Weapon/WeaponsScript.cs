@@ -59,7 +59,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             if (targetedEntity == null) return;
 
             if (targetedEntity is Ped ped) targetedEntity = ped.IsInVehicle() ? ped.CurrentVehicle : ped;
-            if (targetedEntity is Prop prop) targetedEntity = prop.IsAttached() ? prop.AttachedEntity : prop;
 
             if (Game.IsKeyPressed(Keys.J))
             {
