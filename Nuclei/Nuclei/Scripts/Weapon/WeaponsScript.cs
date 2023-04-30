@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using GTA.Native;
@@ -10,6 +11,11 @@ namespace Nuclei.Scripts.Weapon;
 
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
+    private Entity _grabbedEntity;
+    private float _grabbedEntityDistance;
+    private Vector3 _previousCameraDirection;
+
+    private DateTime _previousCameraDirectionTime;
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
 
     protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
@@ -35,34 +41,80 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
-        Character.Draw3DRectangleAroundObject();
         ProcessFireBullets();
         ProcessInfiniteAmmo();
         ProcessNoReload();
         ProcessExplosiveBullets();
         ProcessLevitationGun();
+        ProcessGravityGun();
         ProcessTeleportGun();
-        ProcessShootVehicles();
     }
 
-    private void ProcessShootVehicles()
+    private void ProcessGravityGun()
     {
-        // if (!Character.IsAiming || !Character.IsShooting) return;
-        // var model = new Model(VehicleHash.Adder);
-        // model.Request(1000);
-        // if (!model.IsLoaded) return;
-        // Vector3? targetLocation;
-        // var vehicle = World.CreateVehicle(model,
-        //     Character.Position + Character.ForwardVector * 2.0f,
-        //     Character.Heading);
-        // var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
-        //
-        // if (crosshairCoords.DidHit)
-        //     targetLocation = crosshairCoords.HitPosition;
-        // else
-        //     targetLocation = GameplayCamera.Position + GameplayCamera.Direction;
-        //
-        // vehicle.ApplyForce(targetLocation.Value + Character.ForwardVector * 1000.0f);
+        if (!Service.GravityGun || !Character.IsAiming) return;
+
+        if (_grabbedEntity == null)
+        {
+            var targetedEntity = Game.Player.TargetedEntity;
+            if (targetedEntity == null) return;
+
+            if (targetedEntity is Ped ped) targetedEntity = ped.IsInVehicle() ? ped.CurrentVehicle : ped;
+            if (targetedEntity is Prop prop) targetedEntity = prop.IsAttached() ? prop.AttachedEntity : prop;
+
+            if (Game.IsKeyPressed(Keys.J))
+            {
+                _grabbedEntity = targetedEntity;
+                _grabbedEntityDistance = Vector3.Distance(Character.Position, _grabbedEntity.Position);
+                _previousCameraDirection = GameplayCamera.Direction;
+            }
+        }
+        else
+        {
+            _grabbedEntity.Draw3DRectangleAroundObject();
+
+            var cameraPosition = GameplayCamera.Position;
+            var cameraDirection = GameplayCamera.Direction;
+
+            var raycastHitPlane = RaycastPlaneIntersection(cameraPosition, cameraDirection, Character.Position,
+                Vector3.WorldUp, _grabbedEntityDistance);
+            var targetPosition = raycastHitPlane ?? cameraPosition + cameraDirection * _grabbedEntityDistance;
+
+            var min = new Vector3(-0.5f, -0.5f, 0f);
+            var max = new Vector3(0.5f, 0.5f, 1f);
+            var boundingBoxCorners = _grabbedEntity.GetBoundingBoxCorners(min, max);
+            var entityHeight = Math.Abs(boundingBoxCorners[4].Z - boundingBoxCorners[0].Z);
+            var verticalOffset = entityHeight * 1.0f;
+
+            targetPosition.Z -= verticalOffset;
+            _grabbedEntity.Position = targetPosition;
+
+            if (!Game.IsKeyPressed(Keys.J))
+            {
+                var releaseVelocity = (GameplayCamera.Direction - _previousCameraDirection) * 5000.0f;
+                _grabbedEntity.ApplyForce(releaseVelocity);
+                _grabbedEntity = null;
+            }
+            else
+            {
+                _previousCameraDirection = GameplayCamera.Direction;
+            }
+        }
+    }
+
+    private Vector3? RaycastPlaneIntersection(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planePoint,
+        Vector3 planeNormal, float maxDistance)
+    {
+        var denom = Vector3.Dot(rayDirection, planeNormal);
+
+        if (Math.Abs(denom) > 0.0001f)
+        {
+            var t = Vector3.Dot(planePoint - rayOrigin, planeNormal) / denom;
+
+            if (t >= 0 && t <= maxDistance) return rayOrigin + rayDirection * t;
+        }
+
+        return null;
     }
 
     private void ProcessTeleportGun()

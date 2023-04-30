@@ -69,7 +69,7 @@ public static class EntityExtensions
         }
     }
 
-    private static Vector3[] GetBoundingBoxCorners(Entity entity, Vector3 min, Vector3 max)
+    public static Vector3[] GetBoundingBoxCorners(this Entity entity, Vector3 min, Vector3 max)
     {
         var corners = new Vector3[8];
         corners[0] = entity.GetOffsetPosition(new Vector3(min.X, min.Y, min.Z));
