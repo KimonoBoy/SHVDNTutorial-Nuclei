@@ -76,9 +76,9 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [ ] Vehicle Gun Menu - Shoot vehicles.
 - [ ] Portal Gun - Was a fun game, wasn't it?
 - [ ] Seagull Gun - Everything you shoot turns into a Seagull
-- [ ] Aimbot - Them headshots, huh.
 - [ ] Grappling Gun
 - [ ] Ultra Rapid Fire
+- [ ] Guided Bullets - Lock on to all targets on screen and shoot guided bullets at them.
 
 Below features will be written later
 * **Pedestrians**
