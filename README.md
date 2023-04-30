@@ -85,6 +85,8 @@ Below features will be written later
 * **Props**
 * **World**
 
+Save and load + auto-save and load also works! But this will be reworked later. 
+
 ## Hotkeys
 At the moment hotkeys are hardcoded. This will be configurable in settings later. For now:
 
