@@ -6,11 +6,11 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Finally the Modifications Menu is ready to be finished.
-
-* Finishing the Modifications Menu - or at least adding all the features, we might change how each item is represented later.
-
-* Once the above is complete, we'll update the save & load functionality of our services, including the stored CustomVehicles.
+* Added Gravity Gun - Aim at an entity and hold **J**
+  * Release the target by releasing **J**  
+  * By moving your cursor around quickly while releasing the **J** key sends the target flying.  
+  
+We'll improve on this Gravity Gun, by setting a timer for easier throwing object. We'll also add functionality for changing the distance between you and the grabbed target.  
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
@@ -40,6 +40,9 @@ At the moment hotkeys are hardcoded. This will be configurable in settings later
   
 * **Teleport to Waypoint**  
   * **CTRL + T** - **Teleport** to the desired location. If in a vehicle, teleport the vehicle.  
+  
+* **Gravity Gun**  
+  * **HOLD J** - **Aim** at a **target** hold down the **J key** and **pick** up the target with your gravity gun. Moving the mouse around quickly and releasing the key again throws the entity in that direction.
 
 ## Credits
 **Alexander Blade** - **ScriptHookV**  
