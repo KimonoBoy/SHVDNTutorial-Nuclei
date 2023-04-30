@@ -87,6 +87,13 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         ProcessRideOnCars();
         ProcessInfiniteStamina();
         ProcessInfiniteSpecialAbility();
+        ProcessLockedWantedLevel();
+    }
+
+    private void ProcessLockedWantedLevel()
+    {
+        if (Service.IsWantedLevelLocked)
+            Game.Player.WantedLevel = Service.LockedWantedLevel;
     }
 
     protected override void UpdateServiceStatesTimer(object sender, EventArgs e)

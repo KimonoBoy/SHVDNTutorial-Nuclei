@@ -95,7 +95,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             if (!Game.IsKeyPressed(Keys.J))
             {
                 var accumulatedVelocity = CalculateAccumulatedVelocity(150);
-                var releaseVelocity = accumulatedVelocity * 500.0f;
+                var releaseVelocity = accumulatedVelocity * 200.0f;
                 _grabbedEntity.ApplyForce(releaseVelocity);
                 _grabbedEntity = null;
             }

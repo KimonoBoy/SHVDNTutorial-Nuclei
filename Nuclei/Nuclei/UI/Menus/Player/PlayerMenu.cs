@@ -50,7 +50,11 @@ public class PlayerMenu : GenericMenuBase<PlayerService>
         var listItemWantedLevel = AddListItem(PlayerItemTitle.WantedLevel,
             () => Service.WantedLevel,
             Service,
-            (item, index) => { Service.WantedLevel = index; }, 0, 1, 2,
+            (item, index) =>
+            {
+                Service.WantedLevel = index;
+                Service.LockedWantedLevel = index;
+            }, 0, 1, 2,
             3, 4, 5);
     }
 
