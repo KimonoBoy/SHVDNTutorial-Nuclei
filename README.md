@@ -42,10 +42,10 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [x] Invisible - Well... No one can see you, not even you.
 - [x] One Punch Man - Hit your foes with immense force, killing them instantly and sending them flying.
 * **Vehicle**
-- [x] Vehicle Spawner Menu 
-	[x] Spawn Any Vehicle in Game
-	[x] Add your favorite vehicles to a favorites menu.
-	[x] Save your vehicles with all of their modifications.
+- [x] Vehicle Spawner Menu  
+	- [x] Spawn Any Vehicle in Game
+	- [x] Add your favorite vehicles to a favorites menu.
+	- [x] Save your vehicles* with all of their modifications.
 - [x] Vehicle Weapons Menu* - Choose between a bunch of different Weapons, from shotguns, to lasers, to rockets and adjust the firerate and attachmentpoints
 - [x] Vehicle Mods Menu* - Change all your vehicles modifications
 - [ ] Vehicle Handling Menu
