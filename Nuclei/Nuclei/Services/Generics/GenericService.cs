@@ -41,7 +41,7 @@ public abstract class GenericService<TService> : ObservableService where TServic
         }
     }
 
-    public GenericStateService<TService> GetStateService()
+    public GenericStateService<TService> GetStorage()
     {
         return GenericStateService<TService>.Instance;
     }

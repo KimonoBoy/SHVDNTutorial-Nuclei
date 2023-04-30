@@ -23,8 +23,8 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
     protected GenericScriptBase()
     {
-        if (_storageService.GetStateService().GetState().AutoLoad) Load();
-        if (_storageService.GetStateService().GetState().AutoSave) _storageService.AutoSave = true;
+        if (_storageService.GetStorage().GetState().AutoLoad) Load();
+        if (_storageService.GetStorage().GetState().AutoSave) _storageService.AutoSave = true;
 
         if (SubscribeToSharedEvents()) return;
     }

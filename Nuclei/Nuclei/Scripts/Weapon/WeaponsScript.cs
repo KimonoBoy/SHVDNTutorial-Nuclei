@@ -2,6 +2,7 @@
 using GTA;
 using GTA.Math;
 using GTA.Native;
+using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Weapon;
 
@@ -34,7 +35,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
     private void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
-
+        Character.Draw3DRectangleAroundObject();
         ProcessFireBullets();
         ProcessInfiniteAmmo();
         ProcessNoReload();

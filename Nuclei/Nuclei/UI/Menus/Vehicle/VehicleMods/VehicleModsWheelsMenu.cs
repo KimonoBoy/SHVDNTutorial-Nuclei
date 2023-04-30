@@ -97,7 +97,7 @@ public class VehicleModsWheelsMenu : VehicleModsMenuBase
     {
         if (Service.CurrentVehicle.IsMotorcycle)
             return Service.VehicleMods.Where(vehicleMod =>
-                vehicleMod.Type == VehicleModType.FrontWheel || vehicleMod.Type == VehicleModType.RearWheel);
+                vehicleMod.Type is VehicleModType.FrontWheel or VehicleModType.RearWheel);
         return Service.VehicleMods.Where(vehicleMod => vehicleMod.Type == VehicleModType.FrontWheel);
     }
 }

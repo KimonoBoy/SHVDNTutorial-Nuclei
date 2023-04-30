@@ -151,8 +151,8 @@ public class VehicleSpawnerSavedVehiclesMenu : VehicleSpawnerMenuBase
             }
 
             Service.CustomVehicles.Add(customVehicle);
-            Service.GetStateService().SetState(Service);
-            Service.GetStateService().SaveState();
+            Service.GetStorage().SetState(Service);
+            Service.GetStorage().SaveState();
         });
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
 using GTA;
 using GTA.Math;
 
@@ -49,5 +50,37 @@ public static class EntityExtensions
         }
 
         return true;
+    }
+
+    public static void Draw3DRectangleAroundObject(this Entity entity)
+    {
+        // Calculate the dimensions of the bounding box
+        var dimensions = entity.Model.Dimensions;
+
+        // Calculate the positions of the 8 corners of the 3D rectangle
+        var corners = GetBoundingBoxCorners(entity, dimensions.rearBottomLeft, dimensions.frontTopRight);
+
+        // Draw the lines connecting the corners of the 3D rectangle
+        for (var i = 0; i < 4; i++)
+        {
+            World.DrawLine(corners[i], corners[(i + 1) % 4], Color.Aquamarine);
+            World.DrawLine(corners[i + 4], corners[(i + 1) % 4 + 4], Color.Aquamarine);
+            World.DrawLine(corners[i], corners[i + 4], Color.Aquamarine);
+        }
+    }
+
+    private static Vector3[] GetBoundingBoxCorners(Entity entity, Vector3 min, Vector3 max)
+    {
+        var corners = new Vector3[8];
+        corners[0] = entity.GetOffsetPosition(new Vector3(min.X, min.Y, min.Z));
+        corners[1] = entity.GetOffsetPosition(new Vector3(max.X, min.Y, min.Z));
+        corners[2] = entity.GetOffsetPosition(new Vector3(max.X, max.Y, min.Z));
+        corners[3] = entity.GetOffsetPosition(new Vector3(min.X, max.Y, min.Z));
+        corners[4] = entity.GetOffsetPosition(new Vector3(min.X, min.Y, max.Z));
+        corners[5] = entity.GetOffsetPosition(new Vector3(max.X, min.Y, max.Z));
+        corners[6] = entity.GetOffsetPosition(new Vector3(max.X, max.Y, max.Z));
+        corners[7] = entity.GetOffsetPosition(new Vector3(min.X, max.Y, max.Z));
+
+        return corners;
     }
 }
