@@ -205,7 +205,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private Entity GetClosestDamagedEntity()
     {
         var maxDistance = 20.0f;
-        return World.GetAllEntities()
+        return GTA.World.GetAllEntities()
             .Where(entity => entity.Position.DistanceTo(Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
@@ -308,7 +308,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
 
         // Raycast to find ground position below character (more accurate than using Z coordinate (HeightAboveGround))
         var characterPosition = Character.Position;
-        var raycastResult = World.Raycast(characterPosition, characterPosition - new Vector3(0, 0, 50.0f),
+        var raycastResult = GTA.World.Raycast(characterPosition, characterPosition - new Vector3(0, 0, 50.0f),
             IntersectFlags.Everything);
 
         if (raycastResult.DidHit)
@@ -325,7 +325,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         if (entityForceMultiplier <= 0.0f) return;
 
         // Gets all entities that are touching the player.
-        var touchingEntities = World.GetAllEntities()
+        var touchingEntities = GTA.World.GetAllEntities()
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
             .Where(entity =>
                 entity != Character && entity.IsTouching(Character));

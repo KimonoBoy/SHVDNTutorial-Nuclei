@@ -60,5 +60,8 @@ public enum MenuTitle
     [Description("Save and Load")] Storage,
 
     [Description("Change HotKeys")] HotKeys,
-    Interior
+    Interior,
+
+    [Description("Change anything in the game world, from the weather to the time of day, to the gravity level!")]
+    World
 }

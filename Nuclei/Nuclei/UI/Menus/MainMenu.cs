@@ -5,6 +5,7 @@ using Nuclei.UI.Menus.Player;
 using Nuclei.UI.Menus.Settings;
 using Nuclei.UI.Menus.Vehicle;
 using Nuclei.UI.Menus.Weapon;
+using Nuclei.UI.Menus.World;
 
 namespace Nuclei.UI.Menus;
 
@@ -16,7 +17,15 @@ public class MainMenu : MenuBase
         AddVehicleMenu();
         AddWeaponsMenu();
 
+        AddWorldMenu();
+
         AddStorageMenu();
+    }
+
+    private void AddWorldMenu()
+    {
+        var worldMenu = new WorldMenu(MenuTitle.World);
+        AddMenu(worldMenu);
     }
 
     private void AddVehicleMenu()

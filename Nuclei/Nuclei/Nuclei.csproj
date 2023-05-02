@@ -82,6 +82,7 @@
     <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponsScript.cs" />
+    <Compile Include="Scripts\World\WorldScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Services\Vehicle\VehicleWeapons\VehicleWeaponsService.cs" />
     <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
     <Compile Include="Services\Weapon\WeaponsService.cs" />
+    <Compile Include="Services\World\WorldService.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\CustomItems\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Base\GenericMenuBase.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\ItemFactoryService.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="UI\Menus\Vehicle\VehicleWeapons\VehicleWeaponsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />
+    <Compile Include="UI\Menus\World\WorldMenu.cs" />
     <Compile Include="UI\Text\Display.cs" />
   </ItemGroup>
   <ItemGroup>

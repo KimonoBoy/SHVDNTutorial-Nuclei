@@ -229,7 +229,7 @@ public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
         var heading = GetVehicleHeading();
 
         // Create the Vehicle from the model, position it in front of the player, and set its heading.
-        var vehicle = World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
+        var vehicle = GTA.World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
 
         // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();

@@ -58,9 +58,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         {
             var targetedEntity = Game.Player.TargetedEntity;
             if (targetedEntity == null) return;
-
             if (targetedEntity is Ped ped) targetedEntity = ped.IsInVehicle() ? ped.CurrentVehicle : ped;
-
             if (Game.IsKeyPressed(Keys.J))
             {
                 _grabbedEntity = targetedEntity;
@@ -69,46 +67,63 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         }
         else
         {
-            if (_grabbedEntity is Ped ped)
-            {
-                ped.Task.ClearAll();
-                ped.Task.LookAt(Character);
-            }
-
-            _grabbedEntity.Draw3DRectangleAroundObject();
-
-            var cameraPosition = GameplayCamera.Position;
-            var cameraDirection = GameplayCamera.Direction;
-
-            var raycastHitPlane = RaycastPlaneIntersection(cameraPosition, cameraDirection, Character.Position,
-                Vector3.WorldUp, _grabbedEntityDistance);
-            var targetPosition = raycastHitPlane ?? cameraPosition + cameraDirection * _grabbedEntityDistance;
-
-            var min = new Vector3(-0.5f, -0.5f, 0f);
-            var max = new Vector3(0.5f, 0.5f, 1f);
-            var boundingBoxCorners = _grabbedEntity.GetBoundingBoxCorners(min, max);
-            var entityHeight = Math.Abs(boundingBoxCorners[4].Z - boundingBoxCorners[0].Z);
-            var verticalOffset = entityHeight * 1.0f;
-
-            targetPosition.Z -= verticalOffset;
-            _grabbedEntity.Position = targetPosition;
-
-            if (!Game.IsKeyPressed(Keys.J))
-            {
-                var accumulatedVelocity = CalculateAccumulatedVelocity(150);
-                var releaseVelocity = accumulatedVelocity * 200.0f;
-                _grabbedEntity.ApplyForce(releaseVelocity);
-                _grabbedEntity = null;
-            }
-
-            _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
-                DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
-
-            if (Game.IsControlJustPressed(Control.CursorScrollUp))
-                _grabbedEntityDistance += 10.0f;
-            else if (Game.IsControlJustPressed(Control.CursorScrollDown))
-                _grabbedEntityDistance -= 10.0f;
+            HandleGrabbedEntity();
+            AdjustGrabbedEntityDistance();
         }
+    }
+
+    private void HandleGrabbedEntity()
+    {
+        if (_grabbedEntity is Ped ped)
+        {
+            ped.Task.ClearAllImmediately();
+            ped.Task.LookAt(Character);
+        }
+
+        _grabbedEntity.Draw3DRectangleAroundObject();
+        var targetPosition = CalculateTargetPosition();
+        _grabbedEntity.Position = targetPosition;
+
+        if (!Game.IsKeyPressed(Keys.J)) ReleaseGrabbedEntity();
+
+        _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
+            DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
+    }
+
+    private Vector3 CalculateTargetPosition()
+    {
+        var cameraPosition = GameplayCamera.Position;
+        var cameraDirection = GameplayCamera.Direction;
+        var raycastHitPlane = RaycastPlaneIntersection(cameraPosition, cameraDirection, Character.Position,
+            Vector3.WorldUp, _grabbedEntityDistance);
+        var targetPosition = raycastHitPlane ?? cameraPosition + cameraDirection * _grabbedEntityDistance;
+
+        var min = new Vector3(-0.5f, -0.5f, 0f);
+        var max = new Vector3(0.5f, 0.5f, 1f);
+        var boundingBoxCorners = _grabbedEntity.GetBoundingBoxCorners(min, max);
+        var entityHeight = Math.Abs(boundingBoxCorners[4].Z - boundingBoxCorners[0].Z);
+        var verticalOffset = entityHeight * 1.0f;
+
+        targetPosition.Z -= verticalOffset;
+        return targetPosition;
+    }
+
+    private void ReleaseGrabbedEntity()
+    {
+        if (_grabbedEntity is Ped grabbedPed) grabbedPed.Ragdoll(-1, RagdollType.NarrowLegs);
+
+        var accumulatedVelocity = CalculateAccumulatedVelocity(150);
+        var releaseVelocity = accumulatedVelocity * 200.0f;
+        _grabbedEntity.ApplyForce(releaseVelocity);
+        _grabbedEntity = null;
+    }
+
+    private void AdjustGrabbedEntityDistance()
+    {
+        if (Game.IsControlJustPressed(Control.CursorScrollUp))
+            _grabbedEntityDistance += 10.0f;
+        else if (Game.IsControlJustPressed(Control.CursorScrollDown))
+            _grabbedEntityDistance -= 10.0f;
     }
 
     private Vector3? RaycastPlaneIntersection(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planePoint,
@@ -148,7 +163,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         _teleportGunLastShot = DateTime.UtcNow;
 
         Vector3? targetLocation;
-        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
+        var crosshairCoords = GTA.World.GetCrosshairCoordinates(IntersectFlags.Everything);
 
         if (crosshairCoords.DidHit)
             targetLocation = crosshairCoords.HitPosition;
