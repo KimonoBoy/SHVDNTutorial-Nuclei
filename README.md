@@ -56,7 +56,7 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [ ] Emergency Break
 - [x] Seat Belt - Even at the most intense crashes, your character stays inside the vehicle.
 - [x] Never Fall off Bike - Stay on your bike at all costs.
-- [ ] Lock All Doors
+- [x] Lock All Doors
 - [ ] Vehicle Jump
 - [x] Drive under water - Your engine won't die under water.
 - [ ] Drive on water
