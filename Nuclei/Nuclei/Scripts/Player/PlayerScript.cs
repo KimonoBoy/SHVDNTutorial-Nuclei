@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
-using GTA.Math;
 using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
@@ -292,35 +291,16 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     /// <param name="entityForceMultiplier">The force of which entities the player is touching will be pushed away.</param>
     private void ProcessSuperSpeedTicks(int maxSpeed, float entityForceMultiplier = 0.0f)
     {
-        /*
-         * We will rework this code later. We will add a few more functionality, such as WallRunning, FlashTime (SlowMotion when Flash), Improved SuperJump.
-         *
-         * Should also prevent the player from falling over, and make him collision proof.
-         * For now you can activate: RideOnCars and Invincible
-         *
-         * We'll also add a menu, where the user can select the different values of forces and speeds.
-         */
-
         if (!Game.IsControlPressed(Control.Sprint) || Character.IsJumping) return;
 
         Character.MaxSpeed = maxSpeed;
         Character.ApplyForce(Character.ForwardVector * maxSpeed);
 
-        // Raycast to find ground position below character (more accurate than using Z coordinate (HeightAboveGround))
-        var characterPosition = Character.Position;
-        var raycastResult = GTA.World.Raycast(characterPosition, characterPosition - new Vector3(0, 0, 50.0f),
-            IntersectFlags.Everything);
+        var distanceToGround = Character.HeightAboveGround;
 
-        if (raycastResult.DidHit)
-        {
-            // Calculate the distance to the ground
-            var distanceToGround = characterPosition.Z - raycastResult.HitPosition.Z;
-
-            // Apply a force proportional to the distance to the ground to keep the character on the ground
-            if (distanceToGround >= 0.2f)
-                Character.ApplyForce(Character.UpVector *
-                                     (-maxSpeed * (1 + distanceToGround)));
-        }
+        // Apply a force proportional to the distance to the ground to keep the character on the ground
+        if (distanceToGround >= 1.5f)
+            Character.ApplyForce(Character.UpVector * (-maxSpeed * (1 + distanceToGround)));
 
         if (entityForceMultiplier <= 0.0f) return;
 
