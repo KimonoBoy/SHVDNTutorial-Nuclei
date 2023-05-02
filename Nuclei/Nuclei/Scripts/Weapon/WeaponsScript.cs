@@ -14,6 +14,7 @@ namespace Nuclei.Scripts.Weapon;
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
+
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
@@ -94,9 +95,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
     {
         var cameraPosition = GameplayCamera.Position;
         var cameraDirection = GameplayCamera.Direction;
-        var raycastHitPlane = RaycastPlaneIntersection(cameraPosition, cameraDirection, Character.Position,
-            Vector3.WorldUp, _grabbedEntityDistance);
-        var targetPosition = raycastHitPlane ?? cameraPosition + cameraDirection * _grabbedEntityDistance;
+        var targetPosition = cameraPosition + cameraDirection * _grabbedEntityDistance;
 
         var min = new Vector3(-0.5f, -0.5f, 0f);
         var max = new Vector3(0.5f, 0.5f, 1f);
@@ -110,10 +109,10 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
     private void ReleaseGrabbedEntity()
     {
-        if (_grabbedEntity is Ped grabbedPed) grabbedPed.Ragdoll(-1, RagdollType.NarrowLegs);
-
         var accumulatedVelocity = CalculateAccumulatedVelocity(150);
         var releaseVelocity = accumulatedVelocity * 200.0f;
+        if (_grabbedEntity is Ped grabbedPed) grabbedPed.Ragdoll(-1, RagdollType.NarrowLegs);
+
         _grabbedEntity.ApplyForce(releaseVelocity);
         _grabbedEntity = null;
     }
