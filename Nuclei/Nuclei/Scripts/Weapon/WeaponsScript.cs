@@ -125,21 +125,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             _grabbedEntityDistance -= 10.0f;
     }
 
-    private Vector3? RaycastPlaneIntersection(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planePoint,
-        Vector3 planeNormal, float maxDistance)
-    {
-        var denom = Vector3.Dot(rayDirection, planeNormal);
-
-        if (Math.Abs(denom) > 0.0001f)
-        {
-            var t = Vector3.Dot(planePoint - rayOrigin, planeNormal) / denom;
-
-            if (t >= 0 && t <= maxDistance) return rayOrigin + rayDirection * t;
-        }
-
-        return null;
-    }
-
     private Vector3 CalculateAccumulatedVelocity(long durationMs)
     {
         var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();

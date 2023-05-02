@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using GTA;
 using GTA.Math;
@@ -82,5 +83,20 @@ public static class EntityExtensions
         corners[7] = entity.GetOffsetPosition(new Vector3(min.X, max.Y, max.Z));
 
         return corners;
+    }
+
+    public static Vector3? RaycastPlaneIntersection(Vector3 rayOrigin, Vector3 rayDirection, Vector3 planePoint,
+        Vector3 planeNormal, float maxDistance)
+    {
+        var denom = Vector3.Dot(rayDirection, planeNormal);
+
+        if (Math.Abs(denom) > 0.0001f)
+        {
+            var t = Vector3.Dot(planePoint - rayOrigin, planeNormal) / denom;
+
+            if (t >= 0 && t <= maxDistance) return rayOrigin + rayDirection * t;
+        }
+
+        return null;
     }
 }
