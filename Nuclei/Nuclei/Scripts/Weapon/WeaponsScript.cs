@@ -7,6 +7,7 @@ using GTA.Native;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Weapon;
+using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Weapon;
 
@@ -102,6 +103,11 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
             _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
                 DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
+
+            if (Game.IsControlJustPressed(Control.CursorScrollUp))
+                _grabbedEntityDistance += 10.0f;
+            else if (Game.IsControlJustPressed(Control.CursorScrollDown))
+                _grabbedEntityDistance -= 10.0f;
         }
     }
 

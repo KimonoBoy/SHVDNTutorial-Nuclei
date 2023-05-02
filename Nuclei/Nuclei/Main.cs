@@ -21,7 +21,6 @@ public class Main : Script
     private void OnTick(object sender, EventArgs e)
     {
         MenuBase.Pool.Process();
-
         if (MenuBase.Pool.AreAnyVisible) Game.DisableControlThisFrame(Control.ReplayStartStopRecording);
     }
 

@@ -66,6 +66,16 @@ public class VehicleScript : GenericScriptBase<VehicleService>
          *
          * Need to think of a good way to make this less intrusive for the player.
          */
+        if (!Service.DoorsAlwaysLocked) return;
+        if (CurrentVehicle != null)
+        {
+            if (CurrentVehicle.LockStatus == VehicleLockStatus.CannotEnter) return;
+            CurrentVehicle.LockStatus = VehicleLockStatus.CannotEnter;
+        }
+
+        if (Character.VehicleTryingToEnter == null) return;
+
+        Character.VehicleTryingToEnter.LockStatus = VehicleLockStatus.Unlocked;
     }
 
     private void ProcessDriveUnderWater()
