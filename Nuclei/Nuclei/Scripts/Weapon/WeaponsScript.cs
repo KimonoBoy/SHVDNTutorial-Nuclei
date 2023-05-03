@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using GTA.Native;
+using GTA.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Weapon;
@@ -13,7 +14,13 @@ namespace Nuclei.Scripts.Weapon;
 
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
+    private const float BlackHoleRadius = 100.0f;
+    private const float BlackHoleForceMultiplier = 1000.0f;
+    private const string BlackHoleParticleAsset = "core";
+    private const string BlackHoleParticleEffect = "ent_amb_foundry_molten_puddle";
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
+    private Prop _blackHoleEntity;
+    private int _blackHoleParticle;
 
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
@@ -52,14 +59,62 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         ProcessBlackHoleGun();
     }
 
+    private void CreateBlackHole(Vector3 position)
+    {
+        var model = new Model("prop_rock_4_a");
+        model.Request(1000);
+        if (!model.IsInCdImage || !model.IsValid)
+        {
+            Notification.Show("Model not valid");
+            return;
+        }
+
+        while (!model.IsLoaded) Wait(100);
+        // Create an invisible black hole entity
+        _blackHoleEntity = World.CreateProp(model, position, false, false);
+        _blackHoleEntity.IsVisible = false;
+    }
+
     private void ProcessBlackHoleGun()
     {
-        /*
-         * Implemented later.
-         */
-        if (!Service.BlackHoleGun || !Character.IsAiming) return;
+        if (!Service.BlackHoleGun) return;
 
-        var aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 200.0f;
+        if (_blackHoleEntity == null)
+        {
+            if (Game.IsKeyPressed(Keys.H))
+            {
+                Vector3 aimedPosition;
+
+                var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
+
+                if (crosshairCoords.DidHit)
+                    aimedPosition = crosshairCoords.HitPosition;
+                else
+                    aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 200.0f;
+
+                CreateBlackHole(aimedPosition);
+            }
+        }
+        else
+        {
+            var objectsInRange = World.GetNearbyEntities(_blackHoleEntity.Position, BlackHoleRadius);
+            foreach (var obj in objectsInRange)
+            {
+                if (obj == Character) continue;
+                var distance = Vector3.Distance(obj.Position, _blackHoleEntity.Position);
+                var force = BlackHoleForceMultiplier * (1 / (distance * distance));
+                var direction = (_blackHoleEntity.Position - obj.Position).Normalized;
+
+                obj.ApplyForce(direction * force);
+            }
+
+            if (!Game.IsKeyPressed(Keys.H))
+            {
+                _blackHoleEntity.Delete();
+                Function.Call(Hash.STOP_PARTICLE_FX_LOOPED, _blackHoleParticle, false);
+                _blackHoleEntity = null;
+            }
+        }
     }
 
     private void ProcessGravityGun()
