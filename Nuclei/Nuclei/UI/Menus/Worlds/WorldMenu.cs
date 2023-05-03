@@ -1,8 +1,9 @@
 ﻿using System;
-using Nuclei.Services.World;
+using GTA;
+using Nuclei.Services.Worlds;
 using Nuclei.UI.Menus.Base;
 
-namespace Nuclei.UI.Menus.World;
+namespace Nuclei.UI.Menus.Worlds;
 
 public class WorldMenu : GenericMenuBase<WorldService>
 {
@@ -13,6 +14,7 @@ public class WorldMenu : GenericMenuBase<WorldService>
 
     private void TimeOfDay()
     {
-        var itemSetDayTime = AddItem("Day Time", "", () => { GTA.World.CurrentTimeOfDay = TimeSpan.FromHours(12); });
+        // Just used for myself....
+        var itemSetDayTime = AddItem("Day Time", "", () => { World.CurrentTimeOfDay = TimeSpan.FromHours(12); });
     }
 }

@@ -49,6 +49,17 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         ProcessLevitationGun();
         ProcessGravityGun();
         ProcessTeleportGun();
+        ProcessBlackHoleGun();
+    }
+
+    private void ProcessBlackHoleGun()
+    {
+        /*
+         * Implemented later.
+         */
+        if (!Service.BlackHoleGun || !Character.IsAiming) return;
+
+        var aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 200.0f;
     }
 
     private void ProcessGravityGun()
@@ -85,7 +96,11 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         var targetPosition = CalculateTargetPosition();
         _grabbedEntity.Position = targetPosition;
 
-        if (!Game.IsKeyPressed(Keys.J)) ReleaseGrabbedEntity();
+        if (!Game.IsKeyPressed(Keys.J))
+        {
+            var throwVelocity = (Service.ThrowVelocity + 1) * 25.0f;
+            ReleaseGrabbedEntity(throwVelocity);
+        }
 
         _cameraDirectionsTimestamps.Add(new Tuple<Vector3, long>(GameplayCamera.Direction,
             DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()));
@@ -107,10 +122,10 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         return targetPosition;
     }
 
-    private void ReleaseGrabbedEntity()
+    private void ReleaseGrabbedEntity(float throwVelocity)
     {
         var accumulatedVelocity = CalculateAccumulatedVelocity(150);
-        var releaseVelocity = accumulatedVelocity * 200.0f;
+        var releaseVelocity = accumulatedVelocity * throwVelocity;
         if (_grabbedEntity is Ped grabbedPed) grabbedPed.Ragdoll(-1, RagdollType.NarrowLegs);
 
         _grabbedEntity.ApplyForce(releaseVelocity);
@@ -147,7 +162,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         _teleportGunLastShot = DateTime.UtcNow;
 
         Vector3? targetLocation;
-        var crosshairCoords = GTA.World.GetCrosshairCoordinates(IntersectFlags.Everything);
+        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
 
         if (crosshairCoords.DidHit)
             targetLocation = crosshairCoords.HitPosition;

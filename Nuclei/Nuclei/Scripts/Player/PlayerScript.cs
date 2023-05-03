@@ -204,7 +204,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
     private Entity GetClosestDamagedEntity()
     {
         var maxDistance = 20.0f;
-        return GTA.World.GetAllEntities()
+        return World.GetAllEntities()
             .Where(entity => entity.Position.DistanceTo(Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
@@ -302,10 +302,15 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         if (distanceToGround >= 1.5f)
             Character.ApplyForce(Character.UpVector * (-maxSpeed * (1 + distanceToGround)));
 
+        ApplyForceOnImpact(maxSpeed, entityForceMultiplier);
+    }
+
+    private static void ApplyForceOnImpact(int maxSpeed, float entityForceMultiplier)
+    {
         if (entityForceMultiplier <= 0.0f) return;
 
         // Gets all entities that are touching the player.
-        var touchingEntities = GTA.World.GetAllEntities()
+        var touchingEntities = World.GetAllEntities()
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
             .Where(entity =>
                 entity != Character && entity.IsTouching(Character));

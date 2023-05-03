@@ -1,8 +1,8 @@
 ﻿using System;
 using Nuclei.Scripts.Generics;
-using Nuclei.Services.World;
+using Nuclei.Services.Worlds;
 
-namespace Nuclei.Scripts.World;
+namespace Nuclei.Scripts.Worlds;
 
 public class WorldScript : GenericScriptBase<WorldService>
 {

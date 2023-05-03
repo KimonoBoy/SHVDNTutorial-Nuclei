@@ -54,6 +54,9 @@ public enum MenuTitle
     [Description("Change your weapon's stats and make it the best version of itself!")]
     WeaponComponents,
 
+    [Description("Make your weapon a Gravity Gun - pick up and throw anything!")]
+    GravityGun,
+
     [Description("Save/Load and Change HotKeys")]
     Settings,
 

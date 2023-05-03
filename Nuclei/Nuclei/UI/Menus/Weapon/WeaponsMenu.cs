@@ -23,10 +23,23 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
         ExplosiveBullets();
 
         AddHeader("Gutties");
+        GravityGunMenu();
         LevitationGun();
-        GravityGun();
         TeleportGun();
         VehicleGun();
+        BlackHoleGun();
+    }
+
+    private void GravityGunMenu()
+    {
+        var gravityGunMenu = new GravityGunMenu(MenuTitle.GravityGun);
+        AddMenu(gravityGunMenu);
+    }
+
+    private void BlackHoleGun()
+    {
+        var checkBoxBlackHoleGun = AddCheckbox(WeaponItemTitle.BlackHoleGun, () => Service.BlackHoleGun, Service,
+            @checked => { Service.BlackHoleGun = @checked; });
     }
 
     private void VehicleGun()
@@ -40,12 +53,6 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
     {
         var checkBoxTeleportGun = AddCheckbox(WeaponItemTitle.TeleportGun, () => Service.TeleportGun, Service,
             @checked => { Service.TeleportGun = @checked; });
-    }
-
-    private void GravityGun()
-    {
-        var checkBoxGravityGun = AddCheckbox(WeaponItemTitle.GravityGun, () => Service.GravityGun, Service,
-            @checked => { Service.GravityGun = @checked; });
     }
 
     private void LevitationGun()

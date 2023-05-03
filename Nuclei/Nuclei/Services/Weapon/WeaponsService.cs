@@ -8,6 +8,7 @@ public class WeaponsService : GenericService<WeaponsService>
 {
     private int _accuracy;
     private bool _aimBot;
+    private bool _blackHoleGun;
     private VehicleHash _currentVehicleGun;
     private bool _explosiveBullets;
     private bool _fireBullets;
@@ -20,6 +21,7 @@ public class WeaponsService : GenericService<WeaponsService>
     private bool _shootPeds;
     private bool _shootVehicles;
     private bool _teleportGun;
+    private int _throwVelocity;
 
     public bool InfiniteAmmo
     {
@@ -171,6 +173,28 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (value == _currentVehicleGun) return;
             _currentVehicleGun = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool BlackHoleGun
+    {
+        get => _blackHoleGun;
+        set
+        {
+            if (value == _blackHoleGun) return;
+            _blackHoleGun = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int ThrowVelocity
+    {
+        get => _throwVelocity;
+        set
+        {
+            if (value == _throwVelocity) return;
+            _throwVelocity = value;
             OnPropertyChanged();
         }
     }

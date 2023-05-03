@@ -22,12 +22,19 @@ public enum WeaponItemTitle
     [Description("Levitate objects, vehicles and people with your gun.")]
     LevitationGun,
 
-    [Description("Aim at an entity and hold down J.")] GravityGun,
+    [Description("Aim at an entity and hold down J.")]
+    GravityGun,
 
     [Description("Teleport to any location by shooting at the location.")]
     TeleportGun,
 
     [Description(
         "What is even more fun than bullets? Vehicles as bullets.\n\n~b~Note: This version is just for testing purposes only - we'll make it better later.")]
-    VehicleGun
+    VehicleGun,
+
+    [Description("Create a black hole that sucks in everything.")]
+    BlackHoleGun,
+
+    [Description("Adjust the throw velocity of the gravity-gun objects.")]
+    ThrowVelocity
 }
