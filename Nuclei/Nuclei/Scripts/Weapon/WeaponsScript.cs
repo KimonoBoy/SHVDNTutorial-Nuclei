@@ -14,13 +14,10 @@ namespace Nuclei.Scripts.Weapon;
 
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
-    private const float BlackHoleRadius = 100.0f;
+    private const float BlackHoleRadius = 200.0f;
     private const float BlackHoleForceMultiplier = 1000.0f;
-    private const string BlackHoleParticleAsset = "core";
-    private const string BlackHoleParticleEffect = "ent_amb_foundry_molten_puddle";
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
     private Prop _blackHoleEntity;
-    private int _blackHoleParticle;
 
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
@@ -73,6 +70,8 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         // Create an invisible black hole entity
         _blackHoleEntity = World.CreateProp(model, position, false, false);
         _blackHoleEntity.IsVisible = false;
+        _blackHoleEntity.IsCollisionProof = true;
+        _blackHoleEntity.IsCollisionEnabled = false;
     }
 
     private void ProcessBlackHoleGun()
@@ -90,7 +89,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
                 if (crosshairCoords.DidHit)
                     aimedPosition = crosshairCoords.HitPosition;
                 else
-                    aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 200.0f;
+                    aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 50.0f;
 
                 CreateBlackHole(aimedPosition);
             }
@@ -111,7 +110,6 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
             if (!Game.IsKeyPressed(Keys.H))
             {
                 _blackHoleEntity.Delete();
-                Function.Call(Hash.STOP_PARTICLE_FX_LOOPED, _blackHoleParticle, false);
                 _blackHoleEntity = null;
             }
         }
