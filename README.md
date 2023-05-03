@@ -6,11 +6,9 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-* Added Gravity Gun - Aim at an entity and hold **J**
-  * Release the target by releasing **J**  
-  * By moving your cursor around quickly while releasing the **J** key sends the target flying.  
-  
-Gravity gun now accumulates velocity over time to yield a great throwing experience.
+Updating a bunch of different features and adding new smaller features. Also refactoring some.
+
+Fow now, its bedtime.
 
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
@@ -56,7 +54,7 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [ ] Emergency Break
 - [x] Seat Belt - Even at the most intense crashes, your character stays inside the vehicle.
 - [x] Never Fall off Bike - Stay on your bike at all costs.
-- [ ] Lock All Doors
+- [x] Lock All Doors
 - [ ] Vehicle Jump
 - [x] Drive under water - Your engine won't die under water.
 - [ ] Drive on water
