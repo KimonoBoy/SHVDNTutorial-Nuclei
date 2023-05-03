@@ -9,6 +9,9 @@ public class WeaponsService : GenericService<WeaponsService>
     private int _accuracy;
     private bool _aimBot;
     private bool _blackHoleGun;
+    private int _blackHoleLifeSpan = 10;
+    private int _blackHolePower = 10;
+    private int _blackHoleRadius = 10;
     private VehicleHash _currentVehicleGun;
     private bool _explosiveBullets;
     private bool _fireBullets;
@@ -195,6 +198,39 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (value == _throwVelocity) return;
             _throwVelocity = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int BlackHoleLifeSpan
+    {
+        get => _blackHoleLifeSpan;
+        set
+        {
+            if (value == _blackHoleLifeSpan) return;
+            _blackHoleLifeSpan = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int BlackHoleRadius
+    {
+        get => _blackHoleRadius;
+        set
+        {
+            if (value == _blackHoleRadius) return;
+            _blackHoleRadius = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int BlackHolePower
+    {
+        get => _blackHolePower;
+        set
+        {
+            if (value == _blackHolePower) return;
+            _blackHolePower = value;
             OnPropertyChanged();
         }
     }

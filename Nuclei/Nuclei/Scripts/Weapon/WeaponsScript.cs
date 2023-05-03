@@ -14,8 +14,8 @@ namespace Nuclei.Scripts.Weapon;
 
 public class WeaponsScript : GenericScriptBase<WeaponsService>
 {
-    private const float BlackHoleRadius = 200.0f;
-    private const float BlackHoleForceMultiplier = 1000.0f;
+    private readonly List<Tuple<Prop, long>> _activeBlackHoles = new();
+
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
     private Prop _blackHoleEntity;
 
@@ -56,14 +56,14 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         ProcessBlackHoleGun();
     }
 
-    private void CreateBlackHole(Vector3 position)
+    private Prop CreateBlackHole(Vector3 position)
     {
         var model = new Model("prop_rock_4_a");
         model.Request(1000);
         if (!model.IsInCdImage || !model.IsValid)
         {
             Notification.Show("Model not valid");
-            return;
+            return null;
         }
 
         while (!model.IsLoaded) Wait(100);
@@ -72,38 +72,42 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         _blackHoleEntity.IsVisible = false;
         _blackHoleEntity.IsCollisionProof = true;
         _blackHoleEntity.IsCollisionEnabled = false;
+
+        return _blackHoleEntity;
     }
 
     private void ProcessBlackHoleGun()
     {
         if (!Service.BlackHoleGun) return;
 
-        if (_blackHoleEntity == null)
+        if (Character.IsShooting)
         {
-            if (Game.IsKeyPressed(Keys.H))
-            {
-                var aimedPosition = GetAimedPosition(50.0f);
-
-                CreateBlackHole(aimedPosition);
-            }
+            var aimedPosition = GetAimedPosition(50.0f);
+            var newBlackHole = CreateBlackHole(aimedPosition);
+            var currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            _activeBlackHoles.Add(Tuple.Create(newBlackHole, currentTimestamp));
         }
-        else
+
+        var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+        // Remove black holes that have exceeded their duration
+        _activeBlackHoles.RemoveAll(bh => now - bh.Item2 > (Service.BlackHoleLifeSpan + 1) * 1000);
+
+        // Iterate through all active black holes and apply forces to nearby objects
+        foreach (var blackHoleEntry in _activeBlackHoles)
         {
-            var objectsInRange = World.GetNearbyEntities(_blackHoleEntity.Position, BlackHoleRadius);
+            var blackHole = blackHoleEntry.Item1;
+            var blackHoleRadius = Service.BlackHoleRadius * 15.0f;
+            var blackHoleForceMultiplier = Service.BlackHolePower * 100.0f;
+            var objectsInRange = World.GetNearbyEntities(blackHole.Position, blackHoleRadius);
             foreach (var obj in objectsInRange)
             {
                 if (obj == Character) continue;
-                var distance = Vector3.Distance(obj.Position, _blackHoleEntity.Position);
-                var force = BlackHoleForceMultiplier * (1 / (distance * distance));
-                var direction = (_blackHoleEntity.Position - obj.Position).Normalized;
+                var distance = Vector3.Distance(obj.Position, blackHole.Position);
+                var force = blackHoleForceMultiplier * (1 / (distance * distance));
+                var direction = (blackHole.Position - obj.Position).Normalized;
 
                 obj.ApplyForce(direction * force);
-            }
-
-            if (!Game.IsKeyPressed(Keys.H))
-            {
-                _blackHoleEntity.Delete();
-                _blackHoleEntity = null;
             }
         }
     }

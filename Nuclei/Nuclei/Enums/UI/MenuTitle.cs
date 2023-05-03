@@ -57,6 +57,9 @@ public enum MenuTitle
     [Description("Make your weapon a Gravity Gun - pick up and throw anything!")]
     GravityGun,
 
+    [Description("Change how the black hole gun behaves.")]
+    BlackHole,
+
     [Description("Save/Load and Change HotKeys")]
     Settings,
 

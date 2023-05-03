@@ -25,6 +25,9 @@ public enum WeaponItemTitle
     [Description("Aim at an entity and hold down J.")]
     GravityGun,
 
+    [Description("Adjust the throw velocity of the gravity-gun objects.")]
+    ThrowVelocity,
+
     [Description("Teleport to any location by shooting at the location.")]
     TeleportGun,
 
@@ -35,6 +38,12 @@ public enum WeaponItemTitle
     [Description("Create a black hole that sucks in everything.")]
     BlackHoleGun,
 
-    [Description("Adjust the throw velocity of the gravity-gun objects.")]
-    ThrowVelocity
+    [Description("How long the black hole will stay active for in seconds.")]
+    LifeSpan,
+
+    [Description("The Event Horizon Size determines the radius at which objects are pulled towards it.")]
+    BlackHoleRadius,
+
+    [Description("Determines how powerful the black hole is.")]
+    BlackHolePower
 }

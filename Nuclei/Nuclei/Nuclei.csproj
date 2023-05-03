@@ -125,6 +125,7 @@
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerMainMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleSpawner\VehicleSpawnerSavedVehiclesMenu.cs" />
     <Compile Include="UI\Menus\Vehicle\VehicleWeapons\VehicleWeaponsMenu.cs" />
+    <Compile Include="UI\Menus\Weapon\BlackHoleMenu.cs" />
     <Compile Include="UI\Menus\Weapon\GravityGunMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />

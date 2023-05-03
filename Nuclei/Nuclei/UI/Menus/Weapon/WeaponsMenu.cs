@@ -24,10 +24,11 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
 
         AddHeader("Gutties");
         GravityGunMenu();
+        BlackHoleMenu();
         LevitationGun();
         TeleportGun();
         VehicleGun();
-        BlackHoleGun();
+        // BlackHoleGun();
     }
 
     private void GravityGunMenu()
@@ -36,10 +37,10 @@ public class WeaponsMenu : GenericMenuBase<WeaponsService>
         AddMenu(gravityGunMenu);
     }
 
-    private void BlackHoleGun()
+    private void BlackHoleMenu()
     {
-        var checkBoxBlackHoleGun = AddCheckbox(WeaponItemTitle.BlackHoleGun, () => Service.BlackHoleGun, Service,
-            @checked => { Service.BlackHoleGun = @checked; });
+        var blackHoleMenu = new BlackHoleMenu(MenuTitle.BlackHole);
+        AddMenu(blackHoleMenu);
     }
 
     private void VehicleGun()
