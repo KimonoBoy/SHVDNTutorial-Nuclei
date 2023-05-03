@@ -305,7 +305,7 @@ public class PlayerScript : GenericScriptBase<PlayerService>
         ApplyForceOnImpact(maxSpeed, entityForceMultiplier);
     }
 
-    private static void ApplyForceOnImpact(int maxSpeed, float entityForceMultiplier)
+    private void ApplyForceOnImpact(int maxSpeed, float entityForceMultiplier)
     {
         if (entityForceMultiplier <= 0.0f) return;
 

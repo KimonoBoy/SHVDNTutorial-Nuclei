@@ -82,14 +82,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         {
             if (Game.IsKeyPressed(Keys.H))
             {
-                Vector3 aimedPosition;
-
-                var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
-
-                if (crosshairCoords.DidHit)
-                    aimedPosition = crosshairCoords.HitPosition;
-                else
-                    aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * 50.0f;
+                var aimedPosition = GetAimedPosition(50.0f);
 
                 CreateBlackHole(aimedPosition);
             }
@@ -113,6 +106,25 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
                 _blackHoleEntity = null;
             }
         }
+    }
+
+    /// <summary>
+    ///     Gets the aimed position, if the crosshair hits a target return that position, otherwise if the crosshair does not
+    ///     intersect with anything return the camera hit position at max cameraDistance.
+    /// </summary>
+    /// <param name="cameraDistance">The distance when camera is used as the return value</param>
+    /// <returns>The hitCoords</returns>
+    private static Vector3 GetAimedPosition(float cameraDistance)
+    {
+        Vector3 aimedPosition;
+
+        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
+
+        if (crosshairCoords.DidHit)
+            aimedPosition = crosshairCoords.HitPosition;
+        else
+            aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * cameraDistance;
+        return aimedPosition;
     }
 
     private void ProcessGravityGun()
@@ -214,13 +226,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
         if ((DateTime.UtcNow - _teleportGunLastShot).TotalMilliseconds < 500) return;
         _teleportGunLastShot = DateTime.UtcNow;
 
-        Vector3? targetLocation;
-        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
-
-        if (crosshairCoords.DidHit)
-            targetLocation = crosshairCoords.HitPosition;
-        else
-            targetLocation = GameplayCamera.Position + GameplayCamera.Direction * 200.0f;
+        Vector3? targetLocation = GetAimedPosition(200.0f);
         Wait(100);
 
         CurrentEntity.Position = targetLocation.Value;

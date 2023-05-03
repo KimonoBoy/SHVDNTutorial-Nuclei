@@ -23,7 +23,7 @@ public abstract class MenuBase : NativeMenu
 
     private readonly ExceptionService _exceptionService = ExceptionService.Instance;
 
-    protected readonly ItemFactoryService _itemFactoryService = new();
+    private readonly ItemFactoryService _itemFactoryService = new();
 
     private readonly Dictionary<string, MenuBase> subMenus = new();
 

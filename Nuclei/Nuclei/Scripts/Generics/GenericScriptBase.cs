@@ -11,16 +11,15 @@ namespace Nuclei.Scripts.Generics;
 
 public abstract class GenericScriptBase<TService> : Script, IDisposable where TService : GenericService<TService>, new()
 {
-    private static bool _eventsSubscribed;
-    private static Ped _character;
-    private static GTA.Vehicle _currentVehicle;
-    private static GTA.Vehicle _lastVehicle;
-
     private readonly TService _defaultValuesService = new();
-    private readonly StorageService _storageService = StorageService.Instance;
 
-    private readonly CustomTimer GameStateTimer = new(100);
+    private readonly CustomTimer _gameStateTimer = new(100);
+    private readonly StorageService _storageService = StorageService.Instance;
+    private Ped _character;
+    private GTA.Vehicle _currentVehicle;
     private GTA.Weapon _currentWeapon;
+    private bool _eventsSubscribed;
+    private GTA.Vehicle _lastVehicle;
 
     protected GenericScriptBase()
     {
@@ -36,7 +35,7 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
 
     protected GenericStateService<TService> State => GenericStateService<TService>.Instance;
 
-    public static GTA.Vehicle CurrentVehicle
+    public GTA.Vehicle CurrentVehicle
     {
         get => _currentVehicle;
         private set
@@ -46,7 +45,7 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         }
     }
 
-    public static Ped Character
+    public Ped Character
     {
         get => _character;
         private set
@@ -56,7 +55,7 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         }
     }
 
-    public static GTA.Vehicle LastVehicle
+    public GTA.Vehicle LastVehicle
     {
         get => _lastVehicle;
         private set
@@ -76,11 +75,11 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         }
     }
 
-    public static Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
+    public Entity CurrentEntity => CurrentVehicle ?? (Entity)Character;
 
     public void Dispose()
     {
-        GameStateTimer?.Stop();
+        _gameStateTimer?.Stop();
         KeyDown -= OnKeyDown;
         Tick -= OnTick;
 
@@ -102,8 +101,8 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
-        GameStateTimer.TimerElapsed += ProcessGameStatesTimer;
-        GameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
+        _gameStateTimer.TimerElapsed += ProcessGameStatesTimer;
+        _gameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
 
         _eventsSubscribed = true;
 

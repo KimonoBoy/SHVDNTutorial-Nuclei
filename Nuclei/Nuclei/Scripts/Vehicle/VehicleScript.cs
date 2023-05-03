@@ -122,7 +122,7 @@ public class VehicleScript : GenericScriptBase<VehicleService>
         Character.CanBeKnockedOffBike = !Service.NeverFallOffBike;
     }
 
-    private static void FlipVehicle()
+    private void FlipVehicle()
     {
         CurrentVehicle?.PlaceOnGround();
     }
