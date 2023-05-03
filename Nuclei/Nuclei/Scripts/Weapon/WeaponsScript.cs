@@ -21,6 +21,8 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
+
+    private readonly int _maxBlackHoles = 3;
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
 
     protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
@@ -82,6 +84,13 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
         if (Character.IsShooting)
         {
+            // If there are already MaxBlackHoles active, remove the oldest one
+            if (_activeBlackHoles.Count >= _maxBlackHoles)
+            {
+                _activeBlackHoles[0].Item1.Delete();
+                _activeBlackHoles.RemoveAt(0);
+            }
+
             var aimedPosition = GetAimedPosition(50.0f);
             var newBlackHole = CreateBlackHole(aimedPosition);
             var currentTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
@@ -92,6 +101,7 @@ public class WeaponsScript : GenericScriptBase<WeaponsService>
 
         // Remove black holes that have exceeded their duration
         _activeBlackHoles.RemoveAll(bh => now - bh.Item2 > (Service.BlackHoleLifeSpan + 1) * 1000);
+
 
         // Iterate through all active black holes and apply forces to nearby objects
         foreach (var blackHoleEntry in _activeBlackHoles)
