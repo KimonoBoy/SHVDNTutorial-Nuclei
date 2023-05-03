@@ -13,13 +13,9 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 Updating a bunch of different features and adding new smaller features. Also refactoring some.
 
 ## NOTE
-I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
-All these updates and changes atm is for my own personal test-stage, rethinking how the different layers should interact to make the most sense, and single-ton instances are a challenge to test, scale
-and maintain - unfortunately deriving from the Script class doesn't allow for dependency injection, and state-management between different layers can be a tedious and cumbersome subject.
+I've decided that the Wiki will be finished once the mod is in a more complete state. 
 
-However, when I begin updating the wiki again, you should be able to catch up with all the changes made this far, but I'd rather make it right first than teach you something that is subject to change.
-
-Both the **Wiki** and the **Mod** itself is a work in progress and it's in a very early stage.
+Sorry for any inconveniences.
 
 ## Planned Features
 Below is a list of features currently planned, more will come as the mods develops.
@@ -73,6 +69,7 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [x] Levitation Gun - Entities float when you shoot them
 - [x] Teleport Gun - Teleport to wherever you shoot
 - [x] Gravity Gun - Lift aimed entities and move them around with your mouse. Release them again with a force depending on your mouse Movement speed
+- [x] Black Hole Gun* - Create a black hole at a desired position and watch as the whole world around you is pulled towards it.
 - [ ] Vehicle Gun Menu - Shoot vehicles.
 - [ ] Portal Gun - Was a fun game, wasn't it?
 - [ ] Seagull Gun - Everything you shoot turns into a Seagull
