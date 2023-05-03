@@ -73,6 +73,7 @@ Features marked with an Asterix * are features that are functional but not yet c
 - [x] Levitation Gun - Entities float when you shoot them
 - [x] Teleport Gun - Teleport to wherever you shoot
 - [x] Gravity Gun - Lift aimed entities and move them around with your mouse. Release them again with a force depending on your mouse Movement speed
+- [x] Black Hole Gun* - Create a black hole at a desired position and watch as the whole world around you is pulled towards it.
 - [ ] Vehicle Gun Menu - Shoot vehicles.
 - [ ] Portal Gun - Was a fun game, wasn't it?
 - [ ] Seagull Gun - Everything you shoot turns into a Seagull
