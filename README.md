@@ -10,8 +10,6 @@ Added an OLD black-hole script of mine. Will be updated later. Aim, press and ho
 
 Updating a bunch of different features and adding new smaller features. Also refactoring some.
 
-Fow now, its bedtime.
-
 ## NOTE
 I'm in an optimization Process with the mod itself. Don't worry every step up until this point will be covered, but the mod itself needs to go through a huge Refactor process first.
 All these updates and changes atm is for my own personal test-stage, rethinking how the different layers should interact to make the most sense, and single-ton instances are a challenge to test, scale
