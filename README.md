@@ -6,7 +6,9 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Added an OLD black-hole script of mine. Will be updated later. Aim, press and hold H to create a black hole. The black hole is removed when you release H again.
+* Added a menu for the gravity gun that allows the player to adjust the throw velocity of an object.
+
+* Added an OLD black-hole script of mine. Will be updated later. Aim, press and hold H to create a black hole. The black hole is removed when you release H again.
 
 Updating a bunch of different features and adding new smaller features. Also refactoring some.
 
