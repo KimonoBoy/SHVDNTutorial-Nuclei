@@ -6,11 +6,13 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-* Added a menu for the gravity gun that allows the player to adjust the throw velocity of an object.
+* Updated black hole to have its own menu with different adjustment settings such as size and pull force.
 
-* Added an OLD black-hole script of mine. Will be updated later. Aim, press and hold H to create a black hole. The black hole is removed when you release H again.
+* Black holes are now created when shooting.
 
-Updating a bunch of different features and adding new smaller features. Also refactoring some.
+* A maximum of 3 black holes can be active at any given time, to reduce the stress on the game engine.
+
+Tomorrow we'll dive each feature script into smaller more digestable scripts, just like our menus. Basic functionality such as give all Weapons and Infinite ammo would be placed in the same script, while black hole and gravity gun would have its own script, but still depend on the Weaponservice. This will make our application easier to maintain, as we scale it up.
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
