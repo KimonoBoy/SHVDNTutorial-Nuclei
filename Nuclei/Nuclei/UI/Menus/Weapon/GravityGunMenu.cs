@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Weapon;
 
-public class GravityGunMenu : GenericMenuBase<WeaponsService>
+public class GravityGunMenu : GenericMenu<WeaponsService>
 {
     public GravityGunMenu(Enum @enum) : base(@enum)
     {

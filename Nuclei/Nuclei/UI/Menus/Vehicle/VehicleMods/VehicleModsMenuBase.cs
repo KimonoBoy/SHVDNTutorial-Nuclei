@@ -11,7 +11,7 @@ using Nuclei.UI.Menus.Base.ItemFactory;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleMods;
 
-public abstract class VehicleModsMenuBase : GenericMenuBase<VehicleModsService>
+public abstract class VehicleModsMenuBase : GenericMenu<VehicleModsService>
 {
     protected VehicleModsMenuBase(Enum @enum) : base(@enum)
     {

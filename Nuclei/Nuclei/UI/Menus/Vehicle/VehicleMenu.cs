@@ -10,7 +10,7 @@ using Nuclei.UI.Menus.Vehicle.VehicleWeapons;
 
 namespace Nuclei.UI.Menus.Vehicle;
 
-public class VehicleMenu : GenericMenuBase<VehicleService>
+public class VehicleMenu : GenericMenu<VehicleService>
 {
     public VehicleMenu(Enum @enum) : base(@enum)
     {

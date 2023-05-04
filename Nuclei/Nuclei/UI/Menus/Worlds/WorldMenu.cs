@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Worlds;
 
-public class WorldMenu : GenericMenuBase<WorldService>
+public class WorldMenu : GenericMenu<WorldService>
 {
     public WorldMenu(Enum @enum) : base(@enum)
     {

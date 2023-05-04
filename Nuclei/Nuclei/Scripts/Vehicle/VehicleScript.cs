@@ -7,7 +7,7 @@ using Nuclei.Services.Vehicle;
 
 namespace Nuclei.Scripts.Vehicle;
 
-public class VehicleScript : GenericScriptBase<VehicleService>
+public class VehicleScript : GenericScript<VehicleService>
 {
     private const int FliesThroughWindscreen = 32;
     private DateTime _speedBoostTimer = DateTime.UtcNow;

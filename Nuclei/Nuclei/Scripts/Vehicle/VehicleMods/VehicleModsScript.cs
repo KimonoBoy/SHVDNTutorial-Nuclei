@@ -8,7 +8,7 @@ using Nuclei.Services.Vehicle.VehicleMods;
 
 namespace Nuclei.Scripts.Vehicle.VehicleMods;
 
-public class VehicleModsScript : GenericScriptBase<VehicleModsService>
+public class VehicleModsScript : GenericScript<VehicleModsService>
 {
     private readonly Random random = new();
     private DateTime _rainBowModeInterval = DateTime.UtcNow;

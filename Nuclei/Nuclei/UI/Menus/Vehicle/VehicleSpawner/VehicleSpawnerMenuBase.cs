@@ -10,7 +10,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public abstract class VehicleSpawnerMenuBase : GenericMenuBase<VehicleSpawnerService>
+public abstract class VehicleSpawnerMenuBase : GenericMenu<VehicleSpawnerService>
 {
     protected VehicleSpawnerMenuBase(string subtitle, string description) : base(subtitle, description)
     {

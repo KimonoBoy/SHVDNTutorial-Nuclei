@@ -4,7 +4,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleHandling;
 
-public class VehicleHandlingMenu : GenericMenuBase<VehicleHandlingService>
+public class VehicleHandlingMenu : GenericMenu<VehicleHandlingService>
 {
     public VehicleHandlingMenu(Enum @enum) : base(@enum)
     {

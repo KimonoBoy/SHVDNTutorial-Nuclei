@@ -8,7 +8,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Player;
 
-public class PlayerMenu : GenericMenuBase<PlayerService>
+public class PlayerMenu : GenericMenu<PlayerService>
 {
     public PlayerMenu(Enum @enum) : base(@enum)
     {

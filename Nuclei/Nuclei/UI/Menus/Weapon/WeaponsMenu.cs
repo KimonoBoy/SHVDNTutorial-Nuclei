@@ -7,7 +7,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Weapon;
 
-public class WeaponsMenu : GenericMenuBase<WeaponsService>
+public class WeaponsMenu : GenericMenu<WeaponsService>
 {
     public WeaponsMenu(Enum @enum) : base(@enum)
     {

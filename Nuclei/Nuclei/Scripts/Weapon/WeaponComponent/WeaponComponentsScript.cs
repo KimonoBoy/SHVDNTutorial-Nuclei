@@ -2,9 +2,9 @@
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Weapon;
 
-namespace Nuclei.Scripts.Weapon;
+namespace Nuclei.Scripts.Weapon.WeaponComponent;
 
-public class WeaponComponentsScript : GenericScriptBase<WeaponComponentsService>
+public class WeaponComponentsScript : GenericScript<WeaponComponentsService>
 {
     protected override void SubscribeToEvents()
     {

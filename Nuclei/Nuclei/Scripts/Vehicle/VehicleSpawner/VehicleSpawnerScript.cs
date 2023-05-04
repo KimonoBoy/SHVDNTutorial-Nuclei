@@ -13,7 +13,7 @@ using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerScript : GenericScriptBase<VehicleSpawnerService>
+public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 {
     protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
     {

@@ -4,7 +4,7 @@ using Nuclei.Services.Worlds;
 
 namespace Nuclei.Scripts.Worlds;
 
-public class WorldScript : GenericScriptBase<WorldService>
+public class WorldScript : GenericScript<WorldService>
 {
     protected override void SubscribeToEvents()
     {

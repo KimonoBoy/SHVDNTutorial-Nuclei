@@ -14,7 +14,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleWeapons;
 
-public class VehicleWeaponsMenu : GenericMenuBase<VehicleWeaponsService>
+public class VehicleWeaponsMenu : GenericMenu<VehicleWeaponsService>
 {
     private readonly List<uint> _excludeHashes = new();
     private readonly ScaledTexture _starTexture = new("commonmenu", "shop_new_star");

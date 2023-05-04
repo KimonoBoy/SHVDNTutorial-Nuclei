@@ -9,7 +9,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 
-public class VehicleSpawnerMainMenu : GenericMenuBase<VehicleSpawnerService>
+public class VehicleSpawnerMainMenu : GenericMenu<VehicleSpawnerService>
 {
     public VehicleSpawnerMainMenu(Enum @enum) : base(@enum)
     {

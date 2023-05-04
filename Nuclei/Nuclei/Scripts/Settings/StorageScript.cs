@@ -4,7 +4,7 @@ using Nuclei.Services.Settings;
 
 namespace Nuclei.Scripts.Settings;
 
-public class StorageScript : GenericScriptBase<StorageService>
+public class StorageScript : GenericScript<StorageService>
 {
     public StorageScript()
     {

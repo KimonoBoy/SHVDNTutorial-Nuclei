@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Settings;
 
-public class StorageMenu : GenericMenuBase<StorageService>
+public class StorageMenu : GenericMenu<StorageService>
 {
     public StorageMenu(Enum @enum) : base(@enum)
     {

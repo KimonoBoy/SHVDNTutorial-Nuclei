@@ -14,7 +14,7 @@ using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
 
-public class PlayerScript : GenericScriptBase<PlayerService>
+public class PlayerScript : GenericScript<PlayerService>
 {
     private const int DrownsInWater = 3;
     private DateTime _lastEntityCheck = DateTime.UtcNow;

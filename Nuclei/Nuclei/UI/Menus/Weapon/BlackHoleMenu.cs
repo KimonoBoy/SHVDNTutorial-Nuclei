@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.Weapon;
 
-public class BlackHoleMenu : GenericMenuBase<WeaponsService>
+public class BlackHoleMenu : GenericMenu<WeaponsService>
 {
     public BlackHoleMenu(Enum @enum) : base(@enum)
     {

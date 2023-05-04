@@ -103,6 +103,17 @@ public class WeaponsService : GenericService<WeaponsService>
         }
     }
 
+    public int ThrowVelocity
+    {
+        get => _throwVelocity;
+        set
+        {
+            if (value == _throwVelocity) return;
+            _throwVelocity = value;
+            OnPropertyChanged();
+        }
+    }
+
     public bool TeleportGun
     {
         get => _teleportGun;
@@ -187,17 +198,6 @@ public class WeaponsService : GenericService<WeaponsService>
         {
             if (value == _blackHoleGun) return;
             _blackHoleGun = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public int ThrowVelocity
-    {
-        get => _throwVelocity;
-        set
-        {
-            if (value == _throwVelocity) return;
-            _throwVelocity = value;
             OnPropertyChanged();
         }
     }

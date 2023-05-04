@@ -9,7 +9,7 @@ using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Generics;
 
-public abstract class GenericScriptBase<TService> : Script, IDisposable where TService : GenericService<TService>, new()
+public abstract class GenericScript<TService> : Script, IDisposable where TService : GenericService<TService>, new()
 {
     private readonly TService _defaultValuesService = new();
 
@@ -21,7 +21,7 @@ public abstract class GenericScriptBase<TService> : Script, IDisposable where TS
     private bool _eventsSubscribed;
     private GTA.Vehicle _lastVehicle;
 
-    protected GenericScriptBase()
+    protected GenericScript()
     {
         if (_storageService.GetStorage().GetState().AutoLoad) Load();
         if (_storageService.GetStorage().GetState().AutoSave) _storageService.AutoSave = true;
