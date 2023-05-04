@@ -15,13 +15,8 @@ namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
 
 public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 {
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
-    }
-
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
         Service.VehicleSpawned += OnVehicleSpawned;
         Service.CustomVehicleSpawned += OnCustomVehicleSpawned;
         KeyDown += OnKeyDown;
@@ -29,17 +24,12 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
     protected override void UnsubscribeOnExit()
     {
-        Tick -= OnTick;
         Service.VehicleSpawned -= OnVehicleSpawned;
         Service.CustomVehicleSpawned -= OnCustomVehicleSpawned;
         KeyDown -= OnKeyDown;
     }
 
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-    }
-
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
     }
 

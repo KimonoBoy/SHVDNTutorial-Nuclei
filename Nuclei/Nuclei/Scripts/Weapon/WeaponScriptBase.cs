@@ -25,4 +25,12 @@ public abstract class WeaponScriptBase : GenericScript<WeaponsService>
             aimedPosition = GameplayCamera.Position + GameplayCamera.Direction * cameraDistance;
         return aimedPosition;
     }
+
+    protected override void SubscribeToEvents()
+    {
+    }
+
+    protected override void UnsubscribeOnExit()
+    {
+    }
 }

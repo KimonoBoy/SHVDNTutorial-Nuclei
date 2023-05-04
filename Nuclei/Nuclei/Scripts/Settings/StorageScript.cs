@@ -12,11 +12,7 @@ public class StorageScript : GenericScript<StorageService>
         Service.AutoLoad = State.GetState().AutoLoad;
     }
 
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-    }
-
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
     }
 

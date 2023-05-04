@@ -14,27 +14,9 @@ public class GravityGunScript : WeaponScriptBase
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
 
-    protected override void SubscribeToEvents()
-    {
-        Tick += OnTick;
-    }
-
-    protected override void UnsubscribeOnExit()
-    {
-        Tick -= OnTick;
-    }
-
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         ProcessGravityGun();
-    }
-
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-    }
-
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
     }
 
     private void ProcessGravityGun()

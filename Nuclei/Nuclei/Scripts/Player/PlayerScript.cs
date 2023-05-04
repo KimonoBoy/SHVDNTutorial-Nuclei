@@ -21,7 +21,6 @@ public class PlayerScript : GenericScript<PlayerService>
 
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
         KeyDown += OnKeyDown;
         Service.PlayerFixRequested += OnPlayerFixRequested;
         Service.CashInputRequested += OnCashInputRequested;
@@ -38,14 +37,13 @@ public class PlayerScript : GenericScript<PlayerService>
 
     protected override void UnsubscribeOnExit()
     {
-        Tick -= OnTick;
         KeyDown -= OnKeyDown;
         Service.PlayerFixRequested -= OnPlayerFixRequested;
         Service.CashInputRequested -= OnCashInputRequested;
         Service.AddCashRequested -= OnAddCashRequested;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
 
@@ -53,6 +51,15 @@ public class PlayerScript : GenericScript<PlayerService>
         ProcessSuperJump();
         ProcessOnePunchMan();
         ProcessSuperSpeed();
+        ProcessInvincible();
+        ProcessInvisible();
+        ProcessInfiniteBreath();
+        ProcessRideOnCars();
+        ProcessInfiniteStamina();
+        ProcessInfiniteSpecialAbility();
+        ProcessLockedWantedLevel();
+
+        UpdateWantedLevel();
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -76,18 +83,6 @@ public class PlayerScript : GenericScript<PlayerService>
         AddCash(cashHash);
     }
 
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-        if (Character == null) return;
-
-        ProcessInvincible();
-        ProcessInvisible();
-        ProcessInfiniteBreath();
-        ProcessRideOnCars();
-        ProcessInfiniteStamina();
-        ProcessInfiniteSpecialAbility();
-        ProcessLockedWantedLevel();
-    }
 
     private void ProcessLockedWantedLevel()
     {
@@ -95,10 +90,6 @@ public class PlayerScript : GenericScript<PlayerService>
             Game.Player.WantedLevel = Service.LockedWantedLevel;
     }
 
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
-        UpdateWantedLevel();
-    }
 
     private void ProcessInvincible()
     {

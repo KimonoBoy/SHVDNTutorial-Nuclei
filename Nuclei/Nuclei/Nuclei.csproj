@@ -80,7 +80,7 @@
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />
-    <Compile Include="Scripts\Weapon\WeaponFeatures\BlackHoleScript.cs" />
+    <Compile Include="Scripts\Weapon\WeaponFeatures\BlackHoleGunScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponFeatures\GravityGunScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponComponent\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponScriptBase.cs" />

@@ -6,33 +6,15 @@ using GTA.UI;
 
 namespace Nuclei.Scripts.Weapon.WeaponFeatures;
 
-public class BlackHoleScript : WeaponScriptBase
+public class BlackHoleGunScript : WeaponScriptBase
 {
     private readonly List<Tuple<Prop, long>> _activeBlackHoles = new();
     private readonly int _maxBlackHoles = 3;
     private Prop _blackHoleEntity;
 
-    protected override void SubscribeToEvents()
-    {
-        Tick += OnTick;
-    }
-
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         ProcessBlackHoleGun();
-    }
-
-    protected override void UnsubscribeOnExit()
-    {
-        Tick -= OnTick;
-    }
-
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-    }
-
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
     }
 
     private Prop CreateBlackHole(Vector3 position)
@@ -84,8 +66,8 @@ public class BlackHoleScript : WeaponScriptBase
         foreach (var blackHoleEntry in _activeBlackHoles)
         {
             var blackHole = blackHoleEntry.Item1;
-            var blackHoleRadius = Service.BlackHoleRadius * 15.0f;
-            var blackHoleForceMultiplier = Service.BlackHolePower * 100.0f;
+            var blackHoleRadius = (Service.BlackHoleRadius + 1) * 15.0f;
+            var blackHoleForceMultiplier = (Service.BlackHolePower + 1) * 50.0f;
             var objectsInRange = World.GetNearbyEntities(blackHole.Position, blackHoleRadius);
             foreach (var obj in objectsInRange)
             {

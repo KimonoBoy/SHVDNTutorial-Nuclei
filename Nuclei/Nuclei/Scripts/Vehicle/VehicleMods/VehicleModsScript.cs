@@ -10,21 +10,21 @@ namespace Nuclei.Scripts.Vehicle.VehicleMods;
 
 public class VehicleModsScript : GenericScript<VehicleModsService>
 {
-    private readonly Random random = new();
+    private readonly Random _random = new();
     private DateTime _rainBowModeInterval = DateTime.UtcNow;
 
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
         Service.PropertyChanged += OnPropertyChanged;
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
         Service.RandomizeAllModsRequested += OnRandomizeAllModsRequested;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
+        ProcessCustomTires();
         ProcessRainbowMode();
     }
 
@@ -33,10 +33,10 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         if (!Service.RainbowMode) return;
         if ((DateTime.UtcNow - _rainBowModeInterval).TotalMilliseconds <= 50) return;
 
-        CurrentVehicle.Mods.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        CurrentVehicle.Mods.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        CurrentVehicle.Mods.PrimaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        CurrentVehicle.Mods.SecondaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
         CurrentVehicle.Mods.PearlescentColor =
-            (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+            (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
         _rainBowModeInterval = DateTime.UtcNow;
     }
@@ -45,36 +45,36 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
     {
         if (CurrentVehicle == null) return;
 
-        Service.WheelType = (VehicleWheelType)random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
+        Service.WheelType = (VehicleWheelType)_random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
 
         foreach (var vehicleMod in Service.VehicleMods)
-            vehicleMod.Index = random.Next(0, vehicleMod.Count + 1);
+            vehicleMod.Index = _random.Next(0, vehicleMod.Count + 1);
 
         Service.RimColor =
-            (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+            (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-        Service.TireSmokeColor = (TireSmokeColor)random.Next(0, Service.TireSmokeColorDictionary.Values.Count + 1);
+        Service.TireSmokeColor = (TireSmokeColor)_random.Next(0, Service.TireSmokeColorDictionary.Values.Count + 1);
 
-        Service.CustomTires = random.Next(0, 2) == 1;
+        Service.CustomTires = _random.Next(0, 2) == 1;
 
         Service.LicensePlateStyle =
-            (LicensePlateStyle)random.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
+            (LicensePlateStyle)_random.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
 
-        Service.PrimaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        Service.SecondaryColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.PrimaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.SecondaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-        Service.WindowTint = (VehicleWindowTint)random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
+        Service.WindowTint = (VehicleWindowTint)_random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
 
-        Service.PearlescentColor = (VehicleColor)random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
+        Service.PearlescentColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
 
-        Service.XenonHeadLights = random.Next(0, 2) == 1;
+        Service.XenonHeadLights = _random.Next(0, 2) == 1;
 
         Service.NeonLightsLayout =
-            (NeonLightsLayout)random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
+            (NeonLightsLayout)_random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
 
-        Service.NeonLightsColor = (NeonLightsColor)random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
+        Service.NeonLightsColor = (NeonLightsColor)_random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
 
-        Service.Turbo = random.Next(0, 2) == 1;
+        Service.Turbo = _random.Next(0, 2) == 1;
     }
 
     private void OnLicensePlateInputRequested(object sender, EventArgs e)
@@ -186,10 +186,9 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         Service.PropertyChanged -= OnPropertyChanged;
     }
 
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-        if (CurrentVehicle == null) return;
 
+    private void ProcessCustomTires()
+    {
         if (CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation != Service.CustomTires)
         {
             CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
@@ -197,10 +196,6 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         }
     }
 
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
-        if (CurrentVehicle == null) return;
-    }
 
     private void UpdateMods()
     {

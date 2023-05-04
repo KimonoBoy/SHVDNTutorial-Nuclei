@@ -9,27 +9,19 @@ public class WeaponScript : WeaponScriptBase
 {
     private DateTime _teleportGunLastShot = DateTime.UtcNow;
 
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
-    }
-
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
+        base.SubscribeToEvents();
         Service.AllWeaponsRequested += OnAllWeaponsRequested;
     }
 
     protected override void UnsubscribeOnExit()
     {
-        Tick -= OnTick;
+        base.UnsubscribeOnExit();
         Service.AllWeaponsRequested -= OnAllWeaponsRequested;
     }
 
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-    }
-
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         if (Character == null) return;
         ProcessFireBullets();

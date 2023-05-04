@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using GTA;
-using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
 using Nuclei.Services.Settings;
@@ -13,7 +12,6 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
 {
     private readonly TService _defaultValuesService = new();
 
-    private readonly CustomTimer _gameStateTimer = new(100);
     private readonly StorageService _storageService = StorageService.Instance;
     private Ped _character;
     private GTA.Vehicle _currentVehicle;
@@ -79,8 +77,8 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
 
     public void Dispose()
     {
-        _gameStateTimer?.Stop();
         KeyDown -= OnKeyDown;
+        Tick -= BaseTick;
         Tick -= OnTick;
 
         _storageService.SaveRequested -= OnSaveRequested;
@@ -95,14 +93,13 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
         // Ensures that the events are only subscribed once.
         if (_eventsSubscribed) return true;
         KeyDown += OnKeyDown;
+        Tick += BaseTick;
         Tick += OnTick;
         Aborted += OnAborted;
 
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
-        _gameStateTimer.TimerElapsed += ProcessGameStatesTimer;
-        _gameStateTimer.TimerElapsed += UpdateServiceStatesTimer;
 
         _eventsSubscribed = true;
 
@@ -111,7 +108,9 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
         return false;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    protected abstract void OnTick(object sender, EventArgs e);
+
+    private void BaseTick(object sender, EventArgs e)
     {
         UpdateCurrentCharacter();
         UpdateCurrentVehicle();
@@ -121,6 +120,7 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
         if (_storageService.AutoSave && Game.IsPaused)
             Save();
     }
+
 
     private void UpdateCurrentWeapon()
     {
@@ -166,10 +166,6 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
     protected abstract void SubscribeToEvents();
 
     protected abstract void UnsubscribeOnExit();
-
-    protected abstract void ProcessGameStatesTimer(object sender, EventArgs e);
-
-    protected abstract void UpdateServiceStatesTimer(object sender, EventArgs e);
 
     private void UpdateLastVehicle()
     {

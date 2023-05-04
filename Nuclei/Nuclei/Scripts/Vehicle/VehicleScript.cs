@@ -12,28 +12,27 @@ public class VehicleScript : GenericScript<VehicleService>
     private const int FliesThroughWindscreen = 32;
     private DateTime _speedBoostTimer = DateTime.UtcNow;
 
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
-    {
-    }
-
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
         Service.RepairRequested += OnRepairRequested;
         Service.VehicleFlipRequested += OnVehicleFlipRequested;
     }
 
     protected override void UnsubscribeOnExit()
     {
-        Tick -= OnTick;
         Service.RepairRequested -= OnRepairRequested;
         Service.VehicleFlipRequested -= OnVehicleFlipRequested;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
+        ProcessLockDoors();
+
         if (CurrentVehicle == null) return;
 
+        ProcessIndestructible();
+        ProcessSeatBelt();
+        ProcessNeverFallOffBike();
         ProcessDriveUnderWater();
         ProcessSpeedBoost();
     }
@@ -46,17 +45,6 @@ public class VehicleScript : GenericScript<VehicleService>
     private void OnVehicleFlipRequested(object sender, EventArgs e)
     {
         FlipVehicle();
-    }
-
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-        ProcessLockDoors();
-
-        if (CurrentVehicle == null) return;
-
-        ProcessIndestructible();
-        ProcessSeatBelt();
-        ProcessNeverFallOffBike();
     }
 
     private void ProcessLockDoors()

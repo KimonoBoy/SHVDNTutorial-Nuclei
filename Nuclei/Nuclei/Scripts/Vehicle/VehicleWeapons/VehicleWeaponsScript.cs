@@ -18,20 +18,9 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
 
     protected override void SubscribeToEvents()
     {
-        Tick += OnTick;
     }
 
     protected override void UnsubscribeOnExit()
-    {
-        Tick -= OnTick;
-    }
-
-    protected override void ProcessGameStatesTimer(object sender, EventArgs e)
-    {
-        ProcessFireRate();
-    }
-
-    protected override void UpdateServiceStatesTimer(object sender, EventArgs e)
     {
     }
 
@@ -42,11 +31,12 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
         _minShootInterval = Service.FireRate * 25.0f;
     }
 
-    private void OnTick(object sender, EventArgs e)
+    protected override void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
         ProcessVehicleWeaponShoot(Service.VehicleWeapon);
+        ProcessFireRate();
     }
 
     private void ProcessVehicleWeaponShoot(uint weaponHash)
