@@ -73,15 +73,18 @@
     <Compile Include="Helpers\Utilities\Logger.cs" />
     <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Scripts\Player\OnePunchManScript.cs" />
+    <Compile Include="Scripts\Player\PlayerScriptBase.cs" />
+    <Compile Include="Scripts\Player\SuperSpeedScript.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
     <Compile Include="Scripts\Generics\GenericScript.cs" />
     <Compile Include="Scripts\Settings\StorageScript.cs" />
-    <Compile Include="Scripts\Vehicle\VehicleMods\VehicleModsScript.cs" />
+    <Compile Include="Scripts\Vehicle\Mods\VehicleModsScript.cs" />
     <Compile Include="Scripts\Vehicle\VehicleScript.cs" />
-    <Compile Include="Scripts\Vehicle\VehicleSpawner\VehicleSpawnerScript.cs" />
-    <Compile Include="Scripts\Vehicle\VehicleWeapons\VehicleWeaponsScript.cs" />
-    <Compile Include="Scripts\Weapon\WeaponFeatures\BlackHoleGunScript.cs" />
-    <Compile Include="Scripts\Weapon\WeaponFeatures\GravityGunScript.cs" />
+    <Compile Include="Scripts\Vehicle\Spawner\VehicleSpawnerScript.cs" />
+    <Compile Include="Scripts\Vehicle\Weapons\VehicleWeaponsScript.cs" />
+    <Compile Include="Scripts\Weapon\BlackHoleGunScript.cs" />
+    <Compile Include="Scripts\Weapon\GravityGunScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponComponent\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponScriptBase.cs" />
     <Compile Include="Scripts\Weapon\WeaponScript.cs" />
@@ -130,6 +133,7 @@
     <Compile Include="UI\Menus\Vehicle\VehicleWeapons\VehicleWeaponsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\BlackHoleMenu.cs" />
     <Compile Include="UI\Menus\Weapon\GravityGunMenu.cs" />
+    <Compile Include="UI\Menus\Weapon\VehicleGunMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />
     <Compile Include="UI\Menus\Worlds\WorldMenu.cs" />
@@ -142,10 +146,11 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
-xcopy /y "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"
+    <PostBuildEvent>
+			if not exist "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei" mkdir "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			COPY "$(TargetPath)" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			xcopy /y "$(TargetDir)$(TargetName).pdb" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts\Nuclei"
+			xcopy /y "$(TargetDir)Newtonsoft.Json.dll" "C:\Program Files (x86)\Steam\steamapps\common\Grand Theft Auto V\scripts"
 		</PostBuildEvent>
   </PropertyGroup>
 </Project>

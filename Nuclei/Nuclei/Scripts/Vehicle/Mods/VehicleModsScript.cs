@@ -6,7 +6,7 @@ using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle.VehicleMods;
 
-namespace Nuclei.Scripts.Vehicle.VehicleMods;
+namespace Nuclei.Scripts.Vehicle.Mods;
 
 public class VehicleModsScript : GenericScript<VehicleModsService>
 {

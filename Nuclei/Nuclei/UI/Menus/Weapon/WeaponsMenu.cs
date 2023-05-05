@@ -1,7 +1,5 @@
 ﻿using System;
-using GTA;
 using Nuclei.Enums.UI;
-using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Weapon;
 using Nuclei.UI.Menus.Base;
 
@@ -25,10 +23,9 @@ public class WeaponsMenu : GenericMenu<WeaponsService>
         AddHeader("Gutties");
         GravityGunMenu();
         BlackHoleMenu();
+        VehicleGunMenu();
         LevitationGun();
         TeleportGun();
-        VehicleGun();
-        // BlackHoleGun();
     }
 
     private void GravityGunMenu()
@@ -39,15 +36,14 @@ public class WeaponsMenu : GenericMenu<WeaponsService>
 
     private void BlackHoleMenu()
     {
-        var blackHoleMenu = new BlackHoleMenu(MenuTitle.BlackHole);
+        var blackHoleMenu = new BlackHoleMenu(MenuTitle.BlackHoleGun);
         AddMenu(blackHoleMenu);
     }
 
-    private void VehicleGun()
+    private void VehicleGunMenu()
     {
-        var listItemVehicleGun = AddListItem(WeaponItemTitle.VehicleGun, () => (int)Service.CurrentVehicleGun, Service,
-            (value, index) => { Service.CurrentVehicleGun = (VehicleHash)index; },
-            typeof(VehicleHash).ToDisplayNameArray());
+        var vehicleGunMenu = new VehicleGunMenu(MenuTitle.VehicleGun);
+        AddMenu(vehicleGunMenu);
     }
 
     private void TeleportGun()

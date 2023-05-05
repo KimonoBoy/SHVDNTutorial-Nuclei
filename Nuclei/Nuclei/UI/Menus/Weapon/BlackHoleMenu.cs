@@ -24,7 +24,7 @@ public class BlackHoleMenu : GenericMenu<WeaponsService>
     private void Size()
     {
         var sliderItemSize = AddSliderItem(WeaponItemTitle.BlackHoleRadius, () => Service.BlackHoleRadius, Service,
-            value => { Service.BlackHoleRadius = value; }, 10, 20);
+            value => { Service.BlackHoleRadius = value; }, 5);
     }
 
     private void LifeSpan()

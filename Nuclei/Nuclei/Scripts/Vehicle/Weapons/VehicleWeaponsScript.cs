@@ -8,7 +8,7 @@ using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleWeapons;
 
-namespace Nuclei.Scripts.Vehicle.VehicleWeapons;
+namespace Nuclei.Scripts.Vehicle.Weapons;
 
 public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
 {

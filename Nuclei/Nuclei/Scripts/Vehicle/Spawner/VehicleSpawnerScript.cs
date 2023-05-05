@@ -11,7 +11,7 @@ using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Control = GTA.Control;
 
-namespace Nuclei.Scripts.Vehicle.VehicleSpawner;
+namespace Nuclei.Scripts.Vehicle.Spawner;
 
 public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 {

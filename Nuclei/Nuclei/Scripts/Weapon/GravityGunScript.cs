@@ -6,7 +6,7 @@ using GTA.Math;
 using Nuclei.Helpers.ExtensionMethods;
 using Control = GTA.Control;
 
-namespace Nuclei.Scripts.Weapon.WeaponFeatures;
+namespace Nuclei.Scripts.Weapon;
 
 public class GravityGunScript : WeaponScriptBase
 {
@@ -43,12 +43,6 @@ public class GravityGunScript : WeaponScriptBase
 
     private void HandleGrabbedEntity()
     {
-        if (_grabbedEntity is Ped ped)
-        {
-            ped.Task.ClearAllImmediately();
-            ped.Task.LookAt(Character);
-        }
-
         _grabbedEntity.Draw3DRectangleAroundObject();
         var targetPosition = CalculateTargetPosition();
         _grabbedEntity.Position = targetPosition;

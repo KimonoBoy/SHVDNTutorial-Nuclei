@@ -11,13 +11,11 @@ public class WeaponScript : WeaponScriptBase
 
     protected override void SubscribeToEvents()
     {
-        base.SubscribeToEvents();
         Service.AllWeaponsRequested += OnAllWeaponsRequested;
     }
 
     protected override void UnsubscribeOnExit()
     {
-        base.UnsubscribeOnExit();
         Service.AllWeaponsRequested -= OnAllWeaponsRequested;
     }
 

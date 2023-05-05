@@ -58,7 +58,10 @@ public enum MenuTitle
     GravityGun,
 
     [Description("Change how the black hole gun behaves.")]
-    BlackHole,
+    BlackHoleGun,
+
+    [Description("Shoot vehicles from your gun!\n\nChoose between different vehicles.")]
+    VehicleGun,
 
     [Description("Save/Load and Change HotKeys")]
     Settings,
