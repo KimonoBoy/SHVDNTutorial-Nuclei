@@ -19,8 +19,7 @@ public class BlackHoleGunScript : WeaponScriptBase
     private int _blackHoleRadius;
     private long _lastObjectCacheUpdateTime;
     private long _lastUpdateTime;
-    private bool _wasShooting;
-    private Model model = new("prop_rock_4_a");
+    private Model _model = new("prop_rock_4_a");
 
     protected override void OnTick(object sender, EventArgs e)
     {
@@ -30,7 +29,7 @@ public class BlackHoleGunScript : WeaponScriptBase
 
     private void CacheServiceValues()
     {
-        _blackHoleLifeSpan = Service.BlackHoleLifeSpan;
+        _blackHoleLifeSpan = Service.BlackHoleLifeSpan + 1;
         _blackHoleRadius = (Service.BlackHoleRadius + 1) * 15;
         _blackHolePower = (Service.BlackHolePower + 1) * 50;
     }
@@ -38,7 +37,7 @@ public class BlackHoleGunScript : WeaponScriptBase
     private bool ShouldUpdate()
     {
         var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        if (currentTime - _lastUpdateTime > 25) // Update every 100ms (10 times per second)
+        if (currentTime - _lastUpdateTime > 25)
         {
             _lastUpdateTime = currentTime;
             return true;
@@ -50,7 +49,7 @@ public class BlackHoleGunScript : WeaponScriptBase
     private bool ShouldUpdateObjectCache()
     {
         var currentTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        if (currentTime - _lastObjectCacheUpdateTime > 100) // Update object cache every 500ms (2 times per second)
+        if (currentTime - _lastObjectCacheUpdateTime > 100)
         {
             _lastObjectCacheUpdateTime = currentTime;
             return true;
@@ -68,18 +67,18 @@ public class BlackHoleGunScript : WeaponScriptBase
 
     private Prop CreateBlackHole(Vector3 position)
     {
-        if (!model.IsLoaded)
+        if (!_model.IsLoaded)
         {
-            model.Request(1000);
-            if (!model.IsInCdImage || !model.IsValid)
+            _model.Request(1000);
+            if (!_model.IsInCdImage || !_model.IsValid)
             {
                 Notification.Show("Model not valid");
                 return null;
             }
         }
 
-        while (!model.IsLoaded) Wait(100);
-        _blackHoleEntity = World.CreateProp(model, position, false, false);
+        while (!_model.IsLoaded) Wait(100);
+        _blackHoleEntity = World.CreateProp(_model, position, false, false);
         _blackHoleEntity.IsVisible = false;
         _blackHoleEntity.IsCollisionProof = true;
         _blackHoleEntity.IsCollisionEnabled = false;
@@ -130,11 +129,11 @@ public class BlackHoleGunScript : WeaponScriptBase
                             }
                             // Check if the object has spent enough time in the black hole, and if so, delete it
                             else if (DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - _objectsInBlackHole[obj] >=
-                                     500.0f)
+                                     1000.0f)
                             {
                                 obj.Delete();
                                 _objectsInBlackHole.Remove(obj);
-                                model.MarkAsNoLongerNeeded();
+                                _model.MarkAsNoLongerNeeded();
                                 continue;
                             }
                         }
