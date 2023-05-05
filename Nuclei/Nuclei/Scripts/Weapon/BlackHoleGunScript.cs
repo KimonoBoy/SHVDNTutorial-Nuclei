@@ -21,6 +21,7 @@ public class BlackHoleGunScript : WeaponScriptBase
     private long _lastUpdateTime;
     private Model _model = new("prop_rock_4_a");
 
+
     protected override void OnTick(object sender, EventArgs e)
     {
         CacheServiceValues();
@@ -112,7 +113,6 @@ public class BlackHoleGunScript : WeaponScriptBase
             UpdateObjectCache();
 
             if (_activeBlackHole != null)
-            {
                 if (_cachedObjects.TryGetValue(_activeBlackHole, out var objectsInRange))
                     foreach (var obj in objectsInRange)
                     {
@@ -120,7 +120,7 @@ public class BlackHoleGunScript : WeaponScriptBase
                         var distance = Vector3.Distance(obj.Position, _activeBlackHole.Position);
 
                         // Check if the object is within 3.0f units of the black hole
-                        if (distance < 5.0f)
+                        if (distance < 8.0f)
                         {
                             // Add the object to the dictionary and store the current time
                             if (!_objectsInBlackHole.ContainsKey(obj))
@@ -148,9 +148,6 @@ public class BlackHoleGunScript : WeaponScriptBase
 
                         obj.ApplyForce(direction * force);
                     }
-
-                World.RemoveAllParticleEffectsInRange(_blackHoleEntity.Position, 20.0f);
-            }
         }
     }
 }
