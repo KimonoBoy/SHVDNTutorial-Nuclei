@@ -7,7 +7,6 @@ namespace Nuclei.Services.Generics;
 
 /// <summary>
 ///     Represents the base class for services with common properties and functionality.
-///     This class does not include state management.
 /// </summary>
 /// <typeparam name="TService">The type of the service being implemented.</typeparam>
 public abstract class GenericService<TService> : ObservableService where TService : class, new()
