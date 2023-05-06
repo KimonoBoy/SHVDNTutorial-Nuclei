@@ -88,6 +88,12 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
                 vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
                 vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
                 break;
+            case NeonLightsLayout.Off:
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
+                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
