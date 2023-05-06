@@ -5,7 +5,7 @@ using GTA;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Worlds;
 
-namespace Nuclei.Scripts.Worlds;
+namespace Nuclei.Scripts.World;
 
 public class TimeScript : GenericScript<TimeService>
 {
@@ -27,15 +27,15 @@ public class TimeScript : GenericScript<TimeService>
     private void ProcessLockTimeOfDay()
     {
         if (Service.LockTimeOfDay)
-            World.CurrentTimeOfDay = TimeSpan.FromHours(Service.CurrentHourOfDay);
+            GTA.World.CurrentTimeOfDay = TimeSpan.FromHours(Service.CurrentHourOfDay);
     }
 
     private void UpdateTimeOfDay()
     {
-        if (Service.CurrentHourOfDay == World.CurrentTimeOfDay.Hours) return;
+        if (Service.CurrentHourOfDay == GTA.World.CurrentTimeOfDay.Hours) return;
         if (Service.LockTimeOfDay) return;
 
-        Service.CurrentHourOfDay = World.CurrentTimeOfDay.Hours;
+        Service.CurrentHourOfDay = GTA.World.CurrentTimeOfDay.Hours;
     }
 
     protected override void SubscribeToEvents()
@@ -49,6 +49,6 @@ public class TimeScript : GenericScript<TimeService>
     protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Service.CurrentHourOfDay))
-            World.CurrentTimeOfDay = TimeSpan.FromHours(Service.CurrentHourOfDay);
+            GTA.World.CurrentTimeOfDay = TimeSpan.FromHours(Service.CurrentHourOfDay);
     }
 }

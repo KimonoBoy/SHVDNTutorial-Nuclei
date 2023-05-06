@@ -71,7 +71,7 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
 
     private Vector3 GetCrosshairAimPoint(float maxDistance)
     {
-        var raycastResult = World.Raycast(
+        var raycastResult = GTA.World.Raycast(
             GameplayCamera.Position,
             GameplayCamera.Position + GameplayCamera.Direction * maxDistance,
             IntersectFlags.Everything, Character);
@@ -131,8 +131,7 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
             throw new VehicleWeaponNotFoundException();
 
         var targetPosition = targetPoint ?? shootingPoint + CurrentVehicle.ForwardVector * MinProjectileDistance;
-
-        World.ShootBullet(
+        GTA.World.ShootBullet(
             shootingPoint,
             targetPosition,
             Character,
@@ -144,7 +143,7 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
 
     private void RemoveDistantProjectiles()
     {
-        var projectilesFurtherThanMinProjectileDistance = World.GetAllProjectiles()
+        var projectilesFurtherThanMinProjectileDistance = GTA.World.GetAllProjectiles()
             .OrderByDescending(p => p.Position.DistanceTo(Character.Position));
 
         foreach (var projectile in projectilesFurtherThanMinProjectileDistance)

@@ -77,7 +77,7 @@ public class SuperSpeedScript : PlayerScriptBase
         if (entityForceMultiplier <= 0.0f) return;
 
         // Gets all entities that are touching the player.
-        var touchingEntities = World.GetAllEntities()
+        var touchingEntities = GTA.World.GetAllEntities()
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))
             .Where(entity =>
                 entity != Character && entity.IsTouching(Character));

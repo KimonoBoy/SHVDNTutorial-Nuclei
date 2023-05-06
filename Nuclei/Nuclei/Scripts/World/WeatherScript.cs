@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using GTA;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Worlds;
 
-namespace Nuclei.Scripts.Worlds;
+namespace Nuclei.Scripts.World;
 
 public class WeatherScript : GenericScript<WeatherService>
 {
@@ -15,8 +14,8 @@ public class WeatherScript : GenericScript<WeatherService>
 
     private void UpdateWeather()
     {
-        if (Service.Weather == World.Weather) return;
-        Service.Weather = World.Weather;
+        if (Service.Weather == GTA.World.Weather) return;
+        Service.Weather = GTA.World.Weather;
     }
 
     protected override void SubscribeToEvents()
@@ -30,6 +29,6 @@ public class WeatherScript : GenericScript<WeatherService>
     protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Service.Weather))
-            World.Weather = Service.Weather;
+            GTA.World.Weather = Service.Weather;
     }
 }

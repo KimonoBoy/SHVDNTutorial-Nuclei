@@ -3,7 +3,7 @@ using Nuclei.Enums.UI;
 using Nuclei.Services.Worlds;
 using Nuclei.UI.Menus.Base;
 
-namespace Nuclei.UI.Menus.Worlds;
+namespace Nuclei.UI.Menus.World;
 
 public class WorldMenu : GenericMenu<WorldService>
 {

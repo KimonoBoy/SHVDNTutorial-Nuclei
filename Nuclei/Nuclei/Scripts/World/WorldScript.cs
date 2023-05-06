@@ -2,7 +2,7 @@
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Worlds;
 
-namespace Nuclei.Scripts.Worlds;
+namespace Nuclei.Scripts.World;
 
 public class WorldScript : GenericScript<WorldService>
 {

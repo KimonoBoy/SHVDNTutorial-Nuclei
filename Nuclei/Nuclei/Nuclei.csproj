@@ -93,9 +93,9 @@
     <Compile Include="Scripts\Weapon\WeaponComponent\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponScriptBase.cs" />
     <Compile Include="Scripts\Weapon\WeaponScript.cs" />
-    <Compile Include="Scripts\Worlds\TimeScript.cs" />
-    <Compile Include="Scripts\Worlds\WeatherScript.cs" />
-    <Compile Include="Scripts\Worlds\WorldScript.cs" />
+    <Compile Include="Scripts\World\TimeScript.cs" />
+    <Compile Include="Scripts\World\WeatherScript.cs" />
+    <Compile Include="Scripts\World\WorldScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleException.cs" />
@@ -115,9 +115,9 @@
     <Compile Include="Services\Vehicle\VehicleWeapons\VehicleWeaponsService.cs" />
     <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
     <Compile Include="Services\Weapon\WeaponsService.cs" />
-    <Compile Include="Services\Worlds\TimeService.cs" />
-    <Compile Include="Services\Worlds\WeatherService.cs" />
-    <Compile Include="Services\Worlds\WorldService.cs" />
+    <Compile Include="Services\World\TimeService.cs" />
+    <Compile Include="Services\World\WeatherService.cs" />
+    <Compile Include="Services\World\WorldService.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\CustomItems\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Base\GenericMenu.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\ItemFactoryService.cs" />
@@ -149,9 +149,9 @@
     <Compile Include="UI\Menus\Weapon\VehicleGunMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />
-    <Compile Include="UI\Menus\Worlds\TimeMenu.cs" />
-    <Compile Include="UI\Menus\Worlds\WeatherMenu.cs" />
-    <Compile Include="UI\Menus\Worlds\WorldMenu.cs" />
+    <Compile Include="UI\Menus\World\TimeMenu.cs" />
+    <Compile Include="UI\Menus\World\WeatherMenu.cs" />
+    <Compile Include="UI\Menus\World\WorldMenu.cs" />
     <Compile Include="UI\Text\Display.cs" />
   </ItemGroup>
   <ItemGroup>

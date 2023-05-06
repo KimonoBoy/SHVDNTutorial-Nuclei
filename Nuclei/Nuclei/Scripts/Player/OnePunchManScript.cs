@@ -40,7 +40,7 @@ public class OnePunchManScript : PlayerScriptBase
     private Entity GetClosestDamagedEntity()
     {
         var maxDistance = 20.0f;
-        return World.GetAllEntities()
+        return GTA.World.GetAllEntities()
             .Where(entity => entity.Position.DistanceTo(Character.Position) <= maxDistance &&
                              IsEntityInFrontOfPlayer(entity))
             .OrderBy(entity => entity.Position.DistanceTo(Character.Position))

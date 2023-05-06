@@ -5,7 +5,7 @@ using Nuclei.UI.Menus.Player;
 using Nuclei.UI.Menus.Settings;
 using Nuclei.UI.Menus.Vehicle;
 using Nuclei.UI.Menus.Weapon;
-using Nuclei.UI.Menus.Worlds;
+using Nuclei.UI.Menus.World;
 
 namespace Nuclei.UI.Menus;
 

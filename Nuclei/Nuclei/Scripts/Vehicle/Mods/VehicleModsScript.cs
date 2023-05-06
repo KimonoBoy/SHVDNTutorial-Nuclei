@@ -85,7 +85,7 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         Service.LicensePlate = licensePlateInput;
     }
 
-    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    private new void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (CurrentVehicle == null) return;
 
@@ -106,7 +106,8 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
                 break;
             case nameof(Service.CustomTires):
                 CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
-                CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
+                if (CurrentVehicle.Mods[VehicleModType.RearWheel].Count > 0)
+                    CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
                 break;
             case nameof(Service.LicensePlate):
                 CurrentVehicle.Mods.LicensePlate = Service.LicensePlate;
@@ -192,7 +193,8 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         if (CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation != Service.CustomTires)
         {
             CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
-            CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
+            if (CurrentVehicle.Mods[VehicleModType.RearWheel].Count > 0)
+                CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
         }
     }
 

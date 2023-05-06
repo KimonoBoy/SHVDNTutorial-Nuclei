@@ -63,7 +63,7 @@ public class BlackHoleGunScript : WeaponScriptBase
     {
         if (ShouldUpdateObjectCache() && _activeBlackHole != null)
             _cachedObjects[_activeBlackHole] =
-                World.GetNearbyEntities(_activeBlackHole.Position, _blackHoleRadius).ToList();
+                GTA.World.GetNearbyEntities(_activeBlackHole.Position, _blackHoleRadius).ToList();
     }
 
     private Prop CreateBlackHole(Vector3 position)
@@ -79,7 +79,7 @@ public class BlackHoleGunScript : WeaponScriptBase
         }
 
         while (!_model.IsLoaded) Wait(100);
-        _blackHoleEntity = World.CreateProp(_model, position, false, false);
+        _blackHoleEntity = GTA.World.CreateProp(_model, position, false, false);
         _blackHoleEntity.IsVisible = false;
         _blackHoleEntity.IsCollisionProof = true;
         _blackHoleEntity.IsCollisionEnabled = false;

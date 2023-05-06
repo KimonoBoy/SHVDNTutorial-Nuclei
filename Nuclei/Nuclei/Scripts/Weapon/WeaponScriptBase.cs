@@ -17,7 +17,7 @@ public abstract class WeaponScriptBase : GenericScript<WeaponsService>
     {
         Vector3 aimedPosition;
 
-        var crosshairCoords = World.GetCrosshairCoordinates(IntersectFlags.Everything);
+        var crosshairCoords = GTA.World.GetCrosshairCoordinates(IntersectFlags.Everything);
 
         if (crosshairCoords.DidHit)
             aimedPosition = crosshairCoords.HitPosition;

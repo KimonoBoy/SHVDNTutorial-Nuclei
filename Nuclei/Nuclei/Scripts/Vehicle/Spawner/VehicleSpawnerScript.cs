@@ -42,8 +42,6 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
         // Wheels
         vehicle.Mods.WheelType = customVehicleDto.WheelType;
-        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
-        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
 
         // Mod Types
         foreach (var customVehicleMod in customVehicleDto.VehicleMods)
@@ -104,6 +102,9 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
         vehicle.Mods.RimColor = customVehicleDto.RimColor;
         vehicle.Mods.TireSmokeColor = VehicleModsService.Instance.TireSmokeColorDictionary
             .FirstOrDefault(color => color.Key == customVehicleDto.TireSmokeColor).Value;
+
+        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
+        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -219,7 +220,7 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
         var heading = GetVehicleHeading();
 
         // Create the Vehicle from the model, position it in front of the player, and set its heading.
-        var vehicle = World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
+        var vehicle = GTA.World.CreateVehicle(vehicleModel, GetVehiclePosition(), heading);
 
         // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();
