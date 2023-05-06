@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Services.Exception;
@@ -84,6 +85,7 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
         _storageService.SaveRequested -= OnSaveRequested;
         _storageService.LoadRequested -= OnLoadRequested;
         _storageService.RestoreDefaultsRequested -= OnRestoreDefaultsRequested;
+        Service.PropertyChanged -= OnPropertyChanged;
 
         UnsubscribeOnExit();
     }
@@ -100,12 +102,17 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
         _storageService.SaveRequested += OnSaveRequested;
         _storageService.LoadRequested += OnLoadRequested;
         _storageService.RestoreDefaultsRequested += OnRestoreDefaultsRequested;
+        Service.PropertyChanged += OnPropertyChanged;
 
         _eventsSubscribed = true;
 
         SubscribeToEvents();
 
         return false;
+    }
+
+    protected virtual void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
     }
 
     protected abstract void OnTick(object sender, EventArgs e);

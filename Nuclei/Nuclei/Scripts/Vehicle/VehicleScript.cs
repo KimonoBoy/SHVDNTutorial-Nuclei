@@ -120,3 +120,19 @@ public class VehicleScript : GenericScript<VehicleService>
         CurrentVehicle?.Repair();
     }
 }
+
+// private void ProcessTest()
+// {
+//     if (!Game.IsKeyPressed(Keys.NumPad9)) return;
+//
+//     var nearestProp = World.GetClosestProp(Character.Position, 10.0f);
+//     if (nearestProp == null) return;
+//     var vehicle = World.CreateVehicle(new Model(VehicleHash.Formula),
+//         Character.Position,
+//         Character.Heading);
+//     nearestProp.AttachTo(vehicle);
+//     vehicle.IsVisible = false;
+//     nearestProp.IsVisible = true;
+//     Character.SetIntoVehicle(vehicle, VehicleSeat.Driver);
+//     vehicle.PlaceOnGround();
+// }

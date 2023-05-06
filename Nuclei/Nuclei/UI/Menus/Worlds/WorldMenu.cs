@@ -1,5 +1,5 @@
 ﻿using System;
-using GTA;
+using Nuclei.Enums.UI;
 using Nuclei.Services.Worlds;
 using Nuclei.UI.Menus.Base;
 
@@ -9,12 +9,19 @@ public class WorldMenu : GenericMenu<WorldService>
 {
     public WorldMenu(Enum @enum) : base(@enum)
     {
-        TimeOfDay();
+        TimeMenu();
+        WeatherMenu();
     }
 
-    private void TimeOfDay()
+    private void WeatherMenu()
     {
-        // Just used for myself....
-        var itemSetDayTime = AddItem("Day Time", "", () => { World.CurrentTimeOfDay = TimeSpan.FromHours(12); });
+        var weatherMenu = new WeatherMenu(MenuTitle.Weather);
+        AddMenu(weatherMenu);
+    }
+
+    private void TimeMenu()
+    {
+        var timeMenu = new TimeMenu(MenuTitle.Time);
+        AddMenu(timeMenu);
     }
 }

@@ -72,5 +72,10 @@ public enum MenuTitle
     Interior,
 
     [Description("Change anything in the game world, from the weather to the time of day, to the gravity level!")]
-    World
+    World,
+
+    [Description("Adjust Time settings.")] Time,
+
+    [Description("Adjust weather settings.")]
+    Weather
 }

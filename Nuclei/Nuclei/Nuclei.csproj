@@ -58,15 +58,19 @@
     <Compile Include="Enums\UI\MenuTitle.cs" />
     <Compile Include="Enums\UI\PlayerItemTitle.cs" />
     <Compile Include="Enums\UI\SettingsTitle.cs" />
+    <Compile Include="Enums\UI\TimeItemTitle.cs" />
     <Compile Include="Enums\UI\VehicleSpawnerItemTitle.cs" />
     <Compile Include="Enums\UI\VehicleItemTitle.cs" />
     <Compile Include="Enums\UI\VehicleWeaponsItemTitle.cs" />
     <Compile Include="Enums\UI\WeaponItemTitle.cs" />
+    <Compile Include="Enums\UI\WeatherItemTitle.cs" />
+    <Compile Include="Enums\UI\WorldItemTitle.cs" />
     <Compile Include="Enums\Vehicle\NeonLightsColor.cs" />
     <Compile Include="Enums\Vehicle\NeonLightsLayout.cs" />
     <Compile Include="Enums\Vehicle\TireSmokeColor.cs" />
     <Compile Include="Enums\Vehicle\VehicleModsItemTitle.cs" />
     <Compile Include="Enums\Vehicle\VehicleWeaponAttachmentPoint.cs" />
+    <Compile Include="Enums\World\TimeScaleHash.cs" />
     <Compile Include="Helpers\ExtensionMethods\EntityExtensions.cs" />
     <Compile Include="Helpers\ExtensionMethods\EnumExtensions.cs" />
     <Compile Include="Helpers\Utilities\CustomTimer.cs" />
@@ -88,6 +92,8 @@
     <Compile Include="Scripts\Weapon\WeaponComponent\WeaponComponentsScript.cs" />
     <Compile Include="Scripts\Weapon\WeaponScriptBase.cs" />
     <Compile Include="Scripts\Weapon\WeaponScript.cs" />
+    <Compile Include="Scripts\Worlds\TimeScript.cs" />
+    <Compile Include="Scripts\Worlds\WeatherScript.cs" />
     <Compile Include="Scripts\Worlds\WorldScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
     <Compile Include="Services\Exception\CustomExceptions\PlayerException.cs" />
@@ -106,6 +112,8 @@
     <Compile Include="Services\Vehicle\VehicleWeapons\VehicleWeaponsService.cs" />
     <Compile Include="Services\Weapon\WeaponComponentsService.cs" />
     <Compile Include="Services\Weapon\WeaponsService.cs" />
+    <Compile Include="Services\Worlds\TimeService.cs" />
+    <Compile Include="Services\Worlds\WeatherService.cs" />
     <Compile Include="Services\Worlds\WorldService.cs" />
     <Compile Include="UI\Menus\Base\ItemFactory\CustomItems\NativeHeaderItem.cs" />
     <Compile Include="UI\Menus\Base\GenericMenu.cs" />
@@ -136,6 +144,8 @@
     <Compile Include="UI\Menus\Weapon\VehicleGunMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponComponentsMenu.cs" />
     <Compile Include="UI\Menus\Weapon\WeaponsMenu.cs" />
+    <Compile Include="UI\Menus\Worlds\TimeMenu.cs" />
+    <Compile Include="UI\Menus\Worlds\WeatherMenu.cs" />
     <Compile Include="UI\Menus\Worlds\WorldMenu.cs" />
     <Compile Include="UI\Text\Display.cs" />
   </ItemGroup>

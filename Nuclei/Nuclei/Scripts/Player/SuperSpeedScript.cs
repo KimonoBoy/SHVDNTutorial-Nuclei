@@ -12,7 +12,6 @@ public class SuperSpeedScript : PlayerScriptBase
         ProcessSuperSpeed();
     }
 
-
     /// <summary>
     ///     Processes the different SuperSpeeds.
     ///     If the player is not sprinting, the SuperSpeed is disabled.

@@ -31,6 +31,7 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
         _minShootInterval = Service.FireRate * 25.0f;
     }
 
+
     protected override void OnTick(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;

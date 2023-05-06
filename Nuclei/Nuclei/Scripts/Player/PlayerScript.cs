@@ -24,7 +24,7 @@ public class PlayerScript : PlayerScriptBase
         Service.PropertyChanged += OnPropertyChanged;
     }
 
-    private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+    protected override void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(Service.WantedLevel)) Game.Player.WantedLevel = Service.WantedLevel;
 
