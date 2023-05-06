@@ -2,7 +2,7 @@
 using GTA;
 using Nuclei.Helpers.ExtensionMethods;
 
-namespace Nuclei.Services.Player;
+namespace Nuclei.Helpers;
 
 public class ModelCategorizer
 {
