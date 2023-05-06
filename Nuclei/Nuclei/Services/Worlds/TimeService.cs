@@ -1,10 +1,20 @@
-﻿using Nuclei.Enums.World;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
+using Nuclei.Enums.World;
 using Nuclei.Services.Generics;
 
 namespace Nuclei.Services.Worlds;
 
 public class TimeService : GenericService<TimeService>
 {
+    [JsonIgnore] public readonly Dictionary<TimeScaleHash, float> TimeScaleDictionary = new()
+    {
+        { TimeScaleHash.Normal, 1.0f },
+        { TimeScaleHash.Slow, 0.8f },
+        { TimeScaleHash.Slower, 0.5f },
+        { TimeScaleHash.Slowest, 0.25f }
+    };
+
     private int _currentHourOfDay;
     private bool _lockTimeOfDay;
     private TimeScaleHash _timeScale = TimeScaleHash.Normal;

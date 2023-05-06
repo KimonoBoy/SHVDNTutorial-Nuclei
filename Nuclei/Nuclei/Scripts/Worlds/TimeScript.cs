@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using GTA;
-using Nuclei.Enums.World;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Worlds;
 
@@ -18,21 +18,10 @@ public class TimeScript : GenericScript<TimeService>
 
     private void ProcessTimeScale()
     {
-        switch (Service.TimeScale)
-        {
-            case TimeScaleHash.Normal:
-                Game.TimeScale = 1.0f;
-                break;
-            case TimeScaleHash.Slow:
-                Game.TimeScale = 0.80f;
-                break;
-            case TimeScaleHash.Slower:
-                Game.TimeScale = 0.50f;
-                break;
-            case TimeScaleHash.Slowest:
-                Game.TimeScale = 0.25f;
-                break;
-        }
+        if (Service.TimeScaleDictionary.FirstOrDefault(timeScale => timeScale.Key == Service.TimeScale).Value
+            .Equals(Game.TimeScale)) return;
+        Game.TimeScale = Service.TimeScaleDictionary.FirstOrDefault(timeScale => timeScale.Key == Service.TimeScale)
+            .Value;
     }
 
     private void ProcessLockTimeOfDay()
