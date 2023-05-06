@@ -6,13 +6,7 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-* Updated black hole to have its own menu with different adjustment settings such as size and pull force.
-
-* Black holes are now created when shooting.
-
-* A maximum of 3 black holes can be active at any given time, to reduce the stress on the game engine.
-
-Tomorrow we'll divide each feature script into smaller more digestable scripts, just like our menus. Basic functionality such as give all Weapons and Infinite ammo would be placed in the same script, while black hole and gravity gun would have its own script, but still depend on the Weaponservice. This will make our application easier to maintain, as we scale it up.
+* Currently working on a script that allows the player to use any prop in-game as a vehicle. You can drive trash cans, traffic lights or w/e prop you'll stumble upon.
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
