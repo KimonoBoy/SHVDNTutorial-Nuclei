@@ -33,6 +33,14 @@ public class Logger
         streamWriter.WriteLine(logMessage);
     }
 
+    public void LogNoTimeStamp(string message)
+    {
+        var logMessage = $"{message}";
+
+        using var streamWriter = new StreamWriter(_logFilePath, true);
+        streamWriter.WriteLine(logMessage);
+    }
+
     public void LogException(Exception exception)
     {
         Log($"Exception: {exception}");

@@ -12,7 +12,7 @@ public enum MenuTitle
 
     [Description(
         "Change your player's appearance and transform into any character, creature or even bird and take to the skies!")]
-    SkinChanger,
+    ModelChanger,
 
     [Description(
         "Get complete control over your player's stats and customize them to be the best version of yourself!")]

@@ -78,6 +78,7 @@
     <Compile Include="Helpers\Utilities\ReflectionUtilities.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Scripts\Player\OnePunchManScript.cs" />
+    <Compile Include="Scripts\Player\ModelChangerScript.cs" />
     <Compile Include="Scripts\Player\PlayerScriptBase.cs" />
     <Compile Include="Scripts\Player\SuperSpeedScript.cs" />
     <Compile Include="Scripts\Player\PlayerScript.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Services\Generics\GenericService.cs" />
     <Compile Include="Services\Generics\GenericStateService.cs" />
     <Compile Include="Services\Observable\ObservableService.cs" />
+    <Compile Include="Services\Player\ModelCategorizer.cs" />
+    <Compile Include="Services\Player\ModelChangerService.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
     <Compile Include="Services\Settings\StorageService.cs" />
@@ -121,6 +124,8 @@
     <Compile Include="UI\Menus\Base\ItemFactory\NativeListItemExtension.cs" />
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Base\MenuBase.cs" />
+    <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerMenu.cs" />
+    <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerTypeMenu.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Menus\Settings\StorageMenu.cs" />

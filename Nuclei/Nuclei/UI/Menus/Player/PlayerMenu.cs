@@ -5,6 +5,7 @@ using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Player;
 using Nuclei.UI.Menus.Base;
+using Nuclei.UI.Menus.Player.ModelChanger;
 
 namespace Nuclei.UI.Menus.Player;
 
@@ -12,6 +13,7 @@ public class PlayerMenu : GenericMenu<PlayerService>
 {
     public PlayerMenu(Enum @enum) : base(@enum)
     {
+        ModelChangerMenu();
         AddHeader("Basics");
         FixPlayer();
         Invincible();
@@ -32,6 +34,12 @@ public class PlayerMenu : GenericMenu<PlayerService>
         OnePunchMan();
         SuperSpeed();
         Invisible();
+    }
+
+    private void ModelChangerMenu()
+    {
+        var modelChangerMenu = new ModelChangerMenu(MenuTitle.ModelChanger);
+        AddMenu(modelChangerMenu);
     }
 
     private void FixPlayer()
