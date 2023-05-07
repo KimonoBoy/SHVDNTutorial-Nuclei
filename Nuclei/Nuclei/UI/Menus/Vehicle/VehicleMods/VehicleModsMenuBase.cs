@@ -67,7 +67,6 @@ public abstract class VehicleModsMenuBase : GenericMenu<VehicleModsService>
     {
         if (Service.CurrentVehicle == null) return;
 
-
         Clear();
         PreModTypeMods();
         foreach (var vehicleMod in GetValidMods())

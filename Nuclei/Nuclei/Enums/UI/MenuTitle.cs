@@ -77,5 +77,8 @@ public enum MenuTitle
     [Description("Adjust Time settings.")] Time,
 
     [Description("Adjust weather settings.")]
-    Weather
+    Weather,
+
+    [Description("Change your appearance and outfit.")]
+    Appearance
 }

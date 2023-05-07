@@ -11,7 +11,15 @@ public class ModelChangerMenu : GenericMenu<ModelChangerService>
 {
     public ModelChangerMenu(Enum @enum) : base(@enum)
     {
+        Protagonists();
         GenerateModels();
+    }
+
+    private void Protagonists()
+    {
+        var itemFranklin = AddItem("Franklin", "", () => { Service.RequestChangeModel(PedHash.Franklin); });
+        var itemMichael = AddItem("Michael", "", () => { Service.RequestChangeModel(PedHash.Michael); });
+        var itemTrevor = AddItem("Trevor", "", () => { Service.RequestChangeModel(PedHash.Trevor); });
     }
 
     private void GenerateModels()

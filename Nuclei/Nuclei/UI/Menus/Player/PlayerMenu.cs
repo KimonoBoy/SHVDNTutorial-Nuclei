@@ -14,6 +14,7 @@ public class PlayerMenu : GenericMenu<PlayerService>
     public PlayerMenu(Enum @enum) : base(@enum)
     {
         ModelChangerMenu();
+        AppearanceMenu();
         AddHeader("Basics");
         FixPlayer();
         Invincible();
@@ -34,6 +35,12 @@ public class PlayerMenu : GenericMenu<PlayerService>
         OnePunchMan();
         SuperSpeed();
         Invisible();
+    }
+
+    private void AppearanceMenu()
+    {
+        var appearanceMenu = new AppearanceMenu(MenuTitle.Appearance);
+        AddMenu(appearanceMenu);
     }
 
     private void ModelChangerMenu()
