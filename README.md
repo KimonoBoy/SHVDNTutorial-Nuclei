@@ -6,6 +6,11 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
+1. Fixed Model Changer Menu - now with favorites models. At the moment it lags when loading a menu with many models at a time as each item is generated when the menu is shown - we should probably cache the results and only make changes when updates happen. Will be revisted later.
+2. We should finish up the Appearance Menu.
+3. When the appearance menu is complete, we should create a Save Model menu like we did with our Vehicles, saving different models with different appearances.
+
+-- Below is things I was working on, but decided the above was more important to implement first.
 * Currently working on a script that allows the player to use any prop in-game as a vehicle. You can drive trash cans, traffic lights or w/e prop you'll stumble upon.
 
 ## NOTE
@@ -18,7 +23,7 @@ Below is a list of features currently planned, more will come as the mods develo
 
 Features marked with an Asterix * are features that are functional but not yet complete.
 * **Player**
-- [ ] Skin Changer Menu
+- [x] Skin Changer Menu* - Change your Character's Model, Add your favorites to your favorites menu, change appearance and save the models.
 - [ ] Stats Menu
 - [x] Fix Player - Restores Health and Armor
 - [x] Invincible - Makes the player invincible
