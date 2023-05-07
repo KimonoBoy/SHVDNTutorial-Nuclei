@@ -80,5 +80,6 @@ public enum MenuTitle
     Weather,
 
     [Description("Change your appearance and outfit.")]
-    Appearance
+    Appearance,
+    FavoriteModels
 }

@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using GTA;
 using GTA.Math;
 using Nuclei.Enums.Vehicle;
-using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.VehicleMods;
@@ -117,8 +116,7 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     {
         if (Game.IsControlPressed(Control.Jump))
         {
-            var vehicleDisplayName = Service.CurrentVehicleHash.GetLocalizedDisplayNameFromHash();
-            if (Service.FavoriteVehicles.Contains(vehicleDisplayName.GetHashFromDisplayName<VehicleHash>()))
+            if (Service.FavoriteVehicles.Contains(Service.CurrentVehicleHash))
                 Service.FavoriteVehicles.Remove(Service.CurrentVehicleHash);
             else
                 Service.FavoriteVehicles.Add(Service.CurrentVehicleHash);
