@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 using GTA;
-using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Player;
-using Nuclei.UI.Text;
 using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player;
@@ -15,9 +12,6 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
     protected override void OnTick(object sender, EventArgs e)
     {
         PreventInfiniteLoop();
-        Display.DrawTextElement(Service.CurrentPedHash.GetLocalizedDisplayNameFromHash(), 100.0f, 100.0f,
-            Color.LightGreen);
-        Display.DrawTextElement(Service.FavoriteModels.Count.ToString(), 100.0f, 120.0f, Color.AliceBlue);
     }
 
     private void PreventInfiniteLoop()
