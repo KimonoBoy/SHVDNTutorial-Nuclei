@@ -81,5 +81,6 @@ public enum MenuTitle
 
     [Description("Change your appearance and outfit.")]
     Appearance,
-    FavoriteModels
+    FavoriteModels,
+    SavedModels
 }

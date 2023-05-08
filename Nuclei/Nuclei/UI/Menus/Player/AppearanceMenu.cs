@@ -30,7 +30,7 @@ public class AppearanceMenu : GenericMenu<AppearanceService>
     private void GenerateAppearanceItems()
     {
         if (Service.Character == null) return;
-        if (Service.Character.Style.GetAllComponents().Length < 1 && Service.Character.Style.GetAllProps().Length < 1)
+        if (Service.Character.Style.GetAllComponents().Length <= 1 && Service.Character.Style.GetAllProps().Length <= 1)
         {
             if (!Visible) return;
             NavigateToMenu(MenuTitle.Player);

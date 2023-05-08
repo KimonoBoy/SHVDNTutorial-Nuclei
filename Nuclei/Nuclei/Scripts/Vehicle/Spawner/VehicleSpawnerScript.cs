@@ -123,7 +123,7 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
             var customVehicle =
                 Service.CustomVehicles.FirstOrDefault(
-                    x => x.VehicleHash == Service.CurrentVehicleHash);
+                    customVehicleDto => customVehicleDto.VehicleHash == Service.CurrentVehicleHash);
             if (Service.CustomVehicles.Contains(customVehicle))
                 Service.CustomVehicles.Remove(customVehicle);
         }

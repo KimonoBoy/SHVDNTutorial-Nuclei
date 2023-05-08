@@ -127,9 +127,11 @@
     <Compile Include="UI\Menus\MainMenu.cs" />
     <Compile Include="UI\Menus\Base\MenuBase.cs" />
     <Compile Include="UI\Menus\Player\AppearanceMenu.cs" />
+    <Compile Include="Services\Player\CustomPedDto.cs" />
     <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerFavoritesMenu.cs" />
     <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerMenu.cs" />
     <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerMenuBase.cs" />
+    <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerSavedModelsMenu.cs" />
     <Compile Include="UI\Menus\Player\ModelChanger\ModelChangerTypeMenu.cs" />
     <Compile Include="UI\Menus\Player\PlayerMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

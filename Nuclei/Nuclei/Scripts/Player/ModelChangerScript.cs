@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Scripts.Generics;
@@ -25,7 +26,24 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
     protected override void SubscribeToEvents()
     {
         Service.ModelChangeRequested += OnModelChangeRequested;
+        Service.CustomModelChangeRequested += OnCustomModelChangeRequested;
         KeyDown += OnKeyDown;
+    }
+
+    private void OnCustomModelChangeRequested(object sender, CustomPedDto customPedDto)
+    {
+        ChangeModel(customPedDto.PedHash);
+        foreach (var customPedAppearanceDto in customPedDto.PedComponents)
+        {
+            Character.Style[customPedAppearanceDto.PedComponentType].Index = customPedAppearanceDto.DrawableIndex;
+            Character.Style[customPedAppearanceDto.PedComponentType].TextureIndex = customPedAppearanceDto.TextureIndex;
+        }
+
+        foreach (var pedPropDto in customPedDto.PedProps)
+        {
+            Character.Style[pedPropDto.PedPropType].Index = pedPropDto.DrawableIndex;
+            Character.Style[pedPropDto.PedPropType].TextureIndex = pedPropDto.TextureIndex;
+        }
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
@@ -36,6 +54,12 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
                 Service.FavoriteModels.Remove(Service.CurrentPedHash);
             else
                 Service.FavoriteModels.Add(Service.CurrentPedHash);
+
+            var customPedDto =
+                Service.CustomModels.FirstOrDefault(
+                    pedDto => pedDto.PedHash == Service.CurrentPedHash);
+            if (Service.CustomModels.Contains(customPedDto))
+                Service.CustomModels.Remove(customPedDto);
         }
     }
 
@@ -64,9 +88,6 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
 
         // Let the game release the model from memory after we've assigned it.
         characterModel.MarkAsNoLongerNeeded();
-
-        // Only used for testing purposes at the moment -- tired of moving the camera manually ^^
-        Character.Heading += 180.0f;
     }
 
     protected override void UnsubscribeOnExit()

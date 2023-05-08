@@ -16,6 +16,7 @@ public class ModelChangerFavoritesMenu : ModelChangerMenuBase
     {
         base.OnShown(sender, e);
         GenerateItems();
+        Service.FavoriteModels.CollectionChanged += OnModelCollectionChanged<PedHash>;
     }
 
     private void GenerateItems()
@@ -27,7 +28,7 @@ public class ModelChangerFavoritesMenu : ModelChangerMenuBase
         }
     }
 
-    protected override void OnFavoriteModelsChanged(object sender, NotifyCollectionChangedEventArgs e)
+    protected override void OnModelCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)
     {
         switch (e.Action)
         {
