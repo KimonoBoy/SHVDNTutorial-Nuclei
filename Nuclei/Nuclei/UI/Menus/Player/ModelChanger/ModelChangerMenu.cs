@@ -73,10 +73,22 @@ public class ModelChangerMenu : ModelChangerMenuBase
     private void Protagonists()
     {
         var itemFranklin = AddItem(PedHash.Franklin, () => { Service.RequestChangeModel(PedHash.Franklin); });
+        itemFranklin.Selected += (sender, args) =>
+        {
+            UpdateSelectedItem(PedHash.Franklin.GetLocalizedDisplayNameFromHash());
+        };
 
         var itemMichael = AddItem(PedHash.Michael, () => { Service.RequestChangeModel(PedHash.Michael); });
+        itemMichael.Selected += (sender, args) =>
+        {
+            UpdateSelectedItem(PedHash.Michael.GetLocalizedDisplayNameFromHash());
+        };
 
         var itemTrevor = AddItem(PedHash.Trevor, () => { Service.RequestChangeModel(PedHash.Trevor); });
+        itemTrevor.Selected += (sender, args) =>
+        {
+            UpdateSelectedItem(PedHash.Trevor.GetLocalizedDisplayNameFromHash());
+        };
     }
 
     private void GenerateModels()
