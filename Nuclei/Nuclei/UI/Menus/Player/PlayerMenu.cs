@@ -40,7 +40,21 @@ public class PlayerMenu : GenericMenu<PlayerService>
     private void AppearanceMenu()
     {
         var appearanceMenu = new AppearanceMenu(MenuTitle.Appearance);
-        AddMenu(appearanceMenu);
+        var appearanceNativeSubmenuItem = AddMenu(appearanceMenu);
+        Shown += (sender, args) =>
+        {
+            if (Service.Character.Style.GetAllComponents().Length < 1 &&
+                Service.Character.Style.GetAllProps().Length < 1)
+            {
+                appearanceNativeSubmenuItem.Enabled = false;
+                appearanceNativeSubmenuItem.AltTitle = "No Variations Found";
+            }
+            else
+            {
+                appearanceNativeSubmenuItem.Enabled = true;
+                appearanceNativeSubmenuItem.AltTitle = "Menu";
+            }
+        };
     }
 
     private void ModelChangerMenu()

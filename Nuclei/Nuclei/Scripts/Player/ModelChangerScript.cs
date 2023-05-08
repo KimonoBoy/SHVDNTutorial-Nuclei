@@ -64,6 +64,8 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
 
         // Let the game release the model from memory after we've assigned it.
         characterModel.MarkAsNoLongerNeeded();
+
+        // Only used for testing purposes at the moment -- tired of moving the camera manually ^^
         Character.Heading += 180.0f;
     }
 
