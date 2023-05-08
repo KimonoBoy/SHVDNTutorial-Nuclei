@@ -8,6 +8,8 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 ## Current Mod Progress
 Models can now be saved with their set appearance.
 
+![image](https://user-images.githubusercontent.com/126190439/236926671-18a18d0a-4b47-44e6-9de7-6ef993f9e535.png)
+
 -- Below is things I was working on, but decided the above was more important to implement first.
 * Currently working on a script that allows the player to use any prop in-game as a vehicle. You can drive trash cans, traffic lights or w/e prop you'll stumble upon.
 
