@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Specialized;
-using GTA;
 using LemonUI.Menus;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.Services.Player;
@@ -20,14 +19,14 @@ public abstract class ModelChangerMenuBase : GenericMenu<ModelChangerService>
     {
     }
 
-    protected virtual void OnShown(object sender, EventArgs e)
+    protected abstract void OnShown(object sender, EventArgs e);
+
+    private void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
     {
+        UpdateSelectedItem(Items[e.Index].Title);
     }
 
-    protected virtual void OnSelectedIndexChanged(object sender, SelectedEventArgs e)
-    {
-        Service.CurrentPedHash = Items[e.Index].Title.GetHashFromDisplayName<PedHash>();
-    }
+    protected abstract void UpdateSelectedItem(string title);
 
     protected abstract void OnModelCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e);
 }

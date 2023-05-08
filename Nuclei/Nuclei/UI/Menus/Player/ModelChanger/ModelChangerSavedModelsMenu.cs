@@ -11,7 +11,6 @@ public class ModelChangerSavedModelsMenu : ModelChangerMenuBase
 {
     public ModelChangerSavedModelsMenu(Enum @enum) : base(@enum)
     {
-        SaveCurrentModel();
     }
 
     protected override void OnShown(object sender, EventArgs e)
@@ -22,10 +21,12 @@ public class ModelChangerSavedModelsMenu : ModelChangerMenuBase
 
     private void GenerateItems()
     {
-        foreach (var serviceCustomModel in Service.CustomModels)
+        Clear();
+        SaveCurrentModel();
+        foreach (var customPedDto in Service.CustomModels)
         {
-            var itemTest = AddItem(serviceCustomModel.Title, "",
-                () => Service.RequestChangeModel(serviceCustomModel));
+            var itemCustomModel = AddItem(customPedDto.Title, "",
+                () => Service.RequestChangeModel(customPedDto));
         }
     }
 
@@ -71,6 +72,15 @@ public class ModelChangerSavedModelsMenu : ModelChangerMenuBase
             Service.GetStorage().SetState(Service);
             Service.GetStorage().SaveState();
         });
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        if (string.IsNullOrEmpty(title)) throw new ArgumentNullException(nameof(title));
+
+        var pedHash = Service.CustomModels.FirstOrDefault(v => v.Title == title)?.PedHash;
+
+        if (pedHash != null) Service.CurrentPedHash = (PedHash)pedHash;
     }
 
     protected override void OnModelCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)

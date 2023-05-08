@@ -28,13 +28,17 @@ public class ModelChangerMenu : ModelChangerMenuBase
 
     protected override void OnShown(object sender, EventArgs e)
     {
-        base.OnShown(sender, e);
         if (Service.FavoriteModels.Contains(PedHash.Franklin))
             GetItem<NativeItem>(PedHash.Franklin).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
         if (Service.FavoriteModels.Contains(PedHash.Michael))
             GetItem<NativeItem>(PedHash.Michael).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
         if (Service.FavoriteModels.Contains(PedHash.Trevor))
             GetItem<NativeItem>(PedHash.Trevor).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        Service.CurrentPedHash = title.GetHashFromDisplayName<PedHash>();
     }
 
     protected override void OnModelCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)

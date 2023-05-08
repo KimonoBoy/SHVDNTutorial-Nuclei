@@ -20,8 +20,13 @@ public class ModelChangerTypeMenu : ModelChangerMenuBase
 
     protected override void OnShown(object sender, EventArgs e)
     {
-        base.OnShown(sender, e);
         GenerateItems();
+        Service.FavoriteModels.CollectionChanged += OnModelCollectionChanged<PedHash>;
+    }
+
+    protected override void UpdateSelectedItem(string title)
+    {
+        Service.CurrentPedHash = title.GetHashFromDisplayName<PedHash>();
     }
 
     protected override void OnModelCollectionChanged<T>(object sender, NotifyCollectionChangedEventArgs e)
@@ -53,6 +58,7 @@ public class ModelChangerTypeMenu : ModelChangerMenuBase
         foreach (var pedHash in _pedHashes)
         {
             var itemModel = AddItem(pedHash, () => { Service.RequestChangeModel(pedHash); });
+            itemModel.Selected += (sender, args) => { UpdateSelectedItem(pedHash.GetLocalizedDisplayNameFromHash()); };
 
             if (Service.FavoriteModels.Contains(pedHash))
                 itemModel.RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
