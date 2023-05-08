@@ -75,7 +75,6 @@ public class AppearanceMenu : GenericMenu<AppearanceService>
             listItemVariation.SelectedIndex = currentTextureIndex;
 
             if (textureCount > 1)
-                // listItemVariation.SelectedIndex = 0;
                 listItemVariation.Enabled = true;
             else
                 listItemVariation.Enabled = false;
@@ -130,7 +129,6 @@ public class AppearanceMenu : GenericMenu<AppearanceService>
             if (listItemVariation.Items.Count > 0) listItemVariation.SelectedIndex = currentTextureIndex;
 
             if (textureCount > 1)
-                // listItemVariation.SelectedIndex = 0;
                 listItemVariation.Enabled = true;
             else
                 listItemVariation.Enabled = false;
