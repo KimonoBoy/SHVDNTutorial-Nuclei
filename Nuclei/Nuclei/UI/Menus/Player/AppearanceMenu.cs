@@ -38,10 +38,25 @@ public class AppearanceMenu : GenericMenu<AppearanceService>
         }
 
         Clear();
-
+        RandomizeAppearance();
         GenerateComponents();
         AddHeader("Props");
         GenerateProps();
+    }
+
+    private void RandomizeAppearance()
+    {
+        var rand = new Random();
+        var itemRandomizeAppearance = AddItem("Randomize Appearance", "Randomize appearance", () =>
+        {
+            foreach (var pedVariation in Service.Character.Style)
+            {
+                pedVariation.Index = pedVariation.Count > 0 ? rand.Next(0, pedVariation.Count) : 0;
+                pedVariation.TextureIndex = pedVariation.TextureCount > 0 ? rand.Next(0, pedVariation.TextureCount) : 0;
+            }
+
+            GenerateAppearanceItems();
+        });
     }
 
     private void GenerateComponents()

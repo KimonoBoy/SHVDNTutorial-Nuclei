@@ -47,7 +47,7 @@ public class PlayerMenu : GenericMenu<PlayerService>
                 Service.Character.Style.GetAllProps().Length < 1)
             {
                 appearanceNativeSubmenuItem.Enabled = false;
-                appearanceNativeSubmenuItem.AltTitle = "No Variations Found";
+                appearanceNativeSubmenuItem.AltTitle = "No Textures Found";
             }
             else
             {
