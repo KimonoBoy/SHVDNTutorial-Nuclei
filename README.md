@@ -9,6 +9,7 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 Models can now be saved with their set appearance.
 
 ![image](https://user-images.githubusercontent.com/126190439/236926671-18a18d0a-4b47-44e6-9de7-6ef993f9e535.png)
+![image](https://user-images.githubusercontent.com/126190439/236930857-0a05b673-ea9a-4001-bf8b-d820366f91b4.png)
 
 * Remove models from saved menu will be implemented shortly.
 
