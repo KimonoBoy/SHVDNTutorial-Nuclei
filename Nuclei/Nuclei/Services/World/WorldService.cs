@@ -1,6 +1,6 @@
 ﻿using Nuclei.Services.Generics;
 
-namespace Nuclei.Services.Worlds;
+namespace Nuclei.Services.World;
 
 public class WorldService : GenericService<WorldService>
 {

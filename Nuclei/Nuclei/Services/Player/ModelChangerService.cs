@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using GTA;
 using Nuclei.Services.Generics;
+using Nuclei.Services.Player.Dtos;
 
 namespace Nuclei.Services.Player;
 

@@ -6,6 +6,7 @@ using GTA.Math;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
+using Nuclei.Services.Vehicle.Dtos;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Control = GTA.Control;
@@ -32,120 +33,32 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     {
     }
 
+    private void OnVehicleSpawned(object sender, VehicleHash vehicleHash)
+    {
+        SpawnVehicle(vehicleHash);
+    }
+
     private void OnCustomVehicleSpawned(object sender, CustomVehicleDto customVehicleDto)
     {
-        var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
-        // Install modkit first, otherwise the game will crash
-        vehicle.Mods.InstallModKit();
-        vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
-
-        // Wheels
-        vehicle.Mods.WheelType = customVehicleDto.WheelType;
-
-        // Mod Types
-        foreach (var customVehicleMod in customVehicleDto.VehicleMods)
-            vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
-
-        // License Plate
-        vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
-        vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
-
-        // Toggles
-        vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
-        vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
-        VehicleModsService.Instance.RainbowMode = customVehicleDto.RainbowMode;
-
-        switch (customVehicleDto.NeonLightsLayout)
-        {
-            case NeonLightsLayout.Front:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
-                break;
-            case NeonLightsLayout.Back:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
-                break;
-            case NeonLightsLayout.FrontAndBack:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
-                break;
-            case NeonLightsLayout.Sides:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
-                break;
-            case NeonLightsLayout.FrontBackAndSides:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
-                break;
-            case NeonLightsLayout.Off:
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        // Colors and Tints
-        vehicle.Mods.NeonLightsColor = VehicleModsService.Instance.NeonLightsColorDictionary
-            .FirstOrDefault(neonLightsColor => neonLightsColor.Key == customVehicleDto.NeonLightsColor).Value;
-        vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
-        vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
-        vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
-        vehicle.Mods.PearlescentColor = customVehicleDto.PearlescentColor;
-        vehicle.Mods.RimColor = customVehicleDto.RimColor;
-        vehicle.Mods.TireSmokeColor = VehicleModsService.Instance.TireSmokeColorDictionary
-            .FirstOrDefault(color => color.Key == customVehicleDto.TireSmokeColor).Value;
-
-        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
-        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
+        SpawnVehicle(customVehicleDto);
     }
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
         if (Game.IsControlPressed(Control.Jump))
         {
-            if (Service.FavoriteVehicles.Contains(Service.CurrentVehicleHash))
-                Service.FavoriteVehicles.Remove(Service.CurrentVehicleHash);
-            else
-                Service.FavoriteVehicles.Add(Service.CurrentVehicleHash);
-
-            var customVehicle =
-                Service.CustomVehicles.FirstOrDefault(
-                    customVehicleDto => customVehicleDto.VehicleHash == Service.CurrentVehicleHash);
-            if (Service.CustomVehicles.Contains(customVehicle))
-                Service.CustomVehicles.Remove(customVehicle);
+            UpdateFavoriteVehicles();
+            UpdateSavedVehicles();
         }
 
-        if (e.KeyCode == Keys.NumPad1)
-            SpawnVehicle(VehicleHash.Adder);
-        else if (e.KeyCode == Keys.NumPad2)
-            SpawnVehicle(VehicleHash.DeathBike);
-        else if (e.KeyCode == Keys.NumPad3)
-            SpawnVehicle(VehicleHash.SultanRS);
-    }
-
-    // Handles VehicleSpawned event by spawning the corresponding vehicle
-    private void OnVehicleSpawned(object sender, VehicleHash vehicleHash)
-    {
-        SpawnVehicle(vehicleHash);
+        SpawnVehicleOnKey(e.KeyCode);
     }
 
     /// <summary>
-    ///     Spawns a vehicle with the given VehicleHash at the player's current position.
+    ///     Spawns a vehicle based on the given <paramref name="vehicleHash" />.
     /// </summary>
-    /// <param name="vehicleHash">The VehicleHash of the vehicle to be spawned.</param>
+    /// <param name="vehicleHash">The hash of the vehicle to spawn.</param>
+    /// <returns>The spawned vehicle object.</returns>
     private GTA.Vehicle SpawnVehicle(VehicleHash vehicleHash)
     {
         const int maxAttempts = 3;
@@ -155,13 +68,20 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
         while (currentAttempt <= maxAttempts)
             try
             {
-                var vehicleModel = CreateVehicleModel(vehicleHash);
+                // Load the vehicle model.
+                var vehicleModel = LoadVehicleModel(vehicleHash);
+
+                // Create and position the vehicle.
                 var vehicle = CreateAndPositionVehicle(vehicleModel, vehicleHash);
+
+                // Return the spawned vehicle.
                 return vehicle;
             }
             catch (CustomExceptionBase vehicleSpawnerException)
             {
                 currentAttempt++;
+
+                // If the maximum number of attempts has been reached, raise an error.
                 if (currentAttempt == maxAttempts)
                 {
                     ExceptionService.RaiseError(vehicleSpawnerException);
@@ -178,16 +98,50 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Creates a Model object from the given VehicleHash and validates its existence in the game files.
+    ///     Spawns a custom vehicle based on the given <paramref name="customVehicleDto" />.
     /// </summary>
-    /// <param name="vehicleHash">The VehicleHash of the vehicle model to be created.</param>
-    /// <returns>A validated Model object corresponding to the given VehicleHash.</returns>
-    /// <exception cref="VehicleModelNotFoundException">Thrown when the model is invalid.</exception>
-    /// <exception cref="VehicleModelRequestTimedOutException">
-    ///     Thrown when the model fails to load within the specified
-    ///     timeout.
-    /// </exception>
-    private Model CreateVehicleModel(VehicleHash vehicleHash)
+    /// <param name="customVehicleDto">The custom vehicle data for the spawned vehicle.</param>
+    private void SpawnVehicle(CustomVehicleDto customVehicleDto)
+    {
+        var vehicle = SpawnVehicle(customVehicleDto.VehicleHash);
+        InstallModKits(vehicle);
+        LoadMods(vehicle, customVehicleDto);
+        LoadToggleMods(vehicle, customVehicleDto);
+        LoadNeonLights(vehicle, customVehicleDto.NeonLightsLayout);
+        LoadColors(vehicle, customVehicleDto);
+    }
+
+    /// <summary>
+    ///     Spawns a vehicle based on the given <paramref name="keyCode" />.
+    /// </summary>
+    /// <param name="keyCode">The key code representing the vehicle to spawn.</param>
+    private void SpawnVehicleOnKey(Keys keyCode)
+    {
+        VehicleHash vehicleHash;
+        switch (keyCode)
+        {
+            case Keys.NumPad1:
+                vehicleHash = VehicleHash.Adder;
+                break;
+            case Keys.NumPad2:
+                vehicleHash = VehicleHash.DeathBike;
+                break;
+            case Keys.NumPad3:
+                vehicleHash = VehicleHash.SultanRS;
+                break;
+            default:
+                return;
+        }
+
+        SpawnVehicle(vehicleHash);
+    }
+
+    /// <summary>
+    ///     Loads the model for the given <paramref name="vehicleHash" /> and validates it.
+    /// </summary>
+    /// <param name="vehicleHash">The hash of the vehicle to load.</param>
+    /// <returns>The loaded model.</returns>
+    private Model LoadVehicleModel(VehicleHash vehicleHash)
     {
         // Create a Model object from the vehicleHash.
         var vehicleModel =
@@ -209,15 +163,12 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Creates and positions a vehicle using the provided Model object.
+    ///     Creates and positions a vehicle based on the given <paramref name="vehicleModel" /> and
+    ///     <paramref name="vehicleHash" />.
     /// </summary>
-    /// <param name="vehicleModel">The Model object of the vehicle to be created.</param>
-    /// <param name="vehicleHash">The vehicleHash</param>
-    /// <returns>The spawned vehicle.</returns>
-    /// <exception cref="VehicleSpawnFailedException">
-    ///     Thrown when the vehicle object is not created successfully or does not
-    ///     exist.
-    /// </exception>
+    /// <param name="vehicleModel">The model of the vehicle to create.</param>
+    /// <param name="vehicleHash">The hash of the vehicle to create.</param>
+    /// <returns>The created and positioned vehicle.</returns>
     private GTA.Vehicle CreateAndPositionVehicle(Model vehicleModel, VehicleHash vehicleHash)
     {
         // Calculate the heading of the vehicle based on the player's heading.
@@ -229,11 +180,9 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
         // Release the vehicle model resources.
         vehicleModel.MarkAsNoLongerNeeded();
 
-        // Set the vehicle as persistent so it doesn't despawn.
-        // vehicle.IsPersistent = true;
-
         if (!vehicle.Exists())
-            throw new VehicleSpawnFailedException($"Failed to spawn the actual vehicle object: {vehicleHash}");
+            throw new VehicleSpawnFailedException(
+                $"Failed to spawn the actual vehicle object: {vehicleHash}");
 
         // Set the vehicle's properties and place the player inside if necessary.
         InitializeVehicle(vehicle);
@@ -242,9 +191,9 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Calculates the vehicle heading based on the player's heading and the WarpInSpawned setting.
+    ///     Returns the heading for a vehicle to be spawned based on the player's heading.
     /// </summary>
-    /// <returns>A float value representing the vehicle heading.</returns>
+    /// <returns>The vehicle heading.</returns>
     private float GetVehicleHeading()
     {
         if (!Service.WarpInSpawned) return Game.Player.Character.Heading + 90.0f;
@@ -253,18 +202,18 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
     }
 
     /// <summary>
-    ///     Calculates the vehicle position in front of the player.
+    ///     Returns the position in front of the player to spawn a vehicle.
     /// </summary>
-    /// <returns>A Vector3 value representing the vehicle position.</returns>
+    /// <returns>The vehicle spawn position.</returns>
     private Vector3 GetVehiclePosition()
     {
         return Game.Player.Character.Position + Game.Player.Character.ForwardVector * 5.0f;
     }
 
     /// <summary>
-    ///     Sets the vehicle's properties and places the player inside if WarpInSpawned is enabled.
+    ///     Initializes the given <paramref name="vehicle" /> by setting its properties and placing the player inside.
     /// </summary>
-    /// <param name="vehicle">The GTA.Vehicle object to initialize.</param>
+    /// <param name="vehicle">The vehicle to initialize.</param>
     private void InitializeVehicle(GTA.Vehicle vehicle)
     {
         vehicle.PlaceOnGround();
@@ -279,5 +228,122 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
         Game.Player.Character.SetIntoVehicle(vehicle,
             vehicle.IsSeatFree(preferredSeat) ? preferredSeat : VehicleSeat.Driver);
+    }
+
+    /// <summary>
+    ///     Updates the list of saved vehicles to remove the current vehicle if it exists.
+    /// </summary>
+    private void UpdateSavedVehicles()
+    {
+        var customVehicleDto =
+            Service.CustomVehicles.FirstOrDefault(
+                customVehicleDto => customVehicleDto.VehicleHash == Service.CurrentVehicleHash);
+        if (Service.CustomVehicles.Contains(customVehicleDto))
+            Service.CustomVehicles.Remove(customVehicleDto);
+    }
+
+    /// <summary>
+    ///     Updates the list of favorite vehicles to add or remove the current vehicle.
+    /// </summary>
+    private void UpdateFavoriteVehicles()
+    {
+        if (Service.FavoriteVehicles.Contains(Service.CurrentVehicleHash))
+            Service.FavoriteVehicles.Remove(Service.CurrentVehicleHash);
+        else
+            Service.FavoriteVehicles.Add(Service.CurrentVehicleHash);
+    }
+
+    /// <summary>
+    ///     Installs mod kits on the given <paramref name="vehicle" />.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to install the mod kits on.</param>
+    private static void InstallModKits(GTA.Vehicle vehicle)
+    {
+        vehicle.Mods.InstallModKit();
+        vehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
+    }
+
+    /// <summary>
+    ///     Loads the mods for the given <paramref name="vehicle" /> based on the <paramref name="customVehicleDto" />.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to load the mods on.</param>
+    /// <param name="customVehicleDto">The custom vehicle data.</param>
+    private static void LoadMods(GTA.Vehicle vehicle, CustomVehicleDto customVehicleDto)
+    {
+        vehicle.Mods.WheelType = customVehicleDto.WheelType;
+        foreach (var customVehicleMod in customVehicleDto.VehicleMods)
+            vehicle.Mods[customVehicleMod.VehicleModType].Index = customVehicleMod.ModIndex;
+        vehicle.Mods.LicensePlate = customVehicleDto.LicensePlate;
+        vehicle.Mods.LicensePlateStyle = customVehicleDto.LicensePlateStyle;
+        vehicle.Mods[VehicleModType.FrontWheel].Variation = customVehicleDto.CustomTires;
+        vehicle.Mods[VehicleModType.RearWheel].Variation = customVehicleDto.CustomTires;
+    }
+
+    /// <summary>
+    ///     Loads the toggle mods for the given <paramref name="vehicle" /> based on the <paramref name="customVehicleDto" />.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to load the toggle mods on.</param>
+    /// <param name="customVehicleDto">The custom vehicle data.</param>
+    private static void LoadToggleMods(GTA.Vehicle vehicle, CustomVehicleDto customVehicleDto)
+    {
+        vehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = customVehicleDto.XenonHeadLights;
+        vehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = customVehicleDto.Turbo;
+    }
+
+    /// <summary>
+    ///     Loads the neon lights for the given <paramref name="vehicle" /> based on the <paramref name="layout" />.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to load the neon lights on.</param>
+    /// <param name="layout">The neon lights layout to use.</param>
+    private void LoadNeonLights(GTA.Vehicle vehicle, NeonLightsLayout layout)
+    {
+        bool front = false, back = false, left = false, right = false;
+
+        switch (layout)
+        {
+            case NeonLightsLayout.Front:
+                front = true;
+                break;
+            case NeonLightsLayout.Back:
+                back = true;
+                break;
+            case NeonLightsLayout.FrontAndBack:
+                front = back = true;
+                break;
+            case NeonLightsLayout.Sides:
+                left = right = true;
+                break;
+            case NeonLightsLayout.FrontBackAndSides:
+                front = back = left = right = true;
+                break;
+            case NeonLightsLayout.Off:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(layout), layout, null);
+        }
+
+        vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, front);
+        vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, back);
+        vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, left);
+        vehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, right);
+    }
+
+    /// <summary>
+    ///     Loads the colors for the given <paramref name="vehicle" /> based on the <paramref name="customVehicleDto" />.
+    /// </summary>
+    /// <param name="vehicle">The vehicle to load the colors on.</param>
+    /// <param name="customVehicleDto">The custom vehicle data.</param>
+    private static void LoadColors(GTA.Vehicle vehicle, CustomVehicleDto customVehicleDto)
+    {
+        vehicle.Mods.NeonLightsColor = VehicleModsService.Instance.NeonLightsColorDictionary
+            .FirstOrDefault(neonLightsColor => neonLightsColor.Key == customVehicleDto.NeonLightsColor).Value;
+        vehicle.Mods.WindowTint = customVehicleDto.WindowTint;
+        vehicle.Mods.PrimaryColor = customVehicleDto.PrimaryColor;
+        vehicle.Mods.SecondaryColor = customVehicleDto.SecondaryColor;
+        vehicle.Mods.PearlescentColor = customVehicleDto.PearlescentColor;
+        vehicle.Mods.RimColor = customVehicleDto.RimColor;
+        vehicle.Mods.TireSmokeColor = VehicleModsService.Instance.TireSmokeColorDictionary
+            .FirstOrDefault(color => color.Key == customVehicleDto.TireSmokeColor).Value;
+        VehicleModsService.Instance.RainbowMode = customVehicleDto.RainbowMode;
     }
 }

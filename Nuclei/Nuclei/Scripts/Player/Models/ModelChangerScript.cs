@@ -4,9 +4,10 @@ using System.Windows.Forms;
 using GTA;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Player;
+using Nuclei.Services.Player.Dtos;
 using Control = GTA.Control;
 
-namespace Nuclei.Scripts.Player;
+namespace Nuclei.Scripts.Player.Models;
 
 public class ModelChangerScript : GenericScript<ModelChangerService>
 {

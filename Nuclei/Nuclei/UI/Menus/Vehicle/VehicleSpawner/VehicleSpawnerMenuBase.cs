@@ -5,6 +5,7 @@ using GTA;
 using LemonUI.Menus;
 using LemonUI.Scaleform;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.Services.Vehicle.Dtos;
 using Nuclei.Services.Vehicle.VehicleSpawner;
 using Nuclei.UI.Menus.Base;
 

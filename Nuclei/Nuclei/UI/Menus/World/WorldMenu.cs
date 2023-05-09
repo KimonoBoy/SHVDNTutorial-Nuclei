@@ -1,6 +1,6 @@
 ﻿using System;
 using Nuclei.Enums.UI;
-using Nuclei.Services.Worlds;
+using Nuclei.Services.World;
 using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.World;

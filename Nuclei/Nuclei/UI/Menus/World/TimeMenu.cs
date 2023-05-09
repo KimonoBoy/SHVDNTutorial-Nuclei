@@ -3,7 +3,7 @@ using System.Linq;
 using Nuclei.Enums.UI;
 using Nuclei.Enums.World;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Services.Worlds;
+using Nuclei.Services.World;
 using Nuclei.UI.Menus.Base;
 
 namespace Nuclei.UI.Menus.World;

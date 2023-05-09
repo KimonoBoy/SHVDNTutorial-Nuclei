@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Nuclei.Enums.World;
 using Nuclei.Services.Generics;
 
-namespace Nuclei.Services.Worlds;
+namespace Nuclei.Services.World;
 
 public class TimeService : GenericService<TimeService>
 {

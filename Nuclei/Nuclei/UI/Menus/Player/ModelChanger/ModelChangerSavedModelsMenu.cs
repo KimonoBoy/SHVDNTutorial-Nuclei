@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using GTA;
 using GTA.UI;
-using Nuclei.Services.Player;
+using Nuclei.Services.Player.Dtos;
 
 namespace Nuclei.UI.Menus.Player.ModelChanger;
 

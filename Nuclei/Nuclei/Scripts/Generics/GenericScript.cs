@@ -5,7 +5,6 @@ using GTA;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
 using Nuclei.Services.Settings;
-using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Generics;
 
@@ -198,13 +197,11 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
     {
         State.SetState(Service);
         State.SaveState();
-        Display.Notify("All Settings Saved", "Successfully");
     }
 
     protected void Load()
     {
         var loadedStorageService = State.LoadState();
         if (loadedStorageService != null) Service.SetState(loadedStorageService);
-        Display.Notify("All Settings Loaded", "Successfully");
     }
 }

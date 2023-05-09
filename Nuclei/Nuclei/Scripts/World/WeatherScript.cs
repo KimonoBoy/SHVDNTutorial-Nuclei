@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Nuclei.Scripts.Generics;
-using Nuclei.Services.Worlds;
+using Nuclei.Services.World;
 
 namespace Nuclei.Scripts.World;
 

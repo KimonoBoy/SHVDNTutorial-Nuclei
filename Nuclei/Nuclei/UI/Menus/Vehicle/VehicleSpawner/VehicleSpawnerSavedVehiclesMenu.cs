@@ -8,8 +8,8 @@ using GTA.UI;
 using LemonUI.Scaleform;
 using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
+using Nuclei.Services.Vehicle.Dtos;
 using Nuclei.Services.Vehicle.VehicleMods;
-using Nuclei.Services.Vehicle.VehicleSpawner;
 
 namespace Nuclei.UI.Menus.Vehicle.VehicleSpawner;
 

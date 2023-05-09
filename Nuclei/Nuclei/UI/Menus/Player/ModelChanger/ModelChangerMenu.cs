@@ -28,12 +28,17 @@ public class ModelChangerMenu : ModelChangerMenuBase
 
     protected override void OnShown(object sender, EventArgs e)
     {
-        if (Service.FavoriteModels.Contains(PedHash.Franklin))
-            GetItem<NativeItem>(PedHash.Franklin).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
-        if (Service.FavoriteModels.Contains(PedHash.Michael))
-            GetItem<NativeItem>(PedHash.Michael).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
-        if (Service.FavoriteModels.Contains(PedHash.Trevor))
-            GetItem<NativeItem>(PedHash.Trevor).RightBadge = new ScaledTexture("commonmenu", "shop_new_star");
+        GetItem<NativeItem>(PedHash.Franklin).RightBadge = Service.FavoriteModels.Contains(PedHash.Franklin)
+            ? new ScaledTexture("commonmenu", "shop_new_star")
+            : null;
+        GetItem<NativeItem>(PedHash.Michael).RightBadge = Service.FavoriteModels.Contains(PedHash.Michael)
+            ? new ScaledTexture("commonmenu", "shop_new_star")
+            : null;
+        GetItem<NativeItem>(PedHash.Trevor).RightBadge = Service.FavoriteModels.Contains(PedHash.Trevor)
+            ? new ScaledTexture("commonmenu", "shop_new_star")
+            : null;
+
+        Service.FavoriteModels.CollectionChanged += OnModelCollectionChanged<PedHash>;
     }
 
     protected override void UpdateSelectedItem(string title)
@@ -73,22 +78,8 @@ public class ModelChangerMenu : ModelChangerMenuBase
     private void Protagonists()
     {
         var itemFranklin = AddItem(PedHash.Franklin, () => { Service.RequestChangeModel(PedHash.Franklin); });
-        itemFranklin.Selected += (sender, args) =>
-        {
-            UpdateSelectedItem(PedHash.Franklin.GetLocalizedDisplayNameFromHash());
-        };
-
         var itemMichael = AddItem(PedHash.Michael, () => { Service.RequestChangeModel(PedHash.Michael); });
-        itemMichael.Selected += (sender, args) =>
-        {
-            UpdateSelectedItem(PedHash.Michael.GetLocalizedDisplayNameFromHash());
-        };
-
         var itemTrevor = AddItem(PedHash.Trevor, () => { Service.RequestChangeModel(PedHash.Trevor); });
-        itemTrevor.Selected += (sender, args) =>
-        {
-            UpdateSelectedItem(PedHash.Trevor.GetLocalizedDisplayNameFromHash());
-        };
     }
 
     private void GenerateModels()

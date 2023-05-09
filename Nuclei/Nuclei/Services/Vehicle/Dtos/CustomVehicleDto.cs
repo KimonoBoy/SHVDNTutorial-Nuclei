@@ -2,7 +2,7 @@
 using GTA;
 using Nuclei.Enums.Vehicle;
 
-namespace Nuclei.Services.Vehicle.VehicleSpawner;
+namespace Nuclei.Services.Vehicle.Dtos;
 
 public class CustomVehicleDto
 {
@@ -40,17 +40,4 @@ public class CustomVehicleDto
     public bool Turbo { get; set; }
 
     public bool RainbowMode { get; set; }
-}
-
-public class CustomVehicleModDto
-{
-    public CustomVehicleModDto(VehicleModType vehicleModType, int modIndex)
-    {
-        VehicleModType = vehicleModType;
-        ModIndex = modIndex;
-    }
-
-    public VehicleModType VehicleModType { get; set; }
-
-    public int ModIndex { get; set; }
 }

@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using GTA;
 using Nuclei.Services.Generics;
+using Nuclei.Services.Vehicle.Dtos;
 
 namespace Nuclei.Services.Vehicle.VehicleSpawner;
 
