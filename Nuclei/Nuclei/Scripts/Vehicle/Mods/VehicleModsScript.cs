@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using GTA;
@@ -11,6 +12,7 @@ namespace Nuclei.Scripts.Vehicle.Mods;
 public class VehicleModsScript : GenericScript<VehicleModsService>
 {
     private readonly Random _random = new();
+
     private DateTime _rainBowModeInterval = DateTime.UtcNow;
 
     protected override void SubscribeToEvents()
@@ -18,6 +20,13 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         Service.PropertyChanged += OnPropertyChanged;
         Service.LicensePlateInputRequested += OnLicensePlateInputRequested;
         Service.RandomizeAllModsRequested += OnRandomizeAllModsRequested;
+    }
+
+    protected override void UnsubscribeOnExit()
+    {
+        Service.LicensePlateInputRequested -= OnLicensePlateInputRequested;
+        Service.RandomizeAllModsRequested -= OnRandomizeAllModsRequested;
+        Service.PropertyChanged -= OnPropertyChanged;
     }
 
     protected override void OnTick(object sender, EventArgs e)
@@ -28,53 +37,11 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         ProcessRainbowMode();
     }
 
-    private void ProcessRainbowMode()
-    {
-        if (!Service.RainbowMode) return;
-        if ((DateTime.UtcNow - _rainBowModeInterval).TotalMilliseconds <= 50) return;
-
-        CurrentVehicle.Mods.PrimaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        CurrentVehicle.Mods.SecondaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        CurrentVehicle.Mods.PearlescentColor =
-            (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-
-        _rainBowModeInterval = DateTime.UtcNow;
-    }
-
     private void OnRandomizeAllModsRequested(object sender, EventArgs e)
     {
         if (CurrentVehicle == null) return;
 
-        Service.WheelType = (VehicleWheelType)_random.Next(0, Enum.GetValues(typeof(VehicleWheelType)).Length);
-
-        foreach (var vehicleMod in Service.VehicleMods)
-            vehicleMod.Index = _random.Next(0, vehicleMod.Count + 1);
-
-        Service.RimColor =
-            (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-
-        Service.TireSmokeColor = (TireSmokeColor)_random.Next(0, Service.TireSmokeColorDictionary.Values.Count + 1);
-
-        Service.CustomTires = _random.Next(0, 2) == 1;
-
-        Service.LicensePlateStyle =
-            (LicensePlateStyle)_random.Next(0, Enum.GetValues(typeof(LicensePlateStyle)).Length);
-
-        Service.PrimaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-        Service.SecondaryColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-
-        Service.WindowTint = (VehicleWindowTint)_random.Next(0, Enum.GetValues(typeof(VehicleWindowTint)).Length);
-
-        Service.PearlescentColor = (VehicleColor)_random.Next(0, Enum.GetValues(typeof(VehicleColor)).Length);
-
-        Service.XenonHeadLights = _random.Next(0, 2) == 1;
-
-        Service.NeonLightsLayout =
-            (NeonLightsLayout)_random.Next(0, Enum.GetValues(typeof(NeonLightsLayout)).Length);
-
-        Service.NeonLightsColor = (NeonLightsColor)_random.Next(0, Enum.GetValues(typeof(NeonLightsColor)).Length);
-
-        Service.Turbo = _random.Next(0, 2) == 1;
+        RandomizeVehicleMods();
     }
 
     private void OnLicensePlateInputRequested(object sender, EventArgs e)
@@ -89,115 +56,94 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
     {
         if (CurrentVehicle == null) return;
 
-        switch (e.PropertyName)
+        var propertyActions = new Dictionary<string, Action>
         {
-            case nameof(Service.CurrentVehicle):
-                UpdateMods();
-                break;
-            case nameof(Service.WheelType):
-                CurrentVehicle.Mods.WheelType = Service.WheelType;
-                break;
-            case nameof(Service.RimColor):
-                CurrentVehicle.Mods.RimColor = Service.RimColor;
-                break;
-            case nameof(Service.TireSmokeColor):
-                CurrentVehicle.Mods.TireSmokeColor = Service.TireSmokeColorDictionary
-                    .FirstOrDefault(tireSmokeColor => tireSmokeColor.Key == Service.TireSmokeColor).Value;
-                break;
-            case nameof(Service.CustomTires):
+            [nameof(Service.CurrentVehicle)] = UpdateMods,
+            [nameof(Service.WheelType)] = () => CurrentVehicle.Mods.WheelType = Service.WheelType,
+            [nameof(Service.RimColor)] = () => CurrentVehicle.Mods.RimColor = Service.RimColor,
+            [nameof(Service.TireSmokeColor)] = () => CurrentVehicle.Mods.TireSmokeColor = Service
+                .TireSmokeColorDictionary
+                .FirstOrDefault(tireSmokeColor => tireSmokeColor.Key == Service.TireSmokeColor).Value,
+            [nameof(Service.CustomTires)] = () =>
+            {
                 CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
                 if (CurrentVehicle.Mods[VehicleModType.RearWheel].Count > 0)
                     CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
-                break;
-            case nameof(Service.LicensePlate):
-                CurrentVehicle.Mods.LicensePlate = Service.LicensePlate;
-                break;
-            case nameof(Service.LicensePlateStyle):
-                CurrentVehicle.Mods.LicensePlateStyle = Service.LicensePlateStyle;
-                break;
-            case nameof(Service.PrimaryColor):
-                CurrentVehicle.Mods.PrimaryColor = Service.PrimaryColor;
-                break;
-            case nameof(Service.SecondaryColor):
-                CurrentVehicle.Mods.SecondaryColor = Service.SecondaryColor;
-                break;
-            case nameof(Service.PearlescentColor):
-                CurrentVehicle.Mods.PearlescentColor = Service.PearlescentColor;
-                break;
-            case nameof(Service.WindowTint):
-                CurrentVehicle.Mods.WindowTint = Service.WindowTint;
-                break;
-            case nameof(Service.XenonHeadLights):
-                CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = Service.XenonHeadLights;
-                break;
-            case nameof(Service.NeonLightsLayout):
+            },
+            [nameof(Service.LicensePlate)] = () => CurrentVehicle.Mods.LicensePlate = Service.LicensePlate,
+            [nameof(Service.LicensePlateStyle)] =
+                () => CurrentVehicle.Mods.LicensePlateStyle = Service.LicensePlateStyle,
+            [nameof(Service.PrimaryColor)] = () => CurrentVehicle.Mods.PrimaryColor = Service.PrimaryColor,
+            [nameof(Service.SecondaryColor)] = () => CurrentVehicle.Mods.SecondaryColor = Service.SecondaryColor,
+            [nameof(Service.PearlescentColor)] = () => CurrentVehicle.Mods.PearlescentColor = Service.PearlescentColor,
+            [nameof(Service.WindowTint)] = () => CurrentVehicle.Mods.WindowTint = Service.WindowTint,
+            [nameof(Service.XenonHeadLights)] = () =>
+                CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled = Service.XenonHeadLights,
+            [nameof(Service.NeonLightsLayout)] = () =>
+            {
+                bool front = false, back = false, left = false, right = false;
                 switch (Service.NeonLightsLayout)
                 {
                     case NeonLightsLayout.Front:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                        front = true;
                         break;
                     case NeonLightsLayout.Back:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                        back = true;
                         break;
                     case NeonLightsLayout.FrontAndBack:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
+                        front = true;
+                        back = true;
                         break;
                     case NeonLightsLayout.Sides:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                        left = true;
+                        right = true;
                         break;
                     case NeonLightsLayout.FrontBackAndSides:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, true);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, true);
+                        front = true;
+                        back = true;
+                        left = true;
+                        right = true;
                         break;
                     case NeonLightsLayout.Off:
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, false);
-                        CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, false);
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
-                break;
-            case nameof(Service.NeonLightsColor):
-                CurrentVehicle.Mods.NeonLightsColor = Service.NeonLightsColorDictionary
-                    .FirstOrDefault(color => color.Key == Service.NeonLightsColor).Value;
-                break;
-            case nameof(Service.Turbo):
-                CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = Service.Turbo;
-                break;
-        }
+                CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Front, front);
+                CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Back, back);
+                CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Left, left);
+                CurrentVehicle.Mods.SetNeonLightsOn(VehicleNeonLight.Right, right);
+            },
+            [nameof(Service.NeonLightsColor)] = () => CurrentVehicle.Mods.NeonLightsColor = Service
+                .NeonLightsColorDictionary
+                .FirstOrDefault(color => color.Key == Service.NeonLightsColor).Value,
+            [nameof(Service.Turbo)] = () => CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled = Service.Turbo
+        };
+
+        if (propertyActions.TryGetValue(e.PropertyName, out var propertyAction)) propertyAction();
     }
 
-    protected override void UnsubscribeOnExit()
+    private void RandomizeVehicleMods()
     {
-        Service.PropertyChanged -= OnPropertyChanged;
+        Service.WheelType = GetRandomEnumValue<VehicleWheelType>();
+
+        foreach (var vehicleMod in Service.VehicleMods)
+            vehicleMod.Index = _random.Next(0, vehicleMod.Count + 1);
+
+        Service.RimColor = GetRandomEnumValue<VehicleColor>();
+        Service.TireSmokeColor = GetRandomEnumValue<TireSmokeColor>();
+        Service.CustomTires = GetRandomBool();
+        Service.LicensePlateStyle = GetRandomEnumValue<LicensePlateStyle>();
+        Service.PrimaryColor = GetRandomEnumValue<VehicleColor>();
+        Service.SecondaryColor = GetRandomEnumValue<VehicleColor>();
+        Service.WindowTint = GetRandomEnumValue<VehicleWindowTint>();
+        Service.PearlescentColor = GetRandomEnumValue<VehicleColor>();
+        Service.XenonHeadLights = GetRandomBool();
+        Service.NeonLightsLayout = GetRandomEnumValue<NeonLightsLayout>();
+        Service.NeonLightsColor = GetRandomEnumValue<NeonLightsColor>();
+        Service.Turbo = GetRandomBool();
     }
-
-
-    private void ProcessCustomTires()
-    {
-        if (CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation != Service.CustomTires)
-        {
-            CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
-            if (CurrentVehicle.Mods[VehicleModType.RearWheel].Count > 0)
-                CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
-        }
-    }
-
 
     private void UpdateMods()
     {
@@ -222,72 +168,32 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         UpdateLicensePlateStyle();
     }
 
+    private void InstallModKits()
+    {
+        if (CurrentVehicle == null) return;
+        CurrentVehicle.Mods.InstallModKit();
+        CurrentVehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
+    }
+
+    private void UpdateWheelType()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.WheelType = CurrentVehicle.Mods.WheelType;
+    }
+
+    private void UpdateModTypes()
+    {
+        if (CurrentVehicle == null) return;
+
+        foreach (var vehicleMod in CurrentVehicle.Mods.ToArray()) Service.VehicleMods.Add(vehicleMod);
+    }
+
     private void UpdateTurbo()
     {
         if (CurrentVehicle == null) return;
 
         Service.Turbo = CurrentVehicle.Mods[VehicleToggleModType.Turbo].IsInstalled;
-    }
-
-    private void UpdateNeonLightsColor()
-    {
-        if (CurrentVehicle == null) return;
-
-
-        Service.NeonLightsColor = Service.NeonLightsColorDictionary
-            .FirstOrDefault(color => color.Value == CurrentVehicle.Mods.NeonLightsColor).Key;
-    }
-
-    private void UpdateNeonLightsLayout()
-    {
-        if (CurrentVehicle == null) return;
-
-
-        if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Front) &&
-            CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Back) &&
-            CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Left) &&
-            CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Right))
-            Service.NeonLightsLayout = NeonLightsLayout.FrontBackAndSides;
-        else if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Front) &&
-                 CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Back))
-            Service.NeonLightsLayout = NeonLightsLayout.FrontAndBack;
-        else if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Left) &&
-                 CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Right))
-            Service.NeonLightsLayout = NeonLightsLayout.Sides;
-        else if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Front))
-            Service.NeonLightsLayout = NeonLightsLayout.Front;
-        else if (CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Back))
-            Service.NeonLightsLayout = NeonLightsLayout.Back;
-        else
-            Service.NeonLightsLayout = NeonLightsLayout.Off;
-    }
-
-    private void UpdatePearlescentColor()
-    {
-        if (CurrentVehicle == null) return;
-
-        Service.PearlescentColor = CurrentVehicle.Mods.PearlescentColor;
-    }
-
-    private void UpdateXenonHeadLights()
-    {
-        if (CurrentVehicle == null) return;
-
-        Service.XenonHeadLights = CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled;
-    }
-
-    private void UpdateWindowTint()
-    {
-        if (CurrentVehicle == null) return;
-
-        Service.WindowTint = CurrentVehicle.Mods.WindowTint;
-    }
-
-    private void UpdateSecondaryColor()
-    {
-        if (CurrentVehicle == null) return;
-
-        Service.SecondaryColor = CurrentVehicle.Mods.SecondaryColor;
     }
 
     private void UpdatePrimaryColor()
@@ -297,24 +203,32 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
         Service.PrimaryColor = CurrentVehicle.Mods.PrimaryColor;
     }
 
-    private void UpdateLicensePlateStyle()
+    private void UpdateSecondaryColor()
     {
         if (CurrentVehicle == null) return;
-        Service.LicensePlateStyle = CurrentVehicle.Mods.LicensePlateStyle;
+
+        Service.SecondaryColor = CurrentVehicle.Mods.SecondaryColor;
     }
 
-    private void UpdateLicensePlate()
+    private void UpdatePearlescentColor()
     {
         if (CurrentVehicle == null) return;
 
-        Service.LicensePlate = CurrentVehicle.Mods.LicensePlate;
+        Service.PearlescentColor = CurrentVehicle.Mods.PearlescentColor;
     }
 
-    private void UpdateCustomTires()
+    private void UpdateWindowTint()
     {
         if (CurrentVehicle == null) return;
 
-        Service.CustomTires = CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation;
+        Service.WindowTint = CurrentVehicle.Mods.WindowTint;
+    }
+
+    private void UpdateRimColor()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.RimColor = CurrentVehicle.Mods.RimColor;
     }
 
     private void UpdateTireSmokeColor()
@@ -325,31 +239,91 @@ public class VehicleModsScript : GenericScript<VehicleModsService>
             .FirstOrDefault(tireSmokeColor => tireSmokeColor.Value == CurrentVehicle.Mods.TireSmokeColor).Key;
     }
 
-    private void UpdateWheelType()
+    private void UpdateCustomTires()
     {
         if (CurrentVehicle == null) return;
 
-        Service.WheelType = CurrentVehicle.Mods.WheelType;
+        Service.CustomTires = CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation;
     }
 
-    private void UpdateRimColor()
+    private void UpdateXenonHeadLights()
     {
         if (CurrentVehicle == null) return;
 
-        Service.RimColor = CurrentVehicle.Mods.RimColor;
+        Service.XenonHeadLights = CurrentVehicle.Mods[VehicleToggleModType.XenonHeadlights].IsInstalled;
     }
 
-    private void UpdateModTypes()
+    private void UpdateNeonLightsLayout()
     {
         if (CurrentVehicle == null) return;
 
-        foreach (var vehicleMod in CurrentVehicle.Mods.ToArray()) Service.VehicleMods.Add(vehicleMod);
+        var isFrontOn = CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Front);
+        var isBackOn = CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Back);
+        var isLeftOn = CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Left);
+        var isRightOn = CurrentVehicle.Mods.IsNeonLightsOn(VehicleNeonLight.Right);
+
+        if (isFrontOn && isBackOn && isLeftOn && isRightOn)
+            Service.NeonLightsLayout = NeonLightsLayout.FrontBackAndSides;
+        else if (isFrontOn && isBackOn)
+            Service.NeonLightsLayout = NeonLightsLayout.FrontAndBack;
+        else if (isLeftOn && isRightOn)
+            Service.NeonLightsLayout = NeonLightsLayout.Sides;
+        else if (isFrontOn)
+            Service.NeonLightsLayout = NeonLightsLayout.Front;
+        else if (isBackOn)
+            Service.NeonLightsLayout = NeonLightsLayout.Back;
+        else
+            Service.NeonLightsLayout = NeonLightsLayout.Off;
     }
 
-    private void InstallModKits()
+    private void UpdateNeonLightsColor()
     {
         if (CurrentVehicle == null) return;
-        CurrentVehicle.Mods.InstallModKit();
-        CurrentVehicle.Mods[VehicleToggleModType.TireSmoke].IsInstalled = true;
+        Service.NeonLightsColor = Service.NeonLightsColorDictionary
+            .FirstOrDefault(color => color.Value == CurrentVehicle.Mods.NeonLightsColor).Key;
+    }
+
+    private void UpdateLicensePlate()
+    {
+        if (CurrentVehicle == null) return;
+        Service.LicensePlate = CurrentVehicle.Mods.LicensePlate;
+    }
+
+    private void UpdateLicensePlateStyle()
+    {
+        if (CurrentVehicle == null) return;
+
+        Service.LicensePlateStyle = CurrentVehicle.Mods.LicensePlateStyle;
+    }
+
+    private void ProcessCustomTires()
+    {
+        if (CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation == Service.CustomTires) return;
+
+        CurrentVehicle.Mods[VehicleModType.FrontWheel].Variation = Service.CustomTires;
+        if (CurrentVehicle.Mods[VehicleModType.RearWheel].Count > 0)
+            CurrentVehicle.Mods[VehicleModType.RearWheel].Variation = Service.CustomTires;
+    }
+
+    private void ProcessRainbowMode()
+    {
+        if (!Service.RainbowMode) return;
+        if ((DateTime.UtcNow - _rainBowModeInterval).TotalMilliseconds <= 50) return;
+
+        CurrentVehicle.Mods.PrimaryColor = GetRandomEnumValue<VehicleColor>();
+        CurrentVehicle.Mods.SecondaryColor = GetRandomEnumValue<VehicleColor>();
+        CurrentVehicle.Mods.PearlescentColor = GetRandomEnumValue<VehicleColor>();
+
+        _rainBowModeInterval = DateTime.UtcNow;
+    }
+
+    private T GetRandomEnumValue<T>()
+    {
+        return (T)Enum.GetValues(typeof(T)).GetValue(_random.Next(0, Enum.GetValues(typeof(T)).Length));
+    }
+
+    private bool GetRandomBool()
+    {
+        return _random.Next(0, 2) == 1;
     }
 }
