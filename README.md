@@ -6,9 +6,11 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Working on hotkeys that can be manually set through the Hotkeys.ini, or through the menu. The hotkeys allows for both Keys, Controls and Modifiers such as Shift, Control, etc.
+* Added HotKeys service that handles saving and loading the different hotkeys in the hotkeys.ini
+* Hotkeys can be either a key, a control or both. Hotkeys can also have modifiers such as Shift and Control
+* Hotkeys can be changed directly through the .ini file, but will be updated to be changeable through the menu.
 
-* Hang tight.
+-- The hotkeys should be mapped, for now you kind of have to know which hotkeys belongs to what group, we want to avoid this.
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
