@@ -29,7 +29,7 @@ public class Main : Script
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        var toggleKeys = _hotkeysService.GetValue("ToggleMenu");
+        var toggleKeys = _hotkeysService.GetValue("Menu", "ToggleMenu");
 
         if (!_hotkeysService.IsKeyPressed(toggleKeys)) return;
         if (MenuBase.LatestMenu != null)

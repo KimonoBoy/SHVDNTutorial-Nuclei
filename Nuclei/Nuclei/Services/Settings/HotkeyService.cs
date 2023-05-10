@@ -15,15 +15,15 @@ public class HotkeysService
         settings = ScriptSettings.Load(hotkeysPath);
     }
 
-    public Tuple<Keys, Control, Keys[]> GetValue(string keyName)
+    public Tuple<Keys, Control, Keys[]> GetValue(string section, string keyName)
     {
-        var mainKeyString = settings.GetValue("Hotkeys", keyName + "Key", "");
+        var mainKeyString = settings.GetValue(section, keyName + "Key", "");
         Enum.TryParse(mainKeyString, out Keys mainKey);
 
-        var mainControlString = settings.GetValue("Hotkeys", keyName + "Control", "");
+        var mainControlString = settings.GetValue(section, keyName + "Control", "");
         Enum.TryParse(mainControlString, out Control mainControl);
 
-        var modifierStrings = settings.GetValue("Hotkeys", keyName + "Modifiers", "").Split(',').Select(s => s.Trim())
+        var modifierStrings = settings.GetValue(section, keyName + "Modifiers", "").Split(',').Select(s => s.Trim())
             .ToArray();
         var modifierKeys = modifierStrings.Select(s => Enum.TryParse(s, out Keys result) ? result : Keys.None)
             .ToArray();
@@ -44,11 +44,11 @@ public class HotkeysService
         return (isMainKeyPressed || isMainControlPressed) && areModifiersPressed;
     }
 
-    public void SetValue(string keyName, Keys key, Control control, Keys[] modifiers)
+    public void SetValue(string section, string keyName, Keys key, Control control, Keys[] modifiers)
     {
-        settings.SetValue("Hotkeys", keyName + "Key", key);
-        settings.SetValue("Hotkeys", keyName + "Control", control);
-        settings.SetValue("Hotkeys", keyName + "Modifiers", string.Join(", ", modifiers));
+        settings.SetValue(section, keyName + "Key", key);
+        settings.SetValue(section, keyName + "Control", control);
+        settings.SetValue(section, keyName + "Modifiers", string.Join(", ", modifiers));
         settings.Save();
     }
 }
