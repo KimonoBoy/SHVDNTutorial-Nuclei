@@ -2,10 +2,11 @@
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Player;
 using Nuclei.Services.Player.Dtos;
-using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Player.Models;
 
@@ -49,19 +50,20 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (Game.IsControlPressed(Control.Jump))
-        {
-            if (Service.FavoriteModels.Contains(Service.CurrentPedHash))
-                Service.FavoriteModels.Remove(Service.CurrentPedHash);
-            else
-                Service.FavoriteModels.Add(Service.CurrentPedHash);
+        var updateCollectionKey = Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
 
-            var customPedDto =
-                Service.CustomModels.FirstOrDefault(
-                    pedDto => pedDto.PedHash == Service.CurrentPedHash);
-            if (Service.CustomModels.Contains(customPedDto))
-                Service.CustomModels.Remove(customPedDto);
-        }
+        if (!Hotkeys.IsKeyPressed(updateCollectionKey)) return;
+
+        if (Service.FavoriteModels.Contains(Service.CurrentPedHash))
+            Service.FavoriteModels.Remove(Service.CurrentPedHash);
+        else
+            Service.FavoriteModels.Add(Service.CurrentPedHash);
+
+        var customPedDto =
+            Service.CustomModels.FirstOrDefault(
+                pedDto => pedDto.PedHash == Service.CurrentPedHash);
+        if (Service.CustomModels.Contains(customPedDto))
+            Service.CustomModels.Remove(customPedDto);
     }
 
     private void OnModelChangeRequested(object sender, PedHash pedHash)

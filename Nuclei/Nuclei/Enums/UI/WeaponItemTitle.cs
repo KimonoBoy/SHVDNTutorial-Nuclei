@@ -4,6 +4,9 @@ namespace Nuclei.Enums.UI;
 
 public enum WeaponItemTitle
 {
+    [Description("Picks up the aimed object.")]
+    PickupObject,
+
     [Description("Give all weapons in game.")]
     GiveAllWeapons,
 

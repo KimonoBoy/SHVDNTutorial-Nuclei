@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Control = GTA.Control;
 
@@ -13,6 +15,7 @@ public class GravityGunScript : WeaponScriptBase
     private readonly List<Tuple<Vector3, long>> _cameraDirectionsTimestamps = new();
     private Entity _grabbedEntity;
     private float _grabbedEntityDistance;
+    private Tuple<Keys, Control?, Keys[]> _gravityGunKey;
 
     protected override void OnTick(object sender, EventArgs e)
     {
@@ -23,12 +26,14 @@ public class GravityGunScript : WeaponScriptBase
     {
         if (!Service.GravityGun || !Character.IsAiming) return;
 
+        _gravityGunKey = Hotkeys.GetValue(SectionName.GravityGun, WeaponItemTitle.PickupObject);
+
         if (_grabbedEntity == null)
         {
             var targetedEntity = Game.Player.TargetedEntity;
             if (targetedEntity == null) return;
             if (targetedEntity is Ped ped) targetedEntity = ped.IsInVehicle() ? ped.CurrentVehicle : ped;
-            if (Game.IsKeyPressed(Keys.J))
+            if (Hotkeys.IsKeyPressed(_gravityGunKey))
             {
                 _grabbedEntity = targetedEntity;
                 _grabbedEntityDistance = Vector3.Distance(Character.Position, _grabbedEntity.Position);
@@ -47,7 +52,7 @@ public class GravityGunScript : WeaponScriptBase
         var targetPosition = CalculateTargetPosition();
         _grabbedEntity.Position = targetPosition;
 
-        if (!Game.IsKeyPressed(Keys.J))
+        if (!Hotkeys.IsKeyPressed(_gravityGunKey))
         {
             var throwVelocity = (Service.ThrowVelocity + 1) * 25.0f;
             ReleaseGrabbedEntity(throwVelocity);

@@ -2,6 +2,8 @@
 using GTA;
 using GTA.Math;
 using GTA.Native;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Vehicle;
 
@@ -74,7 +76,10 @@ public class VehicleScript : GenericScript<VehicleService>
 
     private void ProcessSpeedBoost()
     {
-        if (!Game.IsControlPressed(Control.Sprint) || Service.SpeedBoost <= 0) return;
+        if (Service.SpeedBoost <= 0) return;
+        if (CurrentVehicle.Velocity.Length() <= 0.1f) return;
+        var speedBoostKey = Hotkeys.GetValue(SectionName.Vehicle, VehicleItemTitle.SpeedBoost);
+        if (!Hotkeys.IsKeyPressed(speedBoostKey)) return;
 
         if ((DateTime.UtcNow - _speedBoostTimer).TotalMilliseconds < 100) return;
 

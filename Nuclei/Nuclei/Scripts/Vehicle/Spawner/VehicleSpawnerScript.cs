@@ -3,13 +3,14 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
 using Nuclei.Services.Vehicle.Dtos;
 using Nuclei.Services.Vehicle.VehicleMods;
 using Nuclei.Services.Vehicle.VehicleSpawner;
-using Control = GTA.Control;
 
 namespace Nuclei.Scripts.Vehicle.Spawner;
 
@@ -45,7 +46,8 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        if (Game.IsControlPressed(Control.Jump))
+        var updateCollectionKey = Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
+        if (Hotkeys.IsKeyPressed(updateCollectionKey))
         {
             UpdateFavoriteVehicles();
             UpdateSavedVehicles();

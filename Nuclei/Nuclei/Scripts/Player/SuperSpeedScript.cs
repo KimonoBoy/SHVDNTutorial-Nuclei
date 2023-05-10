@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using GTA;
+using Nuclei.Enums.Hotkey;
 using Nuclei.Enums.Player;
+using Nuclei.Enums.UI;
 
 namespace Nuclei.Scripts.Player;
 
@@ -58,7 +60,9 @@ public class SuperSpeedScript : PlayerScriptBase
     /// <param name="entityForceMultiplier">The force of which entities the player is touching will be pushed away.</param>
     private void ApplySuperSpeedForce(int maxSpeed, float entityForceMultiplier = 0.0f)
     {
-        if (!Game.IsControlPressed(Control.Sprint) || Character.IsJumping) return;
+        if (Character.IsJumping) return;
+        var superSpeedKey = Hotkeys.GetValue(SectionName.Player, PlayerItemTitle.SuperSpeed);
+        if (!Hotkeys.IsKeyPressed(superSpeedKey)) return;
 
         Character.MaxSpeed = maxSpeed;
         Character.ApplyForce(Character.ForwardVector * maxSpeed);

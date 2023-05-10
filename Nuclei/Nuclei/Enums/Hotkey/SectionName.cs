@@ -10,5 +10,6 @@ public enum SectionName
     VehicleWeapon,
     VehicleMod,
     Weapon,
+    GravityGun,
     World
 }

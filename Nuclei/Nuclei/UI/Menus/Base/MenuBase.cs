@@ -25,7 +25,7 @@ public abstract class MenuBase : NativeMenu
 
     private readonly ItemFactoryService _itemFactoryService = new();
 
-    private readonly Dictionary<string, MenuBase> subMenus = new();
+    private readonly Dictionary<string, MenuBase> _subMenus = new();
 
     private bool _isMovingUp;
 
@@ -202,12 +202,12 @@ public abstract class MenuBase : NativeMenu
 
     protected NativeSubmenuItem AddMenu(MenuBase subMenu)
     {
-        if (subMenus.ContainsKey(subMenu.Subtitle))
+        if (_subMenus.ContainsKey(subMenu.Subtitle))
             // If the submenu already exists, get a reference to it
-            subMenu = subMenus[subMenu.Subtitle];
+            subMenu = _subMenus[subMenu.Subtitle];
         else
             // If the submenu does not exist, add it to the dictionary
-            subMenus.Add(subMenu.Subtitle, subMenu);
+            _subMenus.Add(subMenu.Subtitle, subMenu);
 
         var submenuItem = AddSubMenu(subMenu);
         submenuItem.AltTitle = "Menu";
