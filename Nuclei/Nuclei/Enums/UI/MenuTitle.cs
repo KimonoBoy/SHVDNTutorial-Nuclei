@@ -4,6 +4,9 @@ namespace Nuclei.Enums.UI;
 
 public enum MenuTitle
 {
+    [Description("Toggles the menu on or off.")]
+    ToggleMenu,
+
     [Description("One menu to rule them all! Access all the features and options in one convenient location.")]
     Main,
 

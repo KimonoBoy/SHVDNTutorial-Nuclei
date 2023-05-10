@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Forms;
 using GTA;
 using GTA.Math;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Enums.Vehicle;
 using Nuclei.Scripts.Generics;
 using Nuclei.Services.Exception.CustomExceptions;
@@ -42,7 +43,11 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
 
     private void ProcessVehicleWeaponShoot(uint weaponHash)
     {
-        if (!Service.HasVehicleWeapons || !Game.IsKeyPressed(Keys.T)) return;
+        if (!Service.HasVehicleWeapons) return;
+
+        var shootWeaponKey = Hotkeys.GetValue(SectionName.VehicleWeapon, VehicleWeaponsItemTitle.ShootVehicleWeapon);
+        if (!Hotkeys.IsKeyPressed(shootWeaponKey)) return;
+
         RemoveDistantProjectiles();
 
         if (!IsTimeToShoot()) return;

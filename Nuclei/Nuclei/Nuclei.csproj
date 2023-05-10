@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="Constants\Paths.cs" />
     <Compile Include="Enums\Exception\ExceptionType.cs" />
+    <Compile Include="Enums\Hotkey\SectionName.cs" />
     <Compile Include="Enums\Player\CashHash.cs" />
     <Compile Include="Enums\Player\SuperSpeedHash.cs" />
     <Compile Include="Enums\UI\MenuTitle.cs" />
@@ -114,7 +115,7 @@
     <Compile Include="Services\Player\Dtos\PedPropDto.cs" />
     <Compile Include="Services\Player\PlayerService.cs" />
     <Compile Include="Services\Exception\ExceptionService.cs" />
-    <Compile Include="Services\Settings\HotkeyService.cs" />
+    <Compile Include="Services\Settings\HotkeysService.cs" />
     <Compile Include="Services\Settings\StorageService.cs" />
     <Compile Include="Services\Vehicle\VehicleHandling\VehicleHandlingService.cs" />
     <Compile Include="Services\Vehicle\VehicleMods\VehicleModsService.cs" />

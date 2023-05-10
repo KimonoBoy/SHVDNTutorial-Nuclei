@@ -2,7 +2,8 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using GTA;
-using Nuclei.Constants;
+using Nuclei.Enums.Hotkey;
+using Nuclei.Enums.UI;
 using Nuclei.Services.Exception;
 using Nuclei.Services.Generics;
 using Nuclei.Services.Settings;
@@ -14,7 +15,7 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
     private readonly TService _defaultValuesService = new();
 
     private readonly StorageService _storageService = StorageService.Instance;
-    protected readonly HotkeysService Hotkeys = new(Paths.HotkeysPath);
+    protected readonly HotkeysService Hotkeys = HotkeysService.Instance;
     private Ped _character;
     private GTA.Vehicle _currentVehicle;
     private GTA.Weapon _currentWeapon;
@@ -138,8 +139,8 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        var saveKeys = Hotkeys.GetValue("Storage", "SaveAll");
-        var loadKeys = Hotkeys.GetValue("Storage", "LoadAll");
+        var saveKeys = Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Save);
+        var loadKeys = Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Load);
 
         if (Hotkeys.IsKeyPressed(saveKeys))
             Save();

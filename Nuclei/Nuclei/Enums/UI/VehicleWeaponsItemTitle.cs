@@ -4,6 +4,9 @@ namespace Nuclei.Enums.UI;
 
 public enum VehicleWeaponsItemTitle
 {
+    [Description("Shoots the selected vehicle weapon.")]
+    ShootVehicleWeapon,
+
     [Description(
         "Allows you to shoot a bunch of different weapons directly from your vehicle.\n\nSelect a weapon below.")]
     VehicleWeapons,
