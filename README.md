@@ -6,13 +6,9 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-Models can now be saved with their set appearance.
+Working on hotkeys that can be manually set through the Hotkeys.ini, or through the menu. The hotkeys allows for both Keys, Controls and Modifiers such as Shift, Control, etc.
 
-![image](https://user-images.githubusercontent.com/126190439/236926671-18a18d0a-4b47-44e6-9de7-6ef993f9e535.png)
-![image](https://user-images.githubusercontent.com/126190439/236930857-0a05b673-ea9a-4001-bf8b-d820366f91b4.png)
-
--- Below is things I was working on, but decided the above was more important to implement first.
-* Currently working on a script that allows the player to use any prop in-game as a vehicle. You can drive trash cans, traffic lights or w/e prop you'll stumble upon.
+* Hang tight.
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
