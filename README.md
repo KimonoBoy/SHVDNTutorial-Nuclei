@@ -7,7 +7,8 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
 * Added HotKeys service that handles saving and loading the different hotkeys in the hotkeys.ini
-* Hotkeys can be either a key, a control or both. Hotkeys can also have modifiers such as Shift and Control
+* Hotkeys can be either a key, a control or both. Controls are nice, because they depend on the game's keybindings, this ensures that e.g. pressing the sprint key on any keyboard or controller will trigger the same feature.
+* Hotkeys can also have modifiers such as Shift and Control. 
 * Hotkeys can be changed directly through the .ini file, but will be updated to be changeable through the menu.
 
 -- The hotkeys should be mapped, for now you kind of have to know which hotkeys belongs to what group, we want to avoid this.  
