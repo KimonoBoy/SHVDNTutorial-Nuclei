@@ -15,7 +15,7 @@ public class HotkeysService
 {
     public static HotkeysService Instance = new(Paths.HotkeysPath);
 
-    public readonly Dictionary<SectionName, IEnumerable<Enum>> SectionMapping = new()
+    private readonly Dictionary<SectionName, IEnumerable<Enum>> _sectionMapping = new()
     {
         { SectionName.Player, Enum.GetValues(typeof(PlayerItemTitle)).Cast<Enum>() },
         { SectionName.Vehicle, Enum.GetValues(typeof(VehicleItemTitle)).Cast<Enum>() },
