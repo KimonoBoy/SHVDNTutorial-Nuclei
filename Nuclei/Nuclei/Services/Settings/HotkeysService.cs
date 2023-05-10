@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using Nuclei.Constants;
 using Nuclei.Enums.Hotkey;
-using Nuclei.Enums.UI;
-using Nuclei.Enums.Vehicle;
 using Control = GTA.Control;
 
 namespace Nuclei.Services.Settings;
@@ -14,17 +11,6 @@ namespace Nuclei.Services.Settings;
 public class HotkeysService
 {
     public static HotkeysService Instance = new(Paths.HotkeysPath);
-
-    private readonly Dictionary<SectionName, IEnumerable<Enum>> _sectionMapping = new()
-    {
-        { SectionName.Player, Enum.GetValues(typeof(PlayerItemTitle)).Cast<Enum>() },
-        { SectionName.Vehicle, Enum.GetValues(typeof(VehicleItemTitle)).Cast<Enum>() },
-        { SectionName.VehicleSpawner, Enum.GetValues(typeof(VehicleSpawnerItemTitle)).Cast<Enum>() },
-        { SectionName.VehicleWeapon, Enum.GetValues(typeof(VehicleWeaponsItemTitle)).Cast<Enum>() },
-        { SectionName.VehicleMod, Enum.GetValues(typeof(VehicleModsItemTitle)).Cast<Enum>() },
-        { SectionName.Weapon, Enum.GetValues(typeof(WeaponItemTitle)).Cast<Enum>() },
-        { SectionName.World, Enum.GetValues(typeof(WorldItemTitle)).Cast<Enum>() }
-    };
 
     private readonly ScriptSettings settings;
 
