@@ -11,6 +11,5 @@ public class CustomVehicleModDto
     }
 
     public VehicleModType VehicleModType { get; set; }
-
     public int ModIndex { get; set; }
 }

@@ -6,8 +6,7 @@ using GTA;
 using GTA.Native;
 using Nuclei.Enums.Player;
 using Nuclei.Helpers.ExtensionMethods;
-using Nuclei.Services.Exception;
-using Nuclei.Services.Exception.CustomExceptions;
+using Nuclei.UI.Text;
 
 namespace Nuclei.Scripts.Player;
 
@@ -177,30 +176,19 @@ public class PlayerScript : PlayerScriptBase
     /// </summary>
     private void RequestCashInput()
     {
-        try
-        {
-            var maxLength = ulong.MaxValue.ToString().Length;
-            var cashInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 20);
-            if (cashInput.Length > maxLength)
-                cashInput = cashInput.Substring(0, maxLength);
+        var maxLength = ulong.MaxValue.ToString().Length;
+        var cashInput = Game.GetUserInput(WindowTitle.EnterMessage20, "", 12);
+        if (cashInput.Length > maxLength)
+            cashInput = cashInput.Substring(0, maxLength);
 
-            if (string.IsNullOrEmpty(cashInput)) return;
+        if (string.IsNullOrEmpty(cashInput)) return;
 
-            var cashInputAsULong = ulong.TryParse(cashInput, out var result);
+        var cashInputAsULong = ulong.TryParse(cashInput, out var result);
 
-            if (cashInputAsULong)
-                Game.Player.Money = result > int.MaxValue ? int.MaxValue : (int)result;
-            else
-                throw new InvalidCashInputException();
-        }
-        catch (CustomExceptionBase cashInputException)
-        {
-            ExceptionService.Instance.RaiseError(cashInputException);
-        }
-        catch (Exception ex)
-        {
-            ExceptionService.Instance.RaiseError(ex);
-        }
+        if (cashInputAsULong)
+            Game.Player.Money = result > int.MaxValue ? int.MaxValue : (int)result;
+        else
+            Display.Notify("Invalid Cash Input", "Please enter a whole number.", false);
     }
 
     /// <summary>

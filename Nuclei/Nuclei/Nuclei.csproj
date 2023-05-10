@@ -99,7 +99,6 @@
     <Compile Include="Scripts\World\WorldScript.cs" />
     <Compile Include="Services\Exception\CustomExceptions\AddVehicleWeaponFailedException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\CustomExceptionBase.cs" />
-    <Compile Include="Services\Exception\CustomExceptions\InvalidCashInputException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleModelRequestTimedOutException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleModelNotFoundException.cs" />
     <Compile Include="Services\Exception\CustomExceptions\VehicleSpawnFailedException.cs" />

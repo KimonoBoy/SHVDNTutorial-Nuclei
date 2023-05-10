@@ -43,17 +43,9 @@ public class PlayerMenu : GenericMenu<PlayerService>
         var appearanceNativeSubmenuItem = AddMenu(appearanceMenu);
         Shown += (sender, args) =>
         {
-            if (Service.Character.Style.GetAllComponents().Length <= 1 &&
-                Service.Character.Style.GetAllProps().Length <= 1)
-            {
-                appearanceNativeSubmenuItem.Enabled = false;
-                appearanceNativeSubmenuItem.AltTitle = "No Textures Found";
-            }
-            else
-            {
-                appearanceNativeSubmenuItem.Enabled = true;
-                appearanceNativeSubmenuItem.AltTitle = "Menu";
-            }
+            var hasAnyComponents = Service.Character.Style.GetAllComponents().Length > 1 &&
+                                   Service.Character.Style.GetAllProps().Length > 1;
+            UpdateAltTitleOnCondition(appearanceNativeSubmenuItem, hasAnyComponents, "Menu", "No Textures Found");
         };
     }
 
