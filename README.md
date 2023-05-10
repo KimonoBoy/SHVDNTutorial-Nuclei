@@ -11,6 +11,7 @@ See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 * Hotkeys can be changed directly through the .ini file, but will be updated to be changeable through the menu.
 
 -- The hotkeys should be mapped, for now you kind of have to know which hotkeys belongs to what group, we want to avoid this.
+-- When the menu is updated to allow for hotkeys changes, each menu item have an associated hotkey list where the user can change the hotkey for that specific feature by pressing F1 when the item is selected. 
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
