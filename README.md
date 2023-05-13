@@ -1,3 +1,5 @@
+Sorry for the lack of updates over the past couple of days. Been busy, will get back to the mod within a day or two.
+
 # SHVDNTutorial-Nuclei
 A successor to **NucleiLite** - this will build upon everything we learned here [NucleiLite - Wiki](https://github.com/KimonoBoy/SHVDNTutorial-NucleiLite/wiki)  
 
