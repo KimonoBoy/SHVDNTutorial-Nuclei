@@ -50,9 +50,9 @@ public class ModelChangerScript : GenericScript<ModelChangerService>
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        var updateCollectionKey = Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
+        var updateCollectionKey = Service.Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
 
-        if (!Hotkeys.IsKeyPressed(updateCollectionKey)) return;
+        if (!Service.Hotkeys.IsKeyPressed(updateCollectionKey)) return;
 
         if (Service.FavoriteModels.Contains(Service.CurrentPedHash))
             Service.FavoriteModels.Remove(Service.CurrentPedHash);

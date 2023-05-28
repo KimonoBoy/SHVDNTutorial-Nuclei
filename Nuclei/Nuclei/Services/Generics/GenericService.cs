@@ -1,7 +1,9 @@
-﻿using GTA;
+﻿using System;
+using GTA;
 using Newtonsoft.Json;
 using Nuclei.Helpers.Utilities;
 using Nuclei.Services.Observable;
+using Nuclei.Services.Settings;
 
 namespace Nuclei.Services.Generics;
 
@@ -16,6 +18,7 @@ public abstract class GenericService<TService> : ObservableService where TServic
     private Ped _character;
     private GTA.Vehicle _currentVehicle;
     private GTA.Weapon _currentWeapon;
+    public HotkeysService Hotkeys = HotkeysService.Instance;
 
     [JsonIgnore]
     public Ped Character
@@ -61,5 +64,12 @@ public abstract class GenericService<TService> : ObservableService where TServic
     public void SetState(TService newState)
     {
         ReflectionUtilities.CopyProperties(newState, this);
+    }
+
+    public event EventHandler HotkeyInputRequested;
+
+    public void RequestHotKeyInput()
+    {
+        HotkeyInputRequested?.Invoke(this, EventArgs.Empty);
     }
 }

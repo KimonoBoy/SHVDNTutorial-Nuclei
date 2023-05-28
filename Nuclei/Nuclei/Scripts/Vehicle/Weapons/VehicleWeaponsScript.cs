@@ -45,8 +45,9 @@ public class VehicleWeaponsScript : GenericScript<VehicleWeaponsService>
     {
         if (!Service.HasVehicleWeapons) return;
 
-        var shootWeaponKey = Hotkeys.GetValue(SectionName.VehicleWeapon, VehicleWeaponsItemTitle.ShootVehicleWeapon);
-        if (!Hotkeys.IsKeyPressed(shootWeaponKey)) return;
+        var shootWeaponKey =
+            Service.Hotkeys.GetValue(SectionName.VehicleWeapon, VehicleWeaponsItemTitle.ShootVehicleWeapon);
+        if (!Service.Hotkeys.IsKeyPressed(shootWeaponKey)) return;
 
         RemoveDistantProjectiles();
 

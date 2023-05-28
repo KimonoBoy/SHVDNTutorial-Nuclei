@@ -26,14 +26,14 @@ public class GravityGunScript : WeaponScriptBase
     {
         if (!Service.GravityGun || !Character.IsAiming) return;
 
-        _gravityGunKey = Hotkeys.GetValue(SectionName.GravityGun, WeaponItemTitle.PickupObject);
+        _gravityGunKey = Service.Hotkeys.GetValue(SectionName.GravityGun, WeaponItemTitle.PickupObject);
 
         if (_grabbedEntity == null)
         {
             var targetedEntity = Game.Player.TargetedEntity;
             if (targetedEntity == null) return;
             if (targetedEntity is Ped ped) targetedEntity = ped.IsInVehicle() ? ped.CurrentVehicle : ped;
-            if (Hotkeys.IsKeyPressed(_gravityGunKey))
+            if (Service.Hotkeys.IsKeyPressed(_gravityGunKey))
             {
                 _grabbedEntity = targetedEntity;
                 _grabbedEntityDistance = Vector3.Distance(Character.Position, _grabbedEntity.Position);
@@ -52,7 +52,7 @@ public class GravityGunScript : WeaponScriptBase
         var targetPosition = CalculateTargetPosition();
         _grabbedEntity.Position = targetPosition;
 
-        if (!Hotkeys.IsKeyPressed(_gravityGunKey))
+        if (!Service.Hotkeys.IsKeyPressed(_gravityGunKey))
         {
             var throwVelocity = (Service.ThrowVelocity + 1) * 25.0f;
             ReleaseGrabbedEntity(throwVelocity);

@@ -78,8 +78,8 @@ public class VehicleScript : GenericScript<VehicleService>
     {
         if (Service.SpeedBoost <= 0) return;
         if (CurrentVehicle.Velocity.Length() <= 0.1f) return;
-        var speedBoostKey = Hotkeys.GetValue(SectionName.Vehicle, VehicleItemTitle.SpeedBoost);
-        if (!Hotkeys.IsKeyPressed(speedBoostKey)) return;
+        var speedBoostKey = Service.Hotkeys.GetValue(SectionName.Vehicle, VehicleItemTitle.SpeedBoost);
+        if (!Service.Hotkeys.IsKeyPressed(speedBoostKey)) return;
 
         if ((DateTime.UtcNow - _speedBoostTimer).TotalMilliseconds < 100) return;
 

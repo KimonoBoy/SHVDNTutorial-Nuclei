@@ -84,7 +84,11 @@ public enum MenuTitle
 
     [Description("Change your appearance and outfit.")]
     Appearance,
+
+    [Description("A menu of all your favorite Ped models.")]
     FavoriteModels,
+
+    [Description("A menu of all your saved Ped models, including set appearances.")]
     SavedModels,
 
     [Description("Updates the current collection by adding or removing the selected item.")]

@@ -46,8 +46,8 @@ public class VehicleSpawnerScript : GenericScript<VehicleSpawnerService>
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        var updateCollectionKey = Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
-        if (Hotkeys.IsKeyPressed(updateCollectionKey))
+        var updateCollectionKey = Service.Hotkeys.GetValue(SectionName.Menu, MenuTitle.UpdateCollection);
+        if (Service.Hotkeys.IsKeyPressed(updateCollectionKey))
         {
             UpdateFavoriteVehicles();
             UpdateSavedVehicles();

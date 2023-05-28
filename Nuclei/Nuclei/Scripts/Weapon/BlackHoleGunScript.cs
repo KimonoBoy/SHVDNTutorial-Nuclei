@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using GTA;
 using GTA.Math;
@@ -90,6 +91,11 @@ public class BlackHoleGunScript : WeaponScriptBase
     private void ProcessBlackHoleGun()
     {
         if (!Service.BlackHoleGun) return;
+        if (_blackHoleEntity != null)
+            GTA.World.DrawMarker(MarkerType.DebugSphere, _blackHoleEntity.Position, _blackHoleEntity.ForwardVector,
+                _blackHoleEntity.Rotation,
+                new Vector3(_blackHoleRadius / 80.0f, _blackHoleRadius / 80.0f, _blackHoleRadius / 80.0f),
+                Color.Black);
 
         if (Character.IsShooting)
         {

@@ -61,8 +61,8 @@ public class SuperSpeedScript : PlayerScriptBase
     private void ApplySuperSpeedForce(int maxSpeed, float entityForceMultiplier = 0.0f)
     {
         if (Character.IsJumping) return;
-        var superSpeedKey = Hotkeys.GetValue(SectionName.Player, PlayerItemTitle.SuperSpeed);
-        if (!Hotkeys.IsKeyPressed(superSpeedKey)) return;
+        var superSpeedKey = Service.Hotkeys.GetValue(SectionName.Player, PlayerItemTitle.SuperSpeed);
+        if (!Service.Hotkeys.IsKeyPressed(superSpeedKey)) return;
 
         Character.MaxSpeed = maxSpeed;
         Character.ApplyForce(Character.ForwardVector * maxSpeed);

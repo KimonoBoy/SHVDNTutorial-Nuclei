@@ -4,7 +4,9 @@ using System.Linq;
 using System.Windows.Forms;
 using GTA;
 using GTA.Native;
+using Nuclei.Enums.Hotkey;
 using Nuclei.Enums.Player;
+using Nuclei.Enums.UI;
 using Nuclei.Helpers.ExtensionMethods;
 using Nuclei.UI.Text;
 
@@ -58,6 +60,9 @@ public class PlayerScript : PlayerScriptBase
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.T && e.Control) CurrentEntity.TeleportToBlip(BlipSprite.Waypoint);
+        var invincibleKey = Service.Hotkeys.GetValue(SectionName.Player, PlayerItemTitle.Invincible);
+        if (Service.Hotkeys.IsKeyPressed(invincibleKey))
+            Service.IsInvincible = !Service.IsInvincible;
     }
 
     private void OnPlayerFixRequested(object sender, EventArgs e)

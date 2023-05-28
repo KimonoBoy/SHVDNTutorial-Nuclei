@@ -15,7 +15,6 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
     private readonly TService _defaultValuesService = new();
 
     private readonly StorageService _storageService = StorageService.Instance;
-    protected readonly HotkeysService Hotkeys = HotkeysService.Instance;
     private Ped _character;
     private GTA.Vehicle _currentVehicle;
     private GTA.Weapon _currentWeapon;
@@ -139,12 +138,12 @@ public abstract class GenericScript<TService> : Script, IDisposable where TServi
 
     private void OnKeyDown(object sender, KeyEventArgs e)
     {
-        var saveKeys = Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Save);
-        var loadKeys = Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Load);
+        var saveKeys = Service.Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Save);
+        var loadKeys = Service.Hotkeys.GetValue(SectionName.Storage, SettingsTitle.Load);
 
-        if (Hotkeys.IsKeyPressed(saveKeys))
+        if (Service.Hotkeys.IsKeyPressed(saveKeys))
             Save();
-        else if (Hotkeys.IsKeyPressed(loadKeys))
+        else if (Service.Hotkeys.IsKeyPressed(loadKeys))
             Load();
     }
 
