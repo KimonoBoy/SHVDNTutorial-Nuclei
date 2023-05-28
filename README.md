@@ -1,5 +1,3 @@
-Sorry for the lack of updates over the past couple of days. Been busy, will get back to the mod within a day or two.
-
 # SHVDNTutorial-Nuclei
 A successor to **NucleiLite** - this will build upon everything we learned here [NucleiLite - Wiki](https://github.com/KimonoBoy/SHVDNTutorial-NucleiLite/wiki)  
 
@@ -8,14 +6,7 @@ The idea of this **mod** is to **create** a **well-build**, **well-documented** 
 See the [Wiki](https://github.com/KimonoBoy/SHVDN-Tutorial/wiki)
 
 ## Current Mod Progress
-* Added HotKeys service that handles saving and loading the different hotkeys in the hotkeys.ini
-* Hotkeys can be either a key, a control or both. Controls are nice, because they depend on the game's keybindings, this ensures that e.g. pressing the sprint key on any keyboard or controller will trigger the same feature.
-* Hotkeys can also have modifiers such as Shift and Control. 
-* Hotkeys can be changed directly through the .ini file, but will be updated to be changeable through the menu.
-
--- The hotkeys should be mapped, for now you kind of have to know which hotkeys belongs to what group, we want to avoid this.  
-
--- When the menu is updated to allow for hotkeys changes, each menu item have an associated hotkey list where the user can change the hotkey for that specific feature by pressing F1 when the item is selected. 
+Back again... Hang tight as I apply changes to the mod.
 
 ## NOTE
 I've decided that the Wiki will be finished once the mod is in a more complete state. 
